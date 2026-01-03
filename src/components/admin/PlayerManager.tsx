@@ -96,9 +96,9 @@ export function PlayerManager({ players, onAddPlayer, onDeletePlayer, onUpdateAv
         const faceCenterX = img.naturalWidth * cropData.centerX;
         const faceCenterY = img.naturalHeight * cropData.centerY;
         
-        // Position the crop so face is in upper-center of the square
-        // Face should be at about 35% from top of the final crop
-        const facePositionInCrop = 0.35;
+        // Position the crop so face is centered in the square
+        // Face should be at about 45% from top of the final crop (slightly above center)
+        const facePositionInCrop = 0.45;
         
         let sourceX = faceCenterX - cropSize / 2;
         let sourceY = faceCenterY - (cropSize * facePositionInCrop);
