@@ -5,9 +5,9 @@ import { useRankings } from '@/hooks/useRankings';
 import { Trophy, Users, Zap } from 'lucide-react';
 
 export default function RankingPage() {
-  const { rankings, loading } = useRankings();
+  const { rankings, loading, hasTopTies } = useRankings();
 
-  // Get rankings for positions 4+
+  // Get rankings for positions 4+ (only used when podium is shown)
   const restOfRankings = rankings.slice(3);
 
   return (
@@ -62,6 +62,18 @@ export default function RankingPage() {
             <Trophy className="w-12 h-12 mx-auto mb-3 opacity-30" />
             <p className="font-display text-xl">No players registered yet</p>
             <p className="text-sm">Add players from the Admin panel</p>
+          </div>
+        ) : hasTopTies ? (
+          /* No clear podium - show all players in list */
+          <div className="space-y-3">
+            <div className="flex items-center gap-2 mb-4 p-3 bg-accent/10 border border-accent/30 rounded-lg">
+              <span className="text-accent text-sm">
+                Rankings tied on points, wins, and sessions — no podium displayed until tiebreaker is resolved
+              </span>
+            </div>
+            {rankings.map((ranking) => (
+              <RankingRow key={ranking.player_id} ranking={ranking} />
+            ))}
           </div>
         ) : (
           <>
