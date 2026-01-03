@@ -348,20 +348,57 @@
     animation: rally-shuttle 2s ease-in-out infinite;
   }
 
+  .animate-rally-shuttle-fast {
+    animation: rally-shuttle 0.6s ease-in-out infinite;
+  }
+
   .animate-racket-hit-left {
     animation: racket-hit-left 2s ease-in-out infinite;
+  }
+
+  .animate-racket-hit-left-fast {
+    animation: racket-hit-left 0.6s ease-in-out infinite;
   }
 
   .animate-racket-hit-right {
     animation: racket-hit-right 2s ease-in-out infinite;
   }
 
+  .animate-racket-hit-right-fast {
+    animation: racket-hit-right 0.6s ease-in-out infinite;
+  }
+
   .animate-shuttle-spin {
     animation: shuttle-spin 2s ease-in-out infinite;
   }
 
+  .animate-shuttle-spin-fast {
+    animation: shuttle-spin 0.6s ease-in-out infinite;
+  }
+
   .animate-trail-fade {
     animation: trail-fade 2s ease-in-out infinite;
+  }
+
+  /* Speed lines for fast rally */
+  @keyframes speed-line {
+    0% { opacity: 0; transform: translateX(0); }
+    50% { opacity: 1; }
+    100% { opacity: 0; transform: translateX(20px); }
+  }
+
+  @keyframes speed-line-reverse {
+    0% { opacity: 0; transform: translateX(0); }
+    50% { opacity: 1; }
+    100% { opacity: 0; transform: translateX(-20px); }
+  }
+
+  .animate-speed-line {
+    animation: speed-line 0.3s ease-out infinite;
+  }
+
+  .animate-speed-line-reverse {
+    animation: speed-line-reverse 0.3s ease-out infinite;
   }
   /* Hover animations */
   .hover-wiggle:hover {
