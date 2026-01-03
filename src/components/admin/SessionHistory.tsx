@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Calendar, Trophy, Medal, Users, Trash2, Pencil, History } from 'lucide-react';
+import { useLanguage } from '@/contexts/LanguageContext';
 import type { TournamentSession, SessionResult, Player, SessionType } from '@/types/ranking';
 import { format } from 'date-fns';
 import { SessionResultsEditor } from './SessionResultsEditor';
@@ -27,6 +28,7 @@ export function SessionHistory({
   onDeleteSession,
   onUpdateResults,
 }: SessionHistoryProps) {
+  const { t } = useLanguage();
   const [editingSession, setEditingSession] = useState<TournamentSession | null>(null);
 
   const getPlayerName = (playerId: string) => {
@@ -45,7 +47,7 @@ export function SessionHistory({
   };
 
   const handleDelete = async (sessionId: string) => {
-    if (confirm('Are you sure you want to delete this session and all its results?')) {
+    if (confirm(t.admin.deleteSessionConfirm)) {
       await onDeleteSession(sessionId);
     }
   };
@@ -57,8 +59,8 @@ export function SessionHistory({
           <History className="w-5 h-5 text-chart-2" />
         </div>
         <div>
-          <h2 className="font-semibold text-foreground">Session History</h2>
-          <p className="text-xs text-muted-foreground">{sessions.length} sessions recorded</p>
+          <h2 className="font-semibold text-foreground">{t.admin.sessionHistory}</h2>
+          <p className="text-xs text-muted-foreground">{sessions.length} {t.admin.sessionsRecorded}</p>
         </div>
       </div>
 
@@ -66,10 +68,10 @@ export function SessionHistory({
         <div className="text-center py-12">
           <Calendar className="w-12 h-12 text-muted-foreground/30 mx-auto mb-3" />
           <p className="text-muted-foreground">
-            No sessions recorded yet
+            {t.admin.noSessionsYet}
           </p>
           <p className="text-sm text-muted-foreground/70">
-            Create your first session to get started
+            {t.admin.createFirstSession}
           </p>
         </div>
       ) : (
@@ -96,7 +98,7 @@ export function SessionHistory({
                         : 'border-chart-2/50 text-chart-2 bg-chart-2/5'
                       }
                     >
-                      {session.session_type === '3_teams' ? '3 Teams' : '2 Teams'}
+                      {session.session_type === '3_teams' ? t.admin.threeTeams : t.admin.twoTeams}
                     </Badge>
                     {session.name && (
                       <span className="text-sm text-muted-foreground">
@@ -132,7 +134,7 @@ export function SessionHistory({
                       <div className="flex items-start gap-2">
                         <Trophy className="w-4 h-4 text-champion mt-0.5 shrink-0" />
                         <div>
-                          <span className="text-xs text-muted-foreground block mb-1">Champions</span>
+                          <span className="text-xs text-muted-foreground block mb-1">{t.admin.champions}</span>
                           <div className="flex flex-wrap gap-1">
                             {champions.map((r) => (
                               <Badge 
@@ -157,7 +159,7 @@ export function SessionHistory({
                       <div className="flex items-start gap-2">
                         <Medal className="w-4 h-4 text-runner-up mt-0.5 shrink-0" />
                         <div>
-                          <span className="text-xs text-muted-foreground block mb-1">Runner-ups</span>
+                          <span className="text-xs text-muted-foreground block mb-1">{t.admin.runnerUps}</span>
                           <div className="flex flex-wrap gap-1">
                             {runnerUps.map((r) => (
                               <Badge 
@@ -177,7 +179,7 @@ export function SessionHistory({
                       <div className="flex items-start gap-2">
                         <Users className="w-4 h-4 text-attendance mt-0.5 shrink-0" />
                         <div>
-                          <span className="text-xs text-muted-foreground block mb-1">Attendance</span>
+                          <span className="text-xs text-muted-foreground block mb-1">{t.admin.attendance}</span>
                           <div className="flex flex-wrap gap-1">
                             {attendance.map((r) => (
                               <Badge 
@@ -193,13 +195,13 @@ export function SessionHistory({
                     )}
                   </div>
                 ) : (
-                  <p className="text-sm text-muted-foreground">No results recorded</p>
+                  <p className="text-sm text-muted-foreground">{t.admin.noResults}</p>
                 )}
 
                 {/* Points Summary */}
                 {sessionResults.length > 0 && (
                   <div className="text-xs text-muted-foreground pt-2 border-t border-border/30">
-                    Total points: <span className="font-medium text-foreground">{sessionResults.reduce((sum, r) => sum + r.total_points, 0)}</span>
+                    {t.admin.totalPoints}: <span className="font-medium text-foreground">{sessionResults.reduce((sum, r) => sum + r.total_points, 0)}</span>
                   </div>
                 )}
               </div>

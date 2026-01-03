@@ -7,11 +7,13 @@ import { SessionHistory } from '@/components/admin/SessionHistory';
 import { AdminStats } from '@/components/admin/AdminStats';
 import { useRankings } from '@/hooks/useRankings';
 import { useAuth } from '@/hooks/useAuth';
+import { useLanguage } from '@/contexts/LanguageContext';
 import { Settings, Loader2 } from 'lucide-react';
 
 export default function AdminRanking() {
   const navigate = useNavigate();
   const { user, isAdmin, loading: authLoading } = useAuth();
+  const { t } = useLanguage();
   const {
     players,
     sessions,
@@ -62,10 +64,10 @@ export default function AdminRanking() {
           </div>
           <div>
             <h1 className="text-2xl sm:text-3xl font-bold text-foreground">
-              Admin Panel
+              {t.admin.title}
             </h1>
             <p className="text-sm text-muted-foreground">
-              Manage players, sessions, and tournament results
+              {t.admin.description}
             </p>
           </div>
         </div>

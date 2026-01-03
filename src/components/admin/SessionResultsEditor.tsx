@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { toast } from 'sonner';
+import { useLanguage } from '@/contexts/LanguageContext';
 import type { TournamentSession, SessionResult, SessionType, Player } from '@/types/ranking';
 import { cn } from '@/lib/utils';
 
@@ -28,9 +29,9 @@ export function SessionResultsEditor({
   onOpenChange,
   onUpdateResults,
 }: SessionResultsEditorProps) {
+  const { t } = useLanguage();
   const sessionType = session.session_type as SessionType;
   
-  // Initialize selections from existing results
   const getInitialSelections = () => {
     const champions = results.filter(r => r.result_type === 'champion').map(r => r.player_id);
     const runnerUps = results.filter(r => r.result_type === 'runner_up').map(r => r.player_id);
@@ -44,7 +45,6 @@ export function SessionResultsEditor({
   const [selectedAttendance, setSelectedAttendance] = useState<string[]>(initial.attendance);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  // Reset to initial when dialog opens
   const handleOpenChange = (newOpen: boolean) => {
     if (newOpen) {
       const init = getInitialSelections();
@@ -59,12 +59,10 @@ export function SessionResultsEditor({
     playerId: string,
     category: 'champion' | 'runner_up' | 'attendance'
   ) => {
-    // Remove from all categories first
     setSelectedChampions((prev) => prev.filter((id) => id !== playerId));
     setSelectedRunnerUps((prev) => prev.filter((id) => id !== playerId));
     setSelectedAttendance((prev) => prev.filter((id) => id !== playerId));
 
-    // Add to selected category
     switch (category) {
       case 'champion':
         setSelectedChampions((prev) => [...prev, playerId]);
@@ -87,7 +85,7 @@ export function SessionResultsEditor({
 
   const handleSubmit = async () => {
     if (selectedChampions.length === 0) {
-      toast.error('Please select at least one champion');
+      toast.error(t.admin.selectChampion);
       return;
     }
 
@@ -100,7 +98,7 @@ export function SessionResultsEditor({
         selectedRunnerUps,
         selectedAttendance
       );
-      toast.success('Results updated successfully!');
+      toast.success(t.admin.resultsUpdated);
       onOpenChange(false);
     } catch (error) {
       toast.error('Failed to update results');
@@ -114,12 +112,12 @@ export function SessionResultsEditor({
     <Dialog open={open} onOpenChange={handleOpenChange}>
       <DialogContent className="max-w-md max-h-[85vh] overflow-y-auto rounded-2xl">
         <DialogHeader>
-          <DialogTitle className="text-xl font-semibold">Edit Session Results</DialogTitle>
+          <DialogTitle className="text-xl font-semibold">{t.admin.editResults}</DialogTitle>
         </DialogHeader>
 
         <div className="space-y-4 pt-2">
           <p className="text-sm text-muted-foreground bg-muted/50 p-3 rounded-xl">
-            Tap a player to cycle through: <span className="text-champion font-medium">Champion</span> → <span className="text-runner-up font-medium">Runner-up</span> {sessionType === '3_teams' && <span>→ <span className="text-attendance font-medium">Attendance</span></span>}
+            {t.admin.tapToCycle} <span className="text-champion font-medium">{t.admin.champion}</span> → <span className="text-runner-up font-medium">{t.admin.runnerUp}</span> {sessionType === '3_teams' && <span>→ <span className="text-attendance font-medium">{t.admin.attendance}</span></span>}
           </p>
 
           <div className="grid grid-cols-1 gap-2 max-h-64 overflow-y-auto">
@@ -136,7 +134,6 @@ export function SessionResultsEditor({
                     } else if (category === 'runner_up' && sessionType === '3_teams') {
                       togglePlayer(player.id, 'attendance');
                     } else {
-                      // Remove from all
                       setSelectedChampions((prev) => prev.filter((id) => id !== player.id));
                       setSelectedRunnerUps((prev) => prev.filter((id) => id !== player.id));
                       setSelectedAttendance((prev) => prev.filter((id) => id !== player.id));
@@ -153,9 +150,9 @@ export function SessionResultsEditor({
                   <span className="font-medium">{player.name}</span>
                   {category && (
                     <span className="text-xs uppercase tracking-wide font-medium">
-                      {category === 'champion' && `Champion (${sessionType === '3_teams' ? '3' : '2'}pts)`}
-                      {category === 'runner_up' && `Runner-up (${sessionType === '3_teams' ? '2' : '1'}pt)`}
-                      {category === 'attendance' && 'Attendance (1pt)'}
+                      {category === 'champion' && `${t.admin.champion} (${sessionType === '3_teams' ? '3' : '2'}${t.admin.pts})`}
+                      {category === 'runner_up' && `${t.admin.runnerUp} (${sessionType === '3_teams' ? '2' : '1'}${t.admin.pt})`}
+                      {category === 'attendance' && `${t.admin.attendance} (1${t.admin.pt})`}
                     </span>
                   )}
                 </button>
@@ -164,10 +161,10 @@ export function SessionResultsEditor({
           </div>
 
           <div className="flex items-center gap-4 pt-3 border-t border-border text-sm">
-            <span className="text-champion font-medium">{selectedChampions.length} Champions</span>
-            <span className="text-runner-up font-medium">{selectedRunnerUps.length} Runner-ups</span>
+            <span className="text-champion font-medium">{selectedChampions.length} {t.admin.champions}</span>
+            <span className="text-runner-up font-medium">{selectedRunnerUps.length} {t.admin.runnerUps}</span>
             {sessionType === '3_teams' && (
-              <span className="text-attendance font-medium">{selectedAttendance.length} Attendance</span>
+              <span className="text-attendance font-medium">{selectedAttendance.length} {t.admin.attendance}</span>
             )}
           </div>
 
@@ -177,14 +174,14 @@ export function SessionResultsEditor({
               onClick={() => onOpenChange(false)}
               className="flex-1 h-11 rounded-xl"
             >
-              Cancel
+              {t.admin.cancel}
             </Button>
             <Button
               onClick={handleSubmit}
               className="flex-1 h-11 rounded-xl"
               disabled={isSubmitting || selectedChampions.length === 0}
             >
-              {isSubmitting ? 'Saving...' : 'Update Results'}
+              {isSubmitting ? t.admin.saving : t.admin.updateResults}
             </Button>
           </div>
         </div>

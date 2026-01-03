@@ -4,6 +4,7 @@ import { Input } from '@/components/ui/input';
 import { UserPlus, Trash2, Users, Camera, Loader2, Pencil, Check, X } from 'lucide-react';
 import { toast } from 'sonner';
 import { supabase } from '@/integrations/supabase/client';
+import { useLanguage } from '@/contexts/LanguageContext';
 import type { Player } from '@/types/ranking';
 
 interface PlayerManagerProps {
@@ -15,6 +16,7 @@ interface PlayerManagerProps {
 }
 
 export function PlayerManager({ players, onAddPlayer, onDeletePlayer, onUpdateAvatar, onUpdateName }: PlayerManagerProps) {
+  const { t } = useLanguage();
   const [newPlayerName, setNewPlayerName] = useState('');
   const [isAdding, setIsAdding] = useState(false);
   const [uploadingPlayerId, setUploadingPlayerId] = useState<string | null>(null);
@@ -24,7 +26,7 @@ export function PlayerManager({ players, onAddPlayer, onDeletePlayer, onUpdateAv
 
   const handleAddPlayer = async () => {
     if (!newPlayerName.trim()) {
-      toast.error('Please enter a player name');
+      toast.error(t.admin.pleaseEnterName);
       return;
     }
 
@@ -32,7 +34,7 @@ export function PlayerManager({ players, onAddPlayer, onDeletePlayer, onUpdateAv
     try {
       await onAddPlayer(newPlayerName.trim());
       setNewPlayerName('');
-      toast.success('Player added successfully');
+      toast.success(t.admin.playerAdded);
     } catch (error) {
       toast.error('Failed to add player');
       console.error(error);
@@ -42,13 +44,13 @@ export function PlayerManager({ players, onAddPlayer, onDeletePlayer, onUpdateAv
   };
 
   const handleDeletePlayer = async (id: string, name: string) => {
-    if (!confirm(`Delete player "${name}"? This will also remove all their results.`)) {
+    if (!confirm(`${t.admin.deleteConfirmTitle} "${name}"${t.admin.deleteConfirmMessage}`)) {
       return;
     }
 
     try {
       await onDeletePlayer(id);
-      toast.success('Player deleted');
+      toast.success(t.admin.playerDeleted);
     } catch (error) {
       toast.error('Failed to delete player');
       console.error(error);
@@ -85,32 +87,23 @@ export function PlayerManager({ players, onAddPlayer, onDeletePlayer, onUpdateAv
           return;
         }
 
-        const outputSize = 400; // Output avatar size
+        const outputSize = 400;
         canvas.width = outputSize;
         canvas.height = outputSize;
 
-        // Calculate crop size based on image width
         const cropSize = img.naturalWidth * cropData.size;
-        
-        // Calculate center position of the face
         const faceCenterX = img.naturalWidth * cropData.centerX;
         const faceCenterY = img.naturalHeight * cropData.centerY;
-        
-        // Position the crop so face is centered in the square
-        // Face should be at about 45% from top of the final crop (slightly above center)
         const facePositionInCrop = 0.45;
         
         let sourceX = faceCenterX - cropSize / 2;
         let sourceY = faceCenterY - (cropSize * facePositionInCrop);
         
-        // Clamp to image bounds
         sourceX = Math.max(0, Math.min(img.naturalWidth - cropSize, sourceX));
         sourceY = Math.max(0, Math.min(img.naturalHeight - cropSize, sourceY));
         
-        // If crop is larger than image, adjust
         const actualCropSize = Math.min(cropSize, img.naturalWidth, img.naturalHeight);
 
-        // Draw cropped and scaled image
         ctx.fillStyle = '#ffffff';
         ctx.fillRect(0, 0, outputSize, outputSize);
         
@@ -155,14 +148,10 @@ export function PlayerManager({ players, onAddPlayer, onDeletePlayer, onUpdateAv
     const loadingToast = toast.loading('Processing image...');
 
     try {
-      // Convert file to base64
       const imageBase64 = await fileToBase64(file);
-
-      // Call edge function for face detection
       let cropData = { centerX: 0.5, centerY: 0.4, size: 0.8, noFace: true };
       
       try {
-        // Get current session for auth header
         const { data: { session } } = await supabase.auth.getSession();
         
         const response = await supabase.functions.invoke('detect-face', {
@@ -183,10 +172,7 @@ export function PlayerManager({ players, onAddPlayer, onDeletePlayer, onUpdateAv
         console.warn('Face detection failed, using center crop:', detectError);
       }
 
-      // Crop the image
       const croppedBlob = await cropImageWithCoordinates(imageBase64, cropData);
-
-      // Upload to storage
       const fileName = `${playerId}-${Date.now()}.jpg`;
       const filePath = `players/${fileName}`;
 
@@ -202,7 +188,7 @@ export function PlayerManager({ players, onAddPlayer, onDeletePlayer, onUpdateAv
 
       await onUpdateAvatar(playerId, urlData.publicUrl);
       toast.dismiss(loadingToast);
-      toast.success('Avatar updated');
+      toast.success(t.admin.avatarUpdated);
     } catch (error) {
       console.error('Avatar upload error:', error);
       toast.dismiss(loadingToast);
@@ -224,13 +210,13 @@ export function PlayerManager({ players, onAddPlayer, onDeletePlayer, onUpdateAv
 
   const handleSaveEdit = async (playerId: string) => {
     if (!editingName.trim()) {
-      toast.error('Name cannot be empty');
+      toast.error(t.admin.nameCannotBeEmpty);
       return;
     }
 
     try {
       await onUpdateName(playerId, editingName.trim());
-      toast.success('Name updated');
+      toast.success(t.admin.nameUpdated);
       setEditingPlayerId(null);
       setEditingName('');
     } catch (error) {
@@ -255,15 +241,15 @@ export function PlayerManager({ players, onAddPlayer, onDeletePlayer, onUpdateAv
           <Users className="w-5 h-5 text-chart-4" />
         </div>
         <div>
-          <h2 className="font-semibold text-foreground">Manage Players</h2>
-          <p className="text-xs text-muted-foreground">{players.length} players registered</p>
+          <h2 className="font-semibold text-foreground">{t.admin.managePlayers}</h2>
+          <p className="text-xs text-muted-foreground">{players.length} {t.admin.playersRegistered}</p>
         </div>
       </div>
 
       {/* Add Player Form */}
       <div className="flex gap-2 mb-6">
         <Input
-          placeholder="Enter player name"
+          placeholder={t.admin.enterPlayerName}
           value={newPlayerName}
           onChange={(e) => setNewPlayerName(e.target.value)}
           onKeyDown={(e) => e.key === 'Enter' && handleAddPlayer()}
@@ -271,7 +257,7 @@ export function PlayerManager({ players, onAddPlayer, onDeletePlayer, onUpdateAv
         />
         <Button onClick={handleAddPlayer} disabled={isAdding} className="h-11 px-4 rounded-xl">
           <UserPlus className="w-4 h-4 mr-2" />
-          Add
+          {t.admin.add}
         </Button>
       </div>
 
@@ -280,8 +266,8 @@ export function PlayerManager({ players, onAddPlayer, onDeletePlayer, onUpdateAv
         {players.length === 0 ? (
           <div className="col-span-full text-center py-12">
             <Users className="w-12 h-12 text-muted-foreground/30 mx-auto mb-3" />
-            <p className="text-muted-foreground">No players yet</p>
-            <p className="text-sm text-muted-foreground/70">Add your first player above</p>
+            <p className="text-muted-foreground">{t.admin.noPlayersYet}</p>
+            <p className="text-sm text-muted-foreground/70">{t.admin.addFirstPlayer}</p>
           </div>
         ) : (
           players.map((player) => (
