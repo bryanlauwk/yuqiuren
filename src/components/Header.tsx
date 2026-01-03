@@ -1,10 +1,16 @@
 import { Link, useLocation } from 'react-router-dom';
 import { cn } from '@/lib/utils';
-import { Trophy, Shield } from 'lucide-react';
+import { Trophy, Shield, Activity } from 'lucide-react';
 
 export function Header() {
   const location = useLocation();
-  const isAdmin = location.pathname === '/admin';
+  const currentPath = location.pathname;
+
+  const navItems = [
+    { path: '/', label: 'Ranking', icon: Trophy },
+    { path: '/scoreboard', label: 'Scoreboard', icon: Activity },
+    { path: '/admin', label: 'Admin', icon: Shield },
+  ];
 
   return (
     <header className="sticky top-0 z-50 bg-background/80 backdrop-blur-lg border-b border-border">
@@ -15,29 +21,21 @@ export function Header() {
         </Link>
 
         <nav className="flex items-center gap-1">
-          <Link
-            to="/"
-            className={cn(
-              'px-3 py-1.5 rounded-lg text-sm font-medium transition-colors',
-              !isAdmin 
-                ? 'bg-primary text-primary-foreground' 
-                : 'text-muted-foreground hover:text-foreground'
-            )}
-          >
-            Scoreboard
-          </Link>
-          <Link
-            to="/admin"
-            className={cn(
-              'px-3 py-1.5 rounded-lg text-sm font-medium transition-colors flex items-center gap-1.5',
-              isAdmin 
-                ? 'bg-primary text-primary-foreground' 
-                : 'text-muted-foreground hover:text-foreground'
-            )}
-          >
-            <Shield className="w-3.5 h-3.5" />
-            Admin
-          </Link>
+          {navItems.map(({ path, label, icon: Icon }) => (
+            <Link
+              key={path}
+              to={path}
+              className={cn(
+                'px-3 py-1.5 rounded-lg text-sm font-medium transition-colors flex items-center gap-1.5',
+                currentPath === path
+                  ? 'bg-primary text-primary-foreground'
+                  : 'text-muted-foreground hover:text-foreground'
+              )}
+            >
+              <Icon className="w-3.5 h-3.5" />
+              {label}
+            </Link>
+          ))}
         </nav>
       </div>
     </header>

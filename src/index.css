@@ -44,6 +44,14 @@
     --score-bg: 220 20% 8%;
     --court-badge: 200 80% 50%;
 
+    /* Ranking tokens */
+    --rank-gold: 45 93% 47%;
+    --rank-silver: 220 10% 70%;
+    --rank-bronze: 30 60% 45%;
+    --champion: 142 70% 45%;
+    --runner-up: 25 95% 53%;
+    --attendance: 260 60% 55%;
+
     /* Shadows */
     --shadow-card: 0 4px 24px -4px hsl(0 0% 0% / 0.5);
     --shadow-glow: 0 0 20px hsl(var(--live) / 0.4);
