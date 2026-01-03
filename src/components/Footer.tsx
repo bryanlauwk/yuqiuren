@@ -1,5 +1,6 @@
 import { useLanguage } from '@/contexts/LanguageContext';
 import { Heart } from 'lucide-react';
+import { BadmintonRally } from './BadmintonRally';
 
 export function Footer() {
   const { t } = useLanguage();
@@ -14,7 +15,12 @@ export function Footer() {
         </svg>
       </div>
       
-      <div className="container py-6">
+      {/* Animated Badminton Rally */}
+      <div className="container pt-4">
+        <BadmintonRally />
+      </div>
+      
+      <div className="container py-4">
         <div className="flex items-center justify-center gap-2">
           <p className="text-center text-muted-foreground text-sm">
             {t.footer.designedBy}{' '}
