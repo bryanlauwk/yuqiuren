@@ -1,6 +1,7 @@
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { cn } from '@/lib/utils';
 import { Medal, Shield, LogOut } from 'lucide-react';
+import logo from '@/assets/logo.png';
 import { useAuth } from '@/hooks/useAuth';
 import { Button } from '@/components/ui/button';
 import { LanguageSwitcher } from '@/components/LanguageSwitcher';
@@ -30,8 +31,8 @@ export function Header() {
       
       <div className="container flex items-center justify-between h-16">
         <Link to="/" className="flex items-center gap-3 group">
-          <div className="relative p-2.5 rounded-xl bg-gradient-to-br from-primary to-primary/80 text-primary-foreground group-hover:scale-105 transition-transform shadow-lg">
-            <span className="text-xl">🏸</span>
+          <div className="relative w-10 h-10 rounded-xl overflow-hidden group-hover:scale-105 transition-transform shadow-lg">
+            <img src={logo} alt="Logo" className="w-full h-full object-cover" />
           </div>
           <div className="flex flex-col">
             <span className="font-display text-lg leading-tight text-foreground">
