@@ -11,7 +11,7 @@ export function Header() {
   const { user, isAdmin, signOut } = useAuth();
 
   const navItems = [
-    { path: '/', label: 'Ranking', icon: Trophy },
+    { path: '/', label: 'Rankings', icon: Trophy },
     { path: '/admin', label: 'Admin', icon: Shield, requiresAuth: true },
   ];
 
@@ -21,20 +21,27 @@ export function Header() {
   };
 
   return (
-    <header className="sticky top-0 z-50 bg-background/90 backdrop-blur-lg border-b border-border glow-card">
+    <header className="sticky top-0 z-50 bg-card/95 backdrop-blur-sm border-b border-border card-shadow">
+      {/* Top accent bar */}
+      <div className="h-1 accent-bar" />
+      
       <div className="container flex items-center justify-between h-16">
         <Link to="/" className="flex items-center gap-3 group">
-          <div className="p-2 rounded-lg bg-primary/20 border border-primary/50 glow-primary group-hover:scale-105 transition-transform">
-            <Trophy className="w-5 h-5 text-primary" />
+          <div className="p-2 rounded-lg bg-primary text-primary-foreground group-hover:scale-105 transition-transform">
+            <Trophy className="w-5 h-5" />
           </div>
-          <span className="font-display text-2xl tracking-wider text-glow">
-            BADMINTON LEAGUE
-          </span>
+          <div className="flex flex-col">
+            <span className="font-display text-lg leading-tight text-foreground">
+              BWF RANKINGS
+            </span>
+            <span className="text-[10px] uppercase tracking-widest text-muted-foreground">
+              Badminton World Federation
+            </span>
+          </div>
         </Link>
 
-        <nav className="flex items-center gap-2">
+        <nav className="flex items-center gap-1">
           {navItems.map(({ path, label, icon: Icon, requiresAuth }) => {
-            // Hide admin link if not an admin
             if (requiresAuth && !isAdmin) return null;
             
             return (
@@ -42,9 +49,9 @@ export function Header() {
                 key={path}
                 to={path}
                 className={cn(
-                  'px-4 py-2 rounded-lg text-sm font-medium transition-all flex items-center gap-2',
+                  'px-4 py-2 rounded-lg text-sm font-medium transition-colors flex items-center gap-2',
                   currentPath === path
-                    ? 'bg-primary text-primary-foreground glow-primary'
+                    ? 'bg-primary text-primary-foreground'
                     : 'text-muted-foreground hover:text-foreground hover:bg-muted'
                 )}
               >
@@ -59,7 +66,7 @@ export function Header() {
               variant="ghost"
               size="sm"
               onClick={handleSignOut}
-              className="text-muted-foreground hover:text-destructive"
+              className="text-muted-foreground hover:text-destructive ml-2"
             >
               <LogOut className="w-4 h-4" />
               <span className="hidden sm:inline ml-2">Sign out</span>

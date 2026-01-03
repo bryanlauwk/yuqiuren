@@ -2,100 +2,91 @@
 @tailwind components;
 @tailwind utilities;
 
-@import url('https://fonts.googleapis.com/css2?family=Creepster&family=Inter:wght@400;500;600;700&display=swap');
-
 @layer base {
   :root {
-    /* Stranger Things Dark Theme */
-    --background: 0 0% 4%;
-    --foreground: 0 20% 95%;
+    /* BWF Official-Inspired Light Theme */
+    --background: 210 20% 98%;
+    --foreground: 215 25% 15%;
 
-    --card: 0 5% 8%;
-    --card-foreground: 0 20% 95%;
+    --card: 0 0% 100%;
+    --card-foreground: 215 25% 15%;
 
-    --popover: 0 5% 8%;
-    --popover-foreground: 0 20% 95%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 215 25% 15%;
 
-    /* Stranger Things Red */
-    --primary: 0 85% 50%;
+    /* BWF Blue - Primary */
+    --primary: 210 100% 40%;
     --primary-foreground: 0 0% 100%;
 
-    --secondary: 0 10% 15%;
-    --secondary-foreground: 0 20% 95%;
+    --secondary: 210 15% 93%;
+    --secondary-foreground: 215 25% 20%;
 
-    --muted: 0 5% 12%;
-    --muted-foreground: 0 10% 50%;
+    --muted: 210 15% 95%;
+    --muted-foreground: 215 15% 45%;
 
-    /* Neon Pink Accent */
-    --accent: 330 90% 55%;
-    --accent-foreground: 0 0% 100%;
+    /* BWF Orange/Yellow Accent */
+    --accent: 35 100% 50%;
+    --accent-foreground: 215 25% 10%;
 
     --destructive: 0 72% 51%;
     --destructive-foreground: 0 0% 100%;
 
-    --border: 0 15% 18%;
-    --input: 0 15% 18%;
-    --ring: 0 85% 50%;
+    --border: 210 20% 88%;
+    --input: 210 20% 88%;
+    --ring: 210 100% 40%;
 
     --radius: 0.5rem;
 
-    /* Custom Stranger Things tokens */
-    --stranger-red: 0 85% 50%;
-    --stranger-pink: 330 90% 55%;
-    --stranger-orange: 25 95% 53%;
-    --stranger-glow: 0 85% 50%;
-
     /* Status tokens */
-    --live: 0 85% 50%;
-    --live-glow: 0 85% 50%;
-    --scheduled: 0 10% 40%;
-    --finished: 120 60% 40%;
-    --score-bg: 0 0% 6%;
-    --court-badge: 200 80% 50%;
+    --live: 0 75% 50%;
+    --scheduled: 210 15% 50%;
+    --finished: 145 65% 40%;
+    --score-bg: 210 15% 96%;
+    --court-badge: 210 100% 45%;
 
-    /* Ranking tokens - warmer metallics */
-    --rank-gold: 45 90% 50%;
-    --rank-silver: 0 0% 75%;
-    --rank-bronze: 25 70% 45%;
-    --champion: 120 60% 45%;
-    --runner-up: 0 85% 50%;
-    --attendance: 270 60% 55%;
+    /* Ranking tokens - Olympic metallics */
+    --rank-gold: 45 95% 50%;
+    --rank-silver: 210 10% 70%;
+    --rank-bronze: 25 60% 45%;
+    --champion: 145 65% 40%;
+    --runner-up: 210 100% 45%;
+    --attendance: 210 15% 60%;
 
-    /* Glowing shadows */
-    --shadow-card: 0 4px 24px -4px hsl(0 0% 0% / 0.8);
-    --shadow-glow: 0 0 30px hsl(var(--stranger-red) / 0.4);
-    --shadow-glow-pink: 0 0 30px hsl(var(--stranger-pink) / 0.3);
+    /* Clean shadows */
+    --shadow-card: 0 1px 3px hsl(210 20% 20% / 0.08), 0 4px 12px hsl(210 20% 20% / 0.06);
+    --shadow-elevated: 0 4px 16px hsl(210 20% 20% / 0.12);
 
-    --sidebar-background: 0 5% 6%;
-    --sidebar-foreground: 0 20% 95%;
-    --sidebar-primary: 0 85% 50%;
+    --sidebar-background: 0 0% 100%;
+    --sidebar-foreground: 215 25% 15%;
+    --sidebar-primary: 210 100% 40%;
     --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 0 5% 12%;
-    --sidebar-accent-foreground: 0 20% 95%;
-    --sidebar-border: 0 15% 18%;
-    --sidebar-ring: 0 85% 50%;
+    --sidebar-accent: 210 15% 95%;
+    --sidebar-accent-foreground: 215 25% 15%;
+    --sidebar-border: 210 20% 88%;
+    --sidebar-ring: 210 100% 40%;
   }
 
   .dark {
-    --background: 0 0% 4%;
-    --foreground: 0 20% 95%;
-    --card: 0 5% 8%;
-    --card-foreground: 0 20% 95%;
-    --popover: 0 5% 8%;
-    --popover-foreground: 0 20% 95%;
-    --primary: 0 85% 50%;
+    /* BWF Dark variant */
+    --background: 215 30% 10%;
+    --foreground: 210 20% 95%;
+    --card: 215 25% 14%;
+    --card-foreground: 210 20% 95%;
+    --popover: 215 25% 14%;
+    --popover-foreground: 210 20% 95%;
+    --primary: 210 100% 55%;
     --primary-foreground: 0 0% 100%;
-    --secondary: 0 10% 15%;
-    --secondary-foreground: 0 20% 95%;
-    --muted: 0 5% 12%;
-    --muted-foreground: 0 10% 50%;
-    --accent: 330 90% 55%;
-    --accent-foreground: 0 0% 100%;
+    --secondary: 215 20% 20%;
+    --secondary-foreground: 210 20% 95%;
+    --muted: 215 20% 18%;
+    --muted-foreground: 210 15% 55%;
+    --accent: 35 100% 55%;
+    --accent-foreground: 215 25% 10%;
     --destructive: 0 72% 51%;
     --destructive-foreground: 0 0% 100%;
-    --border: 0 15% 18%;
-    --input: 0 15% 18%;
-    --ring: 0 85% 50%;
+    --border: 215 20% 22%;
+    --input: 215 20% 22%;
+    --ring: 210 100% 55%;
   }
 }
 
@@ -106,84 +97,36 @@
 
   body {
     @apply bg-background text-foreground font-sans antialiased;
-    font-family: 'Inter', system-ui, sans-serif;
-    background: 
-      radial-gradient(ellipse at 50% 0%, hsl(0 85% 50% / 0.08) 0%, transparent 50%),
-      radial-gradient(ellipse at 80% 80%, hsl(330 90% 55% / 0.05) 0%, transparent 40%),
-      hsl(var(--background));
   }
 
   .font-display {
-    font-family: 'Creepster', cursive;
-    letter-spacing: 0.05em;
+    font-family: 'Plus Jakarta Sans', 'Inter', system-ui, sans-serif;
+    font-weight: 700;
+    letter-spacing: -0.01em;
   }
 }
 
 @layer utilities {
-  /* Text glow effect */
-  .text-glow {
-    text-shadow: 
-      0 0 10px hsl(var(--stranger-red) / 0.8),
-      0 0 20px hsl(var(--stranger-red) / 0.6),
-      0 0 40px hsl(var(--stranger-red) / 0.4);
+  /* Clean card shadow */
+  .card-shadow {
+    box-shadow: var(--shadow-card);
   }
 
-  .text-glow-subtle {
-    text-shadow: 
-      0 0 10px hsl(var(--stranger-red) / 0.5),
-      0 0 20px hsl(var(--stranger-red) / 0.3);
+  .card-shadow-elevated {
+    box-shadow: var(--shadow-elevated);
   }
 
-  /* Card glow */
-  .glow-card {
-    box-shadow: 
-      0 0 20px hsl(var(--stranger-red) / 0.15),
-      0 4px 24px -4px hsl(0 0% 0% / 0.6);
+  /* Subtle hover effect */
+  .hover-lift {
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
   }
 
-  .glow-card:hover {
-    box-shadow: 
-      0 0 30px hsl(var(--stranger-red) / 0.25),
-      0 4px 24px -4px hsl(0 0% 0% / 0.6);
+  .hover-lift:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-elevated);
   }
 
-  /* Primary glow */
-  .glow-primary {
-    box-shadow: 
-      0 0 20px hsl(var(--primary) / 0.5),
-      0 0 40px hsl(var(--primary) / 0.3);
-  }
-
-  /* Flickering animation */
-  .flicker {
-    animation: flicker 3s infinite;
-  }
-
-  @keyframes flicker {
-    0%, 100% { opacity: 1; }
-    5% { opacity: 0.8; }
-    10% { opacity: 1; }
-    15% { opacity: 0.9; }
-    20% { opacity: 1; }
-    50% { opacity: 1; }
-    55% { opacity: 0.7; }
-    60% { opacity: 1; }
-  }
-
-  /* Pulsing glow */
-  .pulse-glow {
-    animation: pulse-glow 2s ease-in-out infinite;
-  }
-
-  @keyframes pulse-glow {
-    0%, 100% {
-      box-shadow: 0 0 20px hsl(var(--stranger-red) / 0.4);
-    }
-    50% {
-      box-shadow: 0 0 40px hsl(var(--stranger-red) / 0.6);
-    }
-  }
-
+  /* Status pulse */
   .live-pulse {
     animation: pulse-live 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
   }
@@ -205,47 +148,24 @@
     transform: scale(0.95);
   }
 
-  .glow-live {
-    box-shadow: var(--shadow-glow);
+  /* Gradient accent bar */
+  .accent-bar {
+    background: linear-gradient(90deg, hsl(var(--primary)) 0%, hsl(var(--accent)) 100%);
   }
 
-  .card-shadow {
-    box-shadow: var(--shadow-card);
+  /* Podium gradient backgrounds */
+  .podium-gold {
+    background: linear-gradient(135deg, hsl(45 95% 55% / 0.15) 0%, hsl(45 95% 45% / 0.05) 100%);
+    border-color: hsl(var(--rank-gold));
   }
 
-  /* Scanline effect (subtle) */
-  .scanlines::after {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background: repeating-linear-gradient(
-      0deg,
-      transparent,
-      transparent 2px,
-      hsl(0 0% 0% / 0.03) 2px,
-      hsl(0 0% 0% / 0.03) 4px
-    );
-    pointer-events: none;
+  .podium-silver {
+    background: linear-gradient(135deg, hsl(210 10% 75% / 0.15) 0%, hsl(210 10% 65% / 0.05) 100%);
+    border-color: hsl(var(--rank-silver));
   }
 
-  /* Border glow */
-  .border-glow {
-    position: relative;
-  }
-
-  .border-glow::before {
-    content: '';
-    position: absolute;
-    inset: -1px;
-    background: linear-gradient(
-      135deg,
-      hsl(var(--stranger-red)) 0%,
-      hsl(var(--stranger-pink)) 50%,
-      hsl(var(--stranger-red)) 100%
-    );
-    border-radius: inherit;
-    z-index: -1;
-    opacity: 0.5;
-    filter: blur(4px);
+  .podium-bronze {
+    background: linear-gradient(135deg, hsl(25 60% 50% / 0.15) 0%, hsl(25 60% 40% / 0.05) 100%);
+    border-color: hsl(var(--rank-bronze));
   }
 }

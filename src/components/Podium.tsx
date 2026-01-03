@@ -22,29 +22,29 @@ export function Podium({ rankings }: PodiumProps) {
     switch (rank) {
       case 1:
         return {
-          bg: 'bg-rank-gold/20',
+          bg: 'podium-gold',
           border: 'border-rank-gold',
           text: 'text-rank-gold',
-          glow: 'shadow-[0_0_30px_hsl(var(--rank-gold)/0.5)]',
-          height: 'h-32',
+          avatarBg: 'bg-rank-gold/20',
+          height: 'h-28',
           label: 'CHAMPION',
         };
       case 2:
         return {
-          bg: 'bg-rank-silver/20',
+          bg: 'podium-silver',
           border: 'border-rank-silver',
           text: 'text-rank-silver',
-          glow: 'shadow-[0_0_20px_hsl(var(--rank-silver)/0.4)]',
-          height: 'h-24',
+          avatarBg: 'bg-rank-silver/20',
+          height: 'h-20',
           label: 'RUNNER-UP',
         };
       case 3:
         return {
-          bg: 'bg-rank-bronze/20',
+          bg: 'podium-bronze',
           border: 'border-rank-bronze',
           text: 'text-rank-bronze',
-          glow: 'shadow-[0_0_20px_hsl(var(--rank-bronze)/0.4)]',
-          height: 'h-20',
+          avatarBg: 'bg-rank-bronze/20',
+          height: 'h-16',
           label: 'THIRD',
         };
       default:
@@ -52,8 +52,8 @@ export function Podium({ rankings }: PodiumProps) {
           bg: 'bg-muted',
           border: 'border-border',
           text: 'text-muted-foreground',
-          glow: '',
-          height: 'h-16',
+          avatarBg: 'bg-muted',
+          height: 'h-14',
           label: '',
         };
     }
@@ -72,10 +72,10 @@ export function Podium({ rankings }: PodiumProps) {
     <div className="mb-8">
       <div className="flex items-center gap-2 mb-6">
         <Trophy className="w-5 h-5 text-rank-gold" />
-        <h2 className="text-xl font-display tracking-wide text-glow">TOP CHAMPIONS</h2>
+        <h2 className="text-lg font-display tracking-wide text-foreground">TOP PLAYERS</h2>
       </div>
 
-      <div className="flex items-end justify-center gap-3 px-4">
+      <div className="flex items-end justify-center gap-4 px-4">
         {podiumOrder.map((player) => {
           if (!player) return null;
           const style = getMedalStyle(player.rank);
@@ -92,11 +92,10 @@ export function Podium({ rankings }: PodiumProps) {
               {/* Player Avatar */}
               <div
                 className={cn(
-                  'w-16 h-16 rounded-full flex items-center justify-center border-3 font-display text-xl mb-2 transition-all hover:scale-110 overflow-hidden',
-                  style.bg,
+                  'w-16 h-16 rounded-full flex items-center justify-center border-2 font-display text-lg mb-2 transition-transform hover:scale-105 overflow-hidden',
+                  style.avatarBg,
                   style.border,
-                  style.text,
-                  style.glow
+                  style.text
                 )}
               >
                 {player.avatar_url ? (
@@ -106,14 +105,14 @@ export function Podium({ rankings }: PodiumProps) {
                     className="w-full h-full object-cover"
                   />
                 ) : player.rank === 1 ? (
-                  <Trophy className="w-7 h-7" />
+                  <Trophy className="w-6 h-6" />
                 ) : (
                   <span>{getInitials(player.player_name)}</span>
                 )}
               </div>
 
               {/* Player Name */}
-              <p className={cn('font-medium text-sm text-center mb-1 truncate max-w-[100px]', style.text)}>
+              <p className={cn('font-semibold text-sm text-center mb-0.5 truncate max-w-[100px] text-foreground')}>
                 {player.player_name}
               </p>
 
@@ -125,18 +124,17 @@ export function Podium({ rankings }: PodiumProps) {
               {/* Podium Platform */}
               <div
                 className={cn(
-                  'w-24 rounded-t-lg flex flex-col items-center justify-start pt-2 border-t-2 border-x-2 transition-all',
+                  'w-24 rounded-t-lg flex flex-col items-center justify-start pt-3 border-t-2 border-x transition-all',
                   style.height,
                   style.bg,
-                  style.border,
-                  style.glow
+                  style.border
                 )}
               >
-                <Medal className={cn('w-6 h-6 mb-1', style.text)} />
+                <Medal className={cn('w-5 h-5 mb-1', style.text)} />
                 <span className={cn('font-display text-2xl', style.text)}>
                   {player.rank}
                 </span>
-                <span className={cn('text-[10px] tracking-wider opacity-70', style.text)}>
+                <span className={cn('text-[9px] tracking-wider opacity-80', style.text)}>
                   {style.label}
                 </span>
               </div>
