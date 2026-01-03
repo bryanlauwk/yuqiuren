@@ -82,6 +82,11 @@ export function RankingRow({ ranking }: RankingRowProps) {
         <div className="flex items-center gap-2">
           <p className="font-medium text-foreground truncate">{ranking.player_name}</p>
           {getRankChangeDisplay()}
+          {ranking.is_tied && (
+            <span className="text-[10px] bg-accent/20 text-accent px-1.5 py-0.5 rounded uppercase tracking-wide">
+              Tied
+            </span>
+          )}
         </div>
         <p className="text-xs text-muted-foreground">
           {ranking.sessions_played} sessions • {ranking.championships} wins

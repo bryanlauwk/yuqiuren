@@ -137,6 +137,7 @@ export function useRankings() {
         rank: 0,
         rank_change: 0,
         is_new: false,
+        is_tied: false,
       }))
       .sort((a, b) => {
         // 1. Total points (descending)
@@ -148,6 +149,25 @@ export function useRankings() {
         // 4. Alphabetical by name
         return a.player_name.localeCompare(b.player_name);
       });
+
+    // Helper function to check if two players are truly tied
+    const areTrulyTied = (a: typeof rankingList[0], b: typeof rankingList[0]) => {
+      return a.total_points === b.total_points &&
+        a.championships === b.championships &&
+        a.sessions_played === b.sessions_played;
+    };
+
+    // Detect true ties (only distinguished by alphabetical order)
+    for (let i = 0; i < rankingList.length; i++) {
+      const current = rankingList[i];
+      const prev = rankingList[i - 1];
+      const next = rankingList[i + 1];
+
+      const tiedWithPrev = prev && areTrulyTied(current, prev);
+      const tiedWithNext = next && areTrulyTied(current, next);
+
+      current.is_tied = tiedWithPrev || tiedWithNext;
+    }
 
     // Assign ranks and calculate rank changes
     rankingList.forEach((item, index) => {
@@ -168,6 +188,12 @@ export function useRankings() {
 
     return rankingList;
   }, [players, results, sessions]);
+
+  // Check if any of the top 3 positions have true ties
+  const hasTopTies = useMemo(() => {
+    const top3 = rankings.slice(0, 3);
+    return top3.some(player => player.is_tied);
+  }, [rankings]);
 
   // Calculate consecutive championship streak for a player
   const calculateStreakBonus = async (playerId: string): Promise<number> => {
@@ -357,6 +383,7 @@ export function useRankings() {
     sessions,
     results,
     rankings,
+    hasTopTies,
     loading,
     addPlayer,
     deletePlayer,

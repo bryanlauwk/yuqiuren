@@ -34,6 +34,7 @@ export interface PlayerRanking {
   rank: number;
   rank_change: number; // positive = moved up, negative = moved down, 0 = no change
   is_new: boolean; // true if player joined in the latest session
+  is_tied: boolean; // true if tied with adjacent player on all tiebreakers except name
 }
 
 export type SessionType = '3_teams' | '2_teams';
