@@ -92,14 +92,20 @@ export function Podium({ rankings }: PodiumProps) {
               {/* Player Avatar */}
               <div
                 className={cn(
-                  'w-16 h-16 rounded-full flex items-center justify-center border-3 font-display text-xl mb-2 transition-all hover:scale-110',
+                  'w-16 h-16 rounded-full flex items-center justify-center border-3 font-display text-xl mb-2 transition-all hover:scale-110 overflow-hidden',
                   style.bg,
                   style.border,
                   style.text,
                   style.glow
                 )}
               >
-                {player.rank === 1 ? (
+                {player.avatar_url ? (
+                  <img
+                    src={player.avatar_url}
+                    alt={player.player_name}
+                    className="w-full h-full object-cover"
+                  />
+                ) : player.rank === 1 ? (
                   <Trophy className="w-7 h-7" />
                 ) : (
                   <span>{getInitials(player.player_name)}</span>

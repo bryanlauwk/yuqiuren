@@ -83,6 +83,7 @@ export function useRankings() {
       sessions_played: number; 
       championships: number;
       name: string;
+      avatar_url: string | null;
     }>();
 
     // Initialize all players
@@ -92,6 +93,7 @@ export function useRankings() {
         sessions_played: 0,
         championships: 0,
         name: player.name,
+        avatar_url: player.avatar_url,
       });
     });
 
@@ -128,6 +130,7 @@ export function useRankings() {
       .map(([player_id, stats]) => ({
         player_id,
         player_name: stats.name,
+        avatar_url: stats.avatar_url,
         total_points: stats.total_points,
         sessions_played: stats.sessions_played,
         championships: stats.championships,
@@ -209,8 +212,20 @@ export function useRankings() {
   };
 
   // Add a new player
-  const addPlayer = async (name: string) => {
-    const { error } = await supabase.from('players').insert({ name });
+  const addPlayer = async (name: string, avatarUrl?: string) => {
+    const { error } = await supabase.from('players').insert({ 
+      name,
+      avatar_url: avatarUrl || null 
+    });
+    if (error) throw error;
+  };
+
+  // Update player avatar
+  const updatePlayerAvatar = async (playerId: string, avatarUrl: string | null) => {
+    const { error } = await supabase
+      .from('players')
+      .update({ avatar_url: avatarUrl })
+      .eq('id', playerId);
     if (error) throw error;
   };
 
@@ -345,6 +360,7 @@ export function useRankings() {
     loading,
     addPlayer,
     deletePlayer,
+    updatePlayerAvatar,
     createSession,
     deleteSession,
     recordResults,
