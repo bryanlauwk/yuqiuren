@@ -16,35 +16,42 @@ export default function RankingPage() {
       <Header />
       
       <main className="container py-6">
-        {/* Header Section */}
-        <div className="flex items-center gap-4 mb-8">
-          <div className="p-3 rounded-xl bg-primary text-primary-foreground">
-            <Trophy className="w-7 h-7" />
+        {/* Hero Section */}
+        <div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-primary via-primary/90 to-primary/70 p-6 sm:p-8 mb-8 card-shadow-elevated">
+          {/* Background pattern */}
+          <div className="absolute inset-0 opacity-10">
+            <div className="absolute top-4 right-4 text-8xl">🏸</div>
+            <div className="absolute bottom-4 left-4 text-6xl rotate-45">🏸</div>
           </div>
-          <div>
-            <h1 className="text-2xl sm:text-3xl font-display tracking-tight text-foreground">
+          
+          {/* Content */}
+          <div className="relative z-10 text-center">
+            <h1 className="text-2xl sm:text-4xl font-display tracking-tight text-primary-foreground mb-2">
               2026年羽球人赛事积分表
             </h1>
+            <p className="text-primary-foreground/80 text-sm sm:text-base">
+              Badminton League Rankings
+            </p>
           </div>
         </div>
 
         {/* Stats Summary */}
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8">
-          <div className="bg-card rounded-xl border border-border p-4 card-shadow">
+          <div className="bg-card rounded-xl border border-border p-4 card-shadow hover-lift">
             <div className="flex items-center gap-2 text-muted-foreground mb-1">
               <Users className="w-4 h-4" />
               <span className="text-xs uppercase tracking-wide font-medium">Total Players</span>
             </div>
             <p className="text-3xl font-display text-foreground">{rankings.length}</p>
           </div>
-          <div className="bg-card rounded-xl border border-border p-4 card-shadow">
+          <div className="bg-card rounded-xl border border-border p-4 card-shadow hover-lift">
             <div className="flex items-center gap-2 text-muted-foreground mb-1">
               <Clock className="w-4 h-4" />
               <span className="text-xs uppercase tracking-wide font-medium">Next Match</span>
             </div>
             <NextMatchCountdown />
           </div>
-          <div className="bg-card rounded-xl border border-border p-4 card-shadow">
+          <div className="bg-card rounded-xl border border-border p-4 card-shadow hover-lift">
             <div className="flex items-center gap-2 text-muted-foreground mb-1">
               <MapPin className="w-4 h-4" />
               <span className="text-xs uppercase tracking-wide font-medium">Venue</span>
