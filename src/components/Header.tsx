@@ -30,17 +30,9 @@ export function Header() {
       <div className="h-1 accent-bar" />
       
       <div className="container flex items-center justify-between h-16">
-        <Link to="/" className="flex items-center gap-3 group">
-          <div className="relative w-10 h-10 rounded-xl overflow-hidden group-hover:scale-105 transition-transform shadow-lg">
+        <Link to="/" className="flex items-center group">
+          <div className="relative w-12 h-12 rounded-2xl overflow-hidden group-hover:scale-105 group-hover:rotate-2 transition-all duration-300 doodle-shadow">
             <img src={logo} alt="Logo" className="w-full h-full object-cover" />
-          </div>
-          <div className="flex flex-col">
-            <span className="font-display text-lg leading-tight text-foreground">
-              {t.header.brandName}
-            </span>
-            <span className="text-[10px] uppercase tracking-widest text-muted-foreground">
-              {t.header.subtitle}
-            </span>
           </div>
         </Link>
 

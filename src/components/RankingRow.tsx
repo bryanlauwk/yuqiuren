@@ -1,4 +1,4 @@
-import { ArrowUp, ArrowDown, Minus } from 'lucide-react';
+import { ArrowUp, ArrowDown, Minus, Star } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import type { PlayerRanking } from '@/types/ranking';
 import { useLanguage } from '@/contexts/LanguageContext';
@@ -48,11 +48,11 @@ export function RankingRow({ ranking }: RankingRowProps) {
   const getRankBadgeStyle = () => {
     switch (ranking.rank) {
       case 1:
-        return 'bg-rank-gold/15 text-rank-gold border-rank-gold/30';
+        return 'bg-rank-gold/20 text-rank-gold border-rank-gold/50';
       case 2:
-        return 'bg-rank-silver/15 text-rank-silver border-rank-silver/30';
+        return 'bg-rank-silver/20 text-rank-silver border-rank-silver/50';
       case 3:
-        return 'bg-rank-bronze/15 text-rank-bronze border-rank-bronze/30';
+        return 'bg-rank-bronze/20 text-rank-bronze border-rank-bronze/50';
       default:
         return 'bg-muted text-muted-foreground border-border';
     }
@@ -60,18 +60,26 @@ export function RankingRow({ ranking }: RankingRowProps) {
 
   return (
     <div className={cn(
-      "flex items-center gap-4 p-4 bg-card rounded-lg border border-border hover:border-primary/30 transition-all card-shadow hover-lift"
+      "flex items-center gap-4 p-4 bg-card doodle-card hover:rotate-0 transition-all group"
     )}>
-      {/* Rank Number */}
+      {/* Rank Number - Hand-drawn style */}
       <div className={cn(
-        "w-10 h-10 rounded-lg flex items-center justify-center font-display text-lg border",
+        "w-11 h-11 flex items-center justify-center font-display text-lg border-2 relative",
         getRankBadgeStyle()
-      )}>
+      )}
+      style={{ borderRadius: '50% 45% 55% 48%' }}
+      >
         {ranking.rank}
+        {ranking.rank <= 3 && (
+          <Star className="absolute -top-1 -right-1 w-3 h-3 text-accent opacity-60" />
+        )}
       </div>
 
-      {/* Player Avatar */}
-      <div className="w-10 h-10 rounded-full flex items-center justify-center bg-secondary border border-border overflow-hidden">
+      {/* Player Avatar - Organic shape */}
+      <div 
+        className="w-11 h-11 flex items-center justify-center bg-secondary border-2 border-border overflow-hidden"
+        style={{ borderRadius: '45% 55% 50% 50%' }}
+      >
         {ranking.avatar_url ? (
           <img
             src={ranking.avatar_url}
@@ -88,7 +96,7 @@ export function RankingRow({ ranking }: RankingRowProps) {
       {/* Player Name & Stats */}
       <div className="flex-1 min-w-0">
         <div className="flex items-center gap-2">
-          <p className="font-semibold text-foreground truncate">{ranking.player_name}</p>
+          <p className="font-semibold text-foreground truncate group-hover:text-primary transition-colors">{ranking.player_name}</p>
           {getRankChangeDisplay()}
         </div>
         <p className="text-xs text-muted-foreground">
@@ -96,10 +104,14 @@ export function RankingRow({ ranking }: RankingRowProps) {
         </p>
       </div>
 
-      {/* Total Points */}
-      <div className="text-right">
+      {/* Total Points - With decoration */}
+      <div className="text-right relative">
         <p className="text-2xl font-display text-primary">{ranking.total_points}</p>
         <p className="text-[10px] uppercase tracking-wide text-muted-foreground">{t.ranking.points}</p>
+        {/* Small squiggle decoration */}
+        <svg className="absolute -bottom-1 right-0 w-8 h-2 text-primary/20" viewBox="0 0 30 8" fill="none" stroke="currentColor" strokeWidth="1.5">
+          <path d="M0 4 Q7.5 1, 15 4 T30 4" strokeLinecap="round"/>
+        </svg>
       </div>
     </div>
   );
