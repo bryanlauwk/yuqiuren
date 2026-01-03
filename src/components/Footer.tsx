@@ -9,7 +9,7 @@ export function Footer() {
     <footer className="border-t-2 border-dashed border-border/50 mt-auto relative">
       {/* Decorative squiggle line */}
       <div className="absolute -top-1 left-1/2 -translate-x-1/2">
-        <svg className="w-20 h-3 text-primary/30" viewBox="0 0 80 12" fill="none" stroke="currentColor" strokeWidth="2">
+        <svg className="w-20 h-3 text-primary/30 animate-wiggle-subtle" viewBox="0 0 80 12" fill="none" stroke="currentColor" strokeWidth="2">
           <path d="M0 6 Q20 2, 40 6 T80 6" strokeLinecap="round"/>
         </svg>
       </div>
@@ -21,14 +21,14 @@ export function Footer() {
             <span className="font-medium text-foreground/80 wavy-underline">bryanlauwk</span>{' '}
             © {currentYear}
           </p>
-          <Heart className="w-3 h-3 text-primary/50 animate-pulse" />
+          <Heart className="w-3 h-3 text-primary/50 animate-pulse-grow" />
         </div>
         
         {/* Decorative dots */}
         <div className="flex justify-center gap-2 mt-3">
-          <span className="w-1.5 h-1.5 rounded-full bg-primary/30" />
-          <span className="w-1.5 h-1.5 rounded-full bg-accent/40" />
-          <span className="w-1.5 h-1.5 rounded-full bg-primary/30" />
+          <span className="w-1.5 h-1.5 rounded-full bg-primary/30 animate-bounce-subtle" />
+          <span className="w-1.5 h-1.5 rounded-full bg-accent/40 animate-bounce-subtle" style={{ animationDelay: '0.2s' }} />
+          <span className="w-1.5 h-1.5 rounded-full bg-primary/30 animate-bounce-subtle" style={{ animationDelay: '0.4s' }} />
         </div>
       </div>
     </footer>

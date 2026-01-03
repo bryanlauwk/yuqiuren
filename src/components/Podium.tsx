@@ -78,19 +78,22 @@ export function Podium({ rankings }: PodiumProps) {
     <div className="mb-10 doodle-card bg-card p-6 relative overflow-hidden">
       {/* Decorative elements */}
       <div className="absolute top-3 right-3">
-        <Sparkles className="w-5 h-5 text-accent/40" />
+        <Sparkles className="w-5 h-5 text-accent/40 animate-sparkle" />
       </div>
       <div className="absolute bottom-3 left-3">
-        <Star className="w-4 h-4 text-primary/30" />
+        <Star className="w-4 h-4 text-primary/30 animate-float-slow" />
+      </div>
+      <div className="absolute top-1/2 right-6 -translate-y-1/2">
+        <Star className="w-3 h-3 text-rank-gold/20 animate-pulse-grow" />
       </div>
       
       <div className="flex items-center gap-2 mb-6">
-        <div className="p-2 rounded-lg bg-rank-gold/15">
+        <div className="p-2 rounded-lg bg-rank-gold/15 hover-wiggle">
           <Trophy className="w-5 h-5 text-rank-gold" />
         </div>
         <h2 className="text-lg font-display tracking-wide text-foreground">{t.podium.topPlayers}</h2>
         {/* Squiggly decoration */}
-        <svg className="w-12 h-3 ml-2 text-primary/30" viewBox="0 0 50 12" fill="none" stroke="currentColor" strokeWidth="2">
+        <svg className="w-12 h-3 ml-2 text-primary/30 animate-wiggle-subtle" viewBox="0 0 50 12" fill="none" stroke="currentColor" strokeWidth="2">
           <path d="M0 6 Q12.5 2, 25 6 T50 6" strokeLinecap="round"/>
         </svg>
       </div>
@@ -104,15 +107,15 @@ export function Podium({ rankings }: PodiumProps) {
             <div
               key={player.player_id}
               className={cn(
-                'flex flex-col items-center animate-fade-in transition-transform hover:scale-105',
+                'flex flex-col items-center animate-fade-in transition-all duration-300 hover:scale-105 group cursor-default',
                 player.rank === 1 ? 'order-2' : player.rank === 2 ? 'order-1' : 'order-3'
               )}
               style={{ animationDelay: `${(player.rank - 1) * 100}ms` }}
             >
               {/* Crown for 1st place */}
               {player.rank === 1 && (
-                <div className="mb-1 animate-bounce">
-                  <svg className="w-8 h-6 text-rank-gold" viewBox="0 0 40 30" fill="currentColor">
+                <div className="mb-1 animate-bounce-subtle">
+                  <svg className="w-8 h-6 text-rank-gold group-hover:animate-wiggle" viewBox="0 0 40 30" fill="currentColor">
                     <path d="M20 8 L26 18 L38 6 L34 28 L6 28 L2 6 L14 18 Z" />
                   </svg>
                 </div>

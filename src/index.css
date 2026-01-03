@@ -158,6 +158,109 @@
     50% { background-position: 100% 50%; }
   }
 
+  /* Floating animation */
+  @keyframes float {
+    0%, 100% { transform: translateY(0) rotate(0deg); }
+    25% { transform: translateY(-8px) rotate(2deg); }
+    75% { transform: translateY(4px) rotate(-1deg); }
+  }
+
+  @keyframes float-slow {
+    0%, 100% { transform: translateY(0) rotate(0deg); }
+    50% { transform: translateY(-12px) rotate(3deg); }
+  }
+
+  @keyframes float-reverse {
+    0%, 100% { transform: translateY(0) rotate(0deg); }
+    50% { transform: translateY(10px) rotate(-2deg); }
+  }
+
+  /* Wiggle animation */
+  @keyframes wiggle {
+    0%, 100% { transform: rotate(-3deg); }
+    50% { transform: rotate(3deg); }
+  }
+
+  @keyframes wiggle-subtle {
+    0%, 100% { transform: rotate(-1deg); }
+    50% { transform: rotate(1deg); }
+  }
+
+  /* Bounce animation */
+  @keyframes bounce-subtle {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-5px); }
+  }
+
+  /* Pulse grow animation */
+  @keyframes pulse-grow {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+  }
+
+  /* Drawing effect */
+  @keyframes draw-line {
+    from { stroke-dashoffset: 100; }
+    to { stroke-dashoffset: 0; }
+  }
+
+  /* Sparkle animation */
+  @keyframes sparkle {
+    0%, 100% { opacity: 0.3; transform: scale(0.8) rotate(0deg); }
+    50% { opacity: 1; transform: scale(1.2) rotate(180deg); }
+  }
+
+  .animate-float {
+    animation: float 4s ease-in-out infinite;
+  }
+
+  .animate-float-slow {
+    animation: float-slow 6s ease-in-out infinite;
+  }
+
+  .animate-float-reverse {
+    animation: float-reverse 5s ease-in-out infinite;
+  }
+
+  .animate-wiggle {
+    animation: wiggle 0.5s ease-in-out infinite;
+  }
+
+  .animate-wiggle-subtle {
+    animation: wiggle-subtle 2s ease-in-out infinite;
+  }
+
+  .animate-bounce-subtle {
+    animation: bounce-subtle 2s ease-in-out infinite;
+  }
+
+  .animate-pulse-grow {
+    animation: pulse-grow 2s ease-in-out infinite;
+  }
+
+  .animate-sparkle {
+    animation: sparkle 2s ease-in-out infinite;
+  }
+
+  .animate-draw-line {
+    stroke-dasharray: 100;
+    animation: draw-line 2s ease-out forwards;
+  }
+
+  /* Hover animations */
+  .hover-wiggle:hover {
+    animation: wiggle 0.3s ease-in-out;
+  }
+
+  .hover-bounce:hover {
+    animation: bounce-subtle 0.4s ease-in-out;
+  }
+
+  .hover-grow:hover {
+    transform: scale(1.1);
+    transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+
   /* Podium gradient backgrounds - hand-drawn style */
   .podium-gold {
     background: linear-gradient(135deg, hsl(45 85% 60% / 0.2) 0%, hsl(45 85% 50% / 0.08) 100%);
