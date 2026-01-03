@@ -1,4 +1,4 @@
-import { Trophy, ArrowUp, ArrowDown, Minus, Sparkles } from 'lucide-react';
+import { ArrowUp, ArrowDown, Minus, Sparkles } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import type { PlayerRanking } from '@/types/ranking';
 
@@ -7,30 +7,10 @@ interface RankingRowProps {
 }
 
 export function RankingRow({ ranking }: RankingRowProps) {
-  const getRankStyle = (rank: number) => {
-    switch (rank) {
-      case 1:
-        return 'bg-rank-gold/20 border-rank-gold text-rank-gold';
-      case 2:
-        return 'bg-rank-silver/20 border-rank-silver text-rank-silver';
-      case 3:
-        return 'bg-rank-bronze/20 border-rank-bronze text-rank-bronze';
-      default:
-        return 'bg-muted border-border text-muted-foreground';
-    }
-  };
-
-  const getRankIcon = (rank: number) => {
-    if (rank <= 3) {
-      return <Trophy className="w-4 h-4" />;
-    }
-    return <span className="text-sm font-medium">{rank}</span>;
-  };
-
   const getRankChangeDisplay = () => {
     if (ranking.is_new) {
       return (
-        <div className="flex items-center gap-1 text-blue-500">
+        <div className="flex items-center gap-1 text-accent">
           <Sparkles className="w-3 h-3" />
           <span className="text-xs font-medium">NEW</span>
         </div>
@@ -39,7 +19,7 @@ export function RankingRow({ ranking }: RankingRowProps) {
     
     if (ranking.rank_change > 0) {
       return (
-        <div className="flex items-center gap-0.5 text-green-500">
+        <div className="flex items-center gap-0.5 text-finished">
           <ArrowUp className="w-3 h-3" />
           <span className="text-xs font-medium">{ranking.rank_change}</span>
         </div>
@@ -48,7 +28,7 @@ export function RankingRow({ ranking }: RankingRowProps) {
     
     if (ranking.rank_change < 0) {
       return (
-        <div className="flex items-center gap-0.5 text-red-500">
+        <div className="flex items-center gap-0.5 text-primary">
           <ArrowDown className="w-3 h-3" />
           <span className="text-xs font-medium">{Math.abs(ranking.rank_change)}</span>
         </div>
@@ -64,18 +44,13 @@ export function RankingRow({ ranking }: RankingRowProps) {
 
   return (
     <div className={cn(
-      "flex items-center gap-4 p-4 bg-card rounded-lg border border-border hover:border-primary/30 transition-all",
+      "flex items-center gap-4 p-4 bg-card rounded-lg border border-border hover:border-primary/40 transition-all glow-card",
       ranking.rank_change > 0 && "animate-fade-in",
-      ranking.is_new && "ring-1 ring-blue-500/30"
+      ranking.is_new && "ring-1 ring-accent/40"
     )}>
-      {/* Rank Badge */}
-      <div
-        className={cn(
-          'w-10 h-10 rounded-full flex items-center justify-center border-2 font-display text-lg',
-          getRankStyle(ranking.rank)
-        )}
-      >
-        {getRankIcon(ranking.rank)}
+      {/* Rank Number */}
+      <div className="w-10 h-10 rounded-full flex items-center justify-center bg-muted border border-border font-display text-xl text-muted-foreground">
+        {ranking.rank}
       </div>
 
       {/* Player Name */}

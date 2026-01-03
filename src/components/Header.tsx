@@ -1,41 +1,70 @@
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { cn } from '@/lib/utils';
-import { Trophy, Shield, Activity } from 'lucide-react';
+import { Trophy, Shield, LogOut } from 'lucide-react';
+import { useAuth } from '@/hooks/useAuth';
+import { Button } from '@/components/ui/button';
 
 export function Header() {
   const location = useLocation();
+  const navigate = useNavigate();
   const currentPath = location.pathname;
+  const { user, isAdmin, signOut } = useAuth();
 
   const navItems = [
     { path: '/', label: 'Ranking', icon: Trophy },
-    { path: '/scoreboard', label: 'Scoreboard', icon: Activity },
-    { path: '/admin', label: 'Admin', icon: Shield },
+    { path: '/admin', label: 'Admin', icon: Shield, requiresAuth: true },
   ];
 
+  const handleSignOut = async () => {
+    await signOut();
+    navigate('/');
+  };
+
   return (
-    <header className="sticky top-0 z-50 bg-background/80 backdrop-blur-lg border-b border-border">
-      <div className="container flex items-center justify-between h-14">
-        <Link to="/" className="flex items-center gap-2">
-          <Trophy className="w-6 h-6 text-primary" />
-          <span className="font-display text-xl tracking-wide">BADMINTON LIVE</span>
+    <header className="sticky top-0 z-50 bg-background/90 backdrop-blur-lg border-b border-border glow-card">
+      <div className="container flex items-center justify-between h-16">
+        <Link to="/" className="flex items-center gap-3 group">
+          <div className="p-2 rounded-lg bg-primary/20 border border-primary/50 glow-primary group-hover:scale-105 transition-transform">
+            <Trophy className="w-5 h-5 text-primary" />
+          </div>
+          <span className="font-display text-2xl tracking-wider text-glow">
+            BADMINTON LEAGUE
+          </span>
         </Link>
 
-        <nav className="flex items-center gap-1">
-          {navItems.map(({ path, label, icon: Icon }) => (
-            <Link
-              key={path}
-              to={path}
-              className={cn(
-                'px-3 py-1.5 rounded-lg text-sm font-medium transition-colors flex items-center gap-1.5',
-                currentPath === path
-                  ? 'bg-primary text-primary-foreground'
-                  : 'text-muted-foreground hover:text-foreground'
-              )}
+        <nav className="flex items-center gap-2">
+          {navItems.map(({ path, label, icon: Icon, requiresAuth }) => {
+            // Hide admin link if not an admin
+            if (requiresAuth && !isAdmin) return null;
+            
+            return (
+              <Link
+                key={path}
+                to={path}
+                className={cn(
+                  'px-4 py-2 rounded-lg text-sm font-medium transition-all flex items-center gap-2',
+                  currentPath === path
+                    ? 'bg-primary text-primary-foreground glow-primary'
+                    : 'text-muted-foreground hover:text-foreground hover:bg-muted'
+                )}
+              >
+                <Icon className="w-4 h-4" />
+                <span className="hidden sm:inline">{label}</span>
+              </Link>
+            );
+          })}
+
+          {user && isAdmin && (
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={handleSignOut}
+              className="text-muted-foreground hover:text-destructive"
             >
-              <Icon className="w-3.5 h-3.5" />
-              {label}
-            </Link>
-          ))}
+              <LogOut className="w-4 h-4" />
+              <span className="hidden sm:inline ml-2">Sign out</span>
+            </Button>
+          )}
         </nav>
       </div>
     </header>

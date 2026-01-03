@@ -123,7 +123,7 @@ export function useRankings() {
     // Calculate previous rankings
     const previousRankMap = calculateRankingsFromResults(players, previousResults);
 
-    // Convert to array and sort by total points
+    // Convert to array and sort with tiebreakers
     const rankingList = Array.from(playerStats.entries())
       .map(([player_id, stats]) => ({
         player_id,
@@ -135,7 +135,16 @@ export function useRankings() {
         rank_change: 0,
         is_new: false,
       }))
-      .sort((a, b) => b.total_points - a.total_points);
+      .sort((a, b) => {
+        // 1. Total points (descending)
+        if (b.total_points !== a.total_points) return b.total_points - a.total_points;
+        // 2. Championships (descending)
+        if (b.championships !== a.championships) return b.championships - a.championships;
+        // 3. Sessions played (ascending - fewer is better at same points)
+        if (a.sessions_played !== b.sessions_played) return a.sessions_played - b.sessions_played;
+        // 4. Alphabetical by name
+        return a.player_name.localeCompare(b.player_name);
+      });
 
     // Assign ranks and calculate rank changes
     rankingList.forEach((item, index) => {
