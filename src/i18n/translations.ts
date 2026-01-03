@@ -47,6 +47,9 @@ export const translations = {
       matchSoon: "比赛即将开始！🏸",
       matchSoonBody: "您的羽毛球比赛将在1小时后开始",
     },
+    footer: {
+      designedBy: "设计",
+    },
   },
   en: {
     header: {
@@ -95,6 +98,9 @@ export const translations = {
       disabledDesc: "You won't receive match reminders.",
       matchSoon: "Match Starting Soon! 🏸",
       matchSoonBody: "Your badminton match starts in 1 hour.",
+    },
+    footer: {
+      designedBy: "Designed by",
     },
   },
 } as const;
@@ -147,5 +153,8 @@ export type TranslationKeys = {
     disabledDesc: string;
     matchSoon: string;
     matchSoonBody: string;
+  };
+  footer: {
+    designedBy: string;
   };
 };
