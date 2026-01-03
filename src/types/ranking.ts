@@ -30,6 +30,8 @@ export interface PlayerRanking {
   sessions_played: number;
   championships: number;
   rank: number;
+  rank_change: number; // positive = moved up, negative = moved down, 0 = no change
+  is_new: boolean; // true if player joined in the latest session
 }
 
 export type SessionType = '3_teams' | '2_teams';

@@ -1,4 +1,4 @@
-import { Trophy } from 'lucide-react';
+import { Trophy, ArrowUp, ArrowDown, Minus, Sparkles } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import type { PlayerRanking } from '@/types/ranking';
 
@@ -27,8 +27,47 @@ export function RankingRow({ ranking }: RankingRowProps) {
     return <span className="text-sm font-medium">{rank}</span>;
   };
 
+  const getRankChangeDisplay = () => {
+    if (ranking.is_new) {
+      return (
+        <div className="flex items-center gap-1 text-blue-500">
+          <Sparkles className="w-3 h-3" />
+          <span className="text-xs font-medium">NEW</span>
+        </div>
+      );
+    }
+    
+    if (ranking.rank_change > 0) {
+      return (
+        <div className="flex items-center gap-0.5 text-green-500">
+          <ArrowUp className="w-3 h-3" />
+          <span className="text-xs font-medium">{ranking.rank_change}</span>
+        </div>
+      );
+    }
+    
+    if (ranking.rank_change < 0) {
+      return (
+        <div className="flex items-center gap-0.5 text-red-500">
+          <ArrowDown className="w-3 h-3" />
+          <span className="text-xs font-medium">{Math.abs(ranking.rank_change)}</span>
+        </div>
+      );
+    }
+    
+    return (
+      <div className="flex items-center text-muted-foreground">
+        <Minus className="w-3 h-3" />
+      </div>
+    );
+  };
+
   return (
-    <div className="flex items-center gap-4 p-4 bg-card rounded-lg border border-border hover:border-primary/30 transition-colors">
+    <div className={cn(
+      "flex items-center gap-4 p-4 bg-card rounded-lg border border-border hover:border-primary/30 transition-all",
+      ranking.rank_change > 0 && "animate-fade-in",
+      ranking.is_new && "ring-1 ring-blue-500/30"
+    )}>
       {/* Rank Badge */}
       <div
         className={cn(
@@ -41,7 +80,10 @@ export function RankingRow({ ranking }: RankingRowProps) {
 
       {/* Player Name */}
       <div className="flex-1 min-w-0">
-        <p className="font-medium text-foreground truncate">{ranking.player_name}</p>
+        <div className="flex items-center gap-2">
+          <p className="font-medium text-foreground truncate">{ranking.player_name}</p>
+          {getRankChangeDisplay()}
+        </div>
         <p className="text-xs text-muted-foreground">
           {ranking.sessions_played} sessions • {ranking.championships} wins
         </p>
