@@ -15,7 +15,7 @@ export default {
     extend: {
       fontFamily: {
         sans: ['Inter', 'system-ui', 'sans-serif'],
-        display: ['Bebas Neue', 'sans-serif'],
+        display: ['Creepster', 'cursive'],
       },
       colors: {
         border: "hsl(var(--border))",
@@ -61,11 +61,19 @@ export default {
           border: "hsl(var(--sidebar-border))",
           ring: "hsl(var(--sidebar-ring))",
         },
+        // Stranger Things colors
+        stranger: {
+          red: "hsl(var(--stranger-red))",
+          pink: "hsl(var(--stranger-pink))",
+          orange: "hsl(var(--stranger-orange))",
+        },
+        // Status colors
         live: "hsl(var(--live))",
         scheduled: "hsl(var(--scheduled))",
         finished: "hsl(var(--finished))",
         court: "hsl(var(--court-badge))",
         "score-bg": "hsl(var(--score-bg))",
+        // Ranking colors
         "rank-gold": "hsl(var(--rank-gold))",
         "rank-silver": "hsl(var(--rank-silver))",
         "rank-bronze": "hsl(var(--rank-bronze))",
@@ -77,6 +85,9 @@ export default {
         lg: "var(--radius)",
         md: "calc(var(--radius) - 2px)",
         sm: "calc(var(--radius) - 4px)",
+      },
+      borderWidth: {
+        '3': '3px',
       },
       keyframes: {
         "accordion-down": {
@@ -95,12 +106,21 @@ export default {
           from: { opacity: "0", transform: "scale(0.95)" },
           to: { opacity: "1", transform: "scale(1)" },
         },
+        "glow-pulse": {
+          "0%, 100%": { 
+            boxShadow: "0 0 20px hsl(var(--stranger-red) / 0.4), 0 0 40px hsl(var(--stranger-red) / 0.2)" 
+          },
+          "50%": { 
+            boxShadow: "0 0 30px hsl(var(--stranger-red) / 0.6), 0 0 60px hsl(var(--stranger-red) / 0.3)" 
+          },
+        },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
         "fade-in": "fade-in 0.3s ease-out",
         "scale-in": "scale-in 0.2s ease-out",
+        "glow-pulse": "glow-pulse 2s ease-in-out infinite",
       },
     },
   },
