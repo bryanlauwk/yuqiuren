@@ -66,20 +66,36 @@ export function AvatarCropper({ open, onClose, imageSrc, onCrop }: AvatarCropper
     canvas.width = size;
     canvas.height = size;
 
-    // Calculate crop area
-    const cropSize = 200; // Visible area size
+    // Calculate crop area based on visible circular area
+    const cropSize = 200; // Visible area size in CSS pixels
+    
+    // The image is positioned with transform: translate(calc(-50% + posX), calc(-50% + posY)) scale(scale)
+    // We need to figure out what portion of the original image is visible in the crop circle
+    
+    // Scaled dimensions of the image
     const scaledWidth = img.naturalWidth * scale;
     const scaledHeight = img.naturalHeight * scale;
     
-    // Center offset
-    const centerX = cropSize / 2;
-    const centerY = cropSize / 2;
+    // The center of the crop area in the container coordinate system
+    const cropCenterX = cropSize / 2;
+    const cropCenterY = cropSize / 2;
     
-    // Calculate source coordinates
-    const sourceX = (centerX - position.x - scaledWidth / 2) / scale;
-    const sourceY = (centerY - position.y - scaledHeight / 2) / scale;
+    // The center of the image in container coordinates (before position offset)
+    // After translation, the image center is at (cropCenterX + position.x, cropCenterY + position.y)
+    
+    // Top-left corner of crop area relative to the scaled image center
+    const cropOffsetX = -position.x - cropSize / 2;
+    const cropOffsetY = -position.y - cropSize / 2;
+    
+    // Convert to original image coordinates
+    const sourceX = (scaledWidth / 2 + cropOffsetX) / scale;
+    const sourceY = (scaledHeight / 2 + cropOffsetY) / scale;
     const sourceSize = cropSize / scale;
 
+    // Clear and draw
+    ctx.fillStyle = '#ffffff';
+    ctx.fillRect(0, 0, size, size);
+    
     ctx.drawImage(
       img,
       sourceX,
@@ -95,7 +111,10 @@ export function AvatarCropper({ open, onClose, imageSrc, onCrop }: AvatarCropper
     canvas.toBlob((blob) => {
       if (blob) {
         onCrop(blob);
-        handleClose();
+        // Reset state
+        setScale(1);
+        setPosition({ x: 0, y: 0 });
+        onClose();
       }
     }, 'image/jpeg', 0.9);
   };
