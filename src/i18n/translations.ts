@@ -50,6 +50,61 @@ export const translations = {
     footer: {
       designedBy: "版权所有",
     },
+    admin: {
+      title: "管理面板",
+      description: "管理选手、场次和比赛结果",
+      totalPlayers: "选手总数",
+      sessionsPlayed: "已进行场次",
+      championships: "冠军次数",
+      pointsAwarded: "累计积分",
+      managePlayers: "选手管理",
+      playersRegistered: "位选手已注册",
+      enterPlayerName: "输入选手名称",
+      add: "添加",
+      noPlayersYet: "暂无选手",
+      addFirstPlayer: "请添加第一位选手",
+      deletePlayerConfirm: "删除选手",
+      newSession: "新建场次",
+      createAndRecord: "创建并记录结果",
+      cancel: "取消",
+      threeTeams: "3队模式",
+      twoTeams: "2队模式",
+      champion: "冠军",
+      runnerUp: "亚军",
+      attendance: "出席",
+      sessionType: "场次类型",
+      date: "日期",
+      nameOptional: "名称（可选）",
+      continueToResults: "继续录入结果",
+      tapToCycle: "点击选手切换：",
+      saveResults: "保存结果",
+      saving: "保存中...",
+      sessionHistory: "场次记录",
+      sessionsRecorded: "场次已记录",
+      noSessionsYet: "暂无场次记录",
+      createFirstSession: "创建第一个场次开始",
+      champions: "冠军",
+      runnerUps: "亚军",
+      totalPoints: "总积分",
+      noResults: "暂无结果",
+      editResults: "编辑场次结果",
+      updateResults: "更新结果",
+      playerAdded: "选手添加成功",
+      playerDeleted: "选手已删除",
+      sessionCreated: "场次已创建！请录入结果。",
+      resultsRecorded: "结果保存成功！",
+      resultsUpdated: "结果更新成功！",
+      avatarUpdated: "头像已更新",
+      nameUpdated: "名称已更新",
+      selectChampion: "请选择至少一位冠军",
+      pleaseEnterName: "请输入选手名称",
+      nameCannotBeEmpty: "名称不能为空",
+      pts: "分",
+      pt: "分",
+      deleteConfirmTitle: "删除选手",
+      deleteConfirmMessage: "？这将同时删除该选手的所有比赛结果。",
+      deleteSessionConfirm: "确定删除此场次及其所有结果吗？",
+    },
   },
   en: {
     header: {
@@ -101,6 +156,61 @@ export const translations = {
     },
     footer: {
       designedBy: "Designed by",
+    },
+    admin: {
+      title: "Admin Panel",
+      description: "Manage players, sessions, and tournament results",
+      totalPlayers: "Total Players",
+      sessionsPlayed: "Sessions Played",
+      championships: "Championships",
+      pointsAwarded: "Points Awarded",
+      managePlayers: "Manage Players",
+      playersRegistered: "players registered",
+      enterPlayerName: "Enter player name",
+      add: "Add",
+      noPlayersYet: "No players yet",
+      addFirstPlayer: "Add your first player above",
+      deletePlayerConfirm: "Delete player",
+      newSession: "New Session",
+      createAndRecord: "Create and record results",
+      cancel: "Cancel",
+      threeTeams: "3 Teams",
+      twoTeams: "2 Teams",
+      champion: "Champion",
+      runnerUp: "Runner-up",
+      attendance: "Attendance",
+      sessionType: "Session Type",
+      date: "Date",
+      nameOptional: "Name (optional)",
+      continueToResults: "Continue to Results",
+      tapToCycle: "Tap a player to cycle through:",
+      saveResults: "Save Results",
+      saving: "Saving...",
+      sessionHistory: "Session History",
+      sessionsRecorded: "sessions recorded",
+      noSessionsYet: "No sessions recorded yet",
+      createFirstSession: "Create your first session to get started",
+      champions: "Champions",
+      runnerUps: "Runner-ups",
+      totalPoints: "Total points",
+      noResults: "No results recorded",
+      editResults: "Edit Session Results",
+      updateResults: "Update Results",
+      playerAdded: "Player added successfully",
+      playerDeleted: "Player deleted",
+      sessionCreated: "Session created! Now assign results.",
+      resultsRecorded: "Results recorded successfully!",
+      resultsUpdated: "Results updated successfully!",
+      avatarUpdated: "Avatar updated",
+      nameUpdated: "Name updated",
+      selectChampion: "Please select at least one champion",
+      pleaseEnterName: "Please enter a player name",
+      nameCannotBeEmpty: "Name cannot be empty",
+      pts: "pts",
+      pt: "pt",
+      deleteConfirmTitle: "Delete player",
+      deleteConfirmMessage: "? This will also remove all their results.",
+      deleteSessionConfirm: "Are you sure you want to delete this session and all its results?",
     },
   },
 } as const;
@@ -156,5 +266,60 @@ export type TranslationKeys = {
   };
   footer: {
     designedBy: string;
+  };
+  admin: {
+    title: string;
+    description: string;
+    totalPlayers: string;
+    sessionsPlayed: string;
+    championships: string;
+    pointsAwarded: string;
+    managePlayers: string;
+    playersRegistered: string;
+    enterPlayerName: string;
+    add: string;
+    noPlayersYet: string;
+    addFirstPlayer: string;
+    deletePlayerConfirm: string;
+    newSession: string;
+    createAndRecord: string;
+    cancel: string;
+    threeTeams: string;
+    twoTeams: string;
+    champion: string;
+    runnerUp: string;
+    attendance: string;
+    sessionType: string;
+    date: string;
+    nameOptional: string;
+    continueToResults: string;
+    tapToCycle: string;
+    saveResults: string;
+    saving: string;
+    sessionHistory: string;
+    sessionsRecorded: string;
+    noSessionsYet: string;
+    createFirstSession: string;
+    champions: string;
+    runnerUps: string;
+    totalPoints: string;
+    noResults: string;
+    editResults: string;
+    updateResults: string;
+    playerAdded: string;
+    playerDeleted: string;
+    sessionCreated: string;
+    resultsRecorded: string;
+    resultsUpdated: string;
+    avatarUpdated: string;
+    nameUpdated: string;
+    selectChampion: string;
+    pleaseEnterName: string;
+    nameCannotBeEmpty: string;
+    pts: string;
+    pt: string;
+    deleteConfirmTitle: string;
+    deleteConfirmMessage: string;
+    deleteSessionConfirm: string;
   };
 };

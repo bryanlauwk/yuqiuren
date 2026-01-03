@@ -1,4 +1,5 @@
 import { Users, Calendar, Trophy, TrendingUp } from 'lucide-react';
+import { useLanguage } from '@/contexts/LanguageContext';
 import type { Player, TournamentSession, SessionResult } from '@/types/ranking';
 
 interface AdminStatsProps {
@@ -8,33 +9,34 @@ interface AdminStatsProps {
 }
 
 export function AdminStats({ players, sessions, results }: AdminStatsProps) {
+  const { t } = useLanguage();
   const totalPoints = results.reduce((sum, r) => sum + r.total_points, 0);
   const totalChampions = results.filter(r => r.result_type === 'champion').length;
 
   const stats = [
     {
-      label: 'Total Players',
+      label: t.admin.totalPlayers,
       value: players.length,
       icon: Users,
       color: 'text-primary',
       bgColor: 'bg-primary/10',
     },
     {
-      label: 'Sessions Played',
+      label: t.admin.sessionsPlayed,
       value: sessions.length,
       icon: Calendar,
       color: 'text-chart-2',
       bgColor: 'bg-chart-2/10',
     },
     {
-      label: 'Championships',
+      label: t.admin.championships,
       value: totalChampions,
       icon: Trophy,
       color: 'text-champion',
       bgColor: 'bg-champion/10',
     },
     {
-      label: 'Points Awarded',
+      label: t.admin.pointsAwarded,
       value: totalPoints,
       icon: TrendingUp,
       color: 'text-chart-4',

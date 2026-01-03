@@ -4,6 +4,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { CalendarDays, Users, Plus, ChevronRight } from 'lucide-react';
 import { toast } from 'sonner';
+import { useLanguage } from '@/contexts/LanguageContext';
 import type { TournamentSession, SessionType, Player } from '@/types/ranking';
 import { cn } from '@/lib/utils';
 
@@ -20,6 +21,7 @@ interface SessionCreatorProps {
 }
 
 export function SessionCreator({ players, onCreateSession, onRecordResults }: SessionCreatorProps) {
+  const { t } = useLanguage();
   const [step, setStep] = useState<'type' | 'details' | 'results'>('type');
   const [sessionType, setSessionType] = useState<SessionType | null>(null);
   const [sessionDate, setSessionDate] = useState(new Date().toISOString().split('T')[0]);
@@ -43,7 +45,7 @@ export function SessionCreator({ players, onCreateSession, onRecordResults }: Se
       const session = await onCreateSession(sessionDate, sessionType, sessionName || undefined);
       setCreatedSession(session);
       setStep('results');
-      toast.success('Session created! Now assign results.');
+      toast.success(t.admin.sessionCreated);
     } catch (error) {
       toast.error('Failed to create session');
       console.error(error);
@@ -54,12 +56,10 @@ export function SessionCreator({ players, onCreateSession, onRecordResults }: Se
     playerId: string,
     category: 'champion' | 'runner_up' | 'attendance'
   ) => {
-    // Remove from all categories first
     setSelectedChampions((prev) => prev.filter((id) => id !== playerId));
     setSelectedRunnerUps((prev) => prev.filter((id) => id !== playerId));
     setSelectedAttendance((prev) => prev.filter((id) => id !== playerId));
 
-    // Add to selected category
     switch (category) {
       case 'champion':
         setSelectedChampions((prev) => [...prev, playerId]);
@@ -84,7 +84,7 @@ export function SessionCreator({ players, onCreateSession, onRecordResults }: Se
     if (!createdSession || !sessionType) return;
 
     if (selectedChampions.length === 0) {
-      toast.error('Please select at least one champion');
+      toast.error(t.admin.selectChampion);
       return;
     }
 
@@ -97,9 +97,8 @@ export function SessionCreator({ players, onCreateSession, onRecordResults }: Se
         selectedRunnerUps,
         selectedAttendance
       );
-      toast.success('Results recorded successfully!');
+      toast.success(t.admin.resultsRecorded);
       
-      // Reset form
       setStep('type');
       setSessionType(null);
       setCreatedSession(null);
@@ -133,13 +132,13 @@ export function SessionCreator({ players, onCreateSession, onRecordResults }: Se
             <Plus className="w-5 h-5 text-primary" />
           </div>
           <div>
-            <h2 className="font-semibold text-foreground">New Session</h2>
-            <p className="text-xs text-muted-foreground">Create and record results</p>
+            <h2 className="font-semibold text-foreground">{t.admin.newSession}</h2>
+            <p className="text-xs text-muted-foreground">{t.admin.createAndRecord}</p>
           </div>
         </div>
         {step !== 'type' && (
           <Button variant="ghost" size="sm" onClick={resetForm} className="text-muted-foreground">
-            Cancel
+            {t.admin.cancel}
           </Button>
         )}
       </div>
@@ -172,9 +171,9 @@ export function SessionCreator({ players, onCreateSession, onRecordResults }: Se
               <Users className="w-5 h-5 text-primary" />
               <Users className="w-5 h-5 text-primary" />
             </div>
-            <span className="font-semibold text-foreground group-hover:text-primary">3 Teams</span>
+            <span className="font-semibold text-foreground group-hover:text-primary">{t.admin.threeTeams}</span>
             <span className="text-xs text-muted-foreground text-center">
-              Champion (3) • Runner-up (2) • Attendance (1)
+              {t.admin.champion} (3) • {t.admin.runnerUp} (2) • {t.admin.attendance} (1)
             </span>
           </button>
           <button
@@ -185,9 +184,9 @@ export function SessionCreator({ players, onCreateSession, onRecordResults }: Se
               <Users className="w-5 h-5 text-primary" />
               <Users className="w-5 h-5 text-primary" />
             </div>
-            <span className="font-semibold text-foreground group-hover:text-primary">2 Teams</span>
+            <span className="font-semibold text-foreground group-hover:text-primary">{t.admin.twoTeams}</span>
             <span className="text-xs text-muted-foreground text-center">
-              Champion (2) • Runner-up (1)
+              {t.admin.champion} (2) • {t.admin.runnerUp} (1)
             </span>
           </button>
         </div>
@@ -198,11 +197,11 @@ export function SessionCreator({ players, onCreateSession, onRecordResults }: Se
         <div className="space-y-5">
           <div className="flex items-center gap-2 text-sm text-muted-foreground bg-muted/50 p-3 rounded-lg">
             <CalendarDays className="w-4 h-4" />
-            <span>Session Type: <span className="text-foreground font-medium">{sessionType === '3_teams' ? '3 Teams' : '2 Teams'}</span></span>
+            <span>{t.admin.sessionType}: <span className="text-foreground font-medium">{sessionType === '3_teams' ? t.admin.threeTeams : t.admin.twoTeams}</span></span>
           </div>
           
           <div className="space-y-2">
-            <Label htmlFor="session-date" className="text-sm font-medium">Date</Label>
+            <Label htmlFor="session-date" className="text-sm font-medium">{t.admin.date}</Label>
             <Input
               id="session-date"
               type="date"
@@ -213,7 +212,7 @@ export function SessionCreator({ players, onCreateSession, onRecordResults }: Se
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="session-name" className="text-sm font-medium">Name (optional)</Label>
+            <Label htmlFor="session-name" className="text-sm font-medium">{t.admin.nameOptional}</Label>
             <Input
               id="session-name"
               placeholder="e.g., Weekly Tournament #5"
@@ -224,7 +223,7 @@ export function SessionCreator({ players, onCreateSession, onRecordResults }: Se
           </div>
 
           <Button onClick={handleCreateSession} className="w-full h-11 rounded-xl">
-            Continue to Results
+            {t.admin.continueToResults}
           </Button>
         </div>
       )}
@@ -233,7 +232,7 @@ export function SessionCreator({ players, onCreateSession, onRecordResults }: Se
       {step === 'results' && sessionType && (
         <div className="space-y-4">
           <p className="text-sm text-muted-foreground bg-muted/50 p-3 rounded-lg">
-            Tap a player to cycle through: <span className="text-champion font-medium">Champion</span> → <span className="text-runner-up font-medium">Runner-up</span> {sessionType === '3_teams' && <span>→ <span className="text-attendance font-medium">Attendance</span></span>}
+            {t.admin.tapToCycle} <span className="text-champion font-medium">{t.admin.champion}</span> → <span className="text-runner-up font-medium">{t.admin.runnerUp}</span> {sessionType === '3_teams' && <span>→ <span className="text-attendance font-medium">{t.admin.attendance}</span></span>}
           </p>
 
           <div className="grid grid-cols-1 gap-2 max-h-64 overflow-y-auto">
@@ -250,7 +249,6 @@ export function SessionCreator({ players, onCreateSession, onRecordResults }: Se
                     } else if (category === 'runner_up' && sessionType === '3_teams') {
                       togglePlayer(player.id, 'attendance');
                     } else {
-                      // Remove from all
                       setSelectedChampions((prev) => prev.filter((id) => id !== player.id));
                       setSelectedRunnerUps((prev) => prev.filter((id) => id !== player.id));
                       setSelectedAttendance((prev) => prev.filter((id) => id !== player.id));
@@ -267,9 +265,9 @@ export function SessionCreator({ players, onCreateSession, onRecordResults }: Se
                   <span className="font-medium">{player.name}</span>
                   {category && (
                     <span className="text-xs uppercase tracking-wide font-medium">
-                      {category === 'champion' && `Champion (${sessionType === '3_teams' ? '3' : '2'}pts)`}
-                      {category === 'runner_up' && `Runner-up (${sessionType === '3_teams' ? '2' : '1'}pt)`}
-                      {category === 'attendance' && 'Attendance (1pt)'}
+                      {category === 'champion' && `${t.admin.champion} (${sessionType === '3_teams' ? '3' : '2'}${t.admin.pts})`}
+                      {category === 'runner_up' && `${t.admin.runnerUp} (${sessionType === '3_teams' ? '2' : '1'}${t.admin.pt})`}
+                      {category === 'attendance' && `${t.admin.attendance} (1${t.admin.pt})`}
                     </span>
                   )}
                 </button>
@@ -278,10 +276,10 @@ export function SessionCreator({ players, onCreateSession, onRecordResults }: Se
           </div>
 
           <div className="flex items-center gap-4 pt-3 border-t border-border text-sm">
-            <span className="text-champion font-medium">{selectedChampions.length} Champions</span>
-            <span className="text-runner-up font-medium">{selectedRunnerUps.length} Runner-ups</span>
+            <span className="text-champion font-medium">{selectedChampions.length} {t.admin.champions}</span>
+            <span className="text-runner-up font-medium">{selectedRunnerUps.length} {t.admin.runnerUps}</span>
             {sessionType === '3_teams' && (
-              <span className="text-attendance font-medium">{selectedAttendance.length} Attendance</span>
+              <span className="text-attendance font-medium">{selectedAttendance.length} {t.admin.attendance}</span>
             )}
           </div>
 
@@ -290,7 +288,7 @@ export function SessionCreator({ players, onCreateSession, onRecordResults }: Se
             className="w-full h-11 rounded-xl"
             disabled={isSubmitting || selectedChampions.length === 0}
           >
-            {isSubmitting ? 'Saving...' : 'Save Results'}
+            {isSubmitting ? t.admin.saving : t.admin.saveResults}
           </Button>
         </div>
       )}
