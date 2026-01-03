@@ -14,7 +14,96 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      players: {
+        Row: {
+          created_at: string
+          id: string
+          name: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          name: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          name?: string
+        }
+        Relationships: []
+      }
+      session_results: {
+        Row: {
+          base_points: number
+          created_at: string
+          id: string
+          player_id: string
+          result_type: string
+          session_id: string
+          streak_bonus: number
+          total_points: number
+        }
+        Insert: {
+          base_points: number
+          created_at?: string
+          id?: string
+          player_id: string
+          result_type: string
+          session_id: string
+          streak_bonus?: number
+          total_points: number
+        }
+        Update: {
+          base_points?: number
+          created_at?: string
+          id?: string
+          player_id?: string
+          result_type?: string
+          session_id?: string
+          streak_bonus?: number
+          total_points?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "session_results_player_id_fkey"
+            columns: ["player_id"]
+            isOneToOne: false
+            referencedRelation: "players"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "session_results_session_id_fkey"
+            columns: ["session_id"]
+            isOneToOne: false
+            referencedRelation: "tournament_sessions"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      tournament_sessions: {
+        Row: {
+          created_at: string
+          id: string
+          name: string | null
+          session_date: string
+          session_type: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          name?: string | null
+          session_date: string
+          session_type: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          name?: string | null
+          session_date?: string
+          session_type?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never

@@ -66,6 +66,12 @@ export default {
         finished: "hsl(var(--finished))",
         court: "hsl(var(--court-badge))",
         "score-bg": "hsl(var(--score-bg))",
+        "rank-gold": "hsl(var(--rank-gold))",
+        "rank-silver": "hsl(var(--rank-silver))",
+        "rank-bronze": "hsl(var(--rank-bronze))",
+        champion: "hsl(var(--champion))",
+        "runner-up": "hsl(var(--runner-up))",
+        attendance: "hsl(var(--attendance))",
       },
       borderRadius: {
         lg: "var(--radius)",
