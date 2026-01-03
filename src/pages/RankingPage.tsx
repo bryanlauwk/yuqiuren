@@ -3,7 +3,7 @@ import { RankingRow } from '@/components/RankingRow';
 import { Podium } from '@/components/Podium';
 import { NextMatchCountdown } from '@/components/NextMatchCountdown';
 import { useRankings } from '@/hooks/useRankings';
-import { Trophy, Users, Clock } from 'lucide-react';
+import { Trophy, Users, Clock, MapPin } from 'lucide-react';
 
 export default function RankingPage() {
   const { rankings, loading, hasTopTies } = useRankings();
@@ -29,7 +29,7 @@ export default function RankingPage() {
         </div>
 
         {/* Stats Summary */}
-        <div className="grid grid-cols-2 gap-4 mb-8">
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8">
           <div className="bg-card rounded-xl border border-border p-4 card-shadow">
             <div className="flex items-center gap-2 text-muted-foreground mb-1">
               <Users className="w-4 h-4" />
@@ -43,6 +43,15 @@ export default function RankingPage() {
               <span className="text-xs uppercase tracking-wide font-medium">Next Match</span>
             </div>
             <NextMatchCountdown />
+          </div>
+          <div className="bg-card rounded-xl border border-border p-4 card-shadow">
+            <div className="flex items-center gap-2 text-muted-foreground mb-1">
+              <MapPin className="w-4 h-4" />
+              <span className="text-xs uppercase tracking-wide font-medium">Venue</span>
+            </div>
+            <p className="text-lg font-display text-foreground leading-tight">
+              One Shamelin Badminton Hall
+            </p>
           </div>
         </div>
 
