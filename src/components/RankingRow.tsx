@@ -1,12 +1,15 @@
 import { ArrowUp, ArrowDown, Minus } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import type { PlayerRanking } from '@/types/ranking';
+import { useLanguage } from '@/contexts/LanguageContext';
 
 interface RankingRowProps {
   ranking: PlayerRanking;
 }
 
 export function RankingRow({ ranking }: RankingRowProps) {
+  const { t } = useLanguage();
+  
   const getInitials = (name: string) => {
     return name
       .split(' ')
@@ -89,14 +92,14 @@ export function RankingRow({ ranking }: RankingRowProps) {
           {getRankChangeDisplay()}
         </div>
         <p className="text-xs text-muted-foreground">
-          {ranking.sessions_played} sessions • {ranking.championships} wins
+          {ranking.sessions_played} {t.ranking.sessions} • {ranking.championships} {t.ranking.wins}
         </p>
       </div>
 
       {/* Total Points */}
       <div className="text-right">
         <p className="text-2xl font-display text-primary">{ranking.total_points}</p>
-        <p className="text-[10px] uppercase tracking-wide text-muted-foreground">points</p>
+        <p className="text-[10px] uppercase tracking-wide text-muted-foreground">{t.ranking.points}</p>
       </div>
     </div>
   );
