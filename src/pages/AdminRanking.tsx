@@ -1,16 +1,20 @@
 import { Header } from '@/components/Header';
 import { PlayerManager } from '@/components/admin/PlayerManager';
 import { SessionCreator } from '@/components/admin/SessionCreator';
+import { SessionHistory } from '@/components/admin/SessionHistory';
 import { useRankings } from '@/hooks/useRankings';
 import { Shield } from 'lucide-react';
 
 export default function AdminRanking() {
   const {
     players,
+    sessions,
+    results,
     loading,
     addPlayer,
     deletePlayer,
     createSession,
+    deleteSession,
     recordResults,
   } = useRankings();
 
@@ -51,6 +55,14 @@ export default function AdminRanking() {
           players={players}
           onCreateSession={createSession}
           onRecordResults={recordResults}
+        />
+
+        {/* Session History */}
+        <SessionHistory
+          sessions={sessions}
+          results={results}
+          players={players}
+          onDeleteSession={deleteSession}
         />
 
         {/* Player Manager */}
