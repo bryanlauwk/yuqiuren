@@ -1,1 +1,4 @@
 project_id = "rzhdaymzzxrmmfzshrix"
+
+[functions.detect-face]
+verify_jwt = false
