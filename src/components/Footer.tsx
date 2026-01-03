@@ -1,15 +1,35 @@
 import { useLanguage } from '@/contexts/LanguageContext';
+import { Heart } from 'lucide-react';
 
 export function Footer() {
   const { t } = useLanguage();
   const currentYear = new Date().getFullYear();
 
   return (
-    <footer className="border-t border-border/50 mt-auto">
+    <footer className="border-t-2 border-dashed border-border/50 mt-auto relative">
+      {/* Decorative squiggle line */}
+      <div className="absolute -top-1 left-1/2 -translate-x-1/2">
+        <svg className="w-20 h-3 text-primary/30" viewBox="0 0 80 12" fill="none" stroke="currentColor" strokeWidth="2">
+          <path d="M0 6 Q20 2, 40 6 T80 6" strokeLinecap="round"/>
+        </svg>
+      </div>
+      
       <div className="container py-6">
-        <p className="text-center text-muted-foreground text-sm">
-          {t.footer.designedBy} <span className="font-medium text-foreground/80">bryanlauwk</span> © {currentYear}
-        </p>
+        <div className="flex items-center justify-center gap-2">
+          <p className="text-center text-muted-foreground text-sm">
+            {t.footer.designedBy}{' '}
+            <span className="font-medium text-foreground/80 wavy-underline">bryanlauwk</span>{' '}
+            © {currentYear}
+          </p>
+          <Heart className="w-3 h-3 text-primary/50 animate-pulse" />
+        </div>
+        
+        {/* Decorative dots */}
+        <div className="flex justify-center gap-2 mt-3">
+          <span className="w-1.5 h-1.5 rounded-full bg-primary/30" />
+          <span className="w-1.5 h-1.5 rounded-full bg-accent/40" />
+          <span className="w-1.5 h-1.5 rounded-full bg-primary/30" />
+        </div>
       </div>
     </footer>
   );

@@ -4,79 +4,88 @@
 
 @layer base {
   :root {
-    /* BWF Official-Inspired Light Theme */
-    --background: 210 20% 98%;
-    --foreground: 215 25% 15%;
+    /* Hand-Drawn Minimalist Theme - Warm & Organic */
+    --background: 40 30% 96%;
+    --foreground: 30 20% 18%;
 
-    --card: 0 0% 100%;
-    --card-foreground: 215 25% 15%;
+    --card: 40 40% 99%;
+    --card-foreground: 30 20% 18%;
 
-    --popover: 0 0% 100%;
-    --popover-foreground: 215 25% 15%;
+    --popover: 40 40% 99%;
+    --popover-foreground: 30 20% 18%;
 
-    /* BWF Blue - Primary */
-    --primary: 210 100% 40%;
-    --primary-foreground: 0 0% 100%;
+    /* Warm Primary - Soft Coral/Terracotta */
+    --primary: 15 70% 55%;
+    --primary-foreground: 40 40% 99%;
 
-    --secondary: 210 15% 93%;
-    --secondary-foreground: 215 25% 20%;
+    --secondary: 40 25% 92%;
+    --secondary-foreground: 30 20% 25%;
 
-    --muted: 210 15% 95%;
-    --muted-foreground: 215 15% 45%;
+    --muted: 40 20% 94%;
+    --muted-foreground: 30 15% 45%;
 
-    /* BWF Orange/Yellow Accent */
-    --accent: 35 100% 50%;
-    --accent-foreground: 215 25% 10%;
+    /* Playful Accent - Warm Yellow */
+    --accent: 45 90% 60%;
+    --accent-foreground: 30 20% 15%;
 
-    --destructive: 0 72% 51%;
-    --destructive-foreground: 0 0% 100%;
+    --destructive: 0 65% 55%;
+    --destructive-foreground: 40 40% 99%;
 
-    --border: 210 20% 88%;
-    --input: 210 20% 88%;
-    --ring: 210 100% 40%;
+    --border: 35 20% 85%;
+    --input: 35 20% 85%;
+    --ring: 15 70% 55%;
 
-    --radius: 0.5rem;
+    --radius: 0.75rem;
 
-    /* Ranking tokens - Olympic metallics */
-    --rank-gold: 45 95% 50%;
-    --rank-silver: 210 10% 70%;
-    --rank-bronze: 25 60% 45%;
+    /* Ranking tokens - Hand-drawn organic feel */
+    --rank-gold: 45 85% 55%;
+    --rank-silver: 35 15% 65%;
+    --rank-bronze: 25 55% 50%;
 
-    /* Clean shadows */
-    --shadow-card: 0 1px 3px hsl(210 20% 20% / 0.08), 0 4px 12px hsl(210 20% 20% / 0.06);
-    --shadow-elevated: 0 4px 16px hsl(210 20% 20% / 0.12);
+    /* Doodle shadows - offset for hand-drawn feel */
+    --shadow-card: 3px 3px 0px hsl(30 20% 18% / 0.08);
+    --shadow-elevated: 5px 5px 0px hsl(30 20% 18% / 0.12);
+    --shadow-doodle: 4px 4px 0px hsl(30 20% 18% / 0.15);
 
-    --sidebar-background: 0 0% 100%;
-    --sidebar-foreground: 215 25% 15%;
-    --sidebar-primary: 210 100% 40%;
-    --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 210 15% 95%;
-    --sidebar-accent-foreground: 215 25% 15%;
-    --sidebar-border: 210 20% 88%;
-    --sidebar-ring: 210 100% 40%;
+    /* Doodle colors */
+    --doodle-line: 30 20% 25%;
+    --doodle-accent: 15 70% 55%;
+    
+    /* Status colors */
+    --finished: 145 60% 45%;
+
+    --sidebar-background: 40 40% 99%;
+    --sidebar-foreground: 30 20% 18%;
+    --sidebar-primary: 15 70% 55%;
+    --sidebar-primary-foreground: 40 40% 99%;
+    --sidebar-accent: 40 25% 94%;
+    --sidebar-accent-foreground: 30 20% 18%;
+    --sidebar-border: 35 20% 85%;
+    --sidebar-ring: 15 70% 55%;
   }
 
   .dark {
-    /* BWF Dark variant */
-    --background: 215 30% 10%;
-    --foreground: 210 20% 95%;
-    --card: 215 25% 14%;
-    --card-foreground: 210 20% 95%;
-    --popover: 215 25% 14%;
-    --popover-foreground: 210 20% 95%;
-    --primary: 210 100% 55%;
-    --primary-foreground: 0 0% 100%;
-    --secondary: 215 20% 20%;
-    --secondary-foreground: 210 20% 95%;
-    --muted: 215 20% 18%;
-    --muted-foreground: 210 15% 55%;
-    --accent: 35 100% 55%;
-    --accent-foreground: 215 25% 10%;
-    --destructive: 0 72% 51%;
-    --destructive-foreground: 0 0% 100%;
-    --border: 215 20% 22%;
-    --input: 215 20% 22%;
-    --ring: 210 100% 55%;
+    /* Dark Hand-Drawn variant */
+    --background: 30 15% 12%;
+    --foreground: 40 20% 92%;
+    --card: 30 15% 16%;
+    --card-foreground: 40 20% 92%;
+    --popover: 30 15% 16%;
+    --popover-foreground: 40 20% 92%;
+    --primary: 15 65% 60%;
+    --primary-foreground: 30 15% 10%;
+    --secondary: 30 12% 22%;
+    --secondary-foreground: 40 20% 92%;
+    --muted: 30 12% 20%;
+    --muted-foreground: 35 15% 55%;
+    --accent: 45 85% 60%;
+    --accent-foreground: 30 20% 12%;
+    --destructive: 0 60% 55%;
+    --destructive-foreground: 40 40% 99%;
+    --border: 30 12% 25%;
+    --input: 30 12% 25%;
+    --ring: 15 65% 60%;
+    --doodle-line: 40 20% 80%;
   }
 }
 
@@ -87,6 +96,9 @@
 
   body {
     @apply bg-background text-foreground font-sans antialiased;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+    background-blend-mode: overlay;
+    background-size: 150px;
   }
 
   .font-display {
@@ -97,6 +109,17 @@
 }
 
 @layer utilities {
+  /* Hand-drawn border effect */
+  .doodle-border {
+    border-radius: 255px 15px 225px 15px/15px 225px 15px 255px;
+    border: 2px solid hsl(var(--doodle-line) / 0.3);
+  }
+
+  /* Doodle shadow - offset for sketch feel */
+  .doodle-shadow {
+    box-shadow: var(--shadow-doodle);
+  }
+
   /* Clean card shadow */
   .card-shadow {
     box-shadow: var(--shadow-card);
@@ -106,34 +129,119 @@
     box-shadow: var(--shadow-elevated);
   }
 
-  /* Subtle hover effect */
+  /* Playful hover effect with rotation */
   .hover-lift {
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.2s ease;
   }
 
   .hover-lift:hover {
-    transform: translateY(-2px);
+    transform: translateY(-4px) rotate(-1deg);
     box-shadow: var(--shadow-elevated);
+  }
+
+  /* Wavy underline decoration */
+  .wavy-underline {
+    text-decoration: underline wavy hsl(var(--primary));
+    text-underline-offset: 4px;
+    text-decoration-thickness: 2px;
   }
 
   /* Gradient accent bar */
   .accent-bar {
-    background: linear-gradient(90deg, hsl(var(--primary)) 0%, hsl(var(--accent)) 100%);
+    background: linear-gradient(90deg, hsl(var(--primary)) 0%, hsl(var(--accent)) 50%, hsl(var(--primary)) 100%);
+    background-size: 200% 100%;
+    animation: shimmer 3s ease-in-out infinite;
   }
 
-  /* Podium gradient backgrounds */
+  @keyframes shimmer {
+    0%, 100% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+  }
+
+  /* Podium gradient backgrounds - hand-drawn style */
   .podium-gold {
-    background: linear-gradient(135deg, hsl(45 95% 55% / 0.15) 0%, hsl(45 95% 45% / 0.05) 100%);
+    background: linear-gradient(135deg, hsl(45 85% 60% / 0.2) 0%, hsl(45 85% 50% / 0.08) 100%);
     border-color: hsl(var(--rank-gold));
   }
 
   .podium-silver {
-    background: linear-gradient(135deg, hsl(210 10% 75% / 0.15) 0%, hsl(210 10% 65% / 0.05) 100%);
+    background: linear-gradient(135deg, hsl(35 15% 70% / 0.2) 0%, hsl(35 15% 60% / 0.08) 100%);
     border-color: hsl(var(--rank-silver));
   }
 
   .podium-bronze {
-    background: linear-gradient(135deg, hsl(25 60% 50% / 0.15) 0%, hsl(25 60% 40% / 0.05) 100%);
+    background: linear-gradient(135deg, hsl(25 55% 55% / 0.2) 0%, hsl(25 55% 45% / 0.08) 100%);
     border-color: hsl(var(--rank-bronze));
+  }
+
+  /* Doodle decorations */
+  .doodle-dots::before {
+    content: '• • •';
+    position: absolute;
+    font-size: 1.5rem;
+    color: hsl(var(--primary) / 0.3);
+    letter-spacing: 0.5rem;
+  }
+
+  /* Squiggly line decoration */
+  .squiggle-line {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='8' viewBox='0 0 100 8'%3E%3Cpath d='M0 4 Q12.5 0, 25 4 T50 4 T75 4 T100 4' fill='none' stroke='%23e07a5f' stroke-width='2' stroke-linecap='round'/%3E%3C/svg%3E");
+    background-repeat: repeat-x;
+    background-size: 50px 8px;
+    height: 8px;
+  }
+
+  /* Paper texture overlay */
+  .paper-texture {
+    position: relative;
+  }
+
+  .paper-texture::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none;
+    border-radius: inherit;
+  }
+
+  /* Playful rotation classes */
+  .rotate-slight-left {
+    transform: rotate(-1.5deg);
+  }
+
+  .rotate-slight-right {
+    transform: rotate(1.5deg);
+  }
+
+  /* Doodle card style */
+  .doodle-card {
+    border-radius: 20px 4px 20px 4px;
+    border: 2px solid hsl(var(--border));
+    box-shadow: var(--shadow-doodle);
+    transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+
+  .doodle-card:hover {
+    transform: translateY(-3px) rotate(0.5deg);
+    box-shadow: 6px 6px 0px hsl(var(--doodle-line) / 0.12);
+  }
+
+  /* Hand-drawn button style */
+  .doodle-button {
+    border-radius: 12px 4px 12px 4px;
+    border: 2px solid currentColor;
+    box-shadow: 3px 3px 0px currentColor;
+    transition: all 0.2s ease;
+  }
+
+  .doodle-button:hover {
+    transform: translate(-2px, -2px);
+    box-shadow: 5px 5px 0px currentColor;
+  }
+
+  .doodle-button:active {
+    transform: translate(1px, 1px);
+    box-shadow: 1px 1px 0px currentColor;
   }
 }
