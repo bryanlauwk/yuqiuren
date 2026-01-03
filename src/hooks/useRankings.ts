@@ -48,7 +48,35 @@ export function useRankings() {
     };
   }, []);
 
-  // Calculate rankings
+  // Helper to calculate rankings from a subset of results
+  const calculateRankingsFromResults = (
+    playerList: Player[],
+    resultList: SessionResult[]
+  ): Map<string, number> => {
+    const playerStats = new Map<string, number>();
+    
+    playerList.forEach(player => {
+      playerStats.set(player.id, 0);
+    });
+    
+    resultList.forEach(result => {
+      const current = playerStats.get(result.player_id) || 0;
+      playerStats.set(result.player_id, current + result.total_points);
+    });
+    
+    // Sort by points and assign ranks
+    const sorted = Array.from(playerStats.entries())
+      .sort((a, b) => b[1] - a[1]);
+    
+    const rankMap = new Map<string, number>();
+    sorted.forEach(([playerId], index) => {
+      rankMap.set(playerId, index + 1);
+    });
+    
+    return rankMap;
+  };
+
+  // Calculate rankings with rank changes
   const rankings = useMemo((): PlayerRanking[] => {
     const playerStats = new Map<string, { 
       total_points: number; 
@@ -79,6 +107,22 @@ export function useRankings() {
       }
     });
 
+    // Find the most recent session
+    const latestSession = sessions.length > 0 ? sessions[0] : null;
+    
+    // Get results excluding the latest session to calculate previous rankings
+    const previousResults = latestSession 
+      ? results.filter(r => r.session_id !== latestSession.id)
+      : results;
+    
+    // Get player IDs who participated in the latest session
+    const latestSessionPlayerIds = latestSession
+      ? new Set(results.filter(r => r.session_id === latestSession.id).map(r => r.player_id))
+      : new Set<string>();
+    
+    // Calculate previous rankings
+    const previousRankMap = calculateRankingsFromResults(players, previousResults);
+
     // Convert to array and sort by total points
     const rankingList = Array.from(playerStats.entries())
       .map(([player_id, stats]) => ({
@@ -88,16 +132,30 @@ export function useRankings() {
         sessions_played: stats.sessions_played,
         championships: stats.championships,
         rank: 0,
+        rank_change: 0,
+        is_new: false,
       }))
       .sort((a, b) => b.total_points - a.total_points);
 
-    // Assign ranks
+    // Assign ranks and calculate rank changes
     rankingList.forEach((item, index) => {
       item.rank = index + 1;
+      
+      const previousRank = previousRankMap.get(item.player_id);
+      const hadPointsBefore = previousResults.some(r => r.player_id === item.player_id);
+      
+      if (!hadPointsBefore && latestSessionPlayerIds.has(item.player_id)) {
+        // Player just joined in the latest session
+        item.is_new = true;
+        item.rank_change = 0;
+      } else if (previousRank !== undefined && hadPointsBefore) {
+        // Player had a previous rank
+        item.rank_change = previousRank - item.rank; // Positive = moved up
+      }
     });
 
     return rankingList;
-  }, [players, results]);
+  }, [players, results, sessions]);
 
   // Calculate consecutive championship streak for a player
   const calculateStreakBonus = async (playerId: string): Promise<number> => {
