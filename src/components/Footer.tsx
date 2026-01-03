@@ -8,7 +8,7 @@ export function Footer() {
     <footer className="border-t border-border/50 mt-auto">
       <div className="container py-6">
         <p className="text-center text-muted-foreground text-sm">
-          {t.footer.designedBy} <span className="font-medium text-foreground/80">bryanlauwk</span> · {currentYear}
+          {t.footer.designedBy} <span className="font-medium text-foreground/80">bryanlauwk</span> © {currentYear}
         </p>
       </div>
     </footer>
