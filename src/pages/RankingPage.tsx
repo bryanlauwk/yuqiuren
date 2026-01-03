@@ -5,6 +5,7 @@ import { NextMatchCountdown } from '@/components/NextMatchCountdown';
 import { useRankings } from '@/hooks/useRankings';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { Trophy, Users, Clock, MapPin } from 'lucide-react';
+import heroBackground from '@/assets/hero-background.png';
 
 export default function RankingPage() {
   const { rankings, loading, hasTopTies } = useRankings();
@@ -19,19 +20,21 @@ export default function RankingPage() {
       
       <main className="container py-6">
         {/* Hero Section */}
-        <div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-primary via-primary/90 to-primary/70 p-6 sm:p-8 mb-8 card-shadow-elevated">
-          {/* Background pattern */}
-          <div className="absolute inset-0 opacity-10">
-            <div className="absolute top-4 right-4 text-8xl">🏸</div>
-            <div className="absolute bottom-4 left-4 text-6xl rotate-45">🏸</div>
-          </div>
+        <div className="relative overflow-hidden rounded-2xl mb-8 card-shadow-elevated">
+          {/* Background Image */}
+          <div 
+            className="absolute inset-0 bg-cover bg-center bg-no-repeat"
+            style={{ backgroundImage: `url(${heroBackground})` }}
+          />
+          {/* Overlay for text readability */}
+          <div className="absolute inset-0 bg-gradient-to-r from-primary/80 via-primary/60 to-transparent" />
           
           {/* Content */}
-          <div className="relative z-10 text-center">
-            <h1 className="text-2xl sm:text-4xl font-display tracking-tight text-primary-foreground mb-2">
+          <div className="relative z-10 p-6 sm:p-8 text-center min-h-[140px] flex flex-col justify-center">
+            <h1 className="text-2xl sm:text-4xl font-display tracking-tight text-primary-foreground mb-2 drop-shadow-lg">
               {t.home.heroTitle}
             </h1>
-            <p className="text-primary-foreground/80 text-sm sm:text-base">
+            <p className="text-primary-foreground/90 text-sm sm:text-base drop-shadow">
               {t.home.heroSubtitle}
             </p>
           </div>
