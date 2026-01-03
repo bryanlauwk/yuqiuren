@@ -3,6 +3,7 @@ import { Footer } from '@/components/Footer';
 import { RankingRow } from '@/components/RankingRow';
 import { Podium } from '@/components/Podium';
 import { NextMatchCountdown } from '@/components/NextMatchCountdown';
+import { Confetti } from '@/components/Confetti';
 import { useRankings } from '@/hooks/useRankings';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { Trophy, Users, Clock, MapPin, Sparkles, Star } from 'lucide-react';
@@ -17,6 +18,9 @@ export default function RankingPage() {
 
   return (
     <div className="min-h-screen bg-background flex flex-col relative">
+      {/* Confetti celebration on load */}
+      <Confetti />
+      
       {/* Decorative doodle elements */}
       <div className="fixed inset-0 pointer-events-none overflow-hidden">
         <svg className="absolute top-20 left-10 w-16 h-16 text-primary/20 animate-float" viewBox="0 0 100 100" fill="none" stroke="currentColor" strokeWidth="2">
