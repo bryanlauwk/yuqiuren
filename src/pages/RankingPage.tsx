@@ -1,4 +1,5 @@
 import { Header } from '@/components/Header';
+import { Footer } from '@/components/Footer';
 import { RankingRow } from '@/components/RankingRow';
 import { Podium } from '@/components/Podium';
 import { NextMatchCountdown } from '@/components/NextMatchCountdown';
@@ -15,7 +16,7 @@ export default function RankingPage() {
   const restOfRankings = rankings.slice(3);
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-background flex flex-col">
       <Header />
       
       <main className="container py-6">
@@ -111,6 +112,8 @@ export default function RankingPage() {
           </>
         )}
       </main>
+
+      <Footer />
     </div>
   );
 }
