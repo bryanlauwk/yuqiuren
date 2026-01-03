@@ -304,6 +304,65 @@
     animation: draw-path 3s ease-out forwards;
   }
 
+  /* Rally animation for footer */
+  @keyframes rally-shuttle {
+    0%, 100% { 
+      left: 15%; 
+      transform: translateY(-50%) rotate(-30deg);
+    }
+    15% {
+      transform: translateY(-80%) rotate(-15deg);
+    }
+    50% { 
+      left: 85%; 
+      transform: translateY(-50%) rotate(30deg);
+    }
+    65% {
+      transform: translateY(-80%) rotate(15deg);
+    }
+  }
+
+  @keyframes racket-hit-left {
+    0%, 10%, 100% { transform: translateY(-50%) rotate(0deg); }
+    5% { transform: translateY(-50%) rotate(25deg); }
+  }
+
+  @keyframes racket-hit-right {
+    0%, 50%, 60%, 100% { transform: translateY(-50%) scaleX(-1) rotate(0deg); }
+    55% { transform: translateY(-50%) scaleX(-1) rotate(25deg); }
+  }
+
+  @keyframes shuttle-spin {
+    0%, 50% { transform: rotate(0deg); }
+    25% { transform: rotate(15deg); }
+    75% { transform: rotate(-15deg); }
+    100% { transform: rotate(0deg); }
+  }
+
+  @keyframes trail-fade {
+    0%, 100% { opacity: 0.1; }
+    50% { opacity: 0.3; }
+  }
+
+  .animate-rally-shuttle {
+    animation: rally-shuttle 2s ease-in-out infinite;
+  }
+
+  .animate-racket-hit-left {
+    animation: racket-hit-left 2s ease-in-out infinite;
+  }
+
+  .animate-racket-hit-right {
+    animation: racket-hit-right 2s ease-in-out infinite;
+  }
+
+  .animate-shuttle-spin {
+    animation: shuttle-spin 2s ease-in-out infinite;
+  }
+
+  .animate-trail-fade {
+    animation: trail-fade 2s ease-in-out infinite;
+  }
   /* Hover animations */
   .hover-wiggle:hover {
     animation: wiggle 0.3s ease-in-out;
