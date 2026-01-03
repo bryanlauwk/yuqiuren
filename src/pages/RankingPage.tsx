@@ -1,8 +1,9 @@
 import { Header } from '@/components/Header';
 import { RankingRow } from '@/components/RankingRow';
 import { Podium } from '@/components/Podium';
+import { NextMatchCountdown } from '@/components/NextMatchCountdown';
 import { useRankings } from '@/hooks/useRankings';
-import { Trophy, Users, Zap } from 'lucide-react';
+import { Trophy, Users, Clock } from 'lucide-react';
 
 export default function RankingPage() {
   const { rankings, loading, hasTopTies } = useRankings();
@@ -22,11 +23,8 @@ export default function RankingPage() {
           </div>
           <div>
             <h1 className="text-2xl sm:text-3xl font-display tracking-tight text-foreground">
-              World Rankings
+              2026年羽球人赛事积分表
             </h1>
-            <p className="text-sm text-muted-foreground">
-              Cumulative points from all tournament sessions
-            </p>
           </div>
         </div>
 
@@ -41,12 +39,10 @@ export default function RankingPage() {
           </div>
           <div className="bg-card rounded-xl border border-border p-4 card-shadow">
             <div className="flex items-center gap-2 text-muted-foreground mb-1">
-              <Zap className="w-4 h-4" />
-              <span className="text-xs uppercase tracking-wide font-medium">Top Score</span>
+              <Clock className="w-4 h-4" />
+              <span className="text-xs uppercase tracking-wide font-medium">Next Match</span>
             </div>
-            <p className="text-3xl font-display text-primary">
-              {rankings[0]?.total_points || 0}
-            </p>
+            <NextMatchCountdown />
           </div>
         </div>
 
