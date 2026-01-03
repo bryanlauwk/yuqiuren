@@ -73,7 +73,7 @@ export function PlayerManager({ players, onAddPlayer, onDeletePlayer, onUpdateAv
 
   const cropImageWithCoordinates = async (
     imageBase64: string,
-    cropData: { x: number; y: number; size: number }
+    cropData: { centerX: number; centerY: number; size: number }
   ): Promise<Blob> => {
     return new Promise((resolve, reject) => {
       const img = new Image();
@@ -89,21 +89,26 @@ export function PlayerManager({ players, onAddPlayer, onDeletePlayer, onUpdateAv
         canvas.width = outputSize;
         canvas.height = outputSize;
 
-        // Calculate crop area
-        const smallerDim = Math.min(img.naturalWidth, img.naturalHeight);
-        const cropSize = smallerDim * cropData.size;
+        // Calculate crop size based on image width
+        const cropSize = img.naturalWidth * cropData.size;
         
-        // Calculate center position
-        const centerX = img.naturalWidth * cropData.x;
-        const centerY = img.naturalHeight * cropData.y;
+        // Calculate center position of the face
+        const faceCenterX = img.naturalWidth * cropData.centerX;
+        const faceCenterY = img.naturalHeight * cropData.centerY;
         
-        // Calculate source coordinates (crop from center of detected area)
-        let sourceX = centerX - cropSize / 2;
-        let sourceY = centerY - cropSize / 2;
+        // Position the crop so face is in upper-center of the square
+        // Face should be at about 35% from top of the final crop
+        const facePositionInCrop = 0.35;
+        
+        let sourceX = faceCenterX - cropSize / 2;
+        let sourceY = faceCenterY - (cropSize * facePositionInCrop);
         
         // Clamp to image bounds
         sourceX = Math.max(0, Math.min(img.naturalWidth - cropSize, sourceX));
         sourceY = Math.max(0, Math.min(img.naturalHeight - cropSize, sourceY));
+        
+        // If crop is larger than image, adjust
+        const actualCropSize = Math.min(cropSize, img.naturalWidth, img.naturalHeight);
 
         // Draw cropped and scaled image
         ctx.fillStyle = '#ffffff';
@@ -113,8 +118,8 @@ export function PlayerManager({ players, onAddPlayer, onDeletePlayer, onUpdateAv
           img,
           sourceX,
           sourceY,
-          cropSize,
-          cropSize,
+          actualCropSize,
+          actualCropSize,
           0,
           0,
           outputSize,
@@ -154,7 +159,7 @@ export function PlayerManager({ players, onAddPlayer, onDeletePlayer, onUpdateAv
       const imageBase64 = await fileToBase64(file);
 
       // Call edge function for face detection
-      let cropData = { x: 0.5, y: 0.35, size: 0.8, centered: true };
+      let cropData = { centerX: 0.5, centerY: 0.4, size: 0.8, noFace: true };
       
       try {
         const response = await supabase.functions.invoke('detect-face', {

@@ -41,20 +41,20 @@ serve(async (req) => {
             content: [
               {
                 type: 'text',
-                text: `Analyze this image and find the face/head position for creating a profile avatar. 
-                
-Return a JSON object with the optimal crop area that centers on the face and includes the upper body/shoulders if visible. The crop should be a square area.
+                text: `Analyze this image and find the CENTER of the person's face for creating a profile avatar.
+
+Return a JSON object with the CENTER coordinates of the face and the optimal crop size.
 
 Return ONLY a valid JSON object in this exact format, nothing else:
-{"x": <number 0-1 representing left edge of crop as percentage>, "y": <number 0-1 representing top edge of crop as percentage>, "size": <number 0-1 representing the size of square crop as percentage of the smaller dimension>}
+{"centerX": <number 0-1 representing horizontal CENTER of face as percentage from left>, "centerY": <number 0-1 representing vertical CENTER of face as percentage from top>, "size": <number 0-1 representing the size of square crop as percentage of image width>}
 
-If no face is detected, return: {"x": 0.5, "y": 0.5, "size": 1, "centered": true}
+IMPORTANT:
+- centerX and centerY must be the CENTER of the face, not the top-left corner
+- For a typical portrait, centerX is usually around 0.5 (horizontally centered)
+- centerY should be positioned so the face ends up in the UPPER portion of the final square crop (usually the face center is at 30-40% from top)
+- size should be large enough to include head and shoulders (typically 0.5-0.8)
 
-The values should position the crop to:
-1. Center on the face/head
-2. Include some space above the head
-3. Include shoulders/upper chest if the image allows
-4. Keep the face in the upper-center third of the final crop`
+If no face is detected, return: {"centerX": 0.5, "centerY": 0.4, "size": 1, "noFace": true}`
               },
               {
                 type: 'image_url',
@@ -81,7 +81,7 @@ The values should position the crop to:
       
       // Return fallback centered crop on error
       return new Response(
-        JSON.stringify({ x: 0.5, y: 0.5, size: 1, centered: true }),
+        JSON.stringify({ centerX: 0.5, centerY: 0.4, size: 1, noFace: true }),
         { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
       );
     }
@@ -104,10 +104,10 @@ The values should position the crop to:
       
       // Validate and clamp values
       const result = {
-        x: Math.max(0, Math.min(1, Number(cropData.x) || 0.5)),
-        y: Math.max(0, Math.min(1, Number(cropData.y) || 0.5)),
+        centerX: Math.max(0, Math.min(1, Number(cropData.centerX) || 0.5)),
+        centerY: Math.max(0, Math.min(1, Number(cropData.centerY) || 0.4)),
         size: Math.max(0.3, Math.min(1, Number(cropData.size) || 1)),
-        centered: cropData.centered || false
+        noFace: cropData.noFace || false
       };
       
       console.log('Returning crop data:', result);
@@ -120,7 +120,7 @@ The values should position the crop to:
       console.error('Failed to parse AI response:', parseError);
       // Return fallback centered crop
       return new Response(
-        JSON.stringify({ x: 0.5, y: 0.5, size: 1, centered: true }),
+        JSON.stringify({ centerX: 0.5, centerY: 0.4, size: 1, noFace: true }),
         { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
       );
     }
