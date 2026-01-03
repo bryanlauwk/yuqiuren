@@ -1,12 +1,14 @@
 import { Trophy, Medal } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import type { PlayerRanking } from '@/types/ranking';
+import { useLanguage } from '@/contexts/LanguageContext';
 
 interface PodiumProps {
   rankings: PlayerRanking[];
 }
 
 export function Podium({ rankings }: PodiumProps) {
+  const { t } = useLanguage();
   const top3 = rankings.slice(0, 3);
   
   if (top3.length === 0) return null;
@@ -27,7 +29,7 @@ export function Podium({ rankings }: PodiumProps) {
           text: 'text-rank-gold',
           avatarBg: 'bg-rank-gold/20',
           height: 'h-28',
-          label: 'CHAMPION',
+          label: t.podium.champion,
         };
       case 2:
         return {
@@ -36,7 +38,7 @@ export function Podium({ rankings }: PodiumProps) {
           text: 'text-rank-silver',
           avatarBg: 'bg-rank-silver/20',
           height: 'h-20',
-          label: 'RUNNER-UP',
+          label: t.podium.runnerUp,
         };
       case 3:
         return {
@@ -45,7 +47,7 @@ export function Podium({ rankings }: PodiumProps) {
           text: 'text-rank-bronze',
           avatarBg: 'bg-rank-bronze/20',
           height: 'h-16',
-          label: 'THIRD',
+          label: t.podium.third,
         };
       default:
         return {
@@ -72,7 +74,7 @@ export function Podium({ rankings }: PodiumProps) {
     <div className="mb-8">
       <div className="flex items-center gap-2 mb-6">
         <Trophy className="w-5 h-5 text-rank-gold" />
-        <h2 className="text-lg font-display tracking-wide text-foreground">TOP PLAYERS</h2>
+        <h2 className="text-lg font-display tracking-wide text-foreground">{t.podium.topPlayers}</h2>
       </div>
 
       <div className="flex items-end justify-center gap-4 px-4">
@@ -118,7 +120,7 @@ export function Podium({ rankings }: PodiumProps) {
 
               {/* Points */}
               <p className="text-xs text-muted-foreground mb-2">
-                {player.total_points} pts
+                {player.total_points} {t.podium.pts}
               </p>
 
               {/* Podium Platform */}

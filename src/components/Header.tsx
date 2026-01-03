@@ -3,16 +3,19 @@ import { cn } from '@/lib/utils';
 import { Medal, Shield, LogOut } from 'lucide-react';
 import { useAuth } from '@/hooks/useAuth';
 import { Button } from '@/components/ui/button';
+import { LanguageSwitcher } from '@/components/LanguageSwitcher';
+import { useLanguage } from '@/contexts/LanguageContext';
 
 export function Header() {
   const location = useLocation();
   const navigate = useNavigate();
   const currentPath = location.pathname;
   const { user, isAdmin, signOut } = useAuth();
+  const { t } = useLanguage();
 
   const navItems = [
-    { path: '/', label: '排行榜', icon: Medal },
-    { path: '/admin', label: '管理', icon: Shield, requiresAuth: true },
+    { path: '/', label: t.header.rankings, icon: Medal },
+    { path: '/admin', label: t.header.admin, icon: Shield, requiresAuth: true },
   ];
 
   const handleSignOut = async () => {
@@ -32,10 +35,10 @@ export function Header() {
           </div>
           <div className="flex flex-col">
             <span className="font-display text-lg leading-tight text-foreground">
-              羽球人联赛
+              {t.header.brandName}
             </span>
             <span className="text-[10px] uppercase tracking-widest text-muted-foreground">
-              2026 积分排行榜
+              {t.header.subtitle}
             </span>
           </div>
         </Link>
@@ -61,6 +64,8 @@ export function Header() {
             );
           })}
 
+          <LanguageSwitcher />
+
           {user && isAdmin && (
             <Button
               variant="ghost"
@@ -69,7 +74,7 @@ export function Header() {
               className="text-muted-foreground hover:text-destructive ml-2"
             >
               <LogOut className="w-4 h-4" />
-              <span className="hidden sm:inline ml-2">退出</span>
+              <span className="hidden sm:inline ml-2">{t.header.signOut}</span>
             </Button>
           )}
         </nav>
