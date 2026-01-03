@@ -68,13 +68,25 @@ export function RankingRow({ ranking }: RankingRowProps) {
       </div>
 
       {/* Player Avatar */}
-      <div className="w-10 h-10 rounded-full flex items-center justify-center bg-secondary border border-border overflow-hidden">
+      <div className="w-10 h-10 rounded-full flex items-center justify-center bg-secondary border border-border overflow-hidden group/avatar relative">
         {ranking.avatar_url ? (
-          <img
-            src={ranking.avatar_url}
-            alt={ranking.player_name}
-            className="w-full h-full object-cover"
-          />
+          <>
+            <img
+              src={ranking.avatar_url}
+              alt={ranking.player_name}
+              className="w-full h-full object-cover transition-transform duration-300 group-hover/avatar:scale-150"
+            />
+            {/* Zoom popup on hover */}
+            <div className="absolute left-12 top-1/2 -translate-y-1/2 opacity-0 group-hover/avatar:opacity-100 pointer-events-none transition-all duration-300 z-50 scale-0 group-hover/avatar:scale-100">
+              <div className="w-24 h-24 rounded-full overflow-hidden border-2 border-primary shadow-xl bg-card">
+                <img
+                  src={ranking.avatar_url}
+                  alt={ranking.player_name}
+                  className="w-full h-full object-cover"
+                />
+              </div>
+            </div>
+          </>
         ) : (
           <span className="text-sm font-medium text-muted-foreground">
             {getInitials(ranking.player_name)}
