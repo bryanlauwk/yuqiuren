@@ -59,19 +59,19 @@ export default function RankingPage() {
           <div className="absolute inset-0 bg-gradient-to-r from-primary/60 via-primary/40 to-accent/30" />
           
           {/* Content */}
-          <div className="relative z-10 p-6 sm:p-8 text-center min-h-[140px] flex flex-col justify-center">
-            <div className="flex items-center justify-center gap-2 mb-2">
-              <Sparkles className="w-5 h-5 text-primary-foreground/80" />
-              <h1 className="text-2xl sm:text-4xl font-display tracking-tight text-primary-foreground drop-shadow-lg">
+          <div className="relative z-10 p-6 sm:p-10 text-center min-h-[160px] flex flex-col justify-center">
+            <div className="flex items-center justify-center gap-3">
+              <Sparkles className="w-6 h-6 text-rank-gold animate-sparkle" />
+              <h1 className="text-3xl sm:text-5xl font-display tracking-tight text-primary-foreground drop-shadow-[0_0_15px_rgba(255,255,255,0.5)] [text-shadow:_2px_2px_0_hsl(var(--primary)),_-1px_-1px_0_hsl(var(--accent))]">
                 {t.home.heroTitle}
               </h1>
-              <Sparkles className="w-5 h-5 text-primary-foreground/80" />
+              <Sparkles className="w-6 h-6 text-rank-gold animate-sparkle" style={{ animationDelay: '0.3s' }} />
             </div>
-            <p className="text-primary-foreground/90 text-sm sm:text-base drop-shadow">
-              {t.home.heroSubtitle}
-            </p>
-            {/* Squiggly underline */}
-            <div className="squiggle-line w-32 mx-auto mt-4 opacity-60" />
+            {/* Highlighted underline accent */}
+            <div className="flex items-center justify-center gap-2 mt-4">
+              <div className="w-8 h-1 bg-rank-gold/60 rounded-full" />
+              <div className="squiggle-line w-40 opacity-80" />
+            </div>
           </div>
         </div>
 
