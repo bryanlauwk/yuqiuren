@@ -162,11 +162,20 @@ export function PlayerManager({ players, onAddPlayer, onDeletePlayer, onUpdateAv
       let cropData = { centerX: 0.5, centerY: 0.4, size: 0.8, noFace: true };
       
       try {
+        // Get current session for auth header
+        const { data: { session } } = await supabase.auth.getSession();
+        
         const response = await supabase.functions.invoke('detect-face', {
-          body: { imageBase64 }
+          body: { imageBase64 },
+          headers: session ? { Authorization: `Bearer ${session.access_token}` } : undefined
         });
         
-        if (response.data && !response.error) {
+        if (response.error) {
+          console.warn('Face detection error:', response.error);
+          if (response.error.message?.includes('Forbidden') || response.error.message?.includes('Unauthorized')) {
+            toast.error('Admin access required for face detection');
+          }
+        } else if (response.data) {
           cropData = response.data;
           console.log('Face detection result:', cropData);
         }
