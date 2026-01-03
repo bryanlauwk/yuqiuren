@@ -48,7 +48,7 @@ export const translations = {
       matchSoonBody: "您的羽毛球比赛将在1小时后开始",
     },
     footer: {
-      designedBy: "设计",
+      designedBy: "版权所有",
     },
   },
   en: {
