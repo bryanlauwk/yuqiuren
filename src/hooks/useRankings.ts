@@ -308,6 +308,26 @@ export function useRankings() {
     if (error) throw error;
   };
 
+  // Update session results (delete existing and re-record)
+  const updateSessionResults = async (
+    sessionId: string,
+    sessionType: SessionType,
+    champions: string[],
+    runnerUps: string[],
+    attendance: string[]
+  ) => {
+    // Delete existing results for this session
+    const { error: deleteError } = await supabase
+      .from('session_results')
+      .delete()
+      .eq('session_id', sessionId);
+    
+    if (deleteError) throw deleteError;
+
+    // Re-record the results
+    await recordResults(sessionId, sessionType, champions, runnerUps, attendance);
+  };
+
   return {
     players,
     sessions,
@@ -319,6 +339,7 @@ export function useRankings() {
     createSession,
     deleteSession,
     recordResults,
+    updateSessionResults,
     refetch: fetchData,
   };
 }

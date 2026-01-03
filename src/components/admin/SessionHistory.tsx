@@ -1,23 +1,35 @@
+import { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { Calendar, Trophy, Medal, Users, Trash2 } from 'lucide-react';
-import type { TournamentSession, SessionResult, Player } from '@/types/ranking';
+import { Calendar, Trophy, Medal, Users, Trash2, Pencil } from 'lucide-react';
+import type { TournamentSession, SessionResult, Player, SessionType } from '@/types/ranking';
 import { format } from 'date-fns';
+import { SessionResultsEditor } from './SessionResultsEditor';
 
 interface SessionHistoryProps {
   sessions: TournamentSession[];
   results: SessionResult[];
   players: Player[];
   onDeleteSession: (id: string) => Promise<void>;
+  onUpdateResults: (
+    sessionId: string,
+    sessionType: SessionType,
+    champions: string[],
+    runnerUps: string[],
+    attendance: string[]
+  ) => Promise<void>;
 }
 
 export function SessionHistory({ 
   sessions, 
   results, 
   players,
-  onDeleteSession 
+  onDeleteSession,
+  onUpdateResults,
 }: SessionHistoryProps) {
+  const [editingSession, setEditingSession] = useState<TournamentSession | null>(null);
+
   const getPlayerName = (playerId: string) => {
     return players.find(p => p.id === playerId)?.name || 'Unknown';
   };
@@ -99,14 +111,24 @@ export function SessionHistory({
                     </span>
                   )}
                 </div>
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  className="h-8 w-8 text-muted-foreground hover:text-destructive"
-                  onClick={() => handleDelete(session.id)}
-                >
-                  <Trash2 className="w-4 h-4" />
-                </Button>
+                <div className="flex gap-1">
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    className="h-8 w-8 text-muted-foreground hover:text-primary"
+                    onClick={() => setEditingSession(session)}
+                  >
+                    <Pencil className="w-4 h-4" />
+                  </Button>
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    className="h-8 w-8 text-muted-foreground hover:text-destructive"
+                    onClick={() => handleDelete(session.id)}
+                  >
+                    <Trash2 className="w-4 h-4" />
+                  </Button>
+                </div>
               </div>
 
               {/* Results */}
@@ -191,6 +213,18 @@ export function SessionHistory({
           );
         })}
       </CardContent>
+
+      {/* Edit Dialog */}
+      {editingSession && (
+        <SessionResultsEditor
+          session={editingSession}
+          results={getSessionResults(editingSession.id)}
+          players={players}
+          open={!!editingSession}
+          onOpenChange={(open) => !open && setEditingSession(null)}
+          onUpdateResults={onUpdateResults}
+        />
+      )}
     </Card>
   );
 }
