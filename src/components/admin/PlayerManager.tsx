@@ -5,7 +5,6 @@ import { UserPlus, Trash2, Users, Camera, Loader2, Pencil, Check, X } from 'luci
 import { toast } from 'sonner';
 import { supabase } from '@/integrations/supabase/client';
 import type { Player } from '@/types/ranking';
-import { AvatarCropper } from './AvatarCropper';
 
 interface PlayerManagerProps {
   players: Player[];
@@ -21,9 +20,6 @@ export function PlayerManager({ players, onAddPlayer, onDeletePlayer, onUpdateAv
   const [uploadingPlayerId, setUploadingPlayerId] = useState<string | null>(null);
   const [editingPlayerId, setEditingPlayerId] = useState<string | null>(null);
   const [editingName, setEditingName] = useState('');
-  const [cropperOpen, setCropperOpen] = useState(false);
-  const [cropperImage, setCropperImage] = useState('');
-  const [cropperPlayerId, setCropperPlayerId] = useState<string | null>(null);
   const fileInputRefs = useRef<Map<string, HTMLInputElement>>(new Map());
 
   const handleAddPlayer = async () => {
@@ -66,7 +62,80 @@ export function PlayerManager({ players, onAddPlayer, onDeletePlayer, onUpdateAv
     }
   };
 
-  const handleFileSelect = (playerId: string, file: File) => {
+  const fileToBase64 = (file: File): Promise<string> => {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = () => resolve(reader.result as string);
+      reader.onerror = (error) => reject(error);
+    });
+  };
+
+  const cropImageWithCoordinates = async (
+    imageBase64: string,
+    cropData: { x: number; y: number; size: number }
+  ): Promise<Blob> => {
+    return new Promise((resolve, reject) => {
+      const img = new Image();
+      img.onload = () => {
+        const canvas = document.createElement('canvas');
+        const ctx = canvas.getContext('2d');
+        if (!ctx) {
+          reject(new Error('Failed to get canvas context'));
+          return;
+        }
+
+        const outputSize = 400; // Output avatar size
+        canvas.width = outputSize;
+        canvas.height = outputSize;
+
+        // Calculate crop area
+        const smallerDim = Math.min(img.naturalWidth, img.naturalHeight);
+        const cropSize = smallerDim * cropData.size;
+        
+        // Calculate center position
+        const centerX = img.naturalWidth * cropData.x;
+        const centerY = img.naturalHeight * cropData.y;
+        
+        // Calculate source coordinates (crop from center of detected area)
+        let sourceX = centerX - cropSize / 2;
+        let sourceY = centerY - cropSize / 2;
+        
+        // Clamp to image bounds
+        sourceX = Math.max(0, Math.min(img.naturalWidth - cropSize, sourceX));
+        sourceY = Math.max(0, Math.min(img.naturalHeight - cropSize, sourceY));
+
+        // Draw cropped and scaled image
+        ctx.fillStyle = '#ffffff';
+        ctx.fillRect(0, 0, outputSize, outputSize);
+        
+        ctx.drawImage(
+          img,
+          sourceX,
+          sourceY,
+          cropSize,
+          cropSize,
+          0,
+          0,
+          outputSize,
+          outputSize
+        );
+
+        canvas.toBlob(
+          (blob) => {
+            if (blob) resolve(blob);
+            else reject(new Error('Failed to create blob'));
+          },
+          'image/jpeg',
+          0.9
+        );
+      };
+      img.onerror = () => reject(new Error('Failed to load image'));
+      img.src = imageBase64;
+    });
+  };
+
+  const handleFileSelect = async (playerId: string, file: File) => {
     if (!file.type.startsWith('image/')) {
       toast.error('Please select an image file');
       return;
@@ -77,24 +146,39 @@ export function PlayerManager({ players, onAddPlayer, onDeletePlayer, onUpdateAv
       return;
     }
 
-    // Create object URL for cropper
-    const imageUrl = URL.createObjectURL(file);
-    setCropperImage(imageUrl);
-    setCropperPlayerId(playerId);
-    setCropperOpen(true);
-  };
+    setUploadingPlayerId(playerId);
+    const loadingToast = toast.loading('Processing image...');
 
-  const handleCroppedImage = async (blob: Blob) => {
-    if (!cropperPlayerId) return;
-
-    setUploadingPlayerId(cropperPlayerId);
     try {
-      const fileName = `${cropperPlayerId}-${Date.now()}.jpg`;
+      // Convert file to base64
+      const imageBase64 = await fileToBase64(file);
+
+      // Call edge function for face detection
+      let cropData = { x: 0.5, y: 0.35, size: 0.8, centered: true };
+      
+      try {
+        const response = await supabase.functions.invoke('detect-face', {
+          body: { imageBase64 }
+        });
+        
+        if (response.data && !response.error) {
+          cropData = response.data;
+          console.log('Face detection result:', cropData);
+        }
+      } catch (detectError) {
+        console.warn('Face detection failed, using center crop:', detectError);
+      }
+
+      // Crop the image
+      const croppedBlob = await cropImageWithCoordinates(imageBase64, cropData);
+
+      // Upload to storage
+      const fileName = `${playerId}-${Date.now()}.jpg`;
       const filePath = `players/${fileName}`;
 
       const { error: uploadError } = await supabase.storage
         .from('avatars')
-        .upload(filePath, blob, { upsert: true, contentType: 'image/jpeg' });
+        .upload(filePath, croppedBlob, { upsert: true, contentType: 'image/jpeg' });
 
       if (uploadError) throw uploadError;
 
@@ -102,16 +186,15 @@ export function PlayerManager({ players, onAddPlayer, onDeletePlayer, onUpdateAv
         .from('avatars')
         .getPublicUrl(filePath);
 
-      await onUpdateAvatar(cropperPlayerId, urlData.publicUrl);
+      await onUpdateAvatar(playerId, urlData.publicUrl);
+      toast.dismiss(loadingToast);
       toast.success('Avatar updated');
     } catch (error) {
       console.error('Avatar upload error:', error);
+      toast.dismiss(loadingToast);
       toast.error('Failed to upload avatar');
     } finally {
       setUploadingPlayerId(null);
-      URL.revokeObjectURL(cropperImage);
-      setCropperImage('');
-      setCropperPlayerId(null);
     }
   };
 
@@ -295,19 +378,6 @@ export function PlayerManager({ players, onAddPlayer, onDeletePlayer, onUpdateAv
           ))
         )}
       </div>
-
-      {/* Avatar Cropper Modal */}
-      <AvatarCropper
-        open={cropperOpen}
-        onClose={() => {
-          setCropperOpen(false);
-          URL.revokeObjectURL(cropperImage);
-          setCropperImage('');
-          setCropperPlayerId(null);
-        }}
-        imageSrc={cropperImage}
-        onCrop={handleCroppedImage}
-      />
     </div>
   );
 }
