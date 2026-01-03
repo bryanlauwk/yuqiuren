@@ -60,24 +60,24 @@ export function RankingRow({ ranking }: RankingRowProps) {
 
   return (
     <div className={cn(
-      "flex items-center gap-4 p-4 bg-card doodle-card hover:rotate-0 transition-all group"
+      "flex items-center gap-4 p-4 bg-card doodle-card hover:rotate-0 transition-all group cursor-default"
     )}>
       {/* Rank Number - Hand-drawn style */}
       <div className={cn(
-        "w-11 h-11 flex items-center justify-center font-display text-lg border-2 relative",
+        "w-11 h-11 flex items-center justify-center font-display text-lg border-2 relative group-hover:animate-wiggle transition-transform",
         getRankBadgeStyle()
       )}
       style={{ borderRadius: '50% 45% 55% 48%' }}
       >
         {ranking.rank}
         {ranking.rank <= 3 && (
-          <Star className="absolute -top-1 -right-1 w-3 h-3 text-accent opacity-60" />
+          <Star className="absolute -top-1 -right-1 w-3 h-3 text-accent opacity-60 group-hover:animate-sparkle" />
         )}
       </div>
 
       {/* Player Avatar - Organic shape */}
       <div 
-        className="w-11 h-11 flex items-center justify-center bg-secondary border-2 border-border overflow-hidden"
+        className="w-11 h-11 flex items-center justify-center bg-secondary border-2 border-border overflow-hidden group-hover:scale-110 transition-transform"
         style={{ borderRadius: '45% 55% 50% 50%' }}
       >
         {ranking.avatar_url ? (

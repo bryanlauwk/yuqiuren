@@ -19,17 +19,23 @@ export default function RankingPage() {
     <div className="min-h-screen bg-background flex flex-col relative">
       {/* Decorative doodle elements */}
       <div className="fixed inset-0 pointer-events-none overflow-hidden">
-        <svg className="absolute top-20 left-10 w-16 h-16 text-primary/20 rotate-12" viewBox="0 0 100 100" fill="none" stroke="currentColor" strokeWidth="2">
+        <svg className="absolute top-20 left-10 w-16 h-16 text-primary/20 animate-float" viewBox="0 0 100 100" fill="none" stroke="currentColor" strokeWidth="2">
           <path d="M50 10 L60 40 L90 40 L65 60 L75 90 L50 70 L25 90 L35 60 L10 40 L40 40 Z" strokeLinecap="round" strokeLinejoin="round"/>
         </svg>
-        <svg className="absolute top-40 right-16 w-12 h-12 text-accent/30 -rotate-6" viewBox="0 0 100 100" fill="none" stroke="currentColor" strokeWidth="3">
+        <svg className="absolute top-40 right-16 w-12 h-12 text-accent/30 animate-float-slow" viewBox="0 0 100 100" fill="none" stroke="currentColor" strokeWidth="3">
           <circle cx="50" cy="50" r="40" strokeDasharray="10 5"/>
         </svg>
-        <svg className="absolute bottom-32 left-20 w-20 h-8 text-primary/15" viewBox="0 0 100 20" fill="none" stroke="currentColor" strokeWidth="2">
+        <svg className="absolute bottom-32 left-20 w-20 h-8 text-primary/15 animate-wiggle-subtle" viewBox="0 0 100 20" fill="none" stroke="currentColor" strokeWidth="2">
           <path d="M0 10 Q25 0, 50 10 T100 10" strokeLinecap="round"/>
         </svg>
-        <svg className="absolute top-1/3 right-8 w-8 h-8 text-rank-gold/30" viewBox="0 0 50 50" fill="currentColor">
+        <svg className="absolute top-1/3 right-8 w-8 h-8 text-rank-gold/30 animate-sparkle" viewBox="0 0 50 50" fill="currentColor">
           <polygon points="25,5 30,20 45,20 33,30 38,45 25,35 12,45 17,30 5,20 20,20"/>
+        </svg>
+        <svg className="absolute bottom-48 right-32 w-10 h-10 text-primary/15 animate-float-reverse" viewBox="0 0 50 50" fill="none" stroke="currentColor" strokeWidth="2">
+          <path d="M10 25 Q25 10 40 25 Q25 40 10 25" strokeLinecap="round"/>
+        </svg>
+        <svg className="absolute top-2/3 left-8 w-6 h-6 text-accent/25 animate-bounce-subtle" viewBox="0 0 30 30" fill="currentColor">
+          <circle cx="15" cy="15" r="12"/>
         </svg>
       </div>
 
@@ -71,9 +77,9 @@ export default function RankingPage() {
 
         {/* Stats Summary - Hand-drawn cards */}
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-5 mb-8">
-          <div className="bg-card doodle-card p-5 rotate-slight-left hover:rotate-0 transition-transform">
+          <div className="bg-card doodle-card p-5 rotate-slight-left hover:rotate-0 hover-wiggle transition-transform group">
             <div className="flex items-center gap-2 text-muted-foreground mb-2">
-              <div className="p-1.5 rounded-lg bg-primary/10">
+              <div className="p-1.5 rounded-lg bg-primary/10 group-hover:animate-bounce-subtle">
                 <Users className="w-4 h-4 text-primary" />
               </div>
               <span className="text-xs uppercase tracking-wide font-medium">{t.home.totalPlayers}</span>
@@ -81,27 +87,27 @@ export default function RankingPage() {
             <p className="text-3xl font-display text-foreground">{rankings.length}</p>
             {/* Decorative dots */}
             <div className="flex gap-1 mt-2">
-              <span className="w-2 h-2 rounded-full bg-primary/30" />
-              <span className="w-2 h-2 rounded-full bg-primary/20" />
-              <span className="w-2 h-2 rounded-full bg-primary/10" />
+              <span className="w-2 h-2 rounded-full bg-primary/30 group-hover:animate-pulse" />
+              <span className="w-2 h-2 rounded-full bg-primary/20 group-hover:animate-pulse" style={{ animationDelay: '0.1s' }} />
+              <span className="w-2 h-2 rounded-full bg-primary/10 group-hover:animate-pulse" style={{ animationDelay: '0.2s' }} />
             </div>
           </div>
           
-          <div className="bg-card doodle-card p-5 hover:rotate-slight-right transition-transform">
+          <div className="bg-card doodle-card p-5 hover:rotate-slight-right hover-bounce transition-transform group">
             <div className="flex items-center gap-2 text-muted-foreground mb-2">
-              <div className="p-1.5 rounded-lg bg-accent/20">
+              <div className="p-1.5 rounded-lg bg-accent/20 group-hover:animate-wiggle">
                 <Clock className="w-4 h-4 text-accent-foreground" />
               </div>
               <span className="text-xs uppercase tracking-wide font-medium">{t.home.nextMatch}</span>
             </div>
             <NextMatchCountdown />
             {/* Star decoration */}
-            <Star className="w-4 h-4 text-accent/40 mt-2" />
+            <Star className="w-4 h-4 text-accent/40 mt-2 group-hover:animate-sparkle" />
           </div>
           
-          <div className="bg-card doodle-card p-5 rotate-slight-right hover:rotate-0 transition-transform">
+          <div className="bg-card doodle-card p-5 rotate-slight-right hover:rotate-0 hover-wiggle transition-transform group">
             <div className="flex items-center gap-2 text-muted-foreground mb-2">
-              <div className="p-1.5 rounded-lg bg-primary/10">
+              <div className="p-1.5 rounded-lg bg-primary/10 group-hover:animate-bounce-subtle">
                 <MapPin className="w-4 h-4 text-primary" />
               </div>
               <span className="text-xs uppercase tracking-wide font-medium">{t.home.venue}</span>
@@ -110,7 +116,7 @@ export default function RankingPage() {
               One Shamelin Badminton Hall
             </p>
             {/* Wavy line decoration */}
-            <svg className="w-16 h-2 mt-2 text-primary/30" viewBox="0 0 60 8" fill="none" stroke="currentColor" strokeWidth="2">
+            <svg className="w-16 h-2 mt-2 text-primary/30 group-hover:animate-wiggle-subtle" viewBox="0 0 60 8" fill="none" stroke="currentColor" strokeWidth="2">
               <path d="M0 4 Q15 0, 30 4 T60 4" strokeLinecap="round"/>
             </svg>
           </div>
