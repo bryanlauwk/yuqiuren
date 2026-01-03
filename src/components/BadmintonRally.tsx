@@ -1,9 +1,22 @@
+import { useState } from 'react';
+
 export function BadmintonRally() {
+  const [isHovering, setIsHovering] = useState(false);
+
   return (
-    <div className="relative w-full h-12 overflow-hidden">
+    <div 
+      className="relative w-full h-12 overflow-hidden cursor-pointer group"
+      onMouseEnter={() => setIsHovering(true)}
+      onMouseLeave={() => setIsHovering(false)}
+    >
+      {/* Hover hint */}
+      <div className={`absolute inset-0 flex items-center justify-center transition-opacity duration-300 ${isHovering ? 'opacity-0' : 'opacity-0 group-hover:opacity-100'}`}>
+        <span className="text-xs text-muted-foreground/50">hover to speed up!</span>
+      </div>
+
       {/* Left racket */}
       <svg 
-        className="absolute left-4 sm:left-8 top-1/2 -translate-y-1/2 w-8 h-12 animate-racket-hit-left"
+        className={`absolute left-4 sm:left-8 top-1/2 -translate-y-1/2 w-8 h-12 ${isHovering ? 'animate-racket-hit-left-fast' : 'animate-racket-hit-left'}`}
         viewBox="0 0 40 60" 
         fill="none" 
         stroke="hsl(var(--primary))" 
@@ -25,9 +38,9 @@ export function BadmintonRally() {
       </svg>
 
       {/* Animated shuttlecock */}
-      <div className="absolute top-1/2 -translate-y-1/2 animate-rally-shuttle">
+      <div className={`absolute top-1/2 -translate-y-1/2 ${isHovering ? 'animate-rally-shuttle-fast' : 'animate-rally-shuttle'}`}>
         <svg 
-          className="w-6 h-8 animate-shuttle-spin"
+          className={`w-6 h-8 ${isHovering ? 'animate-shuttle-spin-fast' : 'animate-shuttle-spin'}`}
           viewBox="0 0 24 36" 
           fill="none" 
           stroke="hsl(var(--accent))" 
@@ -48,15 +61,27 @@ export function BadmintonRally() {
         </svg>
       </div>
 
+      {/* Speed lines when fast */}
+      {isHovering && (
+        <>
+          <div className="absolute left-1/4 top-1/2 -translate-y-1/2 w-8 h-0.5 bg-gradient-to-r from-accent/40 to-transparent animate-speed-line" />
+          <div className="absolute left-1/3 top-[40%] w-6 h-0.5 bg-gradient-to-r from-accent/30 to-transparent animate-speed-line" style={{ animationDelay: '0.1s' }} />
+          <div className="absolute left-1/3 top-[60%] w-6 h-0.5 bg-gradient-to-r from-accent/30 to-transparent animate-speed-line" style={{ animationDelay: '0.2s' }} />
+          <div className="absolute right-1/4 top-1/2 -translate-y-1/2 w-8 h-0.5 bg-gradient-to-l from-accent/40 to-transparent animate-speed-line-reverse" />
+          <div className="absolute right-1/3 top-[40%] w-6 h-0.5 bg-gradient-to-l from-accent/30 to-transparent animate-speed-line-reverse" style={{ animationDelay: '0.1s' }} />
+          <div className="absolute right-1/3 top-[60%] w-6 h-0.5 bg-gradient-to-l from-accent/30 to-transparent animate-speed-line-reverse" style={{ animationDelay: '0.2s' }} />
+        </>
+      )}
+
       {/* Right racket */}
       <svg 
-        className="absolute right-4 sm:right-8 top-1/2 -translate-y-1/2 w-8 h-12 animate-racket-hit-right"
+        className={`absolute right-4 sm:right-8 top-1/2 w-8 h-12 ${isHovering ? 'animate-racket-hit-right-fast' : 'animate-racket-hit-right'}`}
+        style={{ transform: 'translateY(-50%) scaleX(-1)' }}
         viewBox="0 0 40 60" 
         fill="none" 
         stroke="hsl(var(--primary))" 
         strokeWidth="2"
         strokeLinecap="round"
-        style={{ transform: 'translateY(-50%) scaleX(-1)' }}
       >
         {/* Racket head */}
         <ellipse cx="20" cy="18" rx="14" ry="16" />
