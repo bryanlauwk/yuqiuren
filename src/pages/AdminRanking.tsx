@@ -16,6 +16,7 @@ export default function AdminRanking() {
     createSession,
     deleteSession,
     recordResults,
+    updateSessionResults,
   } = useRankings();
 
   if (loading) {
@@ -63,6 +64,7 @@ export default function AdminRanking() {
           results={results}
           players={players}
           onDeleteSession={deleteSession}
+          onUpdateResults={updateSessionResults}
         />
 
         {/* Player Manager */}
