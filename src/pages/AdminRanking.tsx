@@ -18,6 +18,7 @@ export default function AdminRanking() {
     loading,
     addPlayer,
     deletePlayer,
+    updatePlayerAvatar,
     createSession,
     deleteSession,
     recordResults,
@@ -90,6 +91,7 @@ export default function AdminRanking() {
               players={players}
               onAddPlayer={addPlayer}
               onDeletePlayer={deletePlayer}
+              onUpdateAvatar={updatePlayerAvatar}
             />
           </div>
         </div>

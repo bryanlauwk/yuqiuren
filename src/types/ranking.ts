@@ -1,6 +1,7 @@
 export interface Player {
   id: string;
   name: string;
+  avatar_url: string | null;
   created_at: string;
 }
 
@@ -26,6 +27,7 @@ export interface SessionResult {
 export interface PlayerRanking {
   player_id: string;
   player_name: string;
+  avatar_url: string | null;
   total_points: number;
   sessions_played: number;
   championships: number;

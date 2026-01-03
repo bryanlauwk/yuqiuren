@@ -7,6 +7,15 @@ interface RankingRowProps {
 }
 
 export function RankingRow({ ranking }: RankingRowProps) {
+  const getInitials = (name: string) => {
+    return name
+      .split(' ')
+      .map(n => n[0])
+      .join('')
+      .toUpperCase()
+      .slice(0, 2);
+  };
+
   const getRankChangeDisplay = () => {
     if (ranking.is_new) {
       return (
@@ -49,8 +58,23 @@ export function RankingRow({ ranking }: RankingRowProps) {
       ranking.is_new && "ring-1 ring-accent/40"
     )}>
       {/* Rank Number */}
-      <div className="w-10 h-10 rounded-full flex items-center justify-center bg-muted border border-border font-display text-xl text-muted-foreground">
+      <div className="w-8 text-center font-display text-xl text-muted-foreground">
         {ranking.rank}
+      </div>
+
+      {/* Player Avatar */}
+      <div className="w-10 h-10 rounded-full flex items-center justify-center bg-muted border border-border overflow-hidden">
+        {ranking.avatar_url ? (
+          <img
+            src={ranking.avatar_url}
+            alt={ranking.player_name}
+            className="w-full h-full object-cover"
+          />
+        ) : (
+          <span className="text-sm font-medium text-muted-foreground">
+            {getInitials(ranking.player_name)}
+          </span>
+        )}
       </div>
 
       {/* Player Name */}
