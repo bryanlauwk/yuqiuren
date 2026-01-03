@@ -37,20 +37,10 @@
 
     --radius: 0.5rem;
 
-    /* Status tokens */
-    --live: 0 75% 50%;
-    --scheduled: 210 15% 50%;
-    --finished: 145 65% 40%;
-    --score-bg: 210 15% 96%;
-    --court-badge: 210 100% 45%;
-
     /* Ranking tokens - Olympic metallics */
     --rank-gold: 45 95% 50%;
     --rank-silver: 210 10% 70%;
     --rank-bronze: 25 60% 45%;
-    --champion: 145 65% 40%;
-    --runner-up: 210 100% 45%;
-    --attendance: 210 15% 60%;
 
     /* Clean shadows */
     --shadow-card: 0 1px 3px hsl(210 20% 20% / 0.08), 0 4px 12px hsl(210 20% 20% / 0.06);
@@ -124,28 +114,6 @@
   .hover-lift:hover {
     transform: translateY(-2px);
     box-shadow: var(--shadow-elevated);
-  }
-
-  /* Status pulse */
-  .live-pulse {
-    animation: pulse-live 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
-  }
-
-  @keyframes pulse-live {
-    0%, 100% {
-      opacity: 1;
-    }
-    50% {
-      opacity: 0.5;
-    }
-  }
-
-  .score-transition {
-    transition: transform 0.15s ease-out, background-color 0.15s ease-out;
-  }
-
-  .score-transition:active {
-    transform: scale(0.95);
   }
 
   /* Gradient accent bar */
