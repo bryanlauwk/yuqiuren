@@ -255,6 +255,15 @@ export function useRankings() {
     if (error) throw error;
   };
 
+  // Update player name
+  const updatePlayerName = async (playerId: string, name: string) => {
+    const { error } = await supabase
+      .from('players')
+      .update({ name })
+      .eq('id', playerId);
+    if (error) throw error;
+  };
+
   // Delete a player
   const deletePlayer = async (id: string) => {
     const { error } = await supabase.from('players').delete().eq('id', id);
@@ -388,6 +397,7 @@ export function useRankings() {
     addPlayer,
     deletePlayer,
     updatePlayerAvatar,
+    updatePlayerName,
     createSession,
     deleteSession,
     recordResults,

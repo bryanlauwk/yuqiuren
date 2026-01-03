@@ -4,9 +4,10 @@ import { Header } from '@/components/Header';
 import { PlayerManager } from '@/components/admin/PlayerManager';
 import { SessionCreator } from '@/components/admin/SessionCreator';
 import { SessionHistory } from '@/components/admin/SessionHistory';
+import { AdminStats } from '@/components/admin/AdminStats';
 import { useRankings } from '@/hooks/useRankings';
 import { useAuth } from '@/hooks/useAuth';
-import { Shield, Loader2 } from 'lucide-react';
+import { Settings, Loader2 } from 'lucide-react';
 
 export default function AdminRanking() {
   const navigate = useNavigate();
@@ -19,6 +20,7 @@ export default function AdminRanking() {
     addPlayer,
     deletePlayer,
     updatePlayerAvatar,
+    updatePlayerName,
     createSession,
     deleteSession,
     recordResults,
@@ -49,25 +51,33 @@ export default function AdminRanking() {
   }
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-gradient-to-br from-background via-background to-primary/5">
       <Header />
       
-      <main className="container py-6">
+      <main className="container py-8">
         {/* Header Section */}
         <div className="flex items-center gap-4 mb-8">
-          <div className="p-3 rounded-lg bg-primary/20 border border-primary/50 glow-primary">
-            <Shield className="w-7 h-7 text-primary" />
+          <div className="p-3 rounded-xl bg-primary text-primary-foreground shadow-lg">
+            <Settings className="w-6 h-6" />
           </div>
           <div>
-            <h1 className="text-3xl sm:text-4xl font-display tracking-wider text-glow">
-              ADMIN PANEL
+            <h1 className="text-2xl sm:text-3xl font-bold text-foreground">
+              Admin Panel
             </h1>
             <p className="text-sm text-muted-foreground">
-              Manage players, sessions, and results
+              Manage players, sessions, and tournament results
             </p>
           </div>
         </div>
 
+        {/* Quick Stats */}
+        <AdminStats 
+          players={players} 
+          sessions={sessions} 
+          results={results} 
+        />
+
+        {/* Main Grid */}
         <div className="grid gap-6 lg:grid-cols-2">
           {/* Session Creator */}
           <SessionCreator
@@ -92,6 +102,7 @@ export default function AdminRanking() {
               onAddPlayer={addPlayer}
               onDeletePlayer={deletePlayer}
               onUpdateAvatar={updatePlayerAvatar}
+              onUpdateName={updatePlayerName}
             />
           </div>
         </div>

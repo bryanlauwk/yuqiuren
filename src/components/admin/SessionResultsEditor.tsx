@@ -112,17 +112,17 @@ export function SessionResultsEditor({
 
   return (
     <Dialog open={open} onOpenChange={handleOpenChange}>
-      <DialogContent className="max-w-md max-h-[80vh] overflow-y-auto">
+      <DialogContent className="max-w-md max-h-[85vh] overflow-y-auto rounded-2xl">
         <DialogHeader>
-          <DialogTitle>Edit Session Results</DialogTitle>
+          <DialogTitle className="text-xl font-semibold">Edit Session Results</DialogTitle>
         </DialogHeader>
 
-        <div className="space-y-4">
-          <div className="text-sm text-muted-foreground">
-            Tap a player to cycle through: Champion → Runner-up {sessionType === '3_teams' && '→ Attendance'}
-          </div>
+        <div className="space-y-4 pt-2">
+          <p className="text-sm text-muted-foreground bg-muted/50 p-3 rounded-xl">
+            Tap a player to cycle through: <span className="text-champion font-medium">Champion</span> → <span className="text-runner-up font-medium">Runner-up</span> {sessionType === '3_teams' && <span>→ <span className="text-attendance font-medium">Attendance</span></span>}
+          </p>
 
-          <div className="grid grid-cols-1 gap-2 max-h-60 overflow-y-auto">
+          <div className="grid grid-cols-1 gap-2 max-h-64 overflow-y-auto">
             {players.map((player) => {
               const category = getPlayerCategory(player.id);
               return (
@@ -143,8 +143,8 @@ export function SessionResultsEditor({
                     }
                   }}
                   className={cn(
-                    'flex items-center justify-between p-3 rounded-lg border-2 transition-all text-left',
-                    !category && 'border-border bg-muted/30 hover:border-muted-foreground',
+                    'flex items-center justify-between p-3 rounded-xl border-2 transition-all text-left',
+                    !category && 'border-border bg-background hover:border-muted-foreground',
                     category === 'champion' && 'border-champion bg-champion/10 text-champion',
                     category === 'runner_up' && 'border-runner-up bg-runner-up/10 text-runner-up',
                     category === 'attendance' && 'border-attendance bg-attendance/10 text-attendance'
@@ -152,7 +152,7 @@ export function SessionResultsEditor({
                 >
                   <span className="font-medium">{player.name}</span>
                   {category && (
-                    <span className="text-xs uppercase tracking-wide">
+                    <span className="text-xs uppercase tracking-wide font-medium">
                       {category === 'champion' && `Champion (${sessionType === '3_teams' ? '3' : '2'}pts)`}
                       {category === 'runner_up' && `Runner-up (${sessionType === '3_teams' ? '2' : '1'}pt)`}
                       {category === 'attendance' && 'Attendance (1pt)'}
@@ -163,31 +163,25 @@ export function SessionResultsEditor({
             })}
           </div>
 
-          <div className="flex gap-2 pt-2 border-t border-border">
-            <div className="flex-1 text-xs text-muted-foreground">
-              <span className="text-champion">{selectedChampions.length} Champions</span>
-              {' • '}
-              <span className="text-runner-up">{selectedRunnerUps.length} Runner-ups</span>
-              {sessionType === '3_teams' && (
-                <>
-                  {' • '}
-                  <span className="text-attendance">{selectedAttendance.length} Attendance</span>
-                </>
-              )}
-            </div>
+          <div className="flex items-center gap-4 pt-3 border-t border-border text-sm">
+            <span className="text-champion font-medium">{selectedChampions.length} Champions</span>
+            <span className="text-runner-up font-medium">{selectedRunnerUps.length} Runner-ups</span>
+            {sessionType === '3_teams' && (
+              <span className="text-attendance font-medium">{selectedAttendance.length} Attendance</span>
+            )}
           </div>
 
-          <div className="flex gap-2">
+          <div className="flex gap-3 pt-2">
             <Button
               variant="outline"
               onClick={() => onOpenChange(false)}
-              className="flex-1"
+              className="flex-1 h-11 rounded-xl"
             >
               Cancel
             </Button>
             <Button
               onClick={handleSubmit}
-              className="flex-1"
+              className="flex-1 h-11 rounded-xl"
               disabled={isSubmitting || selectedChampions.length === 0}
             >
               {isSubmitting ? 'Saving...' : 'Update Results'}

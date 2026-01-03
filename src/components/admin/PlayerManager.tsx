@@ -1,7 +1,7 @@
 import { useState, useRef } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { UserPlus, Trash2, Users, Camera, Loader2 } from 'lucide-react';
+import { UserPlus, Trash2, Users, Camera, Loader2, Pencil, Check, X } from 'lucide-react';
 import { toast } from 'sonner';
 import { supabase } from '@/integrations/supabase/client';
 import type { Player } from '@/types/ranking';
@@ -11,12 +11,15 @@ interface PlayerManagerProps {
   onAddPlayer: (name: string) => Promise<void>;
   onDeletePlayer: (id: string) => Promise<void>;
   onUpdateAvatar: (playerId: string, avatarUrl: string | null) => Promise<void>;
+  onUpdateName: (playerId: string, name: string) => Promise<void>;
 }
 
-export function PlayerManager({ players, onAddPlayer, onDeletePlayer, onUpdateAvatar }: PlayerManagerProps) {
+export function PlayerManager({ players, onAddPlayer, onDeletePlayer, onUpdateAvatar, onUpdateName }: PlayerManagerProps) {
   const [newPlayerName, setNewPlayerName] = useState('');
   const [isAdding, setIsAdding] = useState(false);
   const [uploadingPlayerId, setUploadingPlayerId] = useState<string | null>(null);
+  const [editingPlayerId, setEditingPlayerId] = useState<string | null>(null);
+  const [editingName, setEditingName] = useState('');
   const fileInputRefs = useRef<Map<string, HTMLInputElement>>(new Map());
 
   const handleAddPlayer = async () => {
@@ -96,6 +99,33 @@ export function PlayerManager({ players, onAddPlayer, onDeletePlayer, onUpdateAv
     }
   };
 
+  const handleStartEdit = (player: Player) => {
+    setEditingPlayerId(player.id);
+    setEditingName(player.name);
+  };
+
+  const handleCancelEdit = () => {
+    setEditingPlayerId(null);
+    setEditingName('');
+  };
+
+  const handleSaveEdit = async (playerId: string) => {
+    if (!editingName.trim()) {
+      toast.error('Name cannot be empty');
+      return;
+    }
+
+    try {
+      await onUpdateName(playerId, editingName.trim());
+      toast.success('Name updated');
+      setEditingPlayerId(null);
+      setEditingName('');
+    } catch (error) {
+      toast.error('Failed to update name');
+      console.error(error);
+    }
+  };
+
   const getInitials = (name: string) => {
     return name
       .split(' ')
@@ -106,44 +136,54 @@ export function PlayerManager({ players, onAddPlayer, onDeletePlayer, onUpdateAv
   };
 
   return (
-    <div className="bg-card rounded-lg border border-border p-4 glow-card">
-      <div className="flex items-center gap-2 mb-4">
-        <Users className="w-5 h-5 text-primary" />
-        <h2 className="font-display text-lg tracking-wide text-glow-subtle">MANAGE PLAYERS</h2>
+    <div className="bg-card rounded-2xl border border-border p-6 shadow-sm">
+      <div className="flex items-center gap-3 mb-6">
+        <div className="p-2 rounded-lg bg-chart-4/10">
+          <Users className="w-5 h-5 text-chart-4" />
+        </div>
+        <div>
+          <h2 className="font-semibold text-foreground">Manage Players</h2>
+          <p className="text-xs text-muted-foreground">{players.length} players registered</p>
+        </div>
       </div>
 
       {/* Add Player Form */}
-      <div className="flex gap-2 mb-4">
+      <div className="flex gap-2 mb-6">
         <Input
           placeholder="Enter player name"
           value={newPlayerName}
           onChange={(e) => setNewPlayerName(e.target.value)}
           onKeyDown={(e) => e.key === 'Enter' && handleAddPlayer()}
-          className="flex-1 bg-background border-border"
+          className="flex-1 h-11 rounded-xl bg-background"
         />
-        <Button onClick={handleAddPlayer} disabled={isAdding} size="icon">
-          <UserPlus className="w-4 h-4" />
+        <Button onClick={handleAddPlayer} disabled={isAdding} className="h-11 px-4 rounded-xl">
+          <UserPlus className="w-4 h-4 mr-2" />
+          Add
         </Button>
       </div>
 
-      {/* Player List */}
-      <div className="space-y-2 max-h-80 overflow-y-auto">
+      {/* Player Grid */}
+      <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3 max-h-[400px] overflow-y-auto pr-2">
         {players.length === 0 ? (
-          <p className="text-sm text-muted-foreground text-center py-4">No players yet</p>
+          <div className="col-span-full text-center py-12">
+            <Users className="w-12 h-12 text-muted-foreground/30 mx-auto mb-3" />
+            <p className="text-muted-foreground">No players yet</p>
+            <p className="text-sm text-muted-foreground/70">Add your first player above</p>
+          </div>
         ) : (
           players.map((player) => (
             <div
               key={player.id}
-              className="flex items-center gap-3 p-2 bg-muted/50 rounded-md"
+              className="flex items-center gap-3 p-3 bg-muted/30 rounded-xl border border-border/50 hover:border-border transition-colors group"
             >
               {/* Avatar */}
               <button
                 onClick={() => handleAvatarClick(player.id)}
                 disabled={uploadingPlayerId === player.id}
-                className="relative w-10 h-10 rounded-full bg-background border border-border flex items-center justify-center overflow-hidden hover:border-primary transition-colors group"
+                className="relative w-12 h-12 rounded-full bg-background border-2 border-border flex items-center justify-center overflow-hidden hover:border-primary transition-colors shrink-0"
               >
                 {uploadingPlayerId === player.id ? (
-                  <Loader2 className="w-4 h-4 animate-spin text-primary" />
+                  <Loader2 className="w-5 h-5 animate-spin text-primary" />
                 ) : player.avatar_url ? (
                   <>
                     <img
@@ -151,16 +191,16 @@ export function PlayerManager({ players, onAddPlayer, onDeletePlayer, onUpdateAv
                       alt={player.name}
                       className="w-full h-full object-cover"
                     />
-                    <div className="absolute inset-0 bg-background/80 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-                      <Camera className="w-4 h-4 text-primary" />
+                    <div className="absolute inset-0 bg-background/80 opacity-0 hover:opacity-100 transition-opacity flex items-center justify-center">
+                      <Camera className="w-5 h-5 text-primary" />
                     </div>
                   </>
                 ) : (
                   <>
-                    <span className="text-xs font-medium text-muted-foreground group-hover:hidden">
+                    <span className="text-sm font-semibold text-muted-foreground group-hover:hidden">
                       {getInitials(player.name)}
                     </span>
-                    <Camera className="w-4 h-4 text-primary hidden group-hover:block" />
+                    <Camera className="w-5 h-5 text-primary hidden group-hover:block" />
                   </>
                 )}
               </button>
@@ -179,17 +219,62 @@ export function PlayerManager({ players, onAddPlayer, onDeletePlayer, onUpdateAv
               />
 
               {/* Name */}
-              <span className="flex-1 text-sm">{player.name}</span>
+              <div className="flex-1 min-w-0">
+                {editingPlayerId === player.id ? (
+                  <div className="flex items-center gap-2">
+                    <Input
+                      value={editingName}
+                      onChange={(e) => setEditingName(e.target.value)}
+                      onKeyDown={(e) => {
+                        if (e.key === 'Enter') handleSaveEdit(player.id);
+                        if (e.key === 'Escape') handleCancelEdit();
+                      }}
+                      className="h-8 text-sm"
+                      autoFocus
+                    />
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      className="h-8 w-8 text-primary hover:text-primary"
+                      onClick={() => handleSaveEdit(player.id)}
+                    >
+                      <Check className="w-4 h-4" />
+                    </Button>
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      className="h-8 w-8 text-muted-foreground"
+                      onClick={handleCancelEdit}
+                    >
+                      <X className="w-4 h-4" />
+                    </Button>
+                  </div>
+                ) : (
+                  <p className="font-medium text-foreground truncate">{player.name}</p>
+                )}
+              </div>
 
-              {/* Delete */}
-              <Button
-                variant="ghost"
-                size="icon"
-                className="h-8 w-8 text-destructive hover:text-destructive"
-                onClick={() => handleDeletePlayer(player.id, player.name)}
-              >
-                <Trash2 className="w-4 h-4" />
-              </Button>
+              {/* Actions */}
+              {editingPlayerId !== player.id && (
+                <div className="flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    className="h-8 w-8 text-muted-foreground hover:text-primary hover:bg-primary/10"
+                    onClick={() => handleStartEdit(player)}
+                  >
+                    <Pencil className="w-4 h-4" />
+                  </Button>
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    className="h-8 w-8 text-muted-foreground hover:text-destructive hover:bg-destructive/10"
+                    onClick={() => handleDeletePlayer(player.id, player.name)}
+                  >
+                    <Trash2 className="w-4 h-4" />
+                  </Button>
+                </div>
+              )}
             </div>
           ))
         )}
