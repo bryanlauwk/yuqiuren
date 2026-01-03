@@ -4,6 +4,7 @@ import { RankingRow } from '@/components/RankingRow';
 import { Podium } from '@/components/Podium';
 import { NextMatchCountdown } from '@/components/NextMatchCountdown';
 import { Confetti } from '@/components/Confetti';
+import { BadmintonDoodles } from '@/components/BadmintonDoodles';
 import { useRankings } from '@/hooks/useRankings';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { Trophy, Users, Clock, MapPin, Sparkles, Star } from 'lucide-react';
@@ -20,6 +21,9 @@ export default function RankingPage() {
     <div className="min-h-screen bg-background flex flex-col relative">
       {/* Confetti celebration on load */}
       <Confetti />
+      
+      {/* Badminton-themed background doodles */}
+      <BadmintonDoodles />
       
       {/* Decorative doodle elements */}
       <div className="fixed inset-0 pointer-events-none overflow-hidden">
