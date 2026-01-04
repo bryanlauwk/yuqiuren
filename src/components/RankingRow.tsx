@@ -106,8 +106,8 @@ export function RankingRow({ ranking }: RankingRowProps) {
 
       {/* Total Points - With decoration */}
       <div className="text-right relative">
-        <p className="text-2xl font-display text-primary">{ranking.total_points}</p>
-        <p className="text-[10px] uppercase tracking-wide text-muted-foreground">{t.ranking.points}</p>
+        <p className="text-3xl sm:text-4xl font-display font-bold text-primary drop-shadow-sm">{ranking.total_points}</p>
+        <p className="text-[10px] uppercase tracking-wider text-muted-foreground">{t.ranking.points}</p>
         {/* Small squiggle decoration */}
         <svg className="absolute -bottom-1 right-0 w-8 h-2 text-primary/20" viewBox="0 0 30 8" fill="none" stroke="currentColor" strokeWidth="1.5">
           <path d="M0 4 Q7.5 1, 15 4 T30 4" strokeLinecap="round"/>

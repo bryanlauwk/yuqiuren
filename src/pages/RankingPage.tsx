@@ -92,7 +92,7 @@ export default function RankingPage() {
               </div>
               <span className="text-xs uppercase tracking-wide font-medium">{t.home.totalPlayers}</span>
             </div>
-            <p className="text-3xl font-display text-foreground">{rankings.length}</p>
+            <p className="text-4xl font-display font-bold text-primary">{rankings.length}</p>
             {/* Decorative dots */}
             <div className="flex gap-1 mt-2">
               <span className="w-2 h-2 rounded-full bg-primary/30 group-hover:animate-pulse" />
