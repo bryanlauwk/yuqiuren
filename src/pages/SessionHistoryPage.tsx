@@ -6,13 +6,31 @@ import { useLanguage } from '@/contexts/LanguageContext';
 import { useRankings } from '@/hooks/useRankings';
 import { format } from 'date-fns';
 import type { SessionResult } from '@/types/ranking';
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import { PhotoLightbox } from '@/components/PhotoLightbox';
 
 export default function SessionHistoryPage() {
   const { t } = useLanguage();
   const { sessions, results, players, loading } = useRankings();
-  const [lightboxImage, setLightboxImage] = useState<string | null>(null);
+  const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
+
+  // Collect all session photos for gallery navigation
+  const allPhotos = useMemo(() => {
+    return sessions
+      .filter(s => s.group_photo_url)
+      .map(s => ({
+        src: s.group_photo_url!,
+        alt: `${t.history.groupPhoto} - ${s.session_date}`,
+        sessionId: s.id,
+      }));
+  }, [sessions, t.history.groupPhoto]);
+
+  const openLightbox = (photoUrl: string) => {
+    const index = allPhotos.findIndex(p => p.src === photoUrl);
+    if (index !== -1) {
+      setLightboxIndex(index);
+    }
+  };
 
   const getPlayerName = (playerId: string) => {
     return players.find(p => p.id === playerId)?.name || 'Unknown';
@@ -102,7 +120,7 @@ export default function SessionHistoryPage() {
                         src={session.group_photo_url} 
                         alt={t.history.groupPhoto}
                         className="w-full h-40 object-cover rounded-lg cursor-pointer hover:opacity-90 transition-opacity"
-                        onClick={() => setLightboxImage(session.group_photo_url)}
+                        onClick={() => openLightbox(session.group_photo_url!)}
                       />
                     </div>
                   )}
@@ -185,10 +203,11 @@ export default function SessionHistoryPage() {
 
       {/* Photo Lightbox */}
       <PhotoLightbox
-        src={lightboxImage}
-        alt={t.history.groupPhoto}
-        open={!!lightboxImage}
-        onClose={() => setLightboxImage(null)}
+        images={allPhotos}
+        currentIndex={lightboxIndex ?? 0}
+        open={lightboxIndex !== null}
+        onClose={() => setLightboxIndex(null)}
+        onIndexChange={setLightboxIndex}
       />
 
       <Footer />
