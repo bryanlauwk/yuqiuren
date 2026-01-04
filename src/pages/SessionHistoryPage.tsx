@@ -7,10 +7,7 @@ import { useRankings } from '@/hooks/useRankings';
 import { format } from 'date-fns';
 import type { SessionResult } from '@/types/ranking';
 import { useState } from 'react';
-import {
-  Dialog,
-  DialogContent,
-} from "@/components/ui/dialog";
+import { PhotoLightbox } from '@/components/PhotoLightbox';
 
 export default function SessionHistoryPage() {
   const { t } = useLanguage();
@@ -187,17 +184,12 @@ export default function SessionHistoryPage() {
       </main>
 
       {/* Photo Lightbox */}
-      <Dialog open={!!lightboxImage} onOpenChange={() => setLightboxImage(null)}>
-        <DialogContent className="max-w-4xl p-0 overflow-hidden bg-transparent border-none">
-          {lightboxImage && (
-            <img 
-              src={lightboxImage} 
-              alt={t.history.groupPhoto}
-              className="w-full h-auto rounded-lg"
-            />
-          )}
-        </DialogContent>
-      </Dialog>
+      <PhotoLightbox
+        src={lightboxImage}
+        alt={t.history.groupPhoto}
+        open={!!lightboxImage}
+        onClose={() => setLightboxImage(null)}
+      />
 
       <Footer />
     </div>
