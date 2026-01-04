@@ -4,6 +4,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { LanguageProvider } from "@/contexts/LanguageContext";
+import { ProtectedRoute } from "@/components/ProtectedRoute";
 import RankingPage from "./pages/RankingPage";
 import AdminRanking from "./pages/AdminRanking";
 import SessionHistoryPage from "./pages/SessionHistoryPage";
@@ -22,7 +23,14 @@ const App = () => (
           <Routes>
             <Route path="/" element={<RankingPage />} />
             <Route path="/history" element={<SessionHistoryPage />} />
-            <Route path="/admin" element={<AdminRanking />} />
+            <Route 
+              path="/admin" 
+              element={
+                <ProtectedRoute requireAdmin>
+                  <AdminRanking />
+                </ProtectedRoute>
+              } 
+            />
             <Route path="/auth" element={<Auth />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
