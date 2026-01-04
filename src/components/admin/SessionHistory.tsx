@@ -1,11 +1,13 @@
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { Calendar, Trophy, Medal, Users, Trash2, Pencil, History } from 'lucide-react';
+import { Calendar, Trophy, Medal, Users, Trash2, Pencil, History, Camera, X, Loader2 } from 'lucide-react';
 import { useLanguage } from '@/contexts/LanguageContext';
 import type { TournamentSession, SessionResult, Player, SessionType } from '@/types/ranking';
 import { format } from 'date-fns';
 import { SessionResultsEditor } from './SessionResultsEditor';
+import { supabase } from '@/integrations/supabase/client';
+import { toast } from 'sonner';
 
 interface SessionHistoryProps {
   sessions: TournamentSession[];
@@ -19,6 +21,7 @@ interface SessionHistoryProps {
     runnerUps: string[],
     attendance: string[]
   ) => Promise<void>;
+  onUpdatePhoto: (sessionId: string, photoUrl: string | null) => Promise<void>;
 }
 
 export function SessionHistory({ 
@@ -27,9 +30,13 @@ export function SessionHistory({
   players,
   onDeleteSession,
   onUpdateResults,
+  onUpdatePhoto,
 }: SessionHistoryProps) {
   const { t } = useLanguage();
   const [editingSession, setEditingSession] = useState<TournamentSession | null>(null);
+  const [uploadingSessionId, setUploadingSessionId] = useState<string | null>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const [targetSessionId, setTargetSessionId] = useState<string | null>(null);
 
   const getPlayerName = (playerId: string) => {
     return players.find(p => p.id === playerId)?.name || 'Unknown';
@@ -52,8 +59,78 @@ export function SessionHistory({
     }
   };
 
+  const handlePhotoUpload = (sessionId: string) => {
+    setTargetSessionId(sessionId);
+    fileInputRef.current?.click();
+  };
+
+  const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file || !targetSessionId) return;
+
+    setUploadingSessionId(targetSessionId);
+
+    try {
+      const fileExt = file.name.split('.').pop();
+      const fileName = `${targetSessionId}-${Date.now()}.${fileExt}`;
+      const filePath = `session-photos/${fileName}`;
+
+      const { error: uploadError } = await supabase.storage
+        .from('session-photos')
+        .upload(fileName, file);
+
+      if (uploadError) throw uploadError;
+
+      const { data: { publicUrl } } = supabase.storage
+        .from('session-photos')
+        .getPublicUrl(fileName);
+
+      await onUpdatePhoto(targetSessionId, publicUrl);
+      toast.success(t.admin.photoUploaded);
+    } catch (error) {
+      console.error('Error uploading photo:', error);
+      toast.error('Failed to upload photo');
+    } finally {
+      setUploadingSessionId(null);
+      setTargetSessionId(null);
+      if (fileInputRef.current) {
+        fileInputRef.current.value = '';
+      }
+    }
+  };
+
+  const handleRemovePhoto = async (session: TournamentSession) => {
+    if (!session.group_photo_url) return;
+
+    try {
+      // Extract filename from URL
+      const urlParts = session.group_photo_url.split('/');
+      const fileName = urlParts[urlParts.length - 1];
+
+      // Delete from storage
+      await supabase.storage
+        .from('session-photos')
+        .remove([fileName]);
+
+      // Update session
+      await onUpdatePhoto(session.id, null);
+      toast.success(t.admin.photoRemoved);
+    } catch (error) {
+      console.error('Error removing photo:', error);
+      toast.error('Failed to remove photo');
+    }
+  };
+
   return (
     <div className="bg-card rounded-2xl border border-border p-6 shadow-sm">
+      <input
+        ref={fileInputRef}
+        type="file"
+        accept="image/*"
+        className="hidden"
+        onChange={handleFileChange}
+      />
+
       <div className="flex items-center gap-3 mb-6">
         <div className="p-2 rounded-lg bg-chart-2/10">
           <History className="w-5 h-5 text-chart-2" />
@@ -75,10 +152,11 @@ export function SessionHistory({
           </p>
         </div>
       ) : (
-        <div className="space-y-4 max-h-[400px] overflow-y-auto pr-2">
+        <div className="space-y-4 max-h-[500px] overflow-y-auto pr-2">
           {sessions.map((session) => {
             const sessionResults = getSessionResults(session.id);
             const { champions, runnerUps, attendance } = groupResultsByType(sessionResults);
+            const isUploading = uploadingSessionId === session.id;
             
             return (
               <div 
@@ -111,6 +189,19 @@ export function SessionHistory({
                       variant="ghost"
                       size="icon"
                       className="h-8 w-8 text-muted-foreground hover:text-primary hover:bg-primary/10"
+                      onClick={() => handlePhotoUpload(session.id)}
+                      disabled={isUploading}
+                    >
+                      {isUploading ? (
+                        <Loader2 className="w-4 h-4 animate-spin" />
+                      ) : (
+                        <Camera className="w-4 h-4" />
+                      )}
+                    </Button>
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      className="h-8 w-8 text-muted-foreground hover:text-primary hover:bg-primary/10"
                       onClick={() => setEditingSession(session)}
                     >
                       <Pencil className="w-4 h-4" />
@@ -125,6 +216,25 @@ export function SessionHistory({
                     </Button>
                   </div>
                 </div>
+
+                {/* Group Photo */}
+                {session.group_photo_url && (
+                  <div className="relative">
+                    <img 
+                      src={session.group_photo_url} 
+                      alt="Group photo"
+                      className="w-full h-32 object-cover rounded-lg"
+                    />
+                    <Button
+                      variant="destructive"
+                      size="icon"
+                      className="absolute top-2 right-2 h-6 w-6"
+                      onClick={() => handleRemovePhoto(session)}
+                    >
+                      <X className="w-3 h-3" />
+                    </Button>
+                  </div>
+                )}
 
                 {/* Results */}
                 {sessionResults.length > 0 ? (

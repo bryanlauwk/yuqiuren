@@ -4,6 +4,7 @@ export const translations = {
       brandName: "羽球人联赛",
       subtitle: "2026 积分排行榜",
       rankings: "排行榜",
+      sessionHistory: "场次记录",
       admin: "管理",
       signOut: "退出",
     },
@@ -49,6 +50,12 @@ export const translations = {
     },
     footer: {
       designedBy: "版权所有",
+    },
+    history: {
+      title: "场次记录",
+      subtitle: "查看所有比赛场次及结果",
+      noSessions: "暂无场次记录",
+      groupPhoto: "合影",
     },
     admin: {
       title: "管理面板",
@@ -104,6 +111,11 @@ export const translations = {
       deleteConfirmTitle: "删除选手",
       deleteConfirmMessage: "？这将同时删除该选手的所有比赛结果。",
       deleteSessionConfirm: "确定删除此场次及其所有结果吗？",
+      uploadPhoto: "上传合影",
+      changePhoto: "更换合影",
+      removePhoto: "删除合影",
+      photoUploaded: "合影上传成功",
+      photoRemoved: "合影已删除",
     },
   },
   en: {
@@ -111,6 +123,7 @@ export const translations = {
       brandName: "Badminton League",
       subtitle: "2026 Rankings",
       rankings: "Rankings",
+      sessionHistory: "History",
       admin: "Admin",
       signOut: "Sign Out",
     },
@@ -156,6 +169,12 @@ export const translations = {
     },
     footer: {
       designedBy: "Designed by",
+    },
+    history: {
+      title: "Session History",
+      subtitle: "View all match sessions and results",
+      noSessions: "No sessions recorded yet",
+      groupPhoto: "Group Photo",
     },
     admin: {
       title: "Admin Panel",
@@ -211,6 +230,11 @@ export const translations = {
       deleteConfirmTitle: "Delete player",
       deleteConfirmMessage: "? This will also remove all their results.",
       deleteSessionConfirm: "Are you sure you want to delete this session and all its results?",
+      uploadPhoto: "Upload Photo",
+      changePhoto: "Change Photo",
+      removePhoto: "Remove Photo",
+      photoUploaded: "Photo uploaded successfully",
+      photoRemoved: "Photo removed",
     },
   },
 } as const;
@@ -221,6 +245,7 @@ export type TranslationKeys = {
     brandName: string;
     subtitle: string;
     rankings: string;
+    sessionHistory: string;
     admin: string;
     signOut: string;
   };
@@ -266,6 +291,12 @@ export type TranslationKeys = {
   };
   footer: {
     designedBy: string;
+  };
+  history: {
+    title: string;
+    subtitle: string;
+    noSessions: string;
+    groupPhoto: string;
   };
   admin: {
     title: string;
@@ -321,5 +352,10 @@ export type TranslationKeys = {
     deleteConfirmTitle: string;
     deleteConfirmMessage: string;
     deleteSessionConfirm: string;
+    uploadPhoto: string;
+    changePhoto: string;
+    removePhoto: string;
+    photoUploaded: string;
+    photoRemoved: string;
   };
 };

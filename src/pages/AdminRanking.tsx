@@ -27,6 +27,7 @@ export default function AdminRanking() {
     deleteSession,
     recordResults,
     updateSessionResults,
+    updateSessionPhoto,
   } = useRankings();
 
   useEffect(() => {
@@ -95,6 +96,7 @@ export default function AdminRanking() {
             players={players}
             onDeleteSession={deleteSession}
             onUpdateResults={updateSessionResults}
+            onUpdatePhoto={updateSessionPhoto}
           />
 
           {/* Player Manager */}

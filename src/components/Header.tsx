@@ -1,6 +1,6 @@
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { cn } from '@/lib/utils';
-import { Medal, Shield, LogOut } from 'lucide-react';
+import { Medal, Shield, LogOut, History } from 'lucide-react';
 import logo from '@/assets/logo.png';
 import { useAuth } from '@/hooks/useAuth';
 import { Button } from '@/components/ui/button';
@@ -16,6 +16,7 @@ export function Header() {
 
   const navItems = [
     { path: '/', label: t.header.rankings, icon: Medal },
+    { path: '/history', label: t.header.sessionHistory, icon: History },
     { path: '/admin', label: t.header.admin, icon: Shield, requiresAuth: true },
   ];
 
