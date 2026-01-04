@@ -10,6 +10,7 @@ export interface TournamentSession {
   session_date: string;
   session_type: '3_teams' | '2_teams';
   name: string | null;
+  group_photo_url: string | null;
   created_at: string;
 }
 

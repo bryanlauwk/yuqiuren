@@ -387,6 +387,16 @@ export function useRankings() {
     await recordResults(sessionId, sessionType, champions, runnerUps, attendance);
   };
 
+  // Update session photo
+  const updateSessionPhoto = async (sessionId: string, photoUrl: string | null) => {
+    const { error } = await supabase
+      .from('tournament_sessions')
+      .update({ group_photo_url: photoUrl })
+      .eq('id', sessionId);
+    if (error) throw error;
+    await fetchData();
+  };
+
   return {
     players,
     sessions,
@@ -402,6 +412,7 @@ export function useRankings() {
     deleteSession,
     recordResults,
     updateSessionResults,
+    updateSessionPhoto,
     refetch: fetchData,
   };
 }

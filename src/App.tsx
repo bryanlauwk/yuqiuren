@@ -6,6 +6,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { LanguageProvider } from "@/contexts/LanguageContext";
 import RankingPage from "./pages/RankingPage";
 import AdminRanking from "./pages/AdminRanking";
+import SessionHistoryPage from "./pages/SessionHistoryPage";
 import Auth from "./pages/Auth";
 import NotFound from "./pages/NotFound";
 
@@ -20,6 +21,7 @@ const App = () => (
         <BrowserRouter>
           <Routes>
             <Route path="/" element={<RankingPage />} />
+            <Route path="/history" element={<SessionHistoryPage />} />
             <Route path="/admin" element={<AdminRanking />} />
             <Route path="/auth" element={<Auth />} />
             <Route path="*" element={<NotFound />} />

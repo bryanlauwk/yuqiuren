@@ -86,6 +86,7 @@ export type Database = {
       tournament_sessions: {
         Row: {
           created_at: string
+          group_photo_url: string | null
           id: string
           name: string | null
           session_date: string
@@ -93,6 +94,7 @@ export type Database = {
         }
         Insert: {
           created_at?: string
+          group_photo_url?: string | null
           id?: string
           name?: string | null
           session_date: string
@@ -100,6 +102,7 @@ export type Database = {
         }
         Update: {
           created_at?: string
+          group_photo_url?: string | null
           id?: string
           name?: string | null
           session_date?: string
