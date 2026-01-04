@@ -151,9 +151,16 @@ export function Podium({ rankings }: PodiumProps) {
               </p>
 
               {/* Points with decoration */}
-              <div className="flex items-center gap-1 mb-2">
-                <span className="text-xs text-muted-foreground">
-                  {player.total_points} {t.podium.pts}
+              <div className="flex flex-col items-center mb-2">
+                <span className={cn(
+                  "font-display font-bold",
+                  player.rank === 1 ? "text-3xl" : "text-2xl",
+                  style.text
+                )}>
+                  {player.total_points}
+                </span>
+                <span className="text-[10px] uppercase tracking-wider text-muted-foreground">
+                  {t.podium.pts}
                 </span>
               </div>
 
