@@ -2,6 +2,9 @@ export interface Player {
   id: string;
   name: string;
   avatar_url: string | null;
+  full_avatar_url: string | null;
+  avatar_crop_x: number | null;
+  avatar_crop_y: number | null;
   created_at: string;
 }
 
@@ -29,6 +32,9 @@ export interface PlayerRanking {
   player_id: string;
   player_name: string;
   avatar_url: string | null;
+  full_avatar_url: string | null;
+  avatar_crop_x: number | null;
+  avatar_crop_y: number | null;
   total_points: number;
   sessions_played: number;
   championships: number;

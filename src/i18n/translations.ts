@@ -116,6 +116,10 @@ export const translations = {
       removePhoto: "删除合影",
       photoUploaded: "合影上传成功",
       photoRemoved: "合影已删除",
+      adjustCropPosition: "调整裁剪位置",
+      dragToPosition: "拖动图片定位圆形视图",
+      preview: "预览",
+      saveCrop: "保存",
     },
   },
   en: {
@@ -235,6 +239,10 @@ export const translations = {
       removePhoto: "Remove Photo",
       photoUploaded: "Photo uploaded successfully",
       photoRemoved: "Photo removed",
+      adjustCropPosition: "Adjust Crop Position",
+      dragToPosition: "Drag on the image to position the circular view",
+      preview: "Preview",
+      saveCrop: "Save",
     },
   },
 } as const;
@@ -357,5 +365,9 @@ export type TranslationKeys = {
     removePhoto: string;
     photoUploaded: string;
     photoRemoved: string;
+    adjustCropPosition: string;
+    dragToPosition: string;
+    preview: string;
+    saveCrop: string;
   };
 };

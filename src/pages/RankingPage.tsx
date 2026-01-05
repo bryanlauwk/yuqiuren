@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { Header } from '@/components/Header';
 import { Footer } from '@/components/Footer';
 import { RankingRow } from '@/components/RankingRow';
@@ -5,6 +6,7 @@ import { Podium } from '@/components/Podium';
 import { NextMatchCountdown } from '@/components/NextMatchCountdown';
 import { Confetti } from '@/components/Confetti';
 import { BadmintonDoodles } from '@/components/BadmintonDoodles';
+import { PhotoLightbox } from '@/components/PhotoLightbox';
 import { useRankings } from '@/hooks/useRankings';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { Trophy, Users, Clock, MapPin, Sparkles, Star } from 'lucide-react';
@@ -14,6 +16,14 @@ export default function RankingPage() {
   const { rankings, loading, hasTopTies } = useRankings();
   const { t } = useLanguage();
 
+  // Lightbox state for viewing avatars
+  const [lightboxOpen, setLightboxOpen] = useState(false);
+  const [selectedAvatar, setSelectedAvatar] = useState<{ src: string; alt: string } | null>(null);
+
+  const handleAvatarClick = (avatarUrl: string, playerName: string) => {
+    setSelectedAvatar({ src: avatarUrl, alt: playerName });
+    setLightboxOpen(true);
+  };
   // Get rankings for positions 4+ (only used when podium is shown)
   const restOfRankings = rankings.slice(3);
 
@@ -162,14 +172,14 @@ export default function RankingPage() {
                 key={ranking.player_id}
                 style={{ transform: `rotate(${index % 2 === 0 ? -0.3 : 0.3}deg)` }}
               >
-                <RankingRow ranking={ranking} />
+                <RankingRow ranking={ranking} onAvatarClick={handleAvatarClick} />
               </div>
             ))}
           </div>
         ) : (
           <>
             {/* Podium for Top 3 */}
-            <Podium rankings={rankings} />
+            <Podium rankings={rankings} onAvatarClick={handleAvatarClick} />
 
             {/* Rest of Rankings (4+) */}
             {restOfRankings.length > 0 && (
@@ -185,7 +195,7 @@ export default function RankingPage() {
                     key={ranking.player_id}
                     style={{ transform: `rotate(${index % 2 === 0 ? -0.3 : 0.3}deg)` }}
                   >
-                    <RankingRow ranking={ranking} />
+                    <RankingRow ranking={ranking} onAvatarClick={handleAvatarClick} />
                   </div>
                 ))}
               </div>
@@ -195,6 +205,15 @@ export default function RankingPage() {
       </main>
 
       <Footer />
+
+      {/* Avatar Lightbox */}
+      <PhotoLightbox
+        images={selectedAvatar ? [selectedAvatar] : []}
+        currentIndex={0}
+        open={lightboxOpen}
+        onClose={() => setLightboxOpen(false)}
+        onIndexChange={() => {}}
+      />
     </div>
   );
 }

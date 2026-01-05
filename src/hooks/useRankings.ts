@@ -84,6 +84,9 @@ export function useRankings() {
       championships: number;
       name: string;
       avatar_url: string | null;
+      full_avatar_url: string | null;
+      avatar_crop_x: number | null;
+      avatar_crop_y: number | null;
     }>();
 
     // Initialize all players
@@ -94,6 +97,9 @@ export function useRankings() {
         championships: 0,
         name: player.name,
         avatar_url: player.avatar_url,
+        full_avatar_url: player.full_avatar_url ?? null,
+        avatar_crop_x: player.avatar_crop_x ?? 0.5,
+        avatar_crop_y: player.avatar_crop_y ?? 0.5,
       });
     });
 
@@ -131,6 +137,9 @@ export function useRankings() {
         player_id,
         player_name: stats.name,
         avatar_url: stats.avatar_url,
+        full_avatar_url: stats.full_avatar_url,
+        avatar_crop_x: stats.avatar_crop_x,
+        avatar_crop_y: stats.avatar_crop_y,
         total_points: stats.total_points,
         sessions_played: stats.sessions_played,
         championships: stats.championships,
@@ -247,12 +256,31 @@ export function useRankings() {
   };
 
   // Update player avatar
-  const updatePlayerAvatar = async (playerId: string, avatarUrl: string | null) => {
+  const updatePlayerAvatar = async (playerId: string, avatarUrl: string | null, fullAvatarUrl?: string | null) => {
+    const updateData: { avatar_url: string | null; full_avatar_url?: string | null } = { 
+      avatar_url: avatarUrl 
+    };
+    if (fullAvatarUrl !== undefined) {
+      updateData.full_avatar_url = fullAvatarUrl;
+    }
     const { error } = await supabase
       .from('players')
-      .update({ avatar_url: avatarUrl })
+      .update(updateData)
       .eq('id', playerId);
     if (error) throw error;
+  };
+
+  // Update avatar crop position
+  const updateAvatarCrop = async (playerId: string, cropX: number, cropY: number) => {
+    const { error } = await supabase
+      .from('players')
+      .update({ 
+        avatar_crop_x: cropX,
+        avatar_crop_y: cropY
+      })
+      .eq('id', playerId);
+    if (error) throw error;
+    await fetchData();
   };
 
   // Update player name
@@ -408,6 +436,7 @@ export function useRankings() {
     deletePlayer,
     updatePlayerAvatar,
     updatePlayerName,
+    updateAvatarCrop,
     createSession,
     deleteSession,
     recordResults,
