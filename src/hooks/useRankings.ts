@@ -205,16 +205,21 @@ export function useRankings() {
   }, [rankings]);
 
   // Calculate consecutive championship streak for a player
-  const calculateStreakBonus = async (playerId: string): Promise<number> => {
-    // Get all sessions ordered by date
+  // currentSessionId: the session being recorded (exclude from query since results don't exist yet)
+  const calculateStreakBonus = async (playerId: string, currentSessionId: string): Promise<number> => {
+    // Get all sessions EXCEPT the current one, ordered by date (most recent first)
     const { data: orderedSessions } = await supabase
       .from('tournament_sessions')
       .select('id')
+      .neq('id', currentSessionId)
       .order('session_date', { ascending: false });
 
-    if (!orderedSessions || orderedSessions.length === 0) return 0;
+    if (!orderedSessions || orderedSessions.length === 0) {
+      // This is the first session, no previous streak possible
+      return 0;
+    }
 
-    // Get player's results
+    // Get player's existing results (won't include current session yet)
     const { data: playerResults } = await supabase
       .from('session_results')
       .select('session_id, result_type')
@@ -228,22 +233,23 @@ export function useRankings() {
         .map(r => r.session_id)
     );
 
-    // Count consecutive championships from most recent
-    let streak = 0;
+    // Count consecutive championships from most recent (excluding current session)
+    let previousStreak = 0;
     for (const session of orderedSessions) {
       if (championSessions.has(session.id)) {
-        streak++;
+        previousStreak++;
       } else {
         break;
       }
     }
 
-    // Calculate bonus (0 for first win, +1 for 2nd, +2 for 3rd, +3 for 4th, +4 for 5+)
-    if (streak <= 1) return 0;
-    if (streak === 2) return 1;
-    if (streak === 3) return 2;
-    if (streak === 4) return 3;
-    return 4; // 5+ consecutive
+    // Total streak = previous consecutive wins + 1 (current win being recorded)
+    const totalStreak = previousStreak + 1;
+
+    // Bonus formula: streak - 1 (0 for 1st win, +1 for 2nd, +2 for 3rd, etc.)
+    // Cap at +4 for 5+ consecutive wins
+    if (totalStreak <= 1) return 0;
+    return Math.min(totalStreak - 1, 4);
   };
 
   // Add a new player
@@ -352,7 +358,7 @@ export function useRankings() {
     // Process champions with streak bonus
     for (const playerId of champions) {
       const basePoints = getBasePoints(sessionType, 'champion');
-      const streakBonus = await calculateStreakBonus(playerId);
+      const streakBonus = await calculateStreakBonus(playerId, sessionId);
       resultsToInsert.push({
         session_id: sessionId,
         player_id: playerId,
