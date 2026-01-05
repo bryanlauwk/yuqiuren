@@ -23,6 +23,7 @@ export default function AdminRanking() {
     deletePlayer,
     updatePlayerAvatar,
     updatePlayerName,
+    updateAvatarCrop,
     createSession,
     deleteSession,
     recordResults,
@@ -107,6 +108,7 @@ export default function AdminRanking() {
               onDeletePlayer={deletePlayer}
               onUpdateAvatar={updatePlayerAvatar}
               onUpdateName={updatePlayerName}
+              onUpdateAvatarCrop={updateAvatarCrop}
             />
           </div>
         </div>

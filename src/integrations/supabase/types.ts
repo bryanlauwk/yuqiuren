@@ -16,20 +16,29 @@ export type Database = {
     Tables: {
       players: {
         Row: {
+          avatar_crop_x: number | null
+          avatar_crop_y: number | null
           avatar_url: string | null
           created_at: string
+          full_avatar_url: string | null
           id: string
           name: string
         }
         Insert: {
+          avatar_crop_x?: number | null
+          avatar_crop_y?: number | null
           avatar_url?: string | null
           created_at?: string
+          full_avatar_url?: string | null
           id?: string
           name: string
         }
         Update: {
+          avatar_crop_x?: number | null
+          avatar_crop_y?: number | null
           avatar_url?: string | null
           created_at?: string
+          full_avatar_url?: string | null
           id?: string
           name?: string
         }

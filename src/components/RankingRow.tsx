@@ -5,9 +5,10 @@ import { useLanguage } from '@/contexts/LanguageContext';
 
 interface RankingRowProps {
   ranking: PlayerRanking;
+  onAvatarClick?: (avatarUrl: string, playerName: string) => void;
 }
 
-export function RankingRow({ ranking }: RankingRowProps) {
+export function RankingRow({ ranking, onAvatarClick }: RankingRowProps) {
   const { t } = useLanguage();
   
   const getInitials = (name: string) => {
@@ -76,8 +77,13 @@ export function RankingRow({ ranking }: RankingRowProps) {
       </div>
 
       {/* Player Avatar - Organic shape */}
-      <div 
-        className="w-11 h-11 flex items-center justify-center bg-secondary border-2 border-border overflow-hidden group-hover:scale-110 transition-transform"
+      <button
+        onClick={() => ranking.full_avatar_url && onAvatarClick?.(ranking.full_avatar_url, ranking.player_name)}
+        disabled={!ranking.full_avatar_url}
+        className={cn(
+          "w-11 h-11 flex items-center justify-center bg-secondary border-2 border-border overflow-hidden group-hover:scale-110 transition-all",
+          ranking.full_avatar_url && "cursor-pointer hover:ring-2 hover:ring-primary/50 hover:border-primary"
+        )}
         style={{ borderRadius: '45% 55% 50% 50%' }}
       >
         {ranking.avatar_url ? (
@@ -85,13 +91,18 @@ export function RankingRow({ ranking }: RankingRowProps) {
             src={ranking.avatar_url}
             alt={ranking.player_name}
             className="w-full h-full object-cover"
+            style={{
+              objectPosition: ranking.avatar_crop_x !== null && ranking.avatar_crop_y !== null
+                ? `${ranking.avatar_crop_x * 100}% ${ranking.avatar_crop_y * 100}%`
+                : 'center'
+            }}
           />
         ) : (
           <span className="text-sm font-medium text-muted-foreground">
             {getInitials(ranking.player_name)}
           </span>
         )}
-      </div>
+      </button>
 
       {/* Player Name & Stats */}
       <div className="flex-1 min-w-0">

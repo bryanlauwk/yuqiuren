@@ -5,9 +5,10 @@ import { useLanguage } from '@/contexts/LanguageContext';
 
 interface PodiumProps {
   rankings: PlayerRanking[];
+  onAvatarClick?: (avatarUrl: string, playerName: string) => void;
 }
 
-export function Podium({ rankings }: PodiumProps) {
+export function Podium({ rankings, onAvatarClick }: PodiumProps) {
   const { t } = useLanguage();
   const top3 = rankings.slice(0, 3);
   
@@ -122,13 +123,16 @@ export function Podium({ rankings }: PodiumProps) {
               )}
               
               {/* Player Avatar - Hand-drawn style border */}
-              <div
+              <button
+                onClick={() => player.full_avatar_url && onAvatarClick?.(player.full_avatar_url, player.player_name)}
+                disabled={!player.full_avatar_url}
                 className={cn(
-                  'w-18 h-18 rounded-full flex items-center justify-center font-display text-lg mb-2 overflow-hidden relative',
+                  'w-18 h-18 rounded-full flex items-center justify-center font-display text-lg mb-2 overflow-hidden relative transition-all',
                   style.avatarBg,
                   style.text,
                   player.rank === 1 ? 'w-20 h-20 border-[3px]' : 'w-16 h-16 border-2',
-                  style.border
+                  style.border,
+                  player.full_avatar_url && 'cursor-pointer hover:ring-2 hover:ring-primary/50 hover:scale-105'
                 )}
                 style={{ borderRadius: '60% 40% 50% 50% / 50% 50% 40% 60%' }}
               >
@@ -137,13 +141,18 @@ export function Podium({ rankings }: PodiumProps) {
                     src={player.avatar_url}
                     alt={player.player_name}
                     className="w-full h-full object-cover"
+                    style={{
+                      objectPosition: player.avatar_crop_x !== null && player.avatar_crop_y !== null
+                        ? `${player.avatar_crop_x * 100}% ${player.avatar_crop_y * 100}%`
+                        : 'center'
+                    }}
                   />
                 ) : player.rank === 1 ? (
                   <Trophy className="w-7 h-7" />
                 ) : (
                   <span className="text-lg">{getInitials(player.player_name)}</span>
                 )}
-              </div>
+              </button>
 
               {/* Player Name */}
               <p className={cn('font-semibold text-sm text-center mb-0.5 truncate max-w-[100px] text-foreground')}>
