@@ -7,9 +7,11 @@ import { NextMatchCountdown } from '@/components/NextMatchCountdown';
 import { Confetti } from '@/components/Confetti';
 import { BadmintonDoodles } from '@/components/BadmintonDoodles';
 import { PhotoLightbox } from '@/components/PhotoLightbox';
+import { ShareRankingModal } from '@/components/ShareRankingModal';
 import { useRankings } from '@/hooks/useRankings';
 import { useLanguage } from '@/contexts/LanguageContext';
-import { Trophy, Users, Clock, MapPin, Sparkles, Star } from 'lucide-react';
+import { Trophy, Users, Clock, MapPin, Sparkles, Star, Share2 } from 'lucide-react';
+import { Button } from '@/components/ui/button';
 import heroBackground from '@/assets/hero-background.png';
 
 export default function RankingPage() {
@@ -19,6 +21,7 @@ export default function RankingPage() {
   // Lightbox state for viewing avatars
   const [lightboxOpen, setLightboxOpen] = useState(false);
   const [selectedAvatar, setSelectedAvatar] = useState<{ src: string; alt: string } | null>(null);
+  const [shareModalOpen, setShareModalOpen] = useState(false);
 
   const handleAvatarClick = (avatarUrl: string, playerName: string) => {
     setSelectedAvatar({ src: avatarUrl, alt: playerName });
@@ -89,6 +92,17 @@ export default function RankingPage() {
             <div className="flex items-center justify-center gap-2 mt-4">
               <div className="w-8 h-1 bg-rank-gold/60 rounded-full" />
               <div className="squiggle-line w-40 opacity-80" />
+            </div>
+            {/* WhatsApp Share Button */}
+            <div className="mt-5">
+              <Button
+                onClick={() => setShareModalOpen(true)}
+                className="bg-[#25D366] hover:bg-[#20BD5A] text-white shadow-lg"
+                disabled={rankings.length === 0}
+              >
+                <Share2 className="w-4 h-4 mr-2" />
+                {t.home.shareRankings}
+              </Button>
             </div>
           </div>
         </div>
@@ -213,6 +227,13 @@ export default function RankingPage() {
         open={lightboxOpen}
         onClose={() => setLightboxOpen(false)}
         onIndexChange={() => {}}
+      />
+
+      {/* Share Modal */}
+      <ShareRankingModal
+        open={shareModalOpen}
+        onClose={() => setShareModalOpen(false)}
+        rankings={rankings}
       />
     </div>
   );
