@@ -18,6 +18,7 @@ export const translations = {
       addPlayersHint: "请在管理面板添加选手",
       tieMessage: "积分相同时，按胜场、场次及字母顺序排列，待分出高下后显示领奖台",
       otherPlayers: "其他选手",
+      shareRankings: "分享排名",
     },
     podium: {
       topPlayers: "前三甲",
@@ -141,6 +142,7 @@ export const translations = {
       addPlayersHint: "Add players from the Admin panel",
       tieMessage: "Rankings tied on points, wins, and sessions — podium displayed when tiebreaker is resolved",
       otherPlayers: "Other Players",
+      shareRankings: "Share Rankings",
     },
     podium: {
       topPlayers: "TOP PLAYERS",
@@ -267,6 +269,7 @@ export type TranslationKeys = {
     addPlayersHint: string;
     tieMessage: string;
     otherPlayers: string;
+    shareRankings: string;
   };
   podium: {
     topPlayers: string;
