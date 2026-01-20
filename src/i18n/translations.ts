@@ -7,6 +7,7 @@ export const translations = {
       sessionHistory: "场次记录",
       admin: "管理",
       signOut: "退出",
+      share: "分享",
     },
     home: {
       heroTitle: "2026年羽球人赛事积分表",
@@ -131,6 +132,7 @@ export const translations = {
       sessionHistory: "History",
       admin: "Admin",
       signOut: "Sign Out",
+      share: "Share",
     },
     home: {
       heroTitle: "2026 Badminton League Rankings",
@@ -258,6 +260,7 @@ export type TranslationKeys = {
     sessionHistory: string;
     admin: string;
     signOut: string;
+    share: string;
   };
   home: {
     heroTitle: string;
