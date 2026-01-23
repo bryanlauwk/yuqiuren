@@ -32,13 +32,13 @@ export function Header() {
 
   return (
     <>
-      <header className="sticky top-0 z-50 bg-card/95 backdrop-blur-sm border-b border-border card-shadow">
+      <header className="sticky top-0 z-50 bg-background/95 backdrop-blur-md border-b border-border">
         {/* Top accent bar */}
         <div className="h-1 accent-bar" />
         
-        <div className="container flex items-center justify-between h-16">
+        <div className="container flex items-center justify-between h-14 sm:h-16">
           <Link to="/" className="flex items-center group">
-            <div className="relative w-12 h-12 rounded-2xl overflow-hidden group-hover:scale-105 group-hover:rotate-2 transition-all duration-300 doodle-shadow">
+            <div className="relative w-10 h-10 sm:w-12 sm:h-12 rounded-xl overflow-hidden group-hover:scale-105 transition-transform duration-300">
               <img src={logo} alt="Logo" className="w-full h-full object-cover" />
             </div>
           </Link>
@@ -52,7 +52,7 @@ export function Header() {
                   key={path}
                   to={path}
                   className={cn(
-                    'px-4 py-2 rounded-lg text-sm font-medium transition-colors flex items-center gap-2',
+                    'px-3 sm:px-4 py-2 rounded-lg text-sm font-medium transition-all flex items-center gap-2',
                     currentPath === path
                       ? 'bg-primary text-primary-foreground'
                       : 'text-muted-foreground hover:text-foreground hover:bg-muted'
@@ -69,7 +69,7 @@ export function Header() {
               onClick={() => setShareModalOpen(true)}
               disabled={rankings.length === 0}
               className={cn(
-                'px-4 py-2 rounded-lg text-sm font-medium transition-colors flex items-center gap-2',
+                'px-3 sm:px-4 py-2 rounded-lg text-sm font-medium transition-all flex items-center gap-2',
                 'text-muted-foreground hover:text-foreground hover:bg-muted disabled:opacity-50 disabled:cursor-not-allowed'
               )}
               title={t.header.share}
@@ -85,7 +85,7 @@ export function Header() {
                 variant="ghost"
                 size="sm"
                 onClick={handleSignOut}
-                className="text-muted-foreground hover:text-destructive ml-2"
+                className="text-muted-foreground hover:text-destructive ml-1 sm:ml-2"
               >
                 <LogOut className="w-4 h-4" />
                 <span className="hidden sm:inline ml-2">{t.header.signOut}</span>
