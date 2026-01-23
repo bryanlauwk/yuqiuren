@@ -28,7 +28,7 @@ export default function RankingPage() {
       {/* Hero Section */}
       <ArenaHero />
 
-      <main className="container py-8 relative z-10 flex-1">
+      <main className="container -mt-8 relative z-10 flex-1">
         {/* Rankings Display */}
         {loading ? (
           <div className="space-y-2">
@@ -50,12 +50,6 @@ export default function RankingPage() {
           </div>
         ) : (
           <div className="space-y-2">
-            {/* Tie message if applicable */}
-            {hasTopTies && (
-              <div className="mb-6 px-4 py-3 bg-primary/10 border border-primary/30 rounded-lg">
-                <p className="text-sm text-foreground/80">{t.home.tieMessage}</p>
-              </div>
-            )}
             
             {/* All rankings in unified list */}
             {rankings.map((ranking, index) => (
