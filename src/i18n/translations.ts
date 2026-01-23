@@ -10,8 +10,8 @@ export const translations = {
       share: "分享",
     },
     home: {
-      heroTitle: "2026年羽球人赛事积分表",
-      heroSubtitle: "羽球积分排行榜",
+      heroTitle: "2026 羽球人赛 · 积分榜",
+      heroSubtitle: "每一分都至关重要",
       totalPlayers: "参赛人数",
       nextMatch: "下一场比赛",
       venue: "比赛场地",
@@ -135,8 +135,8 @@ export const translations = {
       share: "Share",
     },
     home: {
-      heroTitle: "2026 Badminton League Rankings",
-      heroSubtitle: "Season Points Leaderboard",
+      heroTitle: "2026 Badminton League",
+      heroSubtitle: "Every point matters.",
       totalPlayers: "Total Players",
       nextMatch: "Next Match",
       venue: "Venue",
