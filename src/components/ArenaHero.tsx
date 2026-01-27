@@ -16,6 +16,12 @@ export function ArenaHero() {
       <div className="motion-streak w-[200%] h-16 top-1/2 -left-1/2" style={{ animationDelay: '1s' }} />
       <div className="motion-streak w-[200%] h-12 top-3/4 -left-1/2" style={{ animationDelay: '2s' }} />
       
+      {/* Player silhouettes */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        <div className="player-silhouette-left" />
+        <div className="player-silhouette-right" />
+      </div>
+      
       {/* Subtle vignette overlay */}
       <div className="absolute inset-0 bg-gradient-to-t from-background via-transparent to-transparent" />
       <div className="absolute inset-0 bg-gradient-to-b from-background/50 via-transparent to-transparent" />

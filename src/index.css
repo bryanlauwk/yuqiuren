@@ -333,4 +333,75 @@
     background: hsl(0 0% 20%);
     color: hsl(0 0% 70%);
   }
+
+  /* Player silhouettes for hero */
+  .player-silhouette-left {
+    position: absolute;
+    left: -5%;
+    bottom: 0;
+    width: 40%;
+    height: 100%;
+    background: linear-gradient(
+      to right,
+      hsl(0 70% 25% / 0.35),
+      hsl(0 70% 20% / 0.15) 60%,
+      transparent
+    );
+    clip-path: polygon(
+      0% 100%,
+      15% 100%,
+      20% 85%,
+      25% 70%,
+      22% 55%,
+      30% 45%,
+      45% 35%,
+      55% 25%,
+      50% 20%,
+      40% 25%,
+      35% 35%,
+      25% 40%,
+      20% 50%,
+      15% 55%,
+      12% 65%,
+      8% 75%,
+      5% 85%,
+      0% 90%
+    );
+    opacity: 0.7;
+  }
+
+  .player-silhouette-right {
+    position: absolute;
+    right: -5%;
+    bottom: 0;
+    width: 40%;
+    height: 100%;
+    background: linear-gradient(
+      to left,
+      hsl(150 60% 15% / 0.35),
+      hsl(150 60% 12% / 0.15) 60%,
+      transparent
+    );
+    clip-path: polygon(
+      100% 100%,
+      85% 100%,
+      80% 80%,
+      75% 65%,
+      70% 50%,
+      65% 40%,
+      55% 30%,
+      60% 20%,
+      70% 15%,
+      80% 20%,
+      85% 25%,
+      90% 35%,
+      88% 50%,
+      85% 60%,
+      82% 75%,
+      90% 85%,
+      95% 90%,
+      100% 95%
+    );
+    opacity: 0.7;
+  }
 }
