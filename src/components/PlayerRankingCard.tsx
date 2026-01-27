@@ -1,4 +1,4 @@
-import { ArrowUp, ArrowDown } from 'lucide-react';
+import { ArrowUp, ArrowDown, Trophy } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useLanguage } from '@/contexts/LanguageContext';
 
@@ -212,18 +212,35 @@ export function PlayerRankingCard({
           </p>
         </div>
 
+        {/* Divider */}
+        <div className="w-px h-8 sm:h-10 bg-border/50" />
+
         {/* Wins */}
         <div className="text-center min-w-[32px] sm:min-w-[40px]">
-          <p className={cn(
-            "font-display font-bold text-foreground/80",
-            getStatSize()
-          )}>
-            {championships}
-          </p>
+          <div className="flex items-center justify-center gap-1">
+            {rank <= 3 && (
+              <Trophy className={cn(
+                "w-4 h-4 sm:w-5 sm:h-5",
+                rank === 1 ? "text-rank-gold" : 
+                rank === 2 ? "text-rank-silver" : 
+                "text-rank-bronze"
+              )} />
+            )}
+            <p className={cn(
+              "font-display font-bold",
+              getStatSize(),
+              rank <= 3 ? "text-foreground" : "text-foreground/80"
+            )}>
+              {championships}
+            </p>
+          </div>
           <p className="text-[9px] sm:text-[10px] uppercase tracking-wider text-muted-foreground">
             {t.ranking.wins}
           </p>
         </div>
+
+        {/* Divider */}
+        <div className="w-px h-8 sm:h-10 bg-border/50" />
 
         {/* Points (most prominent) */}
         <div className="text-center min-w-[50px] sm:min-w-[70px]">
