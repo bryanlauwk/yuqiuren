@@ -1,158 +1,160 @@
 
 
-# Header Enhancement Plan
+# Ranking Card Layout Optimization
 
-## Overview
-Enhance the header with a sporty vibe by removing the share button, adding player silhouettes to the hero background, and replacing the logo with a shuttlecock icon that matches the arena theme.
+## Problem Analysis
 
----
+The current layout has a large empty gap in the middle because:
+- The Player Info section uses `flex-1` which stretches to fill all available space
+- Stats (sessions/wins) are displayed as small secondary text underneath the player name
+- Points are pushed to the far right, creating visual imbalance
 
-## Changes Summary
+**Current Layout:**
+```
+[Rank] [Avatar] [Name                                         ] [Points]
+                [4 sessions • 2 wins (tiny text)]                [pts]
+```
 
-| Task | File(s) | Description |
-|------|---------|-------------|
-| Remove Share Button | `src/components/Header.tsx` | Remove share button and related state/imports |
-| Add Player Silhouettes | `src/components/ArenaHero.tsx` | Add CSS-based player silhouettes to background |
-| Replace Logo | `src/components/Header.tsx` | Replace PNG logo with inline SVG shuttlecock |
-| Add Silhouette Styles | `src/index.css` | Add CSS for player silhouette effects |
+## Proposed Solution
+
+Reorganize to a more balanced 3-column layout where stats are visually prominent:
+
+**New Layout:**
+```
+[Rank] [Avatar] [Name        ] [Sessions] [Wins ] [Points]
+                [rank change ] [  8      ] [ 3   ] [ 156  ]
+                               [场次/PLAYED] [胜/WINS] [积分/PTS]
+```
+
+This creates a cleaner visual hierarchy with:
+1. **Left block:** Rank + Avatar + Name (identity)
+2. **Center block:** Sessions + Wins (performance stats with bigger typography)
+3. **Right block:** Points (main score)
 
 ---
 
 ## Implementation Details
 
-### 1. Remove Share Button from Header
+### File: `src/components/PlayerRankingCard.tsx`
 
-**File:** `src/components/Header.tsx`
+**Layout Changes:**
+- Split the flexible middle section into discrete stat columns
+- Each stat (sessions, wins, points) gets its own vertical block with number on top, label below
+- Use consistent spacing with `gap-8` between stat columns
+- Stats get larger font sizes (comparable to points)
 
-Remove:
-- `useState` for `shareModalOpen`
-- `Share2` icon import
-- `ShareRankingModal` component import
-- `useRankings` hook import
-- Share button JSX (lines 67-79)
-- ShareRankingModal JSX (lines 98-103)
+**Typography Hierarchy:**
+| Element | Current | New |
+|---------|---------|-----|
+| Sessions number | `text-xs/text-sm` | `text-xl sm:text-2xl` (rank 1-3) / `text-lg sm:text-xl` (others) |
+| Wins number | `text-xs/text-sm` | `text-xl sm:text-2xl` (rank 1-3) / `text-lg sm:text-xl` (others) |
+| Stat labels | `text-xs` | `text-[10px] sm:text-xs uppercase tracking-wider` |
+| Points number | unchanged | unchanged |
 
-### 2. Replace Logo with Shuttlecock SVG
+**Visual Treatment:**
+- Sessions/Wins numbers: Bold, slightly muted color (not as prominent as points)
+- Points: Remains the most prominent (largest, gold glow for top 3)
+- Labels: Uppercase, tracked, muted gray
 
-**File:** `src/components/Header.tsx`
-
-Replace the PNG logo with an inline SVG shuttlecock icon that uses the arena color scheme:
-- Dark background circle with gradient
-- White/gold shuttlecock design
-- Matches the cinematic dark theme
-- Subtle glow effect on hover
+### New Component Structure:
 
 ```tsx
-{/* Shuttlecock Logo */}
-<Link to="/" className="flex items-center group">
-  <div className="relative w-10 h-10 sm:w-12 sm:h-12 rounded-xl overflow-hidden group-hover:scale-105 transition-transform duration-300 bg-gradient-to-br from-primary/80 to-accent/60 flex items-center justify-center shadow-lg">
-    <svg viewBox="0 0 24 24" className="w-6 h-6 sm:w-7 sm:h-7 text-white/90">
-      {/* Shuttlecock SVG path */}
-    </svg>
+<div className="flex items-center gap-4 sm:gap-6 ...">
+  {/* Rank Badge */}
+  <div>...</div>
+
+  {/* Avatar */}
+  <button>...</button>
+
+  {/* Player Name (no longer flex-1) */}
+  <div className="min-w-0 flex-shrink">
+    <div className="flex items-center gap-2">
+      <p className="font-bold truncate">{playerName}</p>
+      {getRankChangeDisplay()}
+    </div>
   </div>
-</Link>
-```
 
-### 3. Add Player Silhouettes to Hero
+  {/* Spacer */}
+  <div className="flex-1" />
 
-**File:** `src/components/ArenaHero.tsx`
+  {/* Stats Grid - Sessions, Wins, Points */}
+  <div className="flex items-center gap-6 sm:gap-8">
+    {/* Sessions */}
+    <div className="text-center">
+      <p className="font-display font-bold text-lg sm:text-xl text-foreground/80">
+        {sessionsPlayed}
+      </p>
+      <p className="text-[10px] uppercase tracking-wider text-muted-foreground">
+        {t.ranking.sessions}
+      </p>
+    </div>
 
-Add CSS-based player silhouettes positioned on left and right sides of the hero:
-- Semi-transparent overlays
-- Action poses (serving, smashing)
-- Gradient fade to blend with background
-- Responsive positioning
+    {/* Wins */}
+    <div className="text-center">
+      <p className="font-display font-bold text-lg sm:text-xl text-foreground/80">
+        {championships}
+      </p>
+      <p className="text-[10px] uppercase tracking-wider text-muted-foreground">
+        {t.ranking.wins}
+      </p>
+    </div>
 
-```tsx
-{/* Player silhouettes */}
-<div className="absolute inset-0 overflow-hidden pointer-events-none">
-  {/* Left player silhouette */}
-  <div className="player-silhouette-left" />
-  {/* Right player silhouette */}
-  <div className="player-silhouette-right" />
+    {/* Points (most prominent) */}
+    <div className="text-center min-w-[60px]">
+      <p className="font-display font-bold text-2xl sm:text-3xl text-rank-gold">
+        {totalPoints}
+      </p>
+      <p className="text-[10px] uppercase tracking-wider text-muted-foreground">
+        {t.ranking.points}
+      </p>
+    </div>
+  </div>
 </div>
 ```
 
-### 4. Add Silhouette CSS Styles
+---
 
-**File:** `src/index.css`
+## Size Scaling by Rank
 
-Add new utility classes for player silhouettes using CSS gradients and clip-paths:
+### Top 3 Players (rank 1-3):
+- Sessions/Wins: `text-xl sm:text-2xl`
+- Points: `text-3xl sm:text-4xl` (rank 1 gets `text-4xl sm:text-5xl`)
+- Gap between stats: `gap-8 sm:gap-10`
 
-```css
-/* Player silhouettes for hero */
-.player-silhouette-left {
-  position: absolute;
-  left: -5%;
-  bottom: 0;
-  width: 35%;
-  height: 100%;
-  background: linear-gradient(
-    to right,
-    hsl(0 70% 25% / 0.3),
-    transparent
-  );
-  clip-path: polygon(...); /* Serving pose */
-  opacity: 0.6;
-}
-
-.player-silhouette-right {
-  position: absolute;
-  right: -5%;
-  bottom: 0;
-  width: 35%;
-  height: 100%;
-  background: linear-gradient(
-    to left,
-    hsl(150 60% 15% / 0.3),
-    transparent
-  );
-  clip-path: polygon(...); /* Smash pose */
-  opacity: 0.6;
-}
-```
+### Other Players (rank 4+):
+- Sessions/Wins: `text-lg sm:text-xl`
+- Points: `text-2xl sm:text-3xl`
+- Gap between stats: `gap-6 sm:gap-8`
 
 ---
 
 ## Visual Result
 
+**Desktop View:**
 ```
-┌─────────────────────────────────────────────────────────────────────────┐
-│ [🏸]  Rankings  History  Admin         [Lang] [Logout]                  │
-├─────────────────────────────────────────────────────────────────────────┤
-│                                                                         │
-│   ▓▓▓                  2026 羽球人赛 · 积分榜                    ▓▓▓   │
-│  ▓▓▓▓▓                                                          ▓▓▓▓▓  │
-│ ▓▓▓▓▓▓▓               "Every point matters."                   ▓▓▓▓▓▓▓ │
-│  ▓▓▓▓▓                     ─────────                            ▓▓▓▓▓  │
-│   ▓▓▓                                                            ▓▓▓   │
-│     [Left player                                    Right player]       │
-│     [silhouette]                                    [silhouette]        │
-│                                                                         │
-└─────────────────────────────────────────────────────────────────────────┘
+┌──────────────────────────────────────────────────────────────────────────────┐
+│  ┌───┐  ┌────┐                                                               │
+│  │ 1 │  │ 👤 │  HANSON ↑2            8         3          156                │
+│  └───┘  └────┘                    SESSIONS   WINS       POINTS               │
+└──────────────────────────────────────────────────────────────────────────────┘
+```
+
+**Mobile View:**
+```
+┌───────────────────────────────────────────────────┐
+│  ┌─┐ ┌──┐                    8     3      156     │
+│  │1│ │👤│ HANSON ↑2        场次   胜     积分      │
+│  └─┘ └──┘                                         │
+└───────────────────────────────────────────────────┘
 ```
 
 ---
 
-## Technical Notes
+## Benefits
 
-### Shuttlecock SVG Design
-A simple, elegant shuttlecock icon using:
-- Cork base (rounded bottom)
-- Feather crown (triangular top)
-- Clean lines matching athletic aesthetic
-- White/cream color on gradient background
-
-### Player Silhouettes Approach
-Using CSS clip-paths and gradients instead of images for:
-- Smaller bundle size
-- Perfect color matching with theme
-- Easy animation potential
-- Responsive scaling
-
-### Removed Dependencies
-- `useRankings` hook no longer needed in Header
-- `ShareRankingModal` import removed
-- `Share2` icon import removed
-- Logo PNG asset no longer imported
+1. **Better space utilization** - No wasted empty space in the middle
+2. **Improved scannability** - All stats are visually aligned in columns
+3. **Stronger hierarchy** - Points remain most prominent, followed by wins, then sessions
+4. **Professional look** - Mimics sports broadcast stat displays
+5. **Mobile-friendly** - Columns compress naturally without breaking
 
