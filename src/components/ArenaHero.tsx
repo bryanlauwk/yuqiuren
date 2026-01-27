@@ -1,42 +1,34 @@
 import { useLanguage } from '@/contexts/LanguageContext';
-import { PlayerSilhouetteLeft } from './hero/PlayerSilhouetteLeft';
-import { PlayerSilhouetteRight } from './hero/PlayerSilhouetteRight';
 import { CourtLines } from './hero/CourtLines';
 import { SpotlightBeams } from './hero/SpotlightBeams';
 import { FloatingShuttlecocks } from './hero/FloatingShuttlecocks';
+import heroBackground from '@/assets/hero-background.png';
 
 export function ArenaHero() {
   const { t } = useLanguage();
 
   return (
     <section className="relative w-full overflow-hidden">
-      {/* Background gradient */}
-      <div className="absolute inset-0 arena-hero-gradient" />
+      {/* Hero background image */}
+      <div 
+        className="absolute inset-0 bg-cover bg-center"
+        style={{ backgroundImage: `url(${heroBackground})` }}
+      />
+      
+      {/* Gradient overlays for blending */}
+      <div className="absolute inset-0 bg-gradient-to-t from-background via-background/20 to-background/60" />
       
       {/* Court lines overlay */}
       <CourtLines />
-      
-      {/* Player illustrations */}
-      <PlayerSilhouetteLeft />
-      <PlayerSilhouetteRight />
       
       {/* Spotlight beams */}
       <SpotlightBeams />
       
       {/* Animated particles */}
-      <div className="absolute inset-0 arena-particles opacity-60" />
-      
-      {/* Motion streaks */}
-      <div className="motion-streak w-[200%] h-20 top-1/4 -left-1/2" />
-      <div className="motion-streak w-[200%] h-16 top-1/2 -left-1/2" style={{ animationDelay: '1s' }} />
-      <div className="motion-streak w-[200%] h-12 top-3/4 -left-1/2" style={{ animationDelay: '2s' }} />
+      <div className="absolute inset-0 arena-particles opacity-40" />
       
       {/* Floating shuttlecocks */}
       <FloatingShuttlecocks />
-      
-      {/* Subtle vignette overlay */}
-      <div className="absolute inset-0 bg-gradient-to-t from-background via-transparent to-transparent" />
-      <div className="absolute inset-0 bg-gradient-to-b from-background/50 via-transparent to-transparent" />
       
       {/* Content */}
       <div className="relative z-10 container py-16 sm:py-24 text-center">
