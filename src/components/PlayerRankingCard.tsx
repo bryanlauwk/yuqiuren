@@ -71,35 +71,45 @@ export function PlayerRankingCard({
   const getRowHeight = () => {
     switch (rank) {
       case 1:
-        return 'min-h-[120px] py-6';
+        return 'min-h-[100px] py-5';
       case 2:
       case 3:
-        return 'min-h-[100px] py-5';
+        return 'min-h-[88px] py-4';
       default:
-        if (rank <= 7) return 'min-h-[80px] py-4';
-        return 'min-h-[72px] py-3';
+        if (rank <= 7) return 'min-h-[72px] py-3';
+        return 'min-h-[64px] py-2.5';
     }
   };
 
   const getNameSize = () => {
-    if (rank <= 3) return 'text-xl sm:text-2xl';
+    if (rank <= 3) return 'text-lg sm:text-xl';
     return 'text-base sm:text-lg';
   };
 
   const getPointsSize = () => {
-    if (rank === 1) return 'text-4xl sm:text-5xl';
-    if (rank <= 3) return 'text-3xl sm:text-4xl';
-    return 'text-2xl sm:text-3xl';
+    if (rank === 1) return 'text-3xl sm:text-4xl';
+    if (rank <= 3) return 'text-2xl sm:text-3xl';
+    return 'text-xl sm:text-2xl';
+  };
+
+  const getStatSize = () => {
+    if (rank <= 3) return 'text-lg sm:text-xl';
+    return 'text-base sm:text-lg';
   };
 
   const getAvatarSize = () => {
-    if (rank <= 3) return 'w-14 h-14 sm:w-16 sm:h-16';
-    return 'w-10 h-10 sm:w-12 sm:h-12';
+    if (rank <= 3) return 'w-12 h-12 sm:w-14 sm:h-14';
+    return 'w-10 h-10 sm:w-11 sm:h-11';
   };
 
   const getRankBadgeSize = () => {
-    if (rank <= 3) return 'w-10 h-10 sm:w-12 sm:h-12 text-lg sm:text-xl';
-    return 'w-8 h-8 sm:w-10 sm:h-10 text-sm sm:text-base';
+    if (rank <= 3) return 'w-9 h-9 sm:w-10 sm:h-10 text-base sm:text-lg';
+    return 'w-7 h-7 sm:w-8 sm:h-8 text-sm';
+  };
+
+  const getStatsGap = () => {
+    if (rank <= 3) return 'gap-6 sm:gap-8';
+    return 'gap-4 sm:gap-6';
   };
 
   const getRankChangeDisplay = () => {
@@ -171,39 +181,65 @@ export function PlayerRankingCard({
         )}
       </button>
 
-      {/* Player Info */}
-      <div className="flex-1 min-w-0">
+      {/* Player Name */}
+      <div className="min-w-0 flex-shrink">
         <div className="flex items-center gap-2">
           <p className={cn(
-            "font-bold text-foreground truncate",
+            "font-bold text-foreground truncate max-w-[120px] sm:max-w-[180px]",
             getNameSize()
           )}>
             {playerName}
           </p>
           {getRankChangeDisplay()}
         </div>
-        <p className={cn(
-          "text-muted-foreground",
-          rank <= 3 ? "text-sm" : "text-xs"
-        )}>
-          {sessionsPlayed} {t.ranking.sessions} • {championships} {t.ranking.wins}
-        </p>
       </div>
 
-      {/* Points */}
-      <div className="text-right flex-shrink-0">
-        <p className={cn(
-          "font-display font-bold",
-          getPointsSize(),
-          rank === 1 ? "text-rank-gold text-glow-gold" : 
-          rank <= 3 ? "text-foreground text-glow-white" : 
-          "text-foreground/90"
-        )}>
-          {totalPoints}
-        </p>
-        <p className="text-[10px] sm:text-xs uppercase tracking-wider text-muted-foreground">
-          {t.ranking.points}
-        </p>
+      {/* Spacer */}
+      <div className="flex-1 min-w-0" />
+
+      {/* Stats Grid */}
+      <div className={cn("flex items-center flex-shrink-0", getStatsGap())}>
+        {/* Sessions */}
+        <div className="text-center min-w-[40px] sm:min-w-[50px]">
+          <p className={cn(
+            "font-display font-bold text-foreground/80",
+            getStatSize()
+          )}>
+            {sessionsPlayed}
+          </p>
+          <p className="text-[9px] sm:text-[10px] uppercase tracking-wider text-muted-foreground">
+            {t.ranking.sessions}
+          </p>
+        </div>
+
+        {/* Wins */}
+        <div className="text-center min-w-[32px] sm:min-w-[40px]">
+          <p className={cn(
+            "font-display font-bold text-foreground/80",
+            getStatSize()
+          )}>
+            {championships}
+          </p>
+          <p className="text-[9px] sm:text-[10px] uppercase tracking-wider text-muted-foreground">
+            {t.ranking.wins}
+          </p>
+        </div>
+
+        {/* Points (most prominent) */}
+        <div className="text-center min-w-[50px] sm:min-w-[70px]">
+          <p className={cn(
+            "font-display font-bold",
+            getPointsSize(),
+            rank === 1 ? "text-rank-gold text-glow-gold" : 
+            rank <= 3 ? "text-foreground text-glow-white" : 
+            "text-foreground/90"
+          )}>
+            {totalPoints}
+          </p>
+          <p className="text-[9px] sm:text-[10px] uppercase tracking-wider text-muted-foreground">
+            {t.ranking.points}
+          </p>
+        </div>
       </div>
     </div>
   );
