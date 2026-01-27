@@ -71,45 +71,45 @@ export function PlayerRankingCard({
   const getRowHeight = () => {
     switch (rank) {
       case 1:
-        return 'min-h-[100px] py-5';
+        return 'min-h-[88px] sm:min-h-[100px] py-4 sm:py-5';
       case 2:
       case 3:
-        return 'min-h-[88px] py-4';
+        return 'min-h-[80px] sm:min-h-[88px] py-3 sm:py-4';
       default:
-        if (rank <= 7) return 'min-h-[72px] py-3';
-        return 'min-h-[64px] py-2.5';
+        if (rank <= 7) return 'min-h-[64px] sm:min-h-[72px] py-2.5 sm:py-3';
+        return 'min-h-[56px] sm:min-h-[64px] py-2 sm:py-2.5';
     }
   };
 
   const getNameSize = () => {
-    if (rank <= 3) return 'text-lg sm:text-xl';
-    return 'text-base sm:text-lg';
+    if (rank <= 3) return 'text-base sm:text-xl';
+    return 'text-sm sm:text-lg';
   };
 
   const getPointsSize = () => {
-    if (rank === 1) return 'text-3xl sm:text-4xl';
-    if (rank <= 3) return 'text-2xl sm:text-3xl';
-    return 'text-xl sm:text-2xl';
+    if (rank === 1) return 'text-2xl sm:text-4xl';
+    if (rank <= 3) return 'text-xl sm:text-3xl';
+    return 'text-lg sm:text-2xl';
   };
 
   const getStatSize = () => {
-    if (rank <= 3) return 'text-lg sm:text-xl';
-    return 'text-base sm:text-lg';
+    if (rank <= 3) return 'text-base sm:text-xl';
+    return 'text-sm sm:text-lg';
   };
 
   const getAvatarSize = () => {
-    if (rank <= 3) return 'w-12 h-12 sm:w-14 sm:h-14';
-    return 'w-10 h-10 sm:w-11 sm:h-11';
+    if (rank <= 3) return 'w-10 h-10 sm:w-14 sm:h-14';
+    return 'w-8 h-8 sm:w-11 sm:h-11';
   };
 
   const getRankBadgeSize = () => {
-    if (rank <= 3) return 'w-9 h-9 sm:w-10 sm:h-10 text-base sm:text-lg';
-    return 'w-7 h-7 sm:w-8 sm:h-8 text-sm';
+    if (rank <= 3) return 'w-8 h-8 sm:w-10 sm:h-10 text-sm sm:text-lg';
+    return 'w-6 h-6 sm:w-8 sm:h-8 text-xs sm:text-sm';
   };
 
   const getStatsGap = () => {
-    if (rank <= 3) return 'gap-6 sm:gap-8';
-    return 'gap-4 sm:gap-6';
+    if (rank <= 3) return 'gap-3 sm:gap-8';
+    return 'gap-2 sm:gap-6';
   };
 
   const getRankChangeDisplay = () => {
@@ -137,7 +137,7 @@ export function PlayerRankingCard({
   return (
     <div 
       className={cn(
-        "flex items-center gap-4 sm:gap-6 px-4 sm:px-6 transition-all duration-200 hover-scale-subtle",
+        "flex items-center gap-2 sm:gap-6 px-3 sm:px-6 transition-all duration-200 hover-scale-subtle",
         getRowStyles(),
         getRowHeight(),
         rank <= 3 && "hover:glow-gold"
@@ -182,10 +182,10 @@ export function PlayerRankingCard({
       </button>
 
       {/* Player Name */}
-      <div className="min-w-0 flex-shrink">
-        <div className="flex items-center gap-2">
+      <div className="min-w-0 flex-1 sm:flex-initial sm:flex-shrink">
+        <div className="flex items-center gap-1 sm:gap-2">
           <p className={cn(
-            "font-bold text-foreground truncate max-w-[120px] sm:max-w-[180px]",
+            "font-bold text-foreground truncate",
             getNameSize()
           )}>
             {playerName}
@@ -194,33 +194,39 @@ export function PlayerRankingCard({
         </div>
       </div>
 
-      {/* Spacer */}
-      <div className="flex-1 min-w-0" />
+      {/* Spacer - hidden on mobile */}
+      <div className="hidden sm:block sm:flex-1 sm:min-w-0" />
 
       {/* Stats Grid */}
       <div className={cn("flex items-center flex-shrink-0", getStatsGap())}>
-        {/* Sessions */}
-        <div className="text-center min-w-[40px] sm:min-w-[50px]">
+        {/* Sessions - hidden on very small screens for lower ranks */}
+        <div className={cn(
+          "text-center min-w-[28px] sm:min-w-[50px]",
+          rank > 3 && "hidden xs:block"
+        )}>
           <p className={cn(
             "font-display font-bold text-foreground/80",
             getStatSize()
           )}>
             {sessionsPlayed}
           </p>
-          <p className="text-[9px] sm:text-[10px] uppercase tracking-wider text-muted-foreground">
+          <p className="text-[8px] sm:text-[10px] uppercase tracking-wider text-muted-foreground">
             {t.ranking.sessions}
           </p>
         </div>
 
         {/* Divider */}
-        <div className="w-px h-8 sm:h-10 bg-border/50" />
+        <div className={cn(
+          "w-px h-6 sm:h-10 bg-border/50",
+          rank > 3 && "hidden xs:block"
+        )} />
 
         {/* Wins */}
-        <div className="text-center min-w-[32px] sm:min-w-[40px]">
-          <div className="flex items-center justify-center gap-1">
+        <div className="text-center min-w-[28px] sm:min-w-[40px]">
+          <div className="flex items-center justify-center gap-0.5 sm:gap-1">
             {rank <= 3 && (
               <Trophy className={cn(
-                "w-4 h-4 sm:w-5 sm:h-5",
+                "w-3.5 h-3.5 sm:w-5 sm:h-5",
                 rank === 1 ? "text-rank-gold" : 
                 rank === 2 ? "text-rank-silver" : 
                 "text-rank-bronze"
@@ -234,16 +240,16 @@ export function PlayerRankingCard({
               {championships}
             </p>
           </div>
-          <p className="text-[9px] sm:text-[10px] uppercase tracking-wider text-muted-foreground">
+          <p className="text-[8px] sm:text-[10px] uppercase tracking-wider text-muted-foreground">
             {t.ranking.wins}
           </p>
         </div>
 
         {/* Divider */}
-        <div className="w-px h-8 sm:h-10 bg-border/50" />
+        <div className="w-px h-6 sm:h-10 bg-border/50" />
 
         {/* Points (most prominent) */}
-        <div className="text-center min-w-[50px] sm:min-w-[70px]">
+        <div className="text-center min-w-[40px] sm:min-w-[70px]">
           <p className={cn(
             "font-display font-bold",
             getPointsSize(),
@@ -253,7 +259,7 @@ export function PlayerRankingCard({
           )}>
             {totalPoints}
           </p>
-          <p className="text-[9px] sm:text-[10px] uppercase tracking-wider text-muted-foreground">
+          <p className="text-[8px] sm:text-[10px] uppercase tracking-wider text-muted-foreground">
             {t.ranking.points}
           </p>
         </div>
