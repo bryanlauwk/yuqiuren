@@ -334,74 +334,43 @@
     color: hsl(0 0% 70%);
   }
 
-  /* Player silhouettes for hero */
-  .player-silhouette-left {
-    position: absolute;
-    left: -5%;
-    bottom: 0;
-    width: 40%;
-    height: 100%;
-    background: linear-gradient(
-      to right,
-      hsl(0 70% 25% / 0.35),
-      hsl(0 70% 20% / 0.15) 60%,
-      transparent
-    );
-    clip-path: polygon(
-      0% 100%,
-      15% 100%,
-      20% 85%,
-      25% 70%,
-      22% 55%,
-      30% 45%,
-      45% 35%,
-      55% 25%,
-      50% 20%,
-      40% 25%,
-      35% 35%,
-      25% 40%,
-      20% 50%,
-      15% 55%,
-      12% 65%,
-      8% 75%,
-      5% 85%,
-      0% 90%
-    );
-    opacity: 0.7;
+  /* Spotlight beam animation */
+  .spotlight-beam {
+    animation: spotlight-pulse 8s ease-in-out infinite;
   }
 
-  .player-silhouette-right {
-    position: absolute;
-    right: -5%;
-    bottom: 0;
-    width: 40%;
-    height: 100%;
-    background: linear-gradient(
-      to left,
-      hsl(150 60% 15% / 0.35),
-      hsl(150 60% 12% / 0.15) 60%,
-      transparent
-    );
-    clip-path: polygon(
-      100% 100%,
-      85% 100%,
-      80% 80%,
-      75% 65%,
-      70% 50%,
-      65% 40%,
-      55% 30%,
-      60% 20%,
-      70% 15%,
-      80% 20%,
-      85% 25%,
-      90% 35%,
-      88% 50%,
-      85% 60%,
-      82% 75%,
-      90% 85%,
-      95% 90%,
-      100% 95%
-    );
-    opacity: 0.7;
+  @keyframes spotlight-pulse {
+    0%, 100% { opacity: 0.04; }
+    50% { opacity: 0.07; }
+  }
+
+  /* Shuttlecock floating animation */
+  @keyframes shuttlecock-float {
+    0%, 100% { 
+      transform: translateY(0) rotate(0deg); 
+    }
+    25% { 
+      transform: translateY(-12px) rotate(3deg); 
+    }
+    50% { 
+      transform: translateY(-6px) rotate(-2deg); 
+    }
+    75% { 
+      transform: translateY(-15px) rotate(2deg); 
+    }
+  }
+
+  /* Player glow breathing effect */
+  @keyframes player-glow-breathe {
+    0%, 100% { filter: drop-shadow(0 0 8px hsl(0 70% 35% / 0.2)); }
+    50% { filter: drop-shadow(0 0 15px hsl(0 70% 35% / 0.35)); }
+  }
+
+  .player-glow-left {
+    animation: player-glow-breathe 3s ease-in-out infinite;
+  }
+
+  .player-glow-right {
+    animation: player-glow-breathe 3s ease-in-out infinite 1.5s;
   }
 }
