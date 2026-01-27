@@ -1,14 +1,10 @@
-import { useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { cn } from '@/lib/utils';
-import { Medal, Shield, LogOut, History, Share2 } from 'lucide-react';
-import logo from '@/assets/logo.png';
+import { Medal, Shield, LogOut, History } from 'lucide-react';
 import { useAuth } from '@/hooks/useAuth';
 import { Button } from '@/components/ui/button';
 import { LanguageSwitcher } from '@/components/LanguageSwitcher';
 import { useLanguage } from '@/contexts/LanguageContext';
-import { ShareRankingModal } from '@/components/ShareRankingModal';
-import { useRankings } from '@/hooks/useRankings';
 
 export function Header() {
   const location = useLocation();
@@ -16,8 +12,6 @@ export function Header() {
   const currentPath = location.pathname;
   const { user, isAdmin, signOut } = useAuth();
   const { t } = useLanguage();
-  const { rankings } = useRankings();
-  const [shareModalOpen, setShareModalOpen] = useState(false);
 
   const navItems = [
     { path: '/', label: t.header.rankings, icon: Medal },
@@ -38,8 +32,19 @@ export function Header() {
         
         <div className="container flex items-center justify-between h-14 sm:h-16">
           <Link to="/" className="flex items-center group">
-            <div className="relative w-10 h-10 sm:w-12 sm:h-12 rounded-xl overflow-hidden group-hover:scale-105 transition-transform duration-300">
-              <img src={logo} alt="Logo" className="w-full h-full object-cover" />
+            <div className="relative w-10 h-10 sm:w-12 sm:h-12 rounded-xl overflow-hidden group-hover:scale-105 transition-transform duration-300 bg-gradient-to-br from-primary/80 to-accent/60 flex items-center justify-center shadow-lg">
+              <svg viewBox="0 0 24 24" className="w-6 h-6 sm:w-7 sm:h-7" fill="none">
+                {/* Cork base */}
+                <ellipse cx="12" cy="19" rx="3" ry="2" fill="hsl(45 100% 70%)" />
+                <ellipse cx="12" cy="18" rx="2.5" ry="1.5" fill="hsl(45 100% 85%)" />
+                {/* Feathers */}
+                <path d="M12 17 L8 4 L10 5 L12 3 L14 5 L16 4 L12 17Z" fill="white" opacity="0.95" />
+                <path d="M10 5 L12 17 L14 5 L12 6 Z" fill="hsl(0 0% 95%)" opacity="0.8" />
+                {/* Feather lines */}
+                <line x1="9" y1="6" x2="12" y2="15" stroke="hsl(0 0% 80%)" strokeWidth="0.3" />
+                <line x1="15" y1="6" x2="12" y2="15" stroke="hsl(0 0% 80%)" strokeWidth="0.3" />
+                <line x1="12" y1="3" x2="12" y2="15" stroke="hsl(0 0% 80%)" strokeWidth="0.3" />
+              </svg>
             </div>
           </Link>
 
@@ -64,20 +69,6 @@ export function Header() {
               );
             })}
 
-            {/* Share Button */}
-            <button
-              onClick={() => setShareModalOpen(true)}
-              disabled={rankings.length === 0}
-              className={cn(
-                'px-3 sm:px-4 py-2 rounded-lg text-sm font-medium transition-all flex items-center gap-2',
-                'text-muted-foreground hover:text-foreground hover:bg-muted disabled:opacity-50 disabled:cursor-not-allowed'
-              )}
-              title={t.header.share}
-            >
-              <Share2 className="w-4 h-4" />
-              <span className="hidden sm:inline">{t.header.share}</span>
-            </button>
-
             <LanguageSwitcher />
 
             {user && isAdmin && (
@@ -94,13 +85,6 @@ export function Header() {
           </nav>
         </div>
       </header>
-
-      {/* Share Modal */}
-      <ShareRankingModal
-        open={shareModalOpen}
-        onClose={() => setShareModalOpen(false)}
-        rankings={rankings}
-      />
     </>
   );
 }
