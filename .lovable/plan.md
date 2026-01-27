@@ -1,160 +1,189 @@
 
+# BWF-Style Background Enhancement
 
-# Ranking Card Layout Optimization
+## Overview
+Transform the background from abstract CSS silhouettes to a more dynamic, BWF (Badminton World Federation) broadcast-style visual with detailed player illustrations, court elements, and enhanced lighting effects.
 
-## Problem Analysis
+---
 
-The current layout has a large empty gap in the middle because:
-- The Player Info section uses `flex-1` which stretches to fill all available space
-- Stats (sessions/wins) are displayed as small secondary text underneath the player name
-- Points are pushed to the far right, creating visual imbalance
+## Current State Analysis
 
-**Current Layout:**
-```
-[Rank] [Avatar] [Name                                         ] [Points]
-                [4 sessions • 2 wins (tiny text)]                [pts]
-```
+The current hero section uses:
+- Abstract CSS gradient silhouettes (clip-path polygons)
+- Simple particle effects
+- Motion streaks
+- Dark arena gradient
 
-## Proposed Solution
+**Issue:** The silhouettes are too abstract and don't clearly convey "badminton" or "professional sports broadcast" energy.
 
-Reorganize to a more balanced 3-column layout where stats are visually prominent:
+---
 
-**New Layout:**
-```
-[Rank] [Avatar] [Name        ] [Sessions] [Wins ] [Points]
-                [rank change ] [  8      ] [ 3   ] [ 156  ]
-                               [场次/PLAYED] [胜/WINS] [积分/PTS]
-```
+## Proposed Enhancements
 
-This creates a cleaner visual hierarchy with:
-1. **Left block:** Rank + Avatar + Name (identity)
-2. **Center block:** Sessions + Wins (performance stats with bigger typography)
-3. **Right block:** Points (main score)
+### 1. Replace CSS Silhouettes with SVG Player Illustrations
+
+Create detailed inline SVG illustrations of badminton players in action poses:
+- **Left side:** Player in serving/defensive stance
+- **Right side:** Player in smash/jumping attack pose
+- Semi-transparent with gradient fills matching arena theme
+- Visible racket and dynamic body positions
+
+### 2. Add Badminton Court Elements
+
+Subtle court line indicators in the background:
+- Court boundary lines with perspective
+- Net silhouette in the center
+- Creates depth and recognizable badminton context
+
+### 3. Enhanced Lighting Effects
+
+Add BWF broadcast-style lighting:
+- Spotlight beams from above
+- Lens flare accents
+- Enhanced glow around players
+- Shuttlecock trail effects
+
+### 4. Floating Shuttlecock Animation
+
+Add subtle animated shuttlecocks:
+- Multiple shuttlecocks at different positions
+- Gentle floating/rotating animation
+- Creates dynamic energy
 
 ---
 
 ## Implementation Details
 
-### File: `src/components/PlayerRankingCard.tsx`
+### File: `src/components/ArenaHero.tsx`
 
-**Layout Changes:**
-- Split the flexible middle section into discrete stat columns
-- Each stat (sessions, wins, points) gets its own vertical block with number on top, label below
-- Use consistent spacing with `gap-8` between stat columns
-- Stats get larger font sizes (comparable to points)
+Add new visual elements:
 
-**Typography Hierarchy:**
-| Element | Current | New |
-|---------|---------|-----|
-| Sessions number | `text-xs/text-sm` | `text-xl sm:text-2xl` (rank 1-3) / `text-lg sm:text-xl` (others) |
-| Wins number | `text-xs/text-sm` | `text-xl sm:text-2xl` (rank 1-3) / `text-lg sm:text-xl` (others) |
-| Stat labels | `text-xs` | `text-[10px] sm:text-xs uppercase tracking-wider` |
-| Points number | unchanged | unchanged |
+```text
++------------------------------------------------------------------+
+|                      [Spotlight Beams]                            |
+|                                                                   |
+|   [Player SVG]        ARENA TITLE          [Player SVG]          |
+|   Serving pose        "Every point..."      Smash pose           |
+|                                                                   |
+|        [Court Lines / Net Silhouette]                            |
+|                                                                   |
+|   [Floating shuttlecocks with animation]                         |
++------------------------------------------------------------------+
+```
 
-**Visual Treatment:**
-- Sessions/Wins numbers: Bold, slightly muted color (not as prominent as points)
-- Points: Remains the most prominent (largest, gold glow for top 3)
-- Labels: Uppercase, tracked, muted gray
+**New Components:**
+- `PlayerIllustrationLeft` - SVG serving pose
+- `PlayerIllustrationRight` - SVG smash pose  
+- Court lines overlay
+- Spotlight beam effects
+- Floating shuttlecock elements
 
-### New Component Structure:
+### File: `src/index.css`
 
-```tsx
-<div className="flex items-center gap-4 sm:gap-6 ...">
-  {/* Rank Badge */}
-  <div>...</div>
+Add new utility classes:
+- `.spotlight-beam` - Diagonal light beam effect
+- `.court-lines` - Perspective court overlay
+- `.shuttlecock-float` - Floating animation keyframes
+- `.player-glow` - Enhanced player edge lighting
 
-  {/* Avatar */}
-  <button>...</button>
+---
 
-  {/* Player Name (no longer flex-1) */}
-  <div className="min-w-0 flex-shrink">
-    <div className="flex items-center gap-2">
-      <p className="font-bold truncate">{playerName}</p>
-      {getRankChangeDisplay()}
-    </div>
-  </div>
+## SVG Player Design
 
-  {/* Spacer */}
-  <div className="flex-1" />
+### Left Player (Defensive/Ready Stance)
+- Standing position with bent knees
+- Racket held in front
+- Looking toward center
+- Red-tinted gradient (arena-red)
 
-  {/* Stats Grid - Sessions, Wins, Points */}
-  <div className="flex items-center gap-6 sm:gap-8">
-    {/* Sessions */}
-    <div className="text-center">
-      <p className="font-display font-bold text-lg sm:text-xl text-foreground/80">
-        {sessionsPlayed}
-      </p>
-      <p className="text-[10px] uppercase tracking-wider text-muted-foreground">
-        {t.ranking.sessions}
-      </p>
-    </div>
+### Right Player (Smash/Attack Pose)
+- Jumping with arm raised high
+- Racket above head mid-swing
+- Dynamic pose with extended reach
+- Green-tinted gradient (arena-green)
 
-    {/* Wins */}
-    <div className="text-center">
-      <p className="font-display font-bold text-lg sm:text-xl text-foreground/80">
-        {championships}
-      </p>
-      <p className="text-[10px] uppercase tracking-wider text-muted-foreground">
-        {t.ranking.wins}
-      </p>
-    </div>
+Both players:
+- Semi-transparent (opacity 0.3-0.5)
+- Gradient fills that blend with background
+- Subtle glow/edge lighting
+- Positioned at edges, facing center
 
-    {/* Points (most prominent) */}
-    <div className="text-center min-w-[60px]">
-      <p className="font-display font-bold text-2xl sm:text-3xl text-rank-gold">
-        {totalPoints}
-      </p>
-      <p className="text-[10px] uppercase tracking-wider text-muted-foreground">
-        {t.ranking.points}
-      </p>
-    </div>
-  </div>
-</div>
+---
+
+## Court & Lighting Elements
+
+### Court Lines
+- Simple perspective lines suggesting a badminton court
+- Very subtle opacity (0.05-0.1)
+- Adds depth without distraction
+
+### Spotlight Beams
+- 2-3 diagonal light beams from top
+- Very subtle (opacity 0.05-0.08)
+- Animates slowly for dynamic feel
+
+### Shuttlecock Trail
+- Curved dotted line suggesting flight path
+- Connects left and right visual areas
+- Gold accent color with low opacity
+
+---
+
+## Animation Enhancements
+
+| Element | Animation | Duration |
+|---------|-----------|----------|
+| Spotlight beams | Slow pulse | 8s |
+| Floating shuttlecocks | Gentle float up/down | 4-6s |
+| Player glow | Subtle breathing | 3s |
+| Court lines | None (static) | - |
+
+---
+
+## Visual Hierarchy
+
+```text
+Layer Order (bottom to top):
+1. Arena gradient background
+2. Court lines (very subtle)
+3. Player illustrations (left & right)
+4. Spotlight beams
+5. Particles & motion streaks
+6. Floating shuttlecocks
+7. Content (title, subtitle)
+8. Bottom fade overlay
 ```
 
 ---
 
-## Size Scaling by Rank
+## Mobile Responsiveness
 
-### Top 3 Players (rank 1-3):
-- Sessions/Wins: `text-xl sm:text-2xl`
-- Points: `text-3xl sm:text-4xl` (rank 1 gets `text-4xl sm:text-5xl`)
-- Gap between stats: `gap-8 sm:gap-10`
-
-### Other Players (rank 4+):
-- Sessions/Wins: `text-lg sm:text-xl`
-- Points: `text-2xl sm:text-3xl`
-- Gap between stats: `gap-6 sm:gap-8`
+- Player illustrations scale down on mobile
+- Positioned further off-screen on small devices
+- Court lines hidden on mobile (too detailed)
+- Shuttlecock count reduced on mobile
 
 ---
 
-## Visual Result
+## Files to Modify
 
-**Desktop View:**
-```
-┌──────────────────────────────────────────────────────────────────────────────┐
-│  ┌───┐  ┌────┐                                                               │
-│  │ 1 │  │ 👤 │  HANSON ↑2            8         3          156                │
-│  └───┘  └────┘                    SESSIONS   WINS       POINTS               │
-└──────────────────────────────────────────────────────────────────────────────┘
-```
-
-**Mobile View:**
-```
-┌───────────────────────────────────────────────────┐
-│  ┌─┐ ┌──┐                    8     3      156     │
-│  │1│ │👤│ HANSON ↑2        场次   胜     积分      │
-│  └─┘ └──┘                                         │
-└───────────────────────────────────────────────────┘
-```
+| File | Changes |
+|------|---------|
+| `src/components/ArenaHero.tsx` | Add SVG players, court lines, spotlights, shuttlecocks |
+| `src/index.css` | Remove old silhouette classes, add new lighting/animation utilities |
 
 ---
 
-## Benefits
+## Technical Notes
 
-1. **Better space utilization** - No wasted empty space in the middle
-2. **Improved scannability** - All stats are visually aligned in columns
-3. **Stronger hierarchy** - Points remain most prominent, followed by wins, then sessions
-4. **Professional look** - Mimics sports broadcast stat displays
-5. **Mobile-friendly** - Columns compress naturally without breaking
+### Why Inline SVG over Images?
+- Perfect color matching with theme variables
+- Smaller bundle size
+- Easy to animate individual elements
+- Scales perfectly at all resolutions
+- Can use gradients that match arena colors
 
+### Performance Considerations
+- SVGs are lightweight and GPU-accelerated
+- Animations use CSS transforms (not layout-triggering)
+- Elements are pointer-events: none to not interfere with interactions
