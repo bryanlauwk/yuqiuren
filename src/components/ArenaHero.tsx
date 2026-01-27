@@ -1,4 +1,9 @@
 import { useLanguage } from '@/contexts/LanguageContext';
+import { PlayerSilhouetteLeft } from './hero/PlayerSilhouetteLeft';
+import { PlayerSilhouetteRight } from './hero/PlayerSilhouetteRight';
+import { CourtLines } from './hero/CourtLines';
+import { SpotlightBeams } from './hero/SpotlightBeams';
+import { FloatingShuttlecocks } from './hero/FloatingShuttlecocks';
 
 export function ArenaHero() {
   const { t } = useLanguage();
@@ -8,6 +13,16 @@ export function ArenaHero() {
       {/* Background gradient */}
       <div className="absolute inset-0 arena-hero-gradient" />
       
+      {/* Court lines overlay */}
+      <CourtLines />
+      
+      {/* Player illustrations */}
+      <PlayerSilhouetteLeft />
+      <PlayerSilhouetteRight />
+      
+      {/* Spotlight beams */}
+      <SpotlightBeams />
+      
       {/* Animated particles */}
       <div className="absolute inset-0 arena-particles opacity-60" />
       
@@ -16,11 +31,8 @@ export function ArenaHero() {
       <div className="motion-streak w-[200%] h-16 top-1/2 -left-1/2" style={{ animationDelay: '1s' }} />
       <div className="motion-streak w-[200%] h-12 top-3/4 -left-1/2" style={{ animationDelay: '2s' }} />
       
-      {/* Player silhouettes */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="player-silhouette-left" />
-        <div className="player-silhouette-right" />
-      </div>
+      {/* Floating shuttlecocks */}
+      <FloatingShuttlecocks />
       
       {/* Subtle vignette overlay */}
       <div className="absolute inset-0 bg-gradient-to-t from-background via-transparent to-transparent" />
