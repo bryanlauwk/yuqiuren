@@ -2,15 +2,18 @@ import { useState } from 'react';
 import { Header } from '@/components/Header';
 import { Footer } from '@/components/Footer';
 import { ArenaHero } from '@/components/ArenaHero';
-import { PlayerRankingCard } from '@/components/PlayerRankingCard';
+import { MobileRankingCard } from '@/components/MobileRankingCard';
+import { DesktopRankingTable } from '@/components/DesktopRankingTable';
 import { PhotoLightbox } from '@/components/PhotoLightbox';
 import { useRankings } from '@/hooks/useRankings';
 import { useLanguage } from '@/contexts/LanguageContext';
+import { useIsMobile } from '@/hooks/use-mobile';
 import { Trophy } from 'lucide-react';
 
 export default function RankingPage() {
   const { rankings, loading, hasTopTies } = useRankings();
   const { t } = useLanguage();
+  const isMobile = useIsMobile();
 
   // Lightbox state for viewing avatars
   const [lightboxOpen, setLightboxOpen] = useState(false);
@@ -28,7 +31,7 @@ export default function RankingPage() {
       {/* Hero Section */}
       <ArenaHero />
 
-      <main className="container -mt-8 relative z-10 flex-1">
+      <main className="container -mt-8 relative z-10 flex-1 pb-8">
         {/* Rankings Display */}
         {loading ? (
           <div className="space-y-2">
@@ -49,31 +52,33 @@ export default function RankingPage() {
             <p className="text-sm text-muted-foreground">{t.home.addPlayersHint}</p>
           </div>
         ) : (
-          <div className="space-y-2">
-            
-            {/* All rankings in unified list */}
-            {rankings.map((ranking, index) => (
-              <div 
-                key={ranking.player_id}
-                className="animate-fade-in-up"
-                style={{ animationDelay: `${index * 0.05}s` }}
-              >
-                <PlayerRankingCard
-                  rank={ranking.rank}
-                  playerName={ranking.player_name}
-                  avatarUrl={ranking.avatar_url}
-                  fullAvatarUrl={ranking.full_avatar_url}
-                  totalPoints={ranking.total_points}
-                  sessionsPlayed={ranking.sessions_played}
-                  championships={ranking.championships}
-                  rankChange={ranking.rank_change}
-                  avatarCropX={ranking.avatar_crop_x}
-                  avatarCropY={ranking.avatar_crop_y}
-                  onAvatarClick={handleAvatarClick}
+          <>
+            {/* Mobile: Stacked card layout */}
+            {isMobile ? (
+              <div className="space-y-3">
+                {rankings.map((ranking, index) => (
+                  <div 
+                    key={ranking.player_id}
+                    className="animate-fade-in-up"
+                    style={{ animationDelay: `${index * 0.05}s` }}
+                  >
+                    <MobileRankingCard
+                      ranking={ranking}
+                      onAvatarClick={handleAvatarClick}
+                    />
+                  </div>
+                ))}
+              </div>
+            ) : (
+              /* Desktop: Table layout */
+              <div className="animate-fade-in-up">
+                <DesktopRankingTable 
+                  rankings={rankings} 
+                  onAvatarClick={handleAvatarClick} 
                 />
               </div>
-            ))}
-          </div>
+            )}
+          </>
         )}
       </main>
 
