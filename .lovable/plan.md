@@ -1,76 +1,97 @@
 
 
 ## Goal
-Fix the desktop + tablet leaderboard so:
-1) All 14 players (ranks 1–14) are accessible by scrolling the table area.
-2) The table header stays visible (sticky) while scrolling through players.
+Add a "no change" indicator for players whose rank stayed the same, ensuring consistent UI/UX across all players in the leaderboard.
 
-## What I found (from code + my test)
-- Your desktop table wrapper currently includes both `overflow-hidden` and `overflow-auto` in the same class list:
-  - `className="... overflow-hidden ... overflow-auto"`
-- With Tailwind utilities, conflicting `overflow-*` classes can result in the wrong one “winning” (often `overflow-hidden`), which clips rows (so rank 8/9+ appears “missing”) and prevents the table from becoming the scroll container.
-- In my test, the page itself was scrolling (browser scrollbar), not the table container—so the sticky header never had a proper scroll container to stick within.
-- Additionally, relying on `sticky` on `<thead>` is unreliable across browsers; sticky works best on the individual `<th>` cells.
+## Problem Identified
 
-## Implementation approach
+Currently, the ranking table shows:
+- Green arrow with number when a player moves UP
+- Red arrow with number when a player moves DOWN  
+- **Nothing** when a player's rank is unchanged
 
-### A) Make the table wrapper the *only* vertical scroll container (fix missing rows)
-**File:** `src/components/DesktopRankingTable.tsx`
+This creates visual inconsistency where some players (ranks 1-10) show trend indicators while others (ranks 11-14 who had no rank movement) show nothing. Users may wonder if there's a bug or missing data.
 
-1. Replace the conflicting overflow utilities on the outer wrapper:
-   - Current:
-     - `... overflow-hidden ... overflow-auto`
-   - Update to:
-     - `overflow-x-hidden overflow-y-auto`
-   - Keep the `max-h-[70vh]` so the table becomes scrollable when there are many players.
-   - Add `relative` + `isolate` so sticky header layering works consistently.
+## Solution
 
-**Result:** The wrapper becomes the scroll container, so ranks 8–14 are reachable.
+Add a horizontal dash/minus indicator for players whose rank hasn't changed (but who have participated in previous sessions). This provides visual consistency and confirms to users that the system is working correctly.
 
-### B) Make the header truly sticky (fix header not sticking)
-**File:** `src/components/DesktopRankingTable.tsx`
+### Visual Result
 
-2. Move sticky behavior from `<TableHeader>` / `<thead>` to the `<TableHead>` (`<th>`) cells:
-   - Add to each `TableHead`:
-     - `sticky top-0 z-20`
-     - a solid background like `bg-card` or `bg-muted/50` so it doesn’t appear transparent while stuck
-   - Keep the header row border (`border-b-2 border-border`) for a clear separation.
+| Rank | Player | Trend Display |
+|------|--------|---------------|
+| 1 | Lao Wong | ↑ 2 (green) |
+| 8 | Jia Her | ↓ 6 (red) |
+| 11 | Sam | — (gray, no change) |
+| 13 | Moong | (nothing - not in latest session) |
 
-**Result:** The header remains visible while scrolling the table body, in desktop + tablet.
+### Design Decision
 
-### C) Verify zebra striping stays visible (optional but recommended)
-Because `.rank-row-default` uses a subtle gradient background, zebra striping can be hard to perceive.
-3. Increase stripe contrast or override background on even rows (only for ranks > 3), e.g.:
-   - Use a slightly stronger stripe (`bg-muted/30` instead of `/20`), or
-   - Apply an inline `style={{ background: '...' }}` on striped rows to ensure it’s visible even if a gradient exists.
+Show the "no change" indicator only for players who:
+- Have `rank_change === 0`
+- AND participated in previous sessions (`!is_new`)
+- AND were not absent from the latest session
 
-This is optional for the “missing players + sticky header” fix, but it addresses your earlier note that striping wasn’t visible.
+Players who didn't participate in the latest session won't show any indicator (their rank wasn't "actively" calculated for this session).
 
-## Step-by-step changes (what I will edit)
-1. `src/components/DesktopRankingTable.tsx`
-   - Update outer wrapper classes:
-     - Remove `overflow-hidden` + `overflow-auto` combo
-     - Use `overflow-x-hidden overflow-y-auto`
-     - Add `relative isolate`
-   - Update header implementation:
-     - Remove/stop relying on `sticky` on `TableHeader`
-     - Add `sticky top-0 z-20 bg-*` to each `TableHead`
+## Files to Modify
 
-## How I will test (desktop + tablet journey)
-1. Desktop width:
-   - Hover over the table and scroll: confirm the table area scrolls (not only the page).
-   - Confirm you can reach the last row (rank 14).
-   - Confirm the header row remains pinned at the top of the table while scrolling.
-2. Tablet width (>= 768px so it still uses desktop table):
-   - Repeat the same scroll test; confirm sticky header remains visible.
-3. Regression check:
-   - Ensure top-3 styling (gold/silver/bronze) remains unchanged.
-   - Ensure row borders remain consistent.
+| File | Changes |
+|------|---------|
+| `src/components/DesktopRankingTable.tsx` | Update `getRankChangeDisplay` to show a muted dash when `rank_change === 0` for eligible players |
+| `src/components/MobileRankingCard.tsx` | Apply the same change to maintain mobile/desktop consistency |
+| `src/hooks/useRankings.ts` | (Optional) Add flag to indicate if player was in latest session, for more precise control |
 
-## Files involved
-- `src/components/DesktopRankingTable.tsx` (primary fix)
+## Implementation Details
 
-## Expected outcome
-- No more “missing” players: ranks 1–14 are reachable via table scrolling.
-- Sticky header works reliably on desktop and tablet (header stays visible while scrolling inside the table).
+### A) Update Desktop Table Display
+In `src/components/DesktopRankingTable.tsx`, modify the `getRankChangeDisplay` function:
+
+```typescript
+const getRankChangeDisplay = (ranking: PlayerRanking) => {
+  if (ranking.rank_change > 0) {
+    return (
+      <div className="flex items-center gap-0.5 text-finished">
+        <ArrowUp className="w-3 h-3" />
+        <span className="text-xs font-medium">{ranking.rank_change}</span>
+      </div>
+    );
+  }
+  
+  if (ranking.rank_change < 0) {
+    return (
+      <div className="flex items-center gap-0.5 text-destructive">
+        <ArrowDown className="w-3 h-3" />
+        <span className="text-xs font-medium">{Math.abs(ranking.rank_change)}</span>
+      </div>
+    );
+  }
+  
+  // Show dash for unchanged rank (if player is not new)
+  if (!ranking.is_new) {
+    return (
+      <div className="flex items-center text-muted-foreground">
+        <Minus className="w-3 h-3" />
+      </div>
+    );
+  }
+  
+  return null;
+};
+```
+
+### B) Update Mobile Card Display
+Apply the same logic to `src/components/MobileRankingCard.tsx` for consistency.
+
+### C) Pass Full Ranking Object
+Update the function call from `getRankChangeDisplay(ranking.rank_change)` to `getRankChangeDisplay(ranking)` so we can access both `rank_change` and `is_new` properties.
+
+## Expected Outcome
+
+- All players who have been in the system before will show a trend indicator
+- ↑ N for rank improvement (green)
+- ↓ N for rank decline (red)  
+- — for no change (muted gray)
+- New players show nothing (or optionally a "NEW" badge)
+- Consistent visual treatment across all rows
 
