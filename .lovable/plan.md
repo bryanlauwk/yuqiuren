@@ -1,82 +1,76 @@
 
-# Fix Missing Players & Sticky Header
 
-## Problems Identified
+## Goal
+Fix the desktop + tablet leaderboard so:
+1) All 14 players (ranks 1–14) are accessible by scrolling the table area.
+2) The table header stays visible (sticky) while scrolling through players.
 
-### 1. Missing Players (Rank 8+)
-The database contains **14 players**, but some are not visible due to:
-- **Nested scroll containers**: The `Table` component creates its own `overflow-auto` wrapper, and then `DesktopRankingTable` adds another `max-h-[70vh] overflow-auto` wrapper outside
-- This creates conflicting scroll contexts where the inner scroll may not trigger, cutting off content
+## What I found (from code + my test)
+- Your desktop table wrapper currently includes both `overflow-hidden` and `overflow-auto` in the same class list:
+  - `className="... overflow-hidden ... overflow-auto"`
+- With Tailwind utilities, conflicting `overflow-*` classes can result in the wrong one “winning” (often `overflow-hidden`), which clips rows (so rank 8/9+ appears “missing”) and prevents the table from becoming the scroll container.
+- In my test, the page itself was scrolling (browser scrollbar), not the table container—so the sticky header never had a proper scroll container to stick within.
+- Additionally, relying on `sticky` on `<thead>` is unreliable across browsers; sticky works best on the individual `<th>` cells.
 
-### 2. Sticky Header Not Working
-The `sticky top-0` on `TableHeader` fails because:
-- Sticky positioning only works relative to the nearest scrolling ancestor
-- The `Table` component creates an inner scrollable div that contains the actual `<thead>`
-- The sticky header is trying to stick to the inner container, but the visible scroll is on the outer container
+## Implementation approach
 
----
+### A) Make the table wrapper the *only* vertical scroll container (fix missing rows)
+**File:** `src/components/DesktopRankingTable.tsx`
 
-## Solution
+1. Replace the conflicting overflow utilities on the outer wrapper:
+   - Current:
+     - `... overflow-hidden ... overflow-auto`
+   - Update to:
+     - `overflow-x-hidden overflow-y-auto`
+   - Keep the `max-h-[70vh]` so the table becomes scrollable when there are many players.
+   - Add `relative` + `isolate` so sticky header layering works consistently.
 
-Remove the scroll behavior from the inner `Table` wrapper and keep only ONE scrolling container at the outer level.
+**Result:** The wrapper becomes the scroll container, so ranks 8–14 are reachable.
 
-### File: `src/components/ui/table.tsx`
+### B) Make the header truly sticky (fix header not sticking)
+**File:** `src/components/DesktopRankingTable.tsx`
 
-**Change**: Remove `overflow-auto` from the Table component's inner div, or make it configurable.
+2. Move sticky behavior from `<TableHeader>` / `<thead>` to the `<TableHead>` (`<th>`) cells:
+   - Add to each `TableHead`:
+     - `sticky top-0 z-20`
+     - a solid background like `bg-card` or `bg-muted/50` so it doesn’t appear transparent while stuck
+   - Keep the header row border (`border-b-2 border-border`) for a clear separation.
 
-```tsx
-// Current (line 6-9):
-const Table = React.forwardRef<HTMLTableElement, React.HTMLAttributes<HTMLTableElement>>(
-  ({ className, ...props }, ref) => (
-    <div className="relative w-full overflow-auto">
-      <table ref={ref} className={cn("w-full caption-bottom text-sm", className)} {...props} />
-    </div>
-  ),
-);
+**Result:** The header remains visible while scrolling the table body, in desktop + tablet.
 
-// Updated - remove overflow-auto:
-const Table = React.forwardRef<HTMLTableElement, React.HTMLAttributes<HTMLTableElement>>(
-  ({ className, ...props }, ref) => (
-    <div className="relative w-full">
-      <table ref={ref} className={cn("w-full caption-bottom text-sm", className)} {...props} />
-    </div>
-  ),
-);
-```
+### C) Verify zebra striping stays visible (optional but recommended)
+Because `.rank-row-default` uses a subtle gradient background, zebra striping can be hard to perceive.
+3. Increase stripe contrast or override background on even rows (only for ranks > 3), e.g.:
+   - Use a slightly stronger stripe (`bg-muted/30` instead of `/20`), or
+   - Apply an inline `style={{ background: '...' }}` on striped rows to ensure it’s visible even if a gradient exists.
 
-This allows the outer container in `DesktopRankingTable.tsx` to be the sole scroll container, making:
-- All 14 players visible within the scrollable area
-- Sticky header work correctly relative to the outer scrolling div
+This is optional for the “missing players + sticky header” fix, but it addresses your earlier note that striping wasn’t visible.
 
----
+## Step-by-step changes (what I will edit)
+1. `src/components/DesktopRankingTable.tsx`
+   - Update outer wrapper classes:
+     - Remove `overflow-hidden` + `overflow-auto` combo
+     - Use `overflow-x-hidden overflow-y-auto`
+     - Add `relative isolate`
+   - Update header implementation:
+     - Remove/stop relying on `sticky` on `TableHeader`
+     - Add `sticky top-0 z-20 bg-*` to each `TableHead`
 
-## Visual Result
+## How I will test (desktop + tablet journey)
+1. Desktop width:
+   - Hover over the table and scroll: confirm the table area scrolls (not only the page).
+   - Confirm you can reach the last row (rank 14).
+   - Confirm the header row remains pinned at the top of the table while scrolling.
+2. Tablet width (>= 768px so it still uses desktop table):
+   - Repeat the same scroll test; confirm sticky header remains visible.
+3. Regression check:
+   - Ensure top-3 styling (gold/silver/bronze) remains unchanged.
+   - Ensure row borders remain consistent.
 
-```text
-+------------------------------------------+ ← sticky header stays here
-| Rank | Player | Sessions | Wins | Points |
-+------------------------------------------+
-|  1   | Gold   |    12    |  5   |  156   | ↑
-|  2   | Silver |    10    |  3   |  120   | |
-|  ...                                     | | scrollable content
-|  13  | Player |     1    |  0   |    1   | |
-|  14  | Player |     1    |  0   |    1   | ↓
-+------------------------------------------+
-```
+## Files involved
+- `src/components/DesktopRankingTable.tsx` (primary fix)
 
----
+## Expected outcome
+- No more “missing” players: ranks 1–14 are reachable via table scrolling.
+- Sticky header works reliably on desktop and tablet (header stays visible while scrolling inside the table).
 
-## Files to Modify
-
-| File | Changes |
-|------|---------|
-| `src/components/ui/table.tsx` | Remove `overflow-auto` from the Table wrapper div |
-
----
-
-## Technical Notes
-
-- This is the minimal change needed to fix both issues
-- The outer container's `max-h-[70vh] overflow-auto` will handle all scrolling
-- The sticky header will now properly stick to the scrolling container
-- All 14 players will be accessible via scrolling
