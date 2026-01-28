@@ -77,23 +77,23 @@ export function DesktopRankingTable({ rankings, onAvatarClick }: DesktopRankingT
   };
 
   return (
-    <div className="rounded-lg border border-border overflow-hidden bg-card/50 max-h-[70vh] overflow-auto">
+    <div className="relative isolate rounded-lg border border-border bg-card/50 max-h-[70vh] overflow-x-hidden overflow-y-auto">
       <Table>
-        <TableHeader className="sticky top-0 z-10 bg-card">
+        <TableHeader>
           <TableRow className="bg-muted/50 hover:bg-muted/50 border-b-2 border-border">
-            <TableHead className="w-20 text-center font-display text-xs uppercase tracking-wider">
+            <TableHead className="sticky top-0 z-20 bg-card w-20 text-center font-display text-xs uppercase tracking-wider">
               Rank
             </TableHead>
-            <TableHead className="font-display text-xs uppercase tracking-wider">
+            <TableHead className="sticky top-0 z-20 bg-card font-display text-xs uppercase tracking-wider">
               Player
             </TableHead>
-            <TableHead className="w-28 text-center font-display text-xs uppercase tracking-wider">
+            <TableHead className="sticky top-0 z-20 bg-card w-28 text-center font-display text-xs uppercase tracking-wider">
               {t.ranking.sessions}
             </TableHead>
-            <TableHead className="w-28 text-center font-display text-xs uppercase tracking-wider">
+            <TableHead className="sticky top-0 z-20 bg-card w-28 text-center font-display text-xs uppercase tracking-wider">
               {t.ranking.wins}
             </TableHead>
-            <TableHead className="w-32 text-center font-display text-xs uppercase tracking-wider">
+            <TableHead className="sticky top-0 z-20 bg-card w-32 text-center font-display text-xs uppercase tracking-wider">
               {t.ranking.points}
             </TableHead>
           </TableRow>
