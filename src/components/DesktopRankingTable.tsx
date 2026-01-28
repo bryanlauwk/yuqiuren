@@ -99,15 +99,17 @@ export function DesktopRankingTable({ rankings, onAvatarClick }: DesktopRankingT
           </TableRow>
         </TableHeader>
         <TableBody>
-          {rankings.map((ranking) => {
+          {rankings.map((ranking, index) => {
             const isTopThree = ranking.rank <= 3;
+            const isEvenRow = index % 2 === 0;
             
             return (
               <TableRow 
                 key={ranking.player_id}
                 className={cn(
                   "transition-all duration-200 border-b border-border",
-                  getRowStyles(ranking.rank)
+                  getRowStyles(ranking.rank),
+                  !isTopThree && isEvenRow && "bg-muted/20"
                 )}
               >
                 {/* Rank */}
