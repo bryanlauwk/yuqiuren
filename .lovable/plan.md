@@ -1,68 +1,67 @@
 
+# Fix Missing Players & Sticky Header
 
-# Fix Table Border Consistency
+## Problems Identified
 
-## Problem
-The desktop ranking table has inconsistent border styling:
-- **Last row** has no bottom border (removed by `[&_tr:last-child]:border-0` in TableBody)
-- **First data row** top border depends on header border which may look different
-- Border opacity varies between top 3 rows and regular rows
+### 1. Missing Players (Rank 8+)
+The database contains **14 players**, but some are not visible due to:
+- **Nested scroll containers**: The `Table` component creates its own `overflow-auto` wrapper, and then `DesktopRankingTable` adds another `max-h-[70vh] overflow-auto` wrapper outside
+- This creates conflicting scroll contexts where the inner scroll may not trigger, cutting off content
+
+### 2. Sticky Header Not Working
+The `sticky top-0` on `TableHeader` fails because:
+- Sticky positioning only works relative to the nearest scrolling ancestor
+- The `Table` component creates an inner scrollable div that contains the actual `<thead>`
+- The sticky header is trying to stick to the inner container, but the visible scroll is on the outer container
 
 ---
 
 ## Solution
 
-Apply consistent `border-b border-border` to ALL rows including the last one, and ensure visual cohesion throughout the table.
+Remove the scroll behavior from the inner `Table` wrapper and keep only ONE scrolling container at the outer level.
 
----
+### File: `src/components/ui/table.tsx`
 
-## Technical Changes
-
-### File: `src/components/DesktopRankingTable.tsx`
-
-**Change 1:** Override the TableBody's last-child border removal by adding explicit border classes to TableRow that persist for all rows.
-
-**Change 2:** Apply consistent `border-b border-border` to all rows (not just top 3).
+**Change**: Remove `overflow-auto` from the Table component's inner div, or make it configurable.
 
 ```tsx
-// Current (line 106-112):
-<TableRow 
-  key={ranking.player_id}
-  className={cn(
-    "transition-all duration-200",
-    getRowStyles(ranking.rank),
-    isTopThree && "border-b border-border/50"
-  )}
->
+// Current (line 6-9):
+const Table = React.forwardRef<HTMLTableElement, React.HTMLAttributes<HTMLTableElement>>(
+  ({ className, ...props }, ref) => (
+    <div className="relative w-full overflow-auto">
+      <table ref={ref} className={cn("w-full caption-bottom text-sm", className)} {...props} />
+    </div>
+  ),
+);
 
-// Updated:
-<TableRow 
-  key={ranking.player_id}
-  className={cn(
-    "transition-all duration-200 border-b border-border",
-    getRowStyles(ranking.rank)
-  )}
->
+// Updated - remove overflow-auto:
+const Table = React.forwardRef<HTMLTableElement, React.HTMLAttributes<HTMLTableElement>>(
+  ({ className, ...props }, ref) => (
+    <div className="relative w-full">
+      <table ref={ref} className={cn("w-full caption-bottom text-sm", className)} {...props} />
+    </div>
+  ),
+);
 ```
 
-**Change 3:** Add a top border to the first data row for visual separation from header, or alternatively ensure the header bottom border matches row borders.
+This allows the outer container in `DesktopRankingTable.tsx` to be the sole scroll container, making:
+- All 14 players visible within the scrollable area
+- Sticky header work correctly relative to the outer scrolling div
 
 ---
 
 ## Visual Result
 
 ```text
-+------------------------------------------+  ← outer border
-| Rank | Player | Sessions | Wins | Points |  ← header
-+------------------------------------------+  ← border-b-2 (header)
-|  1   | Gold   |    12    |  5   |  156   |
-+------------------------------------------+  ← border-b (consistent)
-|  2   | Silver |    10    |  3   |  120   |
-+------------------------------------------+  ← border-b (consistent)
-|  3   | Bronze |     8    |  2   |   95   |
-+------------------------------------------+  ← border-b (consistent)
-|  4   | Player |     6    |  1   |   70   |
-+------------------------------------------+  ← border-b (NOW VISIBLE)
++------------------------------------------+ ← sticky header stays here
+| Rank | Player | Sessions | Wins | Points |
++------------------------------------------+
+|  1   | Gold   |    12    |  5   |  156   | ↑
+|  2   | Silver |    10    |  3   |  120   | |
+|  ...                                     | | scrollable content
+|  13  | Player |     1    |  0   |    1   | |
+|  14  | Player |     1    |  0   |    1   | ↓
++------------------------------------------+
 ```
 
 ---
@@ -71,13 +70,13 @@ Apply consistent `border-b border-border` to ALL rows including the last one, an
 
 | File | Changes |
 |------|---------|
-| `src/components/DesktopRankingTable.tsx` | Apply `border-b border-border` to all TableRow elements consistently |
+| `src/components/ui/table.tsx` | Remove `overflow-auto` from the Table wrapper div |
 
 ---
 
-## Implementation Notes
+## Technical Notes
 
-- The `border-b border-border` class will override the TableBody's default `[&_tr:last-child]:border-0` behavior using CSS specificity
-- All rows (including the last one) will have the same bottom border for visual consistency
-- The outer container's `rounded-lg border border-border overflow-hidden` already provides the frame, so internal row borders just need to be consistent separators
-
+- This is the minimal change needed to fix both issues
+- The outer container's `max-h-[70vh] overflow-auto` will handle all scrolling
+- The sticky header will now properly stick to the scrolling container
+- All 14 players will be accessible via scrolling
