@@ -77,9 +77,9 @@ export function DesktopRankingTable({ rankings, onAvatarClick }: DesktopRankingT
   };
 
   return (
-    <div className="rounded-lg border border-border overflow-hidden bg-card/50">
+    <div className="rounded-lg border border-border overflow-hidden bg-card/50 max-h-[70vh] overflow-auto">
       <Table>
-        <TableHeader>
+        <TableHeader className="sticky top-0 z-10 bg-card">
           <TableRow className="bg-muted/50 hover:bg-muted/50 border-b-2 border-border">
             <TableHead className="w-20 text-center font-display text-xs uppercase tracking-wider">
               Rank
@@ -108,9 +108,9 @@ export function DesktopRankingTable({ rankings, onAvatarClick }: DesktopRankingT
                 key={ranking.player_id}
                 className={cn(
                   "transition-all duration-200 border-b border-border",
-                  getRowStyles(ranking.rank),
-                  !isTopThree && isEvenRow && "bg-muted/20"
+                  getRowStyles(ranking.rank)
                 )}
+                style={!isTopThree && isEvenRow ? { backgroundColor: 'hsl(var(--muted) / 0.25)' } : undefined}
               >
                 {/* Rank */}
                 <TableCell className="text-center py-4">
