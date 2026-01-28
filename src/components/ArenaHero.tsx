@@ -32,13 +32,14 @@ export function ArenaHero() {
       
       {/* Content */}
       <div className="relative z-10 container py-16 sm:py-24 text-center">
-        {/* Main title */}
-        <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-display tracking-tight text-gradient-arena mb-4">
-          {t.home.heroTitle}
+        {/* Main title - Single line on mobile */}
+        <h1 className="text-3xl sm:text-5xl md:text-6xl lg:text-7xl font-display tracking-tight text-gradient-arena mb-4">
+          <span className="sm:hidden">2026羽球人赛。积分榜</span>
+          <span className="hidden sm:inline">{t.home.heroTitle}</span>
         </h1>
         
-        {/* Subtitle */}
-        <p className="text-base sm:text-lg text-foreground/50 italic tracking-wide">
+        {/* Subtitle - Hidden on mobile since combined with title */}
+        <p className="hidden sm:block text-base sm:text-lg text-foreground/50 italic tracking-wide">
           {t.home.heroSubtitle}
         </p>
         
