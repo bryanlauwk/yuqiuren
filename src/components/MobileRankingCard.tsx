@@ -1,4 +1,4 @@
-import { ArrowUp, ArrowDown, Trophy } from 'lucide-react';
+import { ArrowUp, ArrowDown, Minus, Trophy } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useLanguage } from '@/contexts/LanguageContext';
 import type { PlayerRanking } from '@/types/ranking';
@@ -61,6 +61,15 @@ export function MobileRankingCard({ ranking, onAvatarClick }: MobileRankingCardP
         <div className="flex items-center gap-0.5 text-destructive">
           <ArrowDown className="w-3.5 h-3.5" />
           <span className="text-xs font-bold">{Math.abs(ranking.rank_change)}</span>
+        </div>
+      );
+    }
+    
+    // Show dash for unchanged rank (if player is not new)
+    if (!ranking.is_new) {
+      return (
+        <div className="flex items-center text-muted-foreground">
+          <Minus className="w-3.5 h-3.5" />
         </div>
       );
     }
