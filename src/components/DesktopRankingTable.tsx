@@ -106,9 +106,8 @@ export function DesktopRankingTable({ rankings, onAvatarClick }: DesktopRankingT
               <TableRow 
                 key={ranking.player_id}
                 className={cn(
-                  "transition-all duration-200",
-                  getRowStyles(ranking.rank),
-                  isTopThree && "border-b border-border/50"
+                  "transition-all duration-200 border-b border-border",
+                  getRowStyles(ranking.rank)
                 )}
               >
                 {/* Rank */}
