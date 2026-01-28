@@ -1,4 +1,4 @@
-import { ArrowUp, ArrowDown, Trophy } from 'lucide-react';
+import { ArrowUp, ArrowDown, Minus, Trophy } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useLanguage } from '@/contexts/LanguageContext';
 import type { PlayerRanking } from '@/types/ranking';
@@ -54,21 +54,30 @@ export function DesktopRankingTable({ rankings, onAvatarClick }: DesktopRankingT
     }
   };
 
-  const getRankChangeDisplay = (rankChange: number) => {
-    if (rankChange > 0) {
+  const getRankChangeDisplay = (ranking: PlayerRanking) => {
+    if (ranking.rank_change > 0) {
       return (
         <div className="flex items-center gap-0.5 text-finished">
           <ArrowUp className="w-3 h-3" />
-          <span className="text-xs font-medium">{rankChange}</span>
+          <span className="text-xs font-medium">{ranking.rank_change}</span>
         </div>
       );
     }
     
-    if (rankChange < 0) {
+    if (ranking.rank_change < 0) {
       return (
         <div className="flex items-center gap-0.5 text-destructive">
           <ArrowDown className="w-3 h-3" />
-          <span className="text-xs font-medium">{Math.abs(rankChange)}</span>
+          <span className="text-xs font-medium">{Math.abs(ranking.rank_change)}</span>
+        </div>
+      );
+    }
+    
+    // Show dash for unchanged rank (if player is not new)
+    if (!ranking.is_new) {
+      return (
+        <div className="flex items-center text-muted-foreground">
+          <Minus className="w-3 h-3" />
         </div>
       );
     }
@@ -162,7 +171,7 @@ export function DesktopRankingTable({ rankings, onAvatarClick }: DesktopRankingT
                       )}>
                         {ranking.player_name}
                       </p>
-                      {getRankChangeDisplay(ranking.rank_change)}
+                      {getRankChangeDisplay(ranking)}
                     </div>
                   </div>
                 </TableCell>
