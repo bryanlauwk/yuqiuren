@@ -8,7 +8,7 @@ export function ArenaHero() {
     <section className="relative w-full overflow-hidden">
       {/* Hero background image */}
       <div 
-        className="absolute inset-0 bg-cover bg-center opacity-20"
+        className="absolute inset-0 bg-cover bg-center opacity-40"
         style={{ backgroundImage: `url(${heroBackground})` }}
       />
       
