@@ -224,9 +224,9 @@
   .accent-bar {
     background: linear-gradient(
       90deg, 
-      hsl(var(--arena-red)) 0%, 
-      hsl(var(--arena-green)) 50%, 
-      hsl(var(--arena-red)) 100%
+      hsl(var(--arena-blue)) 0%, 
+      hsl(var(--arena-cyan)) 50%, 
+      hsl(var(--arena-blue)) 100%
     );
     background-size: 200% 100%;
     animation: shimmer 4s ease-in-out infinite;
