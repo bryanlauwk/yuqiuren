@@ -157,26 +157,23 @@
     box-shadow: var(--shadow-elevated);
   }
 
-  /* Glow effects for top ranks */
+  /* Glow effects for top ranks — softened */
   .glow-gold {
     box-shadow: 
-      0 0 20px hsl(45 100% 50% / 0.2),
-      0 0 40px hsl(45 100% 50% / 0.1),
-      inset 0 1px 0 hsl(45 100% 70% / 0.1);
+      0 0 12px hsl(45 100% 50% / 0.12),
+      inset 0 1px 0 hsl(45 100% 70% / 0.08);
   }
 
   .glow-silver {
     box-shadow: 
-      0 0 20px hsl(0 0% 75% / 0.15),
-      0 0 40px hsl(0 0% 75% / 0.08),
-      inset 0 1px 0 hsl(0 0% 90% / 0.1);
+      0 0 12px hsl(0 0% 75% / 0.1),
+      inset 0 1px 0 hsl(0 0% 90% / 0.08);
   }
 
   .glow-bronze {
     box-shadow: 
-      0 0 20px hsl(30 60% 45% / 0.15),
-      0 0 40px hsl(30 60% 45% / 0.08),
-      inset 0 1px 0 hsl(30 60% 60% / 0.1);
+      0 0 12px hsl(30 60% 45% / 0.1),
+      inset 0 1px 0 hsl(30 60% 60% / 0.08);
   }
 
   /* Row backgrounds for ranks */
