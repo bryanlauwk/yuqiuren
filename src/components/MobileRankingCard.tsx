@@ -1,4 +1,4 @@
-import { ArrowUp, ArrowDown, Minus, Trophy } from 'lucide-react';
+import { ArrowUp, ArrowDown, Minus } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useLanguage } from '@/contexts/LanguageContext';
 import type { PlayerRanking } from '@/types/ranking';
@@ -20,19 +20,6 @@ export function MobileRankingCard({ ranking, onAvatarClick }: MobileRankingCardP
       .slice(0, 2);
   };
 
-  const getCardStyles = () => {
-    switch (ranking.rank) {
-      case 1:
-        return 'rank-row-gold border-rank-gold/40 shadow-md';
-      case 2:
-        return 'rank-row-silver border-rank-silver/40 shadow-sm';
-      case 3:
-        return 'rank-row-bronze border-rank-bronze/40 shadow-sm';
-      default:
-        return 'rank-row-default border-border/30';
-    }
-  };
-
   const getRankBadgeStyles = () => {
     switch (ranking.rank) {
       case 1:
@@ -42,7 +29,7 @@ export function MobileRankingCard({ ranking, onAvatarClick }: MobileRankingCardP
       case 3:
         return 'rank-badge-bronze';
       default:
-        return 'rank-badge-default';
+        return null;
     }
   };
 
@@ -74,32 +61,38 @@ export function MobileRankingCard({ ranking, onAvatarClick }: MobileRankingCardP
   };
 
   const isTopThree = ranking.rank <= 3;
+  const badgeStyle = getRankBadgeStyles();
 
   return (
     <div 
       className={cn(
-        "rounded-xl border p-4 transition-all duration-200",
-        getCardStyles(),
-        isTopThree && "p-5"
+        "rounded-2xl bg-card p-4 transition-shadow duration-200",
+        isTopThree ? "shadow-md p-5" : "shadow-sm hover:shadow-md"
       )}
     >
       {/* Row 1: Identity */}
       <div className="flex items-center gap-3">
-        <div className={cn(
-          "flex-shrink-0 flex items-center justify-center rounded-lg font-display font-bold",
-          getRankBadgeStyles(),
-          isTopThree ? "w-10 h-10 text-lg" : "w-8 h-8 text-sm"
-        )}>
-          {ranking.rank}
-        </div>
+        {badgeStyle ? (
+          <div className={cn(
+            "flex-shrink-0 flex items-center justify-center rounded-full font-display font-bold",
+            badgeStyle,
+            isTopThree ? "w-10 h-10 text-lg" : "w-8 h-8 text-sm"
+          )}>
+            {ranking.rank}
+          </div>
+        ) : (
+          <div className="flex-shrink-0 w-8 h-8 flex items-center justify-center">
+            <span className="text-sm font-medium text-muted-foreground">{ranking.rank}</span>
+          </div>
+        )}
 
         <button
           onClick={() => ranking.full_avatar_url && onAvatarClick?.(ranking.full_avatar_url, ranking.player_name)}
           disabled={!ranking.full_avatar_url}
           className={cn(
-            "flex-shrink-0 rounded-full overflow-hidden bg-muted border-2 border-border transition-all",
+            "flex-shrink-0 rounded-full overflow-hidden bg-muted border border-border/50 transition-all",
             isTopThree ? "w-12 h-12" : "w-10 h-10",
-            ranking.full_avatar_url && "cursor-pointer hover:border-primary hover:scale-105 active:scale-95"
+            ranking.full_avatar_url && "cursor-pointer hover:ring-2 hover:ring-primary/30 active:scale-95"
           )}
         >
           {ranking.avatar_url ? (
@@ -132,53 +125,40 @@ export function MobileRankingCard({ ranking, onAvatarClick }: MobileRankingCardP
         {getRankChangeDisplay()}
       </div>
 
-      {/* Row 2: Stats — clean grid, no bullet separators */}
-      <div className="grid grid-cols-3 gap-4 mt-3 pt-3 border-t border-border/30">
+      {/* Row 2: Stats */}
+      <div className="grid grid-cols-3 gap-4 mt-3 pt-3">
         <div className="text-center">
           <p className={cn(
-            "font-display font-bold text-foreground/80",
-            isTopThree ? "text-xl" : "text-lg"
+            "font-display font-bold text-foreground/60",
+            isTopThree ? "text-lg" : "text-base"
           )}>
             {ranking.sessions_played}
           </p>
-          <p className="text-[10px] uppercase tracking-wider text-muted-foreground">
+          <p className="text-[10px] uppercase tracking-wider text-foreground/50">
             {t.ranking.sessions}
           </p>
         </div>
 
         <div className="text-center">
-          <div className="flex items-center justify-center gap-1">
-            {isTopThree && (
-              <Trophy className={cn(
-                "w-4 h-4",
-                ranking.rank === 1 ? "text-rank-gold" : 
-                ranking.rank === 2 ? "text-rank-silver" : 
-                "text-rank-bronze"
-              )} />
-            )}
-            <p className={cn(
-              "font-display font-bold",
-              isTopThree ? "text-xl text-foreground" : "text-lg text-foreground/80"
-            )}>
-              {ranking.championships}
-            </p>
-          </div>
-          <p className="text-[10px] uppercase tracking-wider text-muted-foreground">
+          <p className={cn(
+            "font-display font-bold text-foreground/60",
+            isTopThree ? "text-lg" : "text-base"
+          )}>
+            {ranking.championships}
+          </p>
+          <p className="text-[10px] uppercase tracking-wider text-foreground/50">
             {t.ranking.wins}
           </p>
         </div>
 
         <div className="text-center">
           <p className={cn(
-            "font-display font-bold",
-            isTopThree ? "text-2xl" : "text-xl",
-            ranking.rank === 1 ? "text-rank-gold" : 
-            ranking.rank <= 3 ? "text-foreground" : 
-            "text-foreground/90"
+            "font-display font-bold text-foreground",
+            isTopThree ? "text-xl" : "text-lg"
           )}>
             {ranking.total_points}
           </p>
-          <p className="text-[10px] uppercase tracking-wider text-muted-foreground">
+          <p className="text-[10px] uppercase tracking-wider text-foreground/50">
             {t.ranking.points}
           </p>
         </div>
