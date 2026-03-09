@@ -2,3 +2,6 @@ project_id = "rzhdaymzzxrmmfzshrix"
 
 [functions.detect-face]
 verify_jwt = false
+
+[functions.generate-ranking-image]
+verify_jwt = false
