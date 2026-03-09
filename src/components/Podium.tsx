@@ -2,6 +2,7 @@ import { Trophy, Medal, Star, Sparkles } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import type { PlayerRanking } from '@/types/ranking';
 import { useLanguage } from '@/contexts/LanguageContext';
+import { BlueParticles } from './BlueParticles';
 
 interface PodiumProps {
   rankings: PlayerRanking[];
@@ -77,6 +78,8 @@ export function Podium({ rankings, onAvatarClick }: PodiumProps) {
 
   return (
     <div className="mb-10 doodle-card bg-card p-6 relative overflow-hidden">
+      {/* Subtle blue floating particles */}
+      <BlueParticles />
       {/* Decorative elements */}
       <div className="absolute top-3 right-3">
         <Sparkles className="w-5 h-5 text-accent/40 animate-sparkle" />
