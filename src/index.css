@@ -111,9 +111,9 @@
   .arena-hero-gradient {
     background: linear-gradient(
       135deg,
-      hsl(0 70% 20% / 0.9) 0%,
-      hsl(150 60% 8% / 0.95) 50%,
-      hsl(0 0% 4%) 100%
+      hsl(210 100% 20% / 0.9) 0%,
+      hsl(195 80% 10% / 0.95) 50%,
+      hsl(215 35% 7%) 100%
     );
   }
 
@@ -123,7 +123,7 @@
     background: linear-gradient(
       90deg,
       transparent,
-      hsl(0 70% 40% / 0.15),
+      hsl(210 100% 55% / 0.15),
       transparent
     );
     animation: streak 4s ease-in-out infinite;
@@ -137,9 +137,9 @@
   /* Particle effect */
   .arena-particles {
     background-image: 
-      radial-gradient(circle at 20% 30%, hsl(0 70% 40% / 0.1) 1px, transparent 1px),
-      radial-gradient(circle at 80% 70%, hsl(45 100% 50% / 0.08) 1px, transparent 1px),
-      radial-gradient(circle at 50% 50%, hsl(150 60% 20% / 0.05) 1px, transparent 1px);
+      radial-gradient(circle at 20% 30%, hsl(210 100% 55% / 0.1) 1px, transparent 1px),
+      radial-gradient(circle at 80% 70%, hsl(195 90% 45% / 0.08) 1px, transparent 1px),
+      radial-gradient(circle at 50% 50%, hsl(210 80% 30% / 0.05) 1px, transparent 1px);
     background-size: 100px 100px, 150px 150px, 200px 200px;
     animation: particles-drift 20s linear infinite;
   }
