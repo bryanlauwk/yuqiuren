@@ -2,6 +2,7 @@ import { Trophy, Medal, Star, Sparkles } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import type { PlayerRanking } from '@/types/ranking';
 import { useLanguage } from '@/contexts/LanguageContext';
+import { BlueParticles } from './BlueParticles';
 
 interface PodiumProps {
   rankings: PlayerRanking[];
