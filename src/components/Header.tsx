@@ -1,6 +1,5 @@
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { cn } from '@/lib/utils';
-import shuttlecockLogo from '@/assets/shuttlecock-logo.png';
 import { Medal, Shield, LogOut, History } from 'lucide-react';
 import { useAuth } from '@/hooks/useAuth';
 import { Button } from '@/components/ui/button';
@@ -29,9 +28,18 @@ export function Header() {
     <header className="sticky top-0 z-50 bg-background/95 backdrop-blur-md border-b border-border">
       <div className="container flex items-center justify-between h-16 sm:h-18">
         <Link to="/" className="flex items-center gap-2.5 group">
-           <div className="relative w-10 h-10 sm:w-12 sm:h-12 rounded-xl overflow-hidden group-hover:scale-105 transition-transform duration-300 bg-gradient-to-br from-primary/80 to-accent/60 flex items-center justify-center shadow-lg ring-1 ring-white/10 ring-inset">
-              <img src={shuttlecockLogo} alt="Logo" className="w-7 h-7 sm:w-8 sm:h-8 object-contain" />
-            </div>
+          <svg
+            viewBox="0 0 32 32"
+            className="w-8 h-8 sm:w-9 sm:h-9 text-primary transition-transform duration-300 group-hover:scale-105"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2.2"
+            strokeLinecap="round"
+          >
+            <path d="M6 26 C10 18, 12 10, 26 6" />
+            <path d="M26 26 C22 18, 20 10, 6 6" />
+            <circle cx="16" cy="13" r="2.2" fill="currentColor" stroke="none" />
+          </svg>
         </Link>
 
         <nav className="flex items-center gap-1">
