@@ -372,4 +372,27 @@
   .player-glow-right {
     animation: player-glow-breathe 3s ease-in-out infinite 1.5s;
   }
+
+  /* Table header shimmer */
+  .shimmer-row::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      90deg,
+      transparent 0%,
+      hsl(210 100% 70% / 0.06) 40%,
+      hsl(195 90% 65% / 0.1) 50%,
+      hsl(210 100% 70% / 0.06) 60%,
+      transparent 100%
+    );
+    background-size: 200% 100%;
+    animation: table-shimmer 6s ease-in-out infinite;
+    pointer-events: none;
+  }
+
+  @keyframes table-shimmer {
+    0% { background-position: -200% 0; }
+    100% { background-position: 200% 0; }
+  }
 }

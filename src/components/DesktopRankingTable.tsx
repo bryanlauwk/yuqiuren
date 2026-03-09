@@ -89,7 +89,7 @@ export function DesktopRankingTable({ rankings, onAvatarClick }: DesktopRankingT
     <div className="relative isolate rounded-lg border border-border bg-card/50 max-h-[70vh] overflow-x-hidden overflow-y-auto">
       <Table>
         <TableHeader>
-          <TableRow className="bg-muted/50 hover:bg-muted/50 border-b-2 border-border">
+          <TableRow className="relative bg-muted/50 hover:bg-muted/50 border-b-2 border-border overflow-hidden shimmer-row">
             <TableHead className="sticky top-0 z-20 bg-card w-20 text-center font-display text-xs uppercase tracking-wider">
               Rank
             </TableHead>
