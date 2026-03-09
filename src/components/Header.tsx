@@ -3,7 +3,7 @@ import { cn } from '@/lib/utils';
 import { Medal, Shield, LogOut, History } from 'lucide-react';
 import { useAuth } from '@/hooks/useAuth';
 import { Button } from '@/components/ui/button';
-import { LanguageSwitcher } from '@/components/LanguageSwitcher';
+
 import { useLanguage } from '@/contexts/LanguageContext';
 
 export function Header() {
@@ -63,7 +63,7 @@ export function Header() {
             );
           })}
 
-          <LanguageSwitcher />
+          
 
           {user && isAdmin && (
             <Button
