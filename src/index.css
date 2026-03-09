@@ -157,34 +157,31 @@
     box-shadow: var(--shadow-elevated);
   }
 
-  /* Glow effects for top ranks */
+  /* Glow effects for top ranks — softened */
   .glow-gold {
     box-shadow: 
-      0 0 20px hsl(45 100% 50% / 0.2),
-      0 0 40px hsl(45 100% 50% / 0.1),
-      inset 0 1px 0 hsl(45 100% 70% / 0.1);
+      0 0 12px hsl(45 100% 50% / 0.12),
+      inset 0 1px 0 hsl(45 100% 70% / 0.08);
   }
 
   .glow-silver {
     box-shadow: 
-      0 0 20px hsl(0 0% 75% / 0.15),
-      0 0 40px hsl(0 0% 75% / 0.08),
-      inset 0 1px 0 hsl(0 0% 90% / 0.1);
+      0 0 12px hsl(0 0% 75% / 0.1),
+      inset 0 1px 0 hsl(0 0% 90% / 0.08);
   }
 
   .glow-bronze {
     box-shadow: 
-      0 0 20px hsl(30 60% 45% / 0.15),
-      0 0 40px hsl(30 60% 45% / 0.08),
-      inset 0 1px 0 hsl(30 60% 60% / 0.1);
+      0 0 12px hsl(30 60% 45% / 0.1),
+      inset 0 1px 0 hsl(30 60% 60% / 0.08);
   }
 
-  /* Row backgrounds for ranks */
+  /* Row backgrounds for ranks — softened */
   .rank-row-gold {
     background: linear-gradient(
       90deg,
-      hsl(45 100% 50% / 0.12) 0%,
-      hsl(45 100% 50% / 0.05) 50%,
+      hsl(45 100% 50% / 0.07) 0%,
+      hsl(45 100% 50% / 0.02) 50%,
       transparent 100%
     );
     border-left: 3px solid hsl(var(--rank-gold));
@@ -193,8 +190,8 @@
   .rank-row-silver {
     background: linear-gradient(
       90deg,
-      hsl(0 0% 75% / 0.08) 0%,
-      hsl(0 0% 75% / 0.03) 50%,
+      hsl(0 0% 75% / 0.05) 0%,
+      hsl(0 0% 75% / 0.02) 50%,
       transparent 100%
     );
     border-left: 3px solid hsl(var(--rank-silver));
@@ -203,32 +200,27 @@
   .rank-row-bronze {
     background: linear-gradient(
       90deg,
-      hsl(30 60% 45% / 0.08) 0%,
-      hsl(30 60% 45% / 0.03) 50%,
+      hsl(30 60% 45% / 0.05) 0%,
+      hsl(30 60% 45% / 0.02) 50%,
       transparent 100%
     );
     border-left: 3px solid hsl(var(--rank-bronze));
   }
 
   .rank-row-default {
-    background: linear-gradient(
-      90deg,
-      hsl(210 50% 80% / 0.03) 0%,
-      transparent 100%
-    );
-    border-left: 3px solid hsl(215 25% 25%);
+    background: transparent;
+    border-left: 3px solid hsl(215 25% 22%);
   }
 
-  /* Accent bar for header */
+  /* Accent bar for header — subtle */
   .accent-bar {
     background: linear-gradient(
       90deg, 
-      hsl(var(--arena-blue)) 0%, 
-      hsl(var(--arena-cyan)) 50%, 
-      hsl(var(--arena-blue)) 100%
+      hsl(var(--arena-blue) / 0.6) 0%, 
+      hsl(var(--arena-cyan) / 0.4) 50%, 
+      hsl(var(--arena-blue) / 0.6) 100%
     );
-    background-size: 200% 100%;
-    animation: shimmer 4s ease-in-out infinite;
+    height: 2px;
   }
 
   @keyframes shimmer {
@@ -262,17 +254,13 @@
     transform: scale(1.01);
   }
 
-  /* Text glow for points */
+  /* Text glow for points — subtle */
   .text-glow-gold {
-    text-shadow: 
-      0 0 10px hsl(45 100% 50% / 0.5),
-      0 0 20px hsl(45 100% 50% / 0.3);
+    text-shadow: 0 0 8px hsl(45 100% 50% / 0.25);
   }
 
   .text-glow-white {
-    text-shadow: 
-      0 0 8px hsl(0 0% 100% / 0.3),
-      0 0 16px hsl(0 0% 100% / 0.15);
+    text-shadow: 0 0 6px hsl(0 0% 100% / 0.15);
   }
 
   /* Gradient text for hero */

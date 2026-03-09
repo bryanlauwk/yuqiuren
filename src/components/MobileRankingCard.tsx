@@ -23,13 +23,13 @@ export function MobileRankingCard({ ranking, onAvatarClick }: MobileRankingCardP
   const getCardStyles = () => {
     switch (ranking.rank) {
       case 1:
-        return 'rank-row-gold border-rank-gold/50 shadow-[0_0_20px_rgba(255,215,0,0.15)]';
+        return 'rank-row-gold border-rank-gold/40 shadow-md';
       case 2:
-        return 'rank-row-silver border-rank-silver/50 shadow-[0_0_15px_rgba(192,192,192,0.12)]';
+        return 'rank-row-silver border-rank-silver/40 shadow-sm';
       case 3:
-        return 'rank-row-bronze border-rank-bronze/50 shadow-[0_0_15px_rgba(205,127,50,0.12)]';
+        return 'rank-row-bronze border-rank-bronze/40 shadow-sm';
       default:
-        return 'rank-row-default border-border';
+        return 'rank-row-default border-border/30';
     }
   };
 
@@ -55,7 +55,6 @@ export function MobileRankingCard({ ranking, onAvatarClick }: MobileRankingCardP
         </div>
       );
     }
-    
     if (ranking.rank_change < 0) {
       return (
         <div className="flex items-center gap-0.5 text-destructive">
@@ -64,8 +63,6 @@ export function MobileRankingCard({ ranking, onAvatarClick }: MobileRankingCardP
         </div>
       );
     }
-    
-    // Show dash for unchanged rank (if player is not new)
     if (!ranking.is_new) {
       return (
         <div className="flex items-center text-muted-foreground">
@@ -73,7 +70,6 @@ export function MobileRankingCard({ ranking, onAvatarClick }: MobileRankingCardP
         </div>
       );
     }
-    
     return null;
   };
 
@@ -82,14 +78,13 @@ export function MobileRankingCard({ ranking, onAvatarClick }: MobileRankingCardP
   return (
     <div 
       className={cn(
-        "rounded-lg border p-3 transition-all duration-200",
+        "rounded-xl border p-4 transition-all duration-200",
         getCardStyles(),
-        isTopThree && "p-4"
+        isTopThree && "p-5"
       )}
     >
       {/* Row 1: Identity */}
       <div className="flex items-center gap-3">
-        {/* Rank Badge */}
         <div className={cn(
           "flex-shrink-0 flex items-center justify-center rounded-lg font-display font-bold",
           getRankBadgeStyles(),
@@ -98,7 +93,6 @@ export function MobileRankingCard({ ranking, onAvatarClick }: MobileRankingCardP
           {ranking.rank}
         </div>
 
-        {/* Avatar */}
         <button
           onClick={() => ranking.full_avatar_url && onAvatarClick?.(ranking.full_avatar_url, ranking.player_name)}
           disabled={!ranking.full_avatar_url}
@@ -126,7 +120,6 @@ export function MobileRankingCard({ ranking, onAvatarClick }: MobileRankingCardP
           )}
         </button>
 
-        {/* Player Name - Full width, no truncation */}
         <div className="flex-1 min-w-0">
           <p className={cn(
             "font-bold text-foreground",
@@ -136,14 +129,12 @@ export function MobileRankingCard({ ranking, onAvatarClick }: MobileRankingCardP
           </p>
         </div>
 
-        {/* Rank Change Indicator */}
         {getRankChangeDisplay()}
       </div>
 
-      {/* Row 2: Stats Bar */}
-      <div className="flex items-center justify-around mt-3 pt-3 border-t border-border/50">
-        {/* Sessions */}
-        <div className="text-center flex-1">
+      {/* Row 2: Stats — clean grid, no bullet separators */}
+      <div className="grid grid-cols-3 gap-4 mt-3 pt-3 border-t border-border/30">
+        <div className="text-center">
           <p className={cn(
             "font-display font-bold text-foreground/80",
             isTopThree ? "text-xl" : "text-lg"
@@ -155,10 +146,7 @@ export function MobileRankingCard({ ranking, onAvatarClick }: MobileRankingCardP
           </p>
         </div>
 
-        <span className="text-muted-foreground/50">•</span>
-
-        {/* Wins */}
-        <div className="text-center flex-1">
+        <div className="text-center">
           <div className="flex items-center justify-center gap-1">
             {isTopThree && (
               <Trophy className={cn(
@@ -180,10 +168,7 @@ export function MobileRankingCard({ ranking, onAvatarClick }: MobileRankingCardP
           </p>
         </div>
 
-        <span className="text-muted-foreground/50">•</span>
-
-        {/* Points - Most prominent */}
-        <div className="text-center flex-1">
+        <div className="text-center">
           <p className={cn(
             "font-display font-bold",
             isTopThree ? "text-2xl" : "text-xl",
