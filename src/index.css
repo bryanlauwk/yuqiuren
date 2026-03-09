@@ -255,17 +255,13 @@
     transform: scale(1.01);
   }
 
-  /* Text glow for points */
+  /* Text glow for points — subtle */
   .text-glow-gold {
-    text-shadow: 
-      0 0 10px hsl(45 100% 50% / 0.5),
-      0 0 20px hsl(45 100% 50% / 0.3);
+    text-shadow: 0 0 8px hsl(45 100% 50% / 0.25);
   }
 
   .text-glow-white {
-    text-shadow: 
-      0 0 8px hsl(0 0% 100% / 0.3),
-      0 0 16px hsl(0 0% 100% / 0.15);
+    text-shadow: 0 0 6px hsl(0 0% 100% / 0.15);
   }
 
   /* Gradient text for hero */
