@@ -1,97 +1,63 @@
 
 
-## Goal
-Add a "no change" indicator for players whose rank stayed the same, ensuring consistent UI/UX across all players in the leaderboard.
+# Blue-White Sporting Theme Redesign
 
-## Problem Identified
+Shift the entire visual identity from dark red/green "cinematic arena" to a vibrant, youthful blue-white tone inspired by BWF broadcast graphics (like the uploaded All England Open references).
 
-Currently, the ranking table shows:
-- Green arrow with number when a player moves UP
-- Red arrow with number when a player moves DOWN  
-- **Nothing** when a player's rank is unchanged
+## Color Palette Transformation
 
-This creates visual inconsistency where some players (ranks 1-10) show trend indicators while others (ranks 11-14 who had no rank movement) show nothing. Users may wonder if there's a bug or missing data.
+Current: Dark background (#0a0a0a), deep red primary, dark green accent
+New: Deep navy background, vibrant electric blue primary, cyan/teal accent, white foreground with blue tints
 
-## Solution
+```text
+OLD                          NEW
+--background: 0 0% 4%    →  215 35% 7%     (deep navy-black)
+--card: 0 0% 8%           →  215 30% 11%    (navy card)
+--primary: 0 70% 35%      →  210 100% 55%   (electric blue)
+--accent: 150 60% 15%     →  195 90% 45%    (cyan/teal)
+--arena-red: 0 70% 30%    →  210 100% 40%   (deep blue)
+--arena-green: 150 60% 12% → 195 80% 20%   (dark cyan)
+--ring: 0 70% 40%         →  210 100% 55%   (blue ring)
+--border: 0 0% 18%        →  215 25% 18%    (navy border)
+--muted: 0 0% 15%         →  215 25% 15%    (navy muted)
+```
 
-Add a horizontal dash/minus indicator for players whose rank hasn't changed (but who have participated in previous sessions). This provides visual consistency and confirms to users that the system is working correctly.
-
-### Visual Result
-
-| Rank | Player | Trend Display |
-|------|--------|---------------|
-| 1 | Lao Wong | ↑ 2 (green) |
-| 8 | Jia Her | ↓ 6 (red) |
-| 11 | Sam | — (gray, no change) |
-| 13 | Moong | (nothing - not in latest session) |
-
-### Design Decision
-
-Show the "no change" indicator only for players who:
-- Have `rank_change === 0`
-- AND participated in previous sessions (`!is_new`)
-- AND were not absent from the latest session
-
-Players who didn't participate in the latest session won't show any indicator (their rank wasn't "actively" calculated for this session).
+Gold/silver/bronze ranking tokens stay unchanged (universal sports colors).
 
 ## Files to Modify
 
-| File | Changes |
-|------|---------|
-| `src/components/DesktopRankingTable.tsx` | Update `getRankChangeDisplay` to show a muted dash when `rank_change === 0` for eligible players |
-| `src/components/MobileRankingCard.tsx` | Apply the same change to maintain mobile/desktop consistency |
-| `src/hooks/useRankings.ts` | (Optional) Add flag to indicate if player was in latest session, for more precise control |
+### 1. `src/index.css` — Core theme variables + utility classes
+- Update all `:root` CSS variables to blue-white palette
+- Update `.dark` to match
+- Update gradient utilities: `arena-hero-gradient`, `motion-streak`, `arena-particles`, `accent-bar`, `text-gradient-arena`, `rank-row-default`, `player-glow-breathe` — all shift from red/green hues to blue/cyan hues
+- Spotlight pulse keyframes shift to blue tones
 
-## Implementation Details
+### 2. `src/components/hero/SpotlightBeams.tsx`
+- Change spotlight beam colors from gold/red/white to blue/cyan/white
 
-### A) Update Desktop Table Display
-In `src/components/DesktopRankingTable.tsx`, modify the `getRankChangeDisplay` function:
+### 3. `src/components/hero/CourtLines.tsx`
+- Court line gradient stays white (neutral), no changes needed
 
-```typescript
-const getRankChangeDisplay = (ranking: PlayerRanking) => {
-  if (ranking.rank_change > 0) {
-    return (
-      <div className="flex items-center gap-0.5 text-finished">
-        <ArrowUp className="w-3 h-3" />
-        <span className="text-xs font-medium">{ranking.rank_change}</span>
-      </div>
-    );
-  }
-  
-  if (ranking.rank_change < 0) {
-    return (
-      <div className="flex items-center gap-0.5 text-destructive">
-        <ArrowDown className="w-3 h-3" />
-        <span className="text-xs font-medium">{Math.abs(ranking.rank_change)}</span>
-      </div>
-    );
-  }
-  
-  // Show dash for unchanged rank (if player is not new)
-  if (!ranking.is_new) {
-    return (
-      <div className="flex items-center text-muted-foreground">
-        <Minus className="w-3 h-3" />
-      </div>
-    );
-  }
-  
-  return null;
-};
-```
+### 4. `src/components/ArenaHero.tsx`
+- Hero background image stays (it still features badminton players)
+- Gradient overlay shifts: `from-background via-background/20 to-background/60` will auto-adapt since it uses CSS variables
 
-### B) Update Mobile Card Display
-Apply the same logic to `src/components/MobileRankingCard.tsx` for consistency.
+### 5. `src/components/Header.tsx`
+- Logo SVG gradient: change `from-primary/80 to-accent/60` — will auto-adapt via CSS vars
+- No structural changes needed
 
-### C) Pass Full Ranking Object
-Update the function call from `getRankChangeDisplay(ranking.rank_change)` to `getRankChangeDisplay(ranking)` so we can access both `rank_change` and `is_new` properties.
+### 6. `src/components/BadmintonRally.tsx`
+- Stroke colors use `hsl(var(--primary))` and `hsl(var(--accent))` — will auto-adapt
 
-## Expected Outcome
+### 7. `tailwind.config.ts`
+- No changes needed (all colors reference CSS variables)
 
-- All players who have been in the system before will show a trend indicator
-- ↑ N for rank improvement (green)
-- ↓ N for rank decline (red)  
-- — for no change (muted gray)
-- New players show nothing (or optionally a "NEW" badge)
-- Consistent visual treatment across all rows
+## Scope Summary
+
+| File | Change Type |
+|------|-------------|
+| `src/index.css` | Full color variable overhaul + gradient utility updates |
+| `src/components/hero/SpotlightBeams.tsx` | Spotlight colors from gold/red to blue/cyan |
+
+Most components already use CSS variable references, so changing the variables in `index.css` propagates everywhere automatically. Only hardcoded HSL values in utilities and spotlight beams need manual updates.
 
