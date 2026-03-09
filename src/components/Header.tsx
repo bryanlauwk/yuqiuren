@@ -63,7 +63,7 @@ export function Header() {
             );
           })}
 
-          <LanguageSwitcher />
+          
 
           {user && isAdmin && (
             <Button
