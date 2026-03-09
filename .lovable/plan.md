@@ -1,55 +1,97 @@
 
 
-# Ranking Table — Airbnb-Polish Redesign
+## Goal
+Add a "no change" indicator for players whose rank stayed the same, ensuring consistent UI/UX across all players in the leaderboard.
 
-The current table has a heavy "esports arena" aesthetic: colored left borders, gradient row backgrounds, glow effects, bold rank badges with drop shadows, and dense typography. Airbnb's design language is the opposite — clean surfaces, generous whitespace, subtle depth through shadows not gradients, and letting content breathe.
+## Problem Identified
 
-## Design Direction
+Currently, the ranking table shows:
+- Green arrow with number when a player moves UP
+- Red arrow with number when a player moves DOWN  
+- **Nothing** when a player's rank is unchanged
 
-Strip away visual noise. Let the data speak. Depth comes from elevation (soft shadows) not from color gradients. Hierarchy comes from size and weight, not from glowing text.
+This creates visual inconsistency where some players (ranks 1-10) show trend indicators while others (ranks 11-14 who had no rank movement) show nothing. Users may wonder if there's a bug or missing data.
 
-## Desktop Table Changes (`src/components/DesktopRankingTable.tsx`)
+## Solution
 
-**Container**: Replace `border border-border bg-card/50` with a clean white/dark card using a soft `shadow-lg` and `rounded-2xl` — no visible border. Remove `max-h-[70vh] overflow-y-auto` (let it flow naturally, the page scrolls).
+Add a horizontal dash/minus indicator for players whose rank hasn't changed (but who have participated in previous sessions). This provides visual consistency and confirms to users that the system is working correctly.
 
-**Header row**: Remove uppercase tracking. Use sentence-case, `text-sm text-muted-foreground font-medium` — quiet labels, not shouting column titles. Thin bottom border only.
+### Visual Result
 
-**Rows**:
-- Remove colored left borders (`rank-row-gold/silver/bronze`) and gradient backgrounds entirely
-- Remove zebra striping
-- Use a single thin `border-b border-border/40` between rows
-- On hover: subtle `bg-muted/30` background, no scale transforms
-- Top 3 rows get no special background — their rank badge and slightly larger avatar are enough differentiation
+| Rank | Player | Trend Display |
+|------|--------|---------------|
+| 1 | Lao Wong | ↑ 2 (green) |
+| 8 | Jia Her | ↓ 6 (red) |
+| 11 | Sam | — (gray, no change) |
+| 13 | Moong | (nothing - not in latest session) |
 
-**Rank badge**:
-- Top 3: Keep the gradient fill but make badges circular (`rounded-full`) instead of `rounded-lg`, and reduce shadow intensity by ~50%
-- Others: Simple `text-muted-foreground` number, no background box at all — just the number
+### Design Decision
 
-**Avatar**: Reduce border from `border-2` to `border` with `border-border/50`. On hover, instead of `scale-105`, use a soft `ring-2 ring-primary/30` effect.
+Show the "no change" indicator only for players who:
+- Have `rank_change === 0`
+- AND participated in previous sessions (`!is_new`)
+- AND were not absent from the latest session
 
-**Name + rank change**: Keep as-is, the arrow indicators are clean already.
-
-**Stats cells**: Reduce font sizes by one step (e.g. `text-xl` to `text-lg`, `text-2xl` to `text-xl`). Remove the Trophy icon next to wins — the rank badge already communicates position. Use `text-foreground/60` for stats to de-emphasize them vs the player name.
-
-**Points column**: Keep bolder than other stats but remove `text-rank-gold` coloring — use `text-foreground` for all. The rank badge carries the color story.
-
-## Mobile Card Changes (`src/components/MobileRankingCard.tsx`)
-
-**Container**: Replace `border` + colored borders with borderless cards using `shadow-sm hover:shadow-md` transition. Use `rounded-2xl` and `bg-card`. Top 3 get `shadow-md` by default.
-
-**Rank badge**: Same circular treatment as desktop.
-
-**Stats row**: Remove `border-t` divider. Use lighter `text-foreground/50` for stat labels. Remove Trophy icons.
-
-## CSS Cleanup (`src/index.css`)
-
-Keep `rank-badge-gold/silver/bronze` (still used for badges) but soften their `box-shadow` values. The `rank-row-*` classes, `glow-*` classes, and `text-glow-*` classes can remain defined but will no longer be applied in the table components.
+Players who didn't participate in the latest session won't show any indicator (their rank wasn't "actively" calculated for this session).
 
 ## Files to Modify
 
-| File | Change |
-|------|--------|
-| `src/components/DesktopRankingTable.tsx` | Restyle container, header, rows, badges, avatars, stats |
-| `src/components/MobileRankingCard.tsx` | Borderless shadow cards, circular badges, remove trophy icons |
-| `src/index.css` | Soften badge shadows, optionally add new subtle utility classes |
+| File | Changes |
+|------|---------|
+| `src/components/DesktopRankingTable.tsx` | Update `getRankChangeDisplay` to show a muted dash when `rank_change === 0` for eligible players |
+| `src/components/MobileRankingCard.tsx` | Apply the same change to maintain mobile/desktop consistency |
+| `src/hooks/useRankings.ts` | (Optional) Add flag to indicate if player was in latest session, for more precise control |
+
+## Implementation Details
+
+### A) Update Desktop Table Display
+In `src/components/DesktopRankingTable.tsx`, modify the `getRankChangeDisplay` function:
+
+```typescript
+const getRankChangeDisplay = (ranking: PlayerRanking) => {
+  if (ranking.rank_change > 0) {
+    return (
+      <div className="flex items-center gap-0.5 text-finished">
+        <ArrowUp className="w-3 h-3" />
+        <span className="text-xs font-medium">{ranking.rank_change}</span>
+      </div>
+    );
+  }
+  
+  if (ranking.rank_change < 0) {
+    return (
+      <div className="flex items-center gap-0.5 text-destructive">
+        <ArrowDown className="w-3 h-3" />
+        <span className="text-xs font-medium">{Math.abs(ranking.rank_change)}</span>
+      </div>
+    );
+  }
+  
+  // Show dash for unchanged rank (if player is not new)
+  if (!ranking.is_new) {
+    return (
+      <div className="flex items-center text-muted-foreground">
+        <Minus className="w-3 h-3" />
+      </div>
+    );
+  }
+  
+  return null;
+};
+```
+
+### B) Update Mobile Card Display
+Apply the same logic to `src/components/MobileRankingCard.tsx` for consistency.
+
+### C) Pass Full Ranking Object
+Update the function call from `getRankChangeDisplay(ranking.rank_change)` to `getRankChangeDisplay(ranking)` so we can access both `rank_change` and `is_new` properties.
+
+## Expected Outcome
+
+- All players who have been in the system before will show a trend indicator
+- ↑ N for rank improvement (green)
+- ↓ N for rank decline (red)  
+- — for no change (muted gray)
+- New players show nothing (or optionally a "NEW" badge)
+- Consistent visual treatment across all rows
 

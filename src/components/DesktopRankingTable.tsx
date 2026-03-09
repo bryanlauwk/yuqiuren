@@ -1,4 +1,4 @@
-import { ArrowUp, ArrowDown, Minus, Trophy } from 'lucide-react';
+import { ArrowUp, ArrowDown, Minus } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useLanguage } from '@/contexts/LanguageContext';
 import type { PlayerRanking } from '@/types/ranking';
@@ -28,19 +28,6 @@ export function DesktopRankingTable({ rankings, onAvatarClick }: DesktopRankingT
       .slice(0, 2);
   };
 
-  const getRowStyles = (rank: number) => {
-    switch (rank) {
-      case 1:
-        return 'rank-row-gold';
-      case 2:
-        return 'rank-row-silver';
-      case 3:
-        return 'rank-row-bronze';
-      default:
-        return 'rank-row-default hover:bg-muted/20';
-    }
-  };
-
   const getRankBadgeStyles = (rank: number) => {
     switch (rank) {
       case 1:
@@ -50,7 +37,7 @@ export function DesktopRankingTable({ rankings, onAvatarClick }: DesktopRankingT
       case 3:
         return 'rank-badge-bronze';
       default:
-        return 'rank-badge-default';
+        return null;
     }
   };
 
@@ -82,49 +69,51 @@ export function DesktopRankingTable({ rankings, onAvatarClick }: DesktopRankingT
   };
 
   return (
-    <div className="relative isolate rounded-xl border border-border bg-card/50 max-h-[70vh] overflow-x-hidden overflow-y-auto">
+    <div className="rounded-2xl bg-card shadow-lg overflow-hidden">
       <Table>
         <TableHeader>
-          <TableRow className="bg-muted/50 hover:bg-muted/50 border-b-2 border-border">
-            <TableHead className="sticky top-0 z-20 bg-card w-20 text-center font-display text-xs uppercase tracking-wider">
+          <TableRow className="hover:bg-transparent border-b border-border/40">
+            <TableHead className="sticky top-0 z-20 bg-card w-20 text-center text-sm text-muted-foreground font-medium">
               Rank
             </TableHead>
-            <TableHead className="sticky top-0 z-20 bg-card font-display text-xs uppercase tracking-wider">
+            <TableHead className="sticky top-0 z-20 bg-card text-sm text-muted-foreground font-medium">
               Player
             </TableHead>
-            <TableHead className="sticky top-0 z-20 bg-card w-28 text-center font-display text-xs uppercase tracking-wider">
+            <TableHead className="sticky top-0 z-20 bg-card w-28 text-center text-sm text-muted-foreground font-medium">
               {t.ranking.sessions}
             </TableHead>
-            <TableHead className="sticky top-0 z-20 bg-card w-28 text-center font-display text-xs uppercase tracking-wider">
+            <TableHead className="sticky top-0 z-20 bg-card w-28 text-center text-sm text-muted-foreground font-medium">
               {t.ranking.wins}
             </TableHead>
-            <TableHead className="sticky top-0 z-20 bg-card w-32 text-center font-display text-xs uppercase tracking-wider">
+            <TableHead className="sticky top-0 z-20 bg-card w-32 text-center text-sm text-muted-foreground font-medium">
               {t.ranking.points}
             </TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
-          {rankings.map((ranking, index) => {
+          {rankings.map((ranking) => {
             const isTopThree = ranking.rank <= 3;
-            const isEvenRow = index % 2 === 0;
+            const badgeStyle = getRankBadgeStyles(ranking.rank);
             
             return (
               <TableRow 
                 key={ranking.player_id}
-                className={cn(
-                  "transition-colors duration-200 border-b border-border",
-                  getRowStyles(ranking.rank)
-                )}
-                style={!isTopThree && isEvenRow ? { backgroundColor: 'hsl(var(--muted) / 0.15)' } : undefined}
+                className="transition-colors duration-200 border-b border-border/40 hover:bg-muted/30"
               >
                 <TableCell className="text-center py-5">
-                  <div className={cn(
-                    "inline-flex items-center justify-center rounded-lg font-display font-bold mx-auto",
-                    getRankBadgeStyles(ranking.rank),
-                    isTopThree ? "w-10 h-10 text-lg" : "w-8 h-8 text-sm"
-                  )}>
-                    {ranking.rank}
-                  </div>
+                  {badgeStyle ? (
+                    <div className={cn(
+                      "inline-flex items-center justify-center rounded-full font-display font-bold mx-auto",
+                      badgeStyle,
+                      "w-10 h-10 text-lg"
+                    )}>
+                      {ranking.rank}
+                    </div>
+                  ) : (
+                    <span className="text-base font-medium text-muted-foreground">
+                      {ranking.rank}
+                    </span>
+                  )}
                 </TableCell>
 
                 <TableCell className="py-5">
@@ -133,9 +122,9 @@ export function DesktopRankingTable({ rankings, onAvatarClick }: DesktopRankingT
                       onClick={() => ranking.full_avatar_url && onAvatarClick?.(ranking.full_avatar_url, ranking.player_name)}
                       disabled={!ranking.full_avatar_url}
                       className={cn(
-                        "flex-shrink-0 rounded-full overflow-hidden bg-muted border-2 border-border transition-all",
+                        "flex-shrink-0 rounded-full overflow-hidden bg-muted border border-border/50 transition-all",
                         isTopThree ? "w-14 h-14" : "w-11 h-11",
-                        ranking.full_avatar_url && "cursor-pointer hover:border-primary hover:scale-105"
+                        ranking.full_avatar_url && "cursor-pointer hover:ring-2 hover:ring-primary/30"
                       )}
                     >
                       {ranking.avatar_url ? (
@@ -170,39 +159,26 @@ export function DesktopRankingTable({ rankings, onAvatarClick }: DesktopRankingT
 
                 <TableCell className="text-center py-5">
                   <p className={cn(
-                    "font-display font-bold text-foreground/80",
-                    isTopThree ? "text-xl" : "text-lg"
+                    "font-display font-bold text-foreground/60",
+                    isTopThree ? "text-lg" : "text-base"
                   )}>
                     {ranking.sessions_played}
                   </p>
                 </TableCell>
 
                 <TableCell className="text-center py-5">
-                  <div className="flex items-center justify-center gap-1">
-                    {isTopThree && (
-                      <Trophy className={cn(
-                        "w-5 h-5",
-                        ranking.rank === 1 ? "text-rank-gold" : 
-                        ranking.rank === 2 ? "text-rank-silver" : 
-                        "text-rank-bronze"
-                      )} />
-                    )}
-                    <p className={cn(
-                      "font-display font-bold",
-                      isTopThree ? "text-xl text-foreground" : "text-lg text-foreground/80"
-                    )}>
-                      {ranking.championships}
-                    </p>
-                  </div>
+                  <p className={cn(
+                    "font-display font-bold text-foreground/60",
+                    isTopThree ? "text-lg" : "text-base"
+                  )}>
+                    {ranking.championships}
+                  </p>
                 </TableCell>
 
                 <TableCell className="text-center py-5">
                   <p className={cn(
-                    "font-display font-bold",
-                    isTopThree ? "text-2xl" : "text-xl",
-                    ranking.rank === 1 ? "text-rank-gold" : 
-                    ranking.rank <= 3 ? "text-foreground" : 
-                    "text-foreground/90"
+                    "font-display font-bold text-foreground",
+                    isTopThree ? "text-xl" : "text-lg"
                   )}>
                     {ranking.total_points}
                   </p>
