@@ -1,7 +1,4 @@
 import { useLanguage } from '@/contexts/LanguageContext';
-import { CourtLines } from './hero/CourtLines';
-import { SpotlightBeams } from './hero/SpotlightBeams';
-import { FloatingShuttlecocks } from './hero/FloatingShuttlecocks';
 import heroBackground from '@/assets/hero-background.png';
 
 export function ArenaHero() {
@@ -15,38 +12,19 @@ export function ArenaHero() {
         style={{ backgroundImage: `url(${heroBackground})` }}
       />
       
-      {/* Gradient overlays for blending */}
-      <div className="absolute inset-0 bg-gradient-to-t from-background via-background/20 to-background/60" />
-      
-      {/* Court lines overlay */}
-      <CourtLines />
-      
-      {/* Spotlight beams */}
-      <SpotlightBeams />
-      
-      {/* Animated particles */}
-      <div className="absolute inset-0 arena-particles opacity-40" />
-      
-      {/* Floating shuttlecocks */}
-      <FloatingShuttlecocks />
+      {/* Clean gradient overlay — stronger fade */}
+      <div className="absolute inset-0 bg-gradient-to-t from-background via-background/40 to-background/70" />
       
       {/* Content */}
-      <div className="relative z-10 container py-16 sm:py-24 text-center">
-        {/* Main title - Single line on mobile */}
+      <div className="relative z-10 container py-20 sm:py-32 text-center">
         <h1 className="text-3xl sm:text-5xl md:text-6xl lg:text-7xl font-display tracking-tight text-gradient-arena mb-4">
           <span className="sm:hidden">2026羽球人赛。积分榜</span>
           <span className="hidden sm:inline">{t.home.heroTitle}</span>
         </h1>
         
-        {/* Subtitle - Hidden on mobile since combined with title */}
-        <p className="hidden sm:block text-base sm:text-lg text-foreground/50 italic tracking-wide">
+        <p className="hidden sm:block text-base sm:text-lg text-foreground/40 italic tracking-wide">
           {t.home.heroSubtitle}
         </p>
-        
-        {/* Decorative line */}
-        <div className="mt-8 flex justify-center">
-          <div className="w-32 h-px bg-gradient-to-r from-transparent via-rank-gold/50 to-transparent" />
-        </div>
       </div>
       
       {/* Bottom fade to content */}

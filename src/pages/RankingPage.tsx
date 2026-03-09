@@ -15,7 +15,6 @@ export default function RankingPage() {
   const { t } = useLanguage();
   const isMobile = useIsMobile();
 
-  // Lightbox state for viewing avatars
   const [lightboxOpen, setLightboxOpen] = useState(false);
   const [selectedAvatar, setSelectedAvatar] = useState<{ src: string; alt: string } | null>(null);
 
@@ -28,17 +27,15 @@ export default function RankingPage() {
     <div className="min-h-screen bg-background flex flex-col">
       <Header />
       
-      {/* Hero Section */}
       <ArenaHero />
 
-      <main className="container -mt-8 relative z-10 flex-1 pb-8">
-        {/* Rankings Display */}
+      <main className="container -mt-8 relative z-10 flex-1 pb-12">
         {loading ? (
-          <div className="space-y-2">
+          <div className="space-y-3">
             {[...Array(8)].map((_, i) => (
               <div 
                 key={i} 
-                className={`bg-card/50 animate-pulse-arena rounded-lg ${
+                className={`bg-card/50 animate-pulse-arena rounded-xl ${
                   i === 0 ? 'h-[120px]' : i <= 2 ? 'h-[100px]' : 'h-[80px]'
                 }`}
                 style={{ animationDelay: `${i * 0.1}s` }}
@@ -53,9 +50,8 @@ export default function RankingPage() {
           </div>
         ) : (
           <>
-            {/* Mobile: Stacked card layout */}
             {isMobile ? (
-              <div className="space-y-3">
+              <div className="space-y-4">
                 {rankings.map((ranking, index) => (
                   <div 
                     key={ranking.player_id}
@@ -70,7 +66,6 @@ export default function RankingPage() {
                 ))}
               </div>
             ) : (
-              /* Desktop: Table layout */
               <div className="animate-fade-in-up">
                 <DesktopRankingTable 
                   rankings={rankings} 
@@ -84,7 +79,6 @@ export default function RankingPage() {
 
       <Footer />
 
-      {/* Avatar Lightbox */}
       <PhotoLightbox
         images={selectedAvatar ? [selectedAvatar] : []}
         currentIndex={0}

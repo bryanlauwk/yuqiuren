@@ -37,7 +37,7 @@ export function DesktopRankingTable({ rankings, onAvatarClick }: DesktopRankingT
       case 3:
         return 'rank-row-bronze';
       default:
-        return 'rank-row-default hover:bg-muted/30';
+        return 'rank-row-default hover:bg-muted/20';
     }
   };
 
@@ -63,7 +63,6 @@ export function DesktopRankingTable({ rankings, onAvatarClick }: DesktopRankingT
         </div>
       );
     }
-    
     if (ranking.rank_change < 0) {
       return (
         <div className="flex items-center gap-0.5 text-destructive">
@@ -72,8 +71,6 @@ export function DesktopRankingTable({ rankings, onAvatarClick }: DesktopRankingT
         </div>
       );
     }
-    
-    // Show dash for unchanged rank (if player is not new)
     if (!ranking.is_new) {
       return (
         <div className="flex items-center text-muted-foreground">
@@ -81,15 +78,14 @@ export function DesktopRankingTable({ rankings, onAvatarClick }: DesktopRankingT
         </div>
       );
     }
-    
     return null;
   };
 
   return (
-    <div className="relative isolate rounded-lg border border-border bg-card/50 max-h-[70vh] overflow-x-hidden overflow-y-auto">
+    <div className="relative isolate rounded-xl border border-border bg-card/50 max-h-[70vh] overflow-x-hidden overflow-y-auto">
       <Table>
         <TableHeader>
-          <TableRow className="relative bg-muted/50 hover:bg-muted/50 border-b-2 border-border overflow-hidden shimmer-row">
+          <TableRow className="bg-muted/50 hover:bg-muted/50 border-b-2 border-border">
             <TableHead className="sticky top-0 z-20 bg-card w-20 text-center font-display text-xs uppercase tracking-wider">
               Rank
             </TableHead>
@@ -116,13 +112,12 @@ export function DesktopRankingTable({ rankings, onAvatarClick }: DesktopRankingT
               <TableRow 
                 key={ranking.player_id}
                 className={cn(
-                  "transition-all duration-200 border-b border-border",
+                  "transition-colors duration-200 border-b border-border",
                   getRowStyles(ranking.rank)
                 )}
-                style={!isTopThree && isEvenRow ? { backgroundColor: 'hsl(var(--muted) / 0.25)' } : undefined}
+                style={!isTopThree && isEvenRow ? { backgroundColor: 'hsl(var(--muted) / 0.15)' } : undefined}
               >
-                {/* Rank */}
-                <TableCell className="text-center py-4">
+                <TableCell className="text-center py-5">
                   <div className={cn(
                     "inline-flex items-center justify-center rounded-lg font-display font-bold mx-auto",
                     getRankBadgeStyles(ranking.rank),
@@ -132,10 +127,8 @@ export function DesktopRankingTable({ rankings, onAvatarClick }: DesktopRankingT
                   </div>
                 </TableCell>
 
-                {/* Player (Avatar + Name + Rank Change) */}
-                <TableCell className="py-4">
+                <TableCell className="py-5">
                   <div className="flex items-center gap-4">
-                    {/* Avatar */}
                     <button
                       onClick={() => ranking.full_avatar_url && onAvatarClick?.(ranking.full_avatar_url, ranking.player_name)}
                       disabled={!ranking.full_avatar_url}
@@ -163,7 +156,6 @@ export function DesktopRankingTable({ rankings, onAvatarClick }: DesktopRankingT
                       )}
                     </button>
 
-                    {/* Name + Rank Change */}
                     <div className="flex items-center gap-2">
                       <p className={cn(
                         "font-bold text-foreground",
@@ -176,8 +168,7 @@ export function DesktopRankingTable({ rankings, onAvatarClick }: DesktopRankingT
                   </div>
                 </TableCell>
 
-                {/* Sessions */}
-                <TableCell className="text-center py-4">
+                <TableCell className="text-center py-5">
                   <p className={cn(
                     "font-display font-bold text-foreground/80",
                     isTopThree ? "text-xl" : "text-lg"
@@ -186,8 +177,7 @@ export function DesktopRankingTable({ rankings, onAvatarClick }: DesktopRankingT
                   </p>
                 </TableCell>
 
-                {/* Wins */}
-                <TableCell className="text-center py-4">
+                <TableCell className="text-center py-5">
                   <div className="flex items-center justify-center gap-1">
                     {isTopThree && (
                       <Trophy className={cn(
@@ -206,13 +196,12 @@ export function DesktopRankingTable({ rankings, onAvatarClick }: DesktopRankingT
                   </div>
                 </TableCell>
 
-                {/* Points */}
-                <TableCell className="text-center py-4">
+                <TableCell className="text-center py-5">
                   <p className={cn(
                     "font-display font-bold",
                     isTopThree ? "text-2xl" : "text-xl",
-                    ranking.rank === 1 ? "text-rank-gold text-glow-gold" : 
-                    ranking.rank <= 3 ? "text-foreground text-glow-white" : 
+                    ranking.rank === 1 ? "text-rank-gold" : 
+                    ranking.rank <= 3 ? "text-foreground" : 
                     "text-foreground/90"
                   )}>
                     {ranking.total_points}
