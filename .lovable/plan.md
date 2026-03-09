@@ -1,97 +1,61 @@
 
 
-## Goal
-Add a "no change" indicator for players whose rank stayed the same, ensuring consistent UI/UX across all players in the leaderboard.
+# Airbnb-Inspired UX Polish
 
-## Problem Identified
+Thinking as an Airbnb designer: the page has too many competing visual effects (particles, beams, shimmer, court lines, glows) creating visual noise. Airbnb's philosophy is **generous whitespace, restraint, and purposeful motion**. The content is good — we just need to let it breathe.
 
-Currently, the ranking table shows:
-- Green arrow with number when a player moves UP
-- Red arrow with number when a player moves DOWN  
-- **Nothing** when a player's rank is unchanged
+## Key Principles
+- Remove decorative noise, keep purposeful motion
+- More whitespace and padding
+- Softer shadows instead of hard glows
+- Cleaner card surfaces with subtle depth
+- Typography hierarchy through size and weight, not color effects
 
-This creates visual inconsistency where some players (ranks 1-10) show trend indicators while others (ranks 11-14 who had no rank movement) show nothing. Users may wonder if there's a bug or missing data.
+## Changes
 
-## Solution
+### 1. `src/components/ArenaHero.tsx` — Simplify hero
+- Remove `CourtLines`, `SpotlightBeams`, `FloatingShuttlecocks`, and `arena-particles` overlays
+- Keep the background image with a cleaner gradient overlay (stronger fade to background)
+- Add more vertical padding (py-20 sm:py-32) for breathing room
+- Remove the decorative gold line — replace with nothing (less is more)
+- Cleaner subtitle treatment
 
-Add a horizontal dash/minus indicator for players whose rank hasn't changed (but who have participated in previous sessions). This provides visual consistency and confirms to users that the system is working correctly.
+### 2. `src/components/MobileRankingCard.tsx` — Softer cards
+- Replace heavy glow shadows (`shadow-[0_0_20px_...]`) with subtle `shadow-sm` / `shadow-md`
+- More padding (p-4 for all, p-5 for top 3)
+- Softer border colors — use `border-border/30` for non-top-3
+- Rounded corners bump to `rounded-xl`
+- Stats row: remove bullet separators, use equal spacing with `gap-4` grid instead
 
-### Visual Result
+### 3. `src/components/DesktopRankingTable.tsx` — Cleaner table
+- Remove shimmer animation from header (visual noise)
+- Softer row hover: `hover:bg-muted/20` instead of scale
+- Round the outer container more: `rounded-xl`
+- Increase row padding for breathing room
 
-| Rank | Player | Trend Display |
-|------|--------|---------------|
-| 1 | Lao Wong | ↑ 2 (green) |
-| 8 | Jia Her | ↓ 6 (red) |
-| 11 | Sam | — (gray, no change) |
-| 13 | Moong | (nothing - not in latest session) |
+### 4. `src/index.css` — Tone down utilities
+- Remove or soften `text-glow-gold` and `text-glow-white` (text-shadow creates blur)
+- Soften `rank-row-*` gradients — reduce opacity by ~40%
+- Reduce `arena-particles` opacity
+- Make `accent-bar` subtler (thinner, less saturated)
 
-### Design Decision
+### 5. `src/components/Header.tsx` — Cleaner nav
+- Remove the accent-bar (the 1px colored line at top)
+- Increase header height slightly (h-16 sm:h-18) for breathing room
+- Softer nav pill: current page indicator uses `bg-primary/10 text-primary` instead of solid `bg-primary`
 
-Show the "no change" indicator only for players who:
-- Have `rank_change === 0`
-- AND participated in previous sessions (`!is_new`)
-- AND were not absent from the latest session
+### 6. `src/components/Footer.tsx` — More whitespace
+- Increase padding to `py-10`
+- Add a subtle separator treatment
 
-Players who didn't participate in the latest session won't show any indicator (their rank wasn't "actively" calculated for this session).
+### 7. `src/pages/RankingPage.tsx` — Spacing
+- Increase gap between ranking cards on mobile: `space-y-3` → `space-y-4`
+- Add `pb-12` for more bottom breathing room
+- Loading skeletons: use `rounded-xl`
 
-## Files to Modify
-
-| File | Changes |
-|------|---------|
-| `src/components/DesktopRankingTable.tsx` | Update `getRankChangeDisplay` to show a muted dash when `rank_change === 0` for eligible players |
-| `src/components/MobileRankingCard.tsx` | Apply the same change to maintain mobile/desktop consistency |
-| `src/hooks/useRankings.ts` | (Optional) Add flag to indicate if player was in latest session, for more precise control |
-
-## Implementation Details
-
-### A) Update Desktop Table Display
-In `src/components/DesktopRankingTable.tsx`, modify the `getRankChangeDisplay` function:
-
-```typescript
-const getRankChangeDisplay = (ranking: PlayerRanking) => {
-  if (ranking.rank_change > 0) {
-    return (
-      <div className="flex items-center gap-0.5 text-finished">
-        <ArrowUp className="w-3 h-3" />
-        <span className="text-xs font-medium">{ranking.rank_change}</span>
-      </div>
-    );
-  }
-  
-  if (ranking.rank_change < 0) {
-    return (
-      <div className="flex items-center gap-0.5 text-destructive">
-        <ArrowDown className="w-3 h-3" />
-        <span className="text-xs font-medium">{Math.abs(ranking.rank_change)}</span>
-      </div>
-    );
-  }
-  
-  // Show dash for unchanged rank (if player is not new)
-  if (!ranking.is_new) {
-    return (
-      <div className="flex items-center text-muted-foreground">
-        <Minus className="w-3 h-3" />
-      </div>
-    );
-  }
-  
-  return null;
-};
-```
-
-### B) Update Mobile Card Display
-Apply the same logic to `src/components/MobileRankingCard.tsx` for consistency.
-
-### C) Pass Full Ranking Object
-Update the function call from `getRankChangeDisplay(ranking.rank_change)` to `getRankChangeDisplay(ranking)` so we can access both `rank_change` and `is_new` properties.
-
-## Expected Outcome
-
-- All players who have been in the system before will show a trend indicator
-- ↑ N for rank improvement (green)
-- ↓ N for rank decline (red)  
-- — for no change (muted gray)
-- New players show nothing (or optionally a "NEW" badge)
-- Consistent visual treatment across all rows
+## Not Changing
+- Color palette (blue-white theme stays)
+- Ranking logic and data structure
+- Gold/silver/bronze rank tokens
+- Overall layout structure
 
