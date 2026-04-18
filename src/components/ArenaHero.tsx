@@ -1,5 +1,6 @@
 import { useLanguage } from '@/contexts/LanguageContext';
 import { FloatingShuttlecocks } from '@/components/hero/FloatingShuttlecocks';
+import { CircleArrow } from '@/components/ink/CircleArrow';
 
 export function ArenaHero() {
   const { t } = useLanguage();
@@ -35,19 +36,11 @@ export function ArenaHero() {
           </p>
         </div>
 
-        {/* Corner accent — chunky arrow */}
-        <svg
-          className="hidden md:block absolute top-12 right-12 w-24 h-24 text-foreground"
-          viewBox="0 0 100 100"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="6"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-        >
-          <path d="M20 80 L80 20" />
-          <path d="M50 20 L80 20 L80 50" />
-        </svg>
+        {/* Corner accent — circle + arrow ink mark */}
+        <CircleArrow
+          size={112}
+          className="hidden md:block absolute top-12 right-12 text-foreground"
+        />
       </div>
     </section>
   );
