@@ -122,10 +122,19 @@ export function ArenaHero() {
                     }`}
                   >
                     <span className="font-display text-lg w-5 text-foreground">{row.rank}</span>
-                    <div className="w-9 h-9 rounded-full bg-foreground/90 border-2 border-foreground flex items-center justify-center">
-                      <span className="font-display text-[10px] text-background">
-                        {row.name ? getInitials(row.name) : ''}
-                      </span>
+                    <div className="w-9 h-9 rounded-full bg-foreground/90 border-2 border-foreground flex items-center justify-center overflow-hidden shrink-0">
+                      {row.avatarUrl ? (
+                        <img
+                          src={row.avatarUrl}
+                          alt={row.name}
+                          className="w-full h-full object-cover"
+                          style={{ objectPosition: `${(row.cropX ?? 0.5) * 100}% ${(row.cropY ?? 0.5) * 100}%` }}
+                        />
+                      ) : (
+                        <span className="font-display text-[10px] text-background">
+                          {row.name ? getInitials(row.name) : ''}
+                        </span>
+                      )}
                     </div>
                     <div className="flex-1 min-w-0">
                       {row.name ? (
