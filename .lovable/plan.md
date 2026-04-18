@@ -1,97 +1,75 @@
 
 
-## Goal
-Add a "no change" indicator for players whose rank stayed the same, ensuring consistent UI/UX across all players in the leaderboard.
+# Pivot to "Game On" — Sporty & Energetic Aesthetic
 
-## Problem Identified
+The uploaded reference (Swing Up) defines a **completely different visual direction** from the current dark-blue arena and the recent Airbnb-polish pass. It's a modern fitness-app energy: **light cream background, chunky black ink, and one explosive neon-lime accent** — think Strava x Gymshark x a sneaker drop.
 
-Currently, the ranking table shows:
-- Green arrow with number when a player moves UP
-- Red arrow with number when a player moves DOWN  
-- **Nothing** when a player's rank is unchanged
+This is a real pivot, not a tweak. We're moving from "dark esports broadcast" to "bright sporty hype."
 
-This creates visual inconsistency where some players (ranks 1-10) show trend indicators while others (ranks 11-14 who had no rank movement) show nothing. Users may wonder if there's a bug or missing data.
+## New Design Tokens
 
-## Solution
+| Role | Old (dark blue) | New (Game On) |
+|---|---|---|
+| Background | `#0B131F` (deep navy) | `#FAFAF7` (warm off-white) |
+| Foreground / Ink | Light gray | `#0A0E0A` (near-black) |
+| Primary accent | Electric blue | `#C6FF2E` (neon lime) |
+| Secondary ink | — | `#0B3B1E` (deep forest, on lime) |
+| Cards | Dark navy | Pure white with 2px black border |
+| Shadows | Blue glow | Hard offset shadow (`4px 4px 0 #0A0E0A`) |
+| Display font | Plus Jakarta Sans 700 | **Archivo 900** (chunky, condensed feel) |
 
-Add a horizontal dash/minus indicator for players whose rank hasn't changed (but who have participated in previous sessions). This provides visual consistency and confirms to users that the system is working correctly.
+## What Changes
 
-### Visual Result
+**1. Theme tokens (`src/index.css`)**
+- Rewrite `:root` HSL tokens to the cream/black/lime palette
+- Switch `font-display` to `Archivo` weight 900, tighter tracking
+- Replace soft glow shadows with hard "neo-brutalist" offset shadows
+- Add a `.btn-pop` utility (lime fill, black border, hard shadow, translates on hover)
 
-| Rank | Player | Trend Display |
-|------|--------|---------------|
-| 1 | Lao Wong | ↑ 2 (green) |
-| 8 | Jia Her | ↓ 6 (red) |
-| 11 | Sam | — (gray, no change) |
-| 13 | Moong | (nothing - not in latest session) |
+**2. Hero (`ArenaHero.tsx`)**
+- Drop the dark overlay, drop the background photo opacity treatment
+- Lime highlight block behind/under the headline (like the "Game on." swatch in the ref)
+- Headline becomes oversized chunky black text (`text-6xl → text-8xl`, font-weight 900)
+- Subtitle in muted forest green, not gray
+- Optional: a small hand-drawn shuttlecock + arrow doodle as a corner accent
 
-### Design Decision
+**3. Ranking — Desktop table (`DesktopRankingTable.tsx`)**
+- White card with 2px black border + hard offset shadow (replaces soft rounded shadow)
+- Column headers in uppercase Archivo black, lime underline on hover
+- Top 3 rows get a lime left-edge bar (instead of gold/silver/bronze gradients)
+- Rank numbers become huge chunky numerals
+- Points column: large black numerals, lime pill behind #1's points
 
-Show the "no change" indicator only for players who:
-- Have `rank_change === 0`
-- AND participated in previous sessions (`!is_new`)
-- AND were not absent from the latest session
+**4. Ranking — Mobile card (`MobileRankingCard.tsx`)**
+- White card, 2px black border, hard offset shadow
+- Top-3 rank badge becomes a lime square (not circle) with black numeral
+- Stats row: black numerals on cream chips
 
-Players who didn't participate in the latest session won't show any indicator (their rank wasn't "actively" calculated for this session).
+**5. Header & Footer**
+- Header: cream bg, black wordmark in Archivo 900, lime CTA button
+- Footer: keep minimal, but switch to cream/black palette and replace the dot separator with a lime bullet
 
-## Files to Modify
+**6. Buttons (`button.tsx`)**
+- Update default variant to the lime-fill / black-border / hard-shadow style
+- Outline variant: white fill, 2px black border, hard shadow
 
-| File | Changes |
-|------|---------|
-| `src/components/DesktopRankingTable.tsx` | Update `getRankChangeDisplay` to show a muted dash when `rank_change === 0` for eligible players |
-| `src/components/MobileRankingCard.tsx` | Apply the same change to maintain mobile/desktop consistency |
-| `src/hooks/useRankings.ts` | (Optional) Add flag to indicate if player was in latest session, for more precise control |
+## Out of scope (this pass)
 
-## Implementation Details
+- BadmintonDoodles / BlueParticles / Confetti / SpotlightBeams / FloatingShuttlecocks — these are dark-mode decorative elements that would clash. They'll be **temporarily hidden** on the home route; a follow-up can redraw them in the new style if you want them back.
+- Admin pages — same tokens will cascade automatically; no per-page rewrites.
 
-### A) Update Desktop Table Display
-In `src/components/DesktopRankingTable.tsx`, modify the `getRankChangeDisplay` function:
+## Files Touched
 
-```typescript
-const getRankChangeDisplay = (ranking: PlayerRanking) => {
-  if (ranking.rank_change > 0) {
-    return (
-      <div className="flex items-center gap-0.5 text-finished">
-        <ArrowUp className="w-3 h-3" />
-        <span className="text-xs font-medium">{ranking.rank_change}</span>
-      </div>
-    );
-  }
-  
-  if (ranking.rank_change < 0) {
-    return (
-      <div className="flex items-center gap-0.5 text-destructive">
-        <ArrowDown className="w-3 h-3" />
-        <span className="text-xs font-medium">{Math.abs(ranking.rank_change)}</span>
-      </div>
-    );
-  }
-  
-  // Show dash for unchanged rank (if player is not new)
-  if (!ranking.is_new) {
-    return (
-      <div className="flex items-center text-muted-foreground">
-        <Minus className="w-3 h-3" />
-      </div>
-    );
-  }
-  
-  return null;
-};
-```
-
-### B) Update Mobile Card Display
-Apply the same logic to `src/components/MobileRankingCard.tsx` for consistency.
-
-### C) Pass Full Ranking Object
-Update the function call from `getRankChangeDisplay(ranking.rank_change)` to `getRankChangeDisplay(ranking)` so we can access both `rank_change` and `is_new` properties.
-
-## Expected Outcome
-
-- All players who have been in the system before will show a trend indicator
-- ↑ N for rank improvement (green)
-- ↓ N for rank decline (red)  
-- — for no change (muted gray)
-- New players show nothing (or optionally a "NEW" badge)
-- Consistent visual treatment across all rows
+| File | Change |
+|---|---|
+| `src/index.css` | Rewrite theme tokens, fonts, shadows, add `.btn-pop` |
+| `index.html` | Add Archivo Google Fonts link |
+| `tailwind.config.ts` | Confirm `font-display: Archivo` mapping |
+| `src/components/ArenaHero.tsx` | Lime highlight, chunky headline, drop dark overlay |
+| `src/components/DesktopRankingTable.tsx` | Border + hard shadow, lime accents on top 3 |
+| `src/components/MobileRankingCard.tsx` | Border + hard shadow, lime square badge |
+| `src/components/Header.tsx` | Cream bg, black wordmark, lime CTA |
+| `src/components/Footer.tsx` | Repalette to cream/black/lime |
+| `src/components/ui/button.tsx` | New default variant style |
+| `src/pages/RankingPage.tsx` | Hide dark decorative layers (BlueParticles etc.) |
 
