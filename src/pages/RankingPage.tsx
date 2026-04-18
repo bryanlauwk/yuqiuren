@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Header } from '@/components/Header';
 import { Footer } from '@/components/Footer';
 import { ArenaHero } from '@/components/ArenaHero';
+import { BadmintonDoodles } from '@/components/BadmintonDoodles';
 import { MobileRankingCard } from '@/components/MobileRankingCard';
 import { DesktopRankingTable } from '@/components/DesktopRankingTable';
 import { PhotoLightbox } from '@/components/PhotoLightbox';
