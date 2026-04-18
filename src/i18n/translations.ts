@@ -281,6 +281,11 @@ export type TranslationKeys = {
     third: string;
     pts: string;
   };
+  showcase: {
+    headline: string;
+    subline: string;
+    cta: string;
+  };
   ranking: {
     sessions: string;
     wins: string;
