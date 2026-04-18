@@ -1,75 +1,42 @@
 
 
-# Pivot to "Game On" — Sporty & Energetic Aesthetic
+The decorative SVG components (`BadmintonDoodles`, `FloatingShuttlecocks`) currently use soft strokes, low opacities, and dark-mode-friendly colors (whites, blues, gold). For the "Game On" aesthetic they need to be redrawn with **chunky black ink, lime accents, and hard edges** — matching the neo-brutalist hero/cards.
 
-The uploaded reference (Swing Up) defines a **completely different visual direction** from the current dark-blue arena and the recent Airbnb-polish pass. It's a modern fitness-app energy: **light cream background, chunky black ink, and one explosive neon-lime accent** — think Strava x Gymshark x a sneaker drop.
+I also need to re-mount them on the home page (`RankingPage.tsx`), where they were hidden during the pivot.
 
-This is a real pivot, not a tweak. We're moving from "dark esports broadcast" to "bright sporty hype."
+## Redraw approach
 
-## New Design Tokens
+**Shared visual language**
+- Strokes: `hsl(var(--foreground))` (near-black), thick (`3-4px`), `strokeLinecap="round"`, no dashes (chunky over sketchy)
+- Fills: `hsl(var(--primary))` lime for accent shapes (cork base, score chips, stars)
+- Opacity bumped up: doodles at `0.18-0.35` (was `0.10-0.20`) so they read on the cream bg
+- No more gold/silver/bronze hues — lime is the only accent
+- Score bubbles: white fill, 2px black border, hard offset shadow (`shadow-[3px_3px_0_hsl(var(--foreground))]`), black uppercase Archivo text
 
-| Role | Old (dark blue) | New (Game On) |
-|---|---|---|
-| Background | `#0B131F` (deep navy) | `#FAFAF7` (warm off-white) |
-| Foreground / Ink | Light gray | `#0A0E0A` (near-black) |
-| Primary accent | Electric blue | `#C6FF2E` (neon lime) |
-| Secondary ink | — | `#0B3B1E` (deep forest, on lime) |
-| Cards | Dark navy | Pure white with 2px black border |
-| Shadows | Blue glow | Hard offset shadow (`4px 4px 0 #0A0E0A`) |
-| Display font | Plus Jakarta Sans 700 | **Archivo 900** (chunky, condensed feel) |
+**`BadmintonDoodles.tsx` — full repaint**
+- Court outlines: solid black strokes (drop dashes), one with a lime fill-tint at `0.05`
+- Shuttlecocks: black feather strokes, lime cork base
+- Rackets: black frame + strings, lime grip tape band on handle
+- Motion arcs: solid black, thicker, no dashes
+- Stars/sparkles: filled lime with black stroke
+- Dots: solid lime or black (no translucent rank-gold)
+- Score bubbles: white card + black border + hard shadow, black Archivo text
 
-## What Changes
+**`FloatingShuttlecocks.tsx` — full repaint**
+- Cork: lime fill with black stroke
+- Feathers: black stroke, white fill
+- Trail path: solid black with lime mid-stop, thicker stroke
 
-**1. Theme tokens (`src/index.css`)**
-- Rewrite `:root` HSL tokens to the cream/black/lime palette
-- Switch `font-display` to `Archivo` weight 900, tighter tracking
-- Replace soft glow shadows with hard "neo-brutalist" offset shadows
-- Add a `.btn-pop` utility (lime fill, black border, hard shadow, translates on hover)
+**`RankingPage.tsx` — re-mount**
+- Add `<BadmintonDoodles />` back as the fixed background layer
+- Add `<FloatingShuttlecocks />` inside/near the hero area
+- Keep `BlueParticles` / `SpotlightBeams` hidden (those are dark-mode only)
 
-**2. Hero (`ArenaHero.tsx`)**
-- Drop the dark overlay, drop the background photo opacity treatment
-- Lime highlight block behind/under the headline (like the "Game on." swatch in the ref)
-- Headline becomes oversized chunky black text (`text-6xl → text-8xl`, font-weight 900)
-- Subtitle in muted forest green, not gray
-- Optional: a small hand-drawn shuttlecock + arrow doodle as a corner accent
-
-**3. Ranking — Desktop table (`DesktopRankingTable.tsx`)**
-- White card with 2px black border + hard offset shadow (replaces soft rounded shadow)
-- Column headers in uppercase Archivo black, lime underline on hover
-- Top 3 rows get a lime left-edge bar (instead of gold/silver/bronze gradients)
-- Rank numbers become huge chunky numerals
-- Points column: large black numerals, lime pill behind #1's points
-
-**4. Ranking — Mobile card (`MobileRankingCard.tsx`)**
-- White card, 2px black border, hard offset shadow
-- Top-3 rank badge becomes a lime square (not circle) with black numeral
-- Stats row: black numerals on cream chips
-
-**5. Header & Footer**
-- Header: cream bg, black wordmark in Archivo 900, lime CTA button
-- Footer: keep minimal, but switch to cream/black palette and replace the dot separator with a lime bullet
-
-**6. Buttons (`button.tsx`)**
-- Update default variant to the lime-fill / black-border / hard-shadow style
-- Outline variant: white fill, 2px black border, hard shadow
-
-## Out of scope (this pass)
-
-- BadmintonDoodles / BlueParticles / Confetti / SpotlightBeams / FloatingShuttlecocks — these are dark-mode decorative elements that would clash. They'll be **temporarily hidden** on the home route; a follow-up can redraw them in the new style if you want them back.
-- Admin pages — same tokens will cascade automatically; no per-page rewrites.
-
-## Files Touched
+## Files touched
 
 | File | Change |
 |---|---|
-| `src/index.css` | Rewrite theme tokens, fonts, shadows, add `.btn-pop` |
-| `index.html` | Add Archivo Google Fonts link |
-| `tailwind.config.ts` | Confirm `font-display: Archivo` mapping |
-| `src/components/ArenaHero.tsx` | Lime highlight, chunky headline, drop dark overlay |
-| `src/components/DesktopRankingTable.tsx` | Border + hard shadow, lime accents on top 3 |
-| `src/components/MobileRankingCard.tsx` | Border + hard shadow, lime square badge |
-| `src/components/Header.tsx` | Cream bg, black wordmark, lime CTA |
-| `src/components/Footer.tsx` | Repalette to cream/black/lime |
-| `src/components/ui/button.tsx` | New default variant style |
-| `src/pages/RankingPage.tsx` | Hide dark decorative layers (BlueParticles etc.) |
+| `src/components/BadmintonDoodles.tsx` | Full repaint to black ink + lime accents |
+| `src/components/hero/FloatingShuttlecocks.tsx` | Repaint cork lime, feathers black, thicker trail |
+| `src/pages/RankingPage.tsx` | Re-mount both decorative layers |
 
