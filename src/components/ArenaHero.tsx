@@ -1,6 +1,7 @@
 import { useLanguage } from '@/contexts/LanguageContext';
 import { CircleArrow } from '@/components/ink/CircleArrow';
 import { useRankings } from '@/hooks/useRankings';
+import { GraffitiAccents } from '@/components/hero/GraffitiAccents';
 
 export function ArenaHero() {
   const { t } = useLanguage();
