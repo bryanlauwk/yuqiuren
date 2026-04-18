@@ -84,12 +84,6 @@ export function ArenaHero() {
             </div>
           </div>
         </div>
-
-        {/* Corner accent */}
-        <CircleArrow
-          size={88}
-          className="hidden lg:block absolute top-8 right-8 text-foreground"
-        />
       </div>
     </section>
   );
