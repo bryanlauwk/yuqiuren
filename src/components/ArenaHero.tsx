@@ -134,8 +134,8 @@ export function ArenaHero() {
           {/* Right: tilted phone mockup */}
           <div className="md:col-span-5 flex justify-center md:justify-end">
             <div
-              className="relative bg-foreground rounded-[2.5rem] p-3 border-2 border-foreground shadow-[8px_8px_0_0_hsl(var(--accent))]"
-              style={{ transform: 'rotate(-2deg)', width: 280 }}
+              className="relative bg-foreground rounded-[2.5rem] p-3 border-2 border-foreground shadow-[8px_8px_0_0_hsl(var(--accent))] transition-transform duration-200 ease-out will-change-transform"
+              style={{ transform: `rotate(${phoneRotate}deg) translateY(${phoneTranslateY}px)`, width: 280 }}
             >
               <div className="absolute top-3 left-1/2 -translate-x-1/2 w-20 h-5 bg-background rounded-full z-10" />
 
