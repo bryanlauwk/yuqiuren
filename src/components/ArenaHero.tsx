@@ -1,10 +1,12 @@
 import { useLanguage } from '@/contexts/LanguageContext';
+import { FloatingShuttlecocks } from '@/components/hero/FloatingShuttlecocks';
 
 export function ArenaHero() {
   const { t } = useLanguage();
 
   return (
     <section className="relative w-full overflow-hidden bg-background border-b-2 border-foreground">
+      <FloatingShuttlecocks />
       {/* Content */}
       <div className="relative z-10 container py-20 sm:py-28 md:py-36">
         <div className="max-w-5xl">
