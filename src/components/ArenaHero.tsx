@@ -1,5 +1,4 @@
 import { useLanguage } from '@/contexts/LanguageContext';
-import { FloatingShuttlecocks } from '@/components/hero/FloatingShuttlecocks';
 import { CircleArrow } from '@/components/ink/CircleArrow';
 
 export function ArenaHero() {
