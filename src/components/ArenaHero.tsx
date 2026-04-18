@@ -1,6 +1,7 @@
 import { useLanguage } from '@/contexts/LanguageContext';
 import { CircleArrow } from '@/components/ink/CircleArrow';
 import { useRankings } from '@/hooks/useRankings';
+import { GraffitiAccents } from '@/components/hero/GraffitiAccents';
 
 export function ArenaHero() {
   const { t } = useLanguage();
@@ -44,6 +45,7 @@ export function ArenaHero() {
 
   return (
     <section className="relative w-full overflow-hidden bg-background border-b-2 border-foreground">
+      <GraffitiAccents />
       <div className="relative z-10 container py-16 sm:py-20 md:py-28">
         <div className="grid grid-cols-1 md:grid-cols-12 gap-10 md:gap-8 items-center">
           {/* Left: headline + CTA */}
