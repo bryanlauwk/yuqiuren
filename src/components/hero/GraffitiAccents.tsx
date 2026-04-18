@@ -1,262 +1,242 @@
 /**
- * Street-art style graffiti accents for the hero.
- * Drippy spray paint, layered tags with offset shadows, stencil marks,
- * throw-up lettering. Decorative SVGs using semantic tokens.
+ * Wildstyle graffiti accents for the hero.
+ * Angular interlocking letterforms, sharp arrow extensions,
+ * layered fill/outline/shadow construction. Decorative SVGs.
  */
 export function GraffitiAccents() {
   return (
     <div className="pointer-events-none absolute inset-0 z-0 overflow-hidden">
-      {/* Top-left: Throw-up "GO" bubble tag with offset shadow + drips */}
+      {/* TOP-LEFT: Wildstyle "ACE" piece — interlocking angular letters with arrows */}
       <svg
-        className="absolute top-4 left-2 sm:top-8 sm:left-8 -rotate-[8deg]"
-        width="160"
-        height="120"
-        viewBox="0 0 160 120"
+        className="absolute top-2 left-1 sm:top-6 sm:left-6 -rotate-[6deg]"
+        width="280"
+        height="140"
+        viewBox="0 0 280 140"
         fill="none"
       >
-        {/* Drop shadow layer (offset) */}
+        {/* Far shadow */}
+        <g transform="translate(8 8)" opacity="0.9">
+          <path
+            d="M10 90 L 32 30 L 60 30 L 70 50 L 50 50 L 46 60 L 64 60 L 60 72 L 42 72 L 36 90 Z
+               M 70 90 L 96 30 L 132 30 L 142 56 L 122 56 L 130 72 L 110 72 L 100 90 Z
+               M 144 90 L 168 30 L 218 30 L 226 50 L 192 50 L 188 56 L 218 56 L 222 70 L 184 70 L 180 78 L 222 78 L 224 90 Z"
+            fill="hsl(var(--foreground))"
+          />
+        </g>
+        {/* Mid lime layer */}
+        <g transform="translate(4 4)">
+          <path
+            d="M10 90 L 32 30 L 60 30 L 70 50 L 50 50 L 46 60 L 64 60 L 60 72 L 42 72 L 36 90 Z
+               M 70 90 L 96 30 L 132 30 L 142 56 L 122 56 L 130 72 L 110 72 L 100 90 Z
+               M 144 90 L 168 30 L 218 30 L 226 50 L 192 50 L 188 56 L 218 56 L 222 70 L 184 70 L 180 78 L 222 78 L 224 90 Z"
+            fill="hsl(var(--accent))"
+          />
+        </g>
+        {/* Top fill (background) with hard outline */}
+        <g>
+          <path
+            d="M10 90 L 32 30 L 60 30 L 70 50 L 50 50 L 46 60 L 64 60 L 60 72 L 42 72 L 36 90 Z
+               M 70 90 L 96 30 L 132 30 L 142 56 L 122 56 L 130 72 L 110 72 L 100 90 Z
+               M 144 90 L 168 30 L 218 30 L 226 50 L 192 50 L 188 56 L 218 56 L 222 70 L 184 70 L 180 78 L 222 78 L 224 90 Z"
+            fill="hsl(var(--background))"
+            stroke="hsl(var(--foreground))"
+            strokeWidth="2.5"
+            strokeLinejoin="miter"
+          />
+        </g>
+        {/* Sharp arrow extensions shooting off the piece */}
         <path
-          d="M18 38 Q 14 14, 42 12 Q 70 8, 92 14 Q 130 14, 138 40 Q 144 66, 116 74 Q 84 84, 56 78 Q 22 76, 18 50 Z"
-          fill="hsl(var(--foreground))"
-          transform="translate(6 6)"
-        />
-        {/* Main bubble fill */}
-        <path
-          d="M18 38 Q 14 14, 42 12 Q 70 8, 92 14 Q 130 14, 138 40 Q 144 66, 116 74 Q 84 84, 56 78 Q 22 76, 18 50 Z"
+          d="M 224 60 L 264 44 L 256 56 L 274 60 L 256 64 L 264 76 Z"
           fill="hsl(var(--accent))"
           stroke="hsl(var(--foreground))"
-          strokeWidth="3"
-        />
-        {/* Highlight glint */}
-        <path
-          d="M30 24 Q 40 18, 56 22"
-          stroke="hsl(var(--background))"
-          strokeWidth="3"
-          strokeLinecap="round"
-          fill="none"
-          opacity="0.7"
-        />
-        {/* Drips */}
-        <path
-          d="M48 76 Q 47 92, 50 102 Q 52 110, 49 116"
-          stroke="hsl(var(--accent))"
-          strokeWidth="6"
-          strokeLinecap="round"
-          fill="none"
-        />
-        <circle cx="49" cy="116" r="4" fill="hsl(var(--accent))" />
-        <path
-          d="M104 80 Q 103 92, 106 100"
-          stroke="hsl(var(--accent))"
-          strokeWidth="5"
-          strokeLinecap="round"
-          fill="none"
-        />
-        <circle cx="106" cy="102" r="3.5" fill="hsl(var(--accent))" />
-        {/* Letters */}
-        <text
-          x="78"
-          y="58"
-          textAnchor="middle"
-          fontFamily="Archivo, sans-serif"
-          fontWeight="900"
-          fontSize="42"
-          fontStyle="italic"
-          fill="hsl(var(--foreground))"
-        >
-          GO
-        </text>
-      </svg>
-
-      {/* Spray-paint splat top center area */}
-      <svg
-        className="absolute top-[14%] left-[40%] opacity-90"
-        width="90"
-        height="90"
-        viewBox="0 0 90 90"
-        fill="hsl(var(--accent))"
-      >
-        <circle cx="45" cy="45" r="14" />
-        <circle cx="22" cy="32" r="3" />
-        <circle cx="68" cy="28" r="2.5" />
-        <circle cx="74" cy="58" r="4" />
-        <circle cx="18" cy="60" r="2" />
-        <circle cx="58" cy="74" r="3" />
-        <circle cx="36" cy="78" r="2" />
-        <circle cx="80" cy="42" r="1.5" />
-        <circle cx="10" cy="46" r="1.5" />
-        <circle cx="46" cy="14" r="2" />
-      </svg>
-
-      {/* Stencil star with hard edge */}
-      <svg
-        className="absolute top-20 right-[10%] sm:top-24 md:right-[44%] rotate-[18deg]"
-        width="56"
-        height="56"
-        viewBox="0 0 56 56"
-        fill="none"
-      >
-        <path
-          d="M28 4 L33 22 L52 22 L37 32 L43 50 L28 38 L13 50 L19 32 L4 22 L23 22 Z"
-          fill="hsl(var(--foreground))"
+          strokeWidth="2.5"
+          strokeLinejoin="miter"
         />
         <path
-          d="M28 4 L33 22 L52 22 L37 32 L43 50 L28 38 L13 50 L19 32 L4 22 L23 22 Z"
+          d="M 32 30 L 18 14 L 28 22 L 36 12 L 38 26 Z"
           fill="hsl(var(--accent))"
-          transform="translate(-3 -3)"
-          opacity="0.85"
-        />
-      </svg>
-
-      {/* Drippy underline near subtitle */}
-      <svg
-        className="absolute hidden sm:block bottom-[40%] left-[5%]"
-        width="220"
-        height="40"
-        viewBox="0 0 220 40"
-        fill="none"
-      >
-        <path
-          d="M4 12 Q 50 4, 110 14 T 216 12"
-          stroke="hsl(var(--accent))"
-          strokeWidth="6"
-          strokeLinecap="round"
-          fill="none"
-        />
-        {/* Drips */}
-        <path d="M40 14 L 41 30" stroke="hsl(var(--accent))" strokeWidth="4" strokeLinecap="round" />
-        <circle cx="41" cy="32" r="3" fill="hsl(var(--accent))" />
-        <path d="M120 16 L 122 36" stroke="hsl(var(--accent))" strokeWidth="3.5" strokeLinecap="round" />
-        <circle cx="122" cy="38" r="2.5" fill="hsl(var(--accent))" />
-        <path d="M180 12 L 181 26" stroke="hsl(var(--accent))" strokeWidth="3" strokeLinecap="round" />
-        <circle cx="181" cy="27" r="2" fill="hsl(var(--accent))" />
-      </svg>
-
-      {/* Hand-drawn arrow pointing to phone (marker style, double stroke) */}
-      <svg
-        className="absolute hidden md:block top-[48%] right-[36%]"
-        width="160"
-        height="120"
-        viewBox="0 0 160 120"
-        fill="none"
-      >
-        {/* Shadow stroke */}
-        <path
-          d="M8 92 Q 36 18, 132 28"
-          stroke="hsl(var(--accent))"
-          strokeWidth="6"
-          strokeLinecap="round"
-          fill="none"
-          transform="translate(3 3)"
-          opacity="0.9"
-        />
-        {/* Main stroke */}
-        <path
-          d="M8 92 Q 36 18, 132 28"
           stroke="hsl(var(--foreground))"
-          strokeWidth="4"
-          strokeLinecap="round"
-          fill="none"
+          strokeWidth="2"
+          strokeLinejoin="miter"
         />
-        {/* Arrowhead */}
-        <path
-          d="M132 28 L 114 18 M132 28 L 122 46"
-          stroke="hsl(var(--foreground))"
-          strokeWidth="4"
-          strokeLinecap="round"
-          fill="none"
-        />
+        {/* Inner highlight slashes */}
+        <path d="M40 42 L 46 36" stroke="hsl(var(--foreground))" strokeWidth="1.5" />
+        <path d="M104 42 L 110 36" stroke="hsl(var(--foreground))" strokeWidth="1.5" />
+        <path d="M178 42 L 184 36" stroke="hsl(var(--foreground))" strokeWidth="1.5" />
       </svg>
 
-      {/* Stencil "SMASH" tag bottom-right with offset shadow */}
+      {/* Wildstyle 3D arrow shard top-mid */}
       <svg
-        className="absolute bottom-4 right-2 sm:bottom-8 sm:right-8 -rotate-[6deg]"
-        width="220"
-        height="90"
-        viewBox="0 0 220 90"
-        fill="none"
-      >
-        {/* Shadow text */}
-        <text
-          x="14"
-          y="58"
-          fontFamily="Archivo, sans-serif"
-          fontWeight="900"
-          fontStyle="italic"
-          fontSize="56"
-          fill="hsl(var(--accent))"
-          letterSpacing="-2"
-        >
-          SMASH
-        </text>
-        {/* Main text */}
-        <text
-          x="10"
-          y="54"
-          fontFamily="Archivo, sans-serif"
-          fontWeight="900"
-          fontStyle="italic"
-          fontSize="56"
-          fill="hsl(var(--foreground))"
-          letterSpacing="-2"
-        >
-          SMASH
-        </text>
-        {/* Underscore swoosh */}
-        <path
-          d="M14 70 Q 100 64, 200 72"
-          stroke="hsl(var(--foreground))"
-          strokeWidth="4"
-          strokeLinecap="round"
-          fill="none"
-        />
-        {/* Drips off the S */}
-        <path d="M22 60 L 24 78" stroke="hsl(var(--foreground))" strokeWidth="3" strokeLinecap="round" />
-        <circle cx="24" cy="80" r="2.5" fill="hsl(var(--foreground))" />
-        <path d="M168 60 L 170 82" stroke="hsl(var(--foreground))" strokeWidth="3" strokeLinecap="round" />
-        <circle cx="170" cy="84" r="2.5" fill="hsl(var(--foreground))" />
-      </svg>
-
-      {/* Bottom-left: stencil crown */}
-      <svg
-        className="absolute bottom-12 left-[6%] -rotate-[10deg] hidden sm:block"
-        width="80"
+        className="absolute top-[12%] left-[44%] rotate-[14deg] hidden sm:block"
+        width="120"
         height="60"
-        viewBox="0 0 80 60"
+        viewBox="0 0 120 60"
         fill="none"
       >
         <path
-          d="M6 44 L 10 14 L 26 32 L 40 8 L 54 32 L 70 14 L 74 44 Z"
-          fill="hsl(var(--foreground))"
-          transform="translate(3 3)"
+          d="M2 32 L 60 8 L 56 22 L 110 18 L 116 30 L 60 36 L 64 50 Z"
+          fill="hsl(var(--accent))"
+          stroke="hsl(var(--foreground))"
+          strokeWidth="2.5"
+          strokeLinejoin="miter"
+        />
+        <path
+          d="M2 32 L 60 8 L 56 22"
+          fill="none"
+          stroke="hsl(var(--background))"
+          strokeWidth="1.5"
+          strokeLinejoin="miter"
           opacity="0.6"
         />
+      </svg>
+
+      {/* Spiked star / burst — angular wildstyle decoration */}
+      <svg
+        className="absolute top-16 right-[8%] sm:top-20 md:right-[42%] rotate-[24deg]"
+        width="64"
+        height="64"
+        viewBox="0 0 64 64"
+        fill="none"
+      >
         <path
-          d="M6 44 L 10 14 L 26 32 L 40 8 L 54 32 L 70 14 L 74 44 Z"
+          d="M32 2 L 38 22 L 60 16 L 44 32 L 62 40 L 40 42 L 46 62 L 32 46 L 18 62 L 24 42 L 2 40 L 20 32 L 4 16 L 26 22 Z"
+          fill="hsl(var(--foreground))"
+          transform="translate(3 3)"
+          opacity="0.85"
+        />
+        <path
+          d="M32 2 L 38 22 L 60 16 L 44 32 L 62 40 L 40 42 L 46 62 L 32 46 L 18 62 L 24 42 L 2 40 L 20 32 L 4 16 L 26 22 Z"
+          fill="hsl(var(--accent))"
+          stroke="hsl(var(--foreground))"
+          strokeWidth="2"
+          strokeLinejoin="miter"
+        />
+      </svg>
+
+      {/* Lightning bolt — wildstyle filler */}
+      <svg
+        className="absolute hidden md:block top-[44%] left-[2%] -rotate-[12deg]"
+        width="60"
+        height="100"
+        viewBox="0 0 60 100"
+        fill="none"
+      >
+        <path
+          d="M30 4 L 6 54 L 24 54 L 14 96 L 54 38 L 32 38 L 44 4 Z"
+          fill="hsl(var(--foreground))"
+          transform="translate(4 4)"
+          opacity="0.7"
+        />
+        <path
+          d="M30 4 L 6 54 L 24 54 L 14 96 L 54 38 L 32 38 L 44 4 Z"
+          fill="hsl(var(--accent))"
+          stroke="hsl(var(--foreground))"
+          strokeWidth="2.5"
+          strokeLinejoin="miter"
+        />
+      </svg>
+
+      {/* Aggressive marker arrow toward phone */}
+      <svg
+        className="absolute hidden md:block top-[46%] right-[36%]"
+        width="180"
+        height="120"
+        viewBox="0 0 180 120"
+        fill="none"
+      >
+        {/* Shadow */}
+        <path
+          d="M6 96 Q 30 16, 144 24 L 130 8 L 168 26 L 138 50 L 144 30"
           fill="hsl(var(--accent))"
           stroke="hsl(var(--foreground))"
           strokeWidth="3"
+          strokeLinejoin="miter"
+          transform="translate(4 4)"
+          opacity="0.9"
         />
-        <rect x="6" y="44" width="68" height="6" fill="hsl(var(--foreground))" />
+        {/* Main */}
+        <path
+          d="M6 96 Q 30 16, 144 24 L 130 8 L 168 26 L 138 50 L 144 30"
+          fill="hsl(var(--background))"
+          stroke="hsl(var(--foreground))"
+          strokeWidth="3"
+          strokeLinejoin="miter"
+        />
       </svg>
 
-      {/* Scattered spray flecks */}
+      {/* BOTTOM-RIGHT: Wildstyle "SMASH" piece — angular interlock with shadow stack */}
       <svg
-        className="absolute top-[60%] left-[28%] opacity-70"
-        width="100"
-        height="80"
-        viewBox="0 0 100 80"
-        fill="hsl(var(--foreground))"
+        className="absolute bottom-2 right-1 sm:bottom-6 sm:right-4 -rotate-[5deg]"
+        width="340"
+        height="120"
+        viewBox="0 0 340 120"
+        fill="none"
       >
-        <circle cx="10" cy="20" r="1.5" />
-        <circle cx="34" cy="8" r="1" />
-        <circle cx="50" cy="30" r="2" />
-        <circle cx="68" cy="14" r="1.5" />
-        <circle cx="82" cy="40" r="1" />
-        <circle cx="20" cy="50" r="1.5" />
-        <circle cx="56" cy="62" r="1" />
-        <circle cx="78" cy="70" r="1.5" />
-        <circle cx="92" cy="56" r="1" />
+        {/* Far shadow */}
+        <g transform="translate(8 8)" opacity="0.9">
+          <path
+            d="M4 88 L 28 22 L 70 22 L 78 40 L 50 40 L 46 50 L 76 50 L 70 70 L 38 70 L 34 88 Z
+               M 80 88 L 102 22 L 132 22 L 142 88 L 124 88 L 120 72 L 110 72 L 106 88 Z
+               M 150 88 L 168 22 L 218 22 L 226 38 L 196 38 L 200 50 L 220 50 L 224 64 L 188 64 L 184 88 Z
+               M 232 88 L 252 22 L 282 22 L 292 88 L 274 88 L 270 72 L 260 72 L 256 88 Z
+               M 296 88 L 314 22 L 336 22 L 322 88 Z"
+            fill="hsl(var(--foreground))"
+          />
+        </g>
+        {/* Lime mid */}
+        <g transform="translate(4 4)">
+          <path
+            d="M4 88 L 28 22 L 70 22 L 78 40 L 50 40 L 46 50 L 76 50 L 70 70 L 38 70 L 34 88 Z
+               M 80 88 L 102 22 L 132 22 L 142 88 L 124 88 L 120 72 L 110 72 L 106 88 Z
+               M 150 88 L 168 22 L 218 22 L 226 38 L 196 38 L 200 50 L 220 50 L 224 64 L 188 64 L 184 88 Z
+               M 232 88 L 252 22 L 282 22 L 292 88 L 274 88 L 270 72 L 260 72 L 256 88 Z
+               M 296 88 L 314 22 L 336 22 L 322 88 Z"
+            fill="hsl(var(--accent))"
+          />
+        </g>
+        {/* Top fill */}
+        <g>
+          <path
+            d="M4 88 L 28 22 L 70 22 L 78 40 L 50 40 L 46 50 L 76 50 L 70 70 L 38 70 L 34 88 Z
+               M 80 88 L 102 22 L 132 22 L 142 88 L 124 88 L 120 72 L 110 72 L 106 88 Z
+               M 150 88 L 168 22 L 218 22 L 226 38 L 196 38 L 200 50 L 220 50 L 224 64 L 188 64 L 184 88 Z
+               M 232 88 L 252 22 L 282 22 L 292 88 L 274 88 L 270 72 L 260 72 L 256 88 Z
+               M 296 88 L 314 22 L 336 22 L 322 88 Z"
+            fill="hsl(var(--background))"
+            stroke="hsl(var(--foreground))"
+            strokeWidth="2.5"
+            strokeLinejoin="miter"
+          />
+        </g>
+        {/* Sharp arrow shooting from end */}
+        <path
+          d="M 322 36 L 360 22 L 350 36 L 364 44 L 348 50 L 354 64 Z"
+          fill="hsl(var(--accent))"
+          stroke="hsl(var(--foreground))"
+          strokeWidth="2.5"
+          strokeLinejoin="miter"
+        />
+        {/* Inner shading bars */}
+        <path d="M40 36 L 50 26" stroke="hsl(var(--foreground))" strokeWidth="1.5" />
+        <path d="M114 36 L 122 26" stroke="hsl(var(--foreground))" strokeWidth="1.5" />
+        <path d="M180 36 L 190 26" stroke="hsl(var(--foreground))" strokeWidth="1.5" />
+        <path d="M260 36 L 270 26" stroke="hsl(var(--foreground))" strokeWidth="1.5" />
+      </svg>
+
+      {/* Scattered angular ticks — wildstyle filler dots */}
+      <svg
+        className="absolute top-[58%] left-[26%] opacity-80 hidden sm:block"
+        width="120"
+        height="80"
+        viewBox="0 0 120 80"
+        fill="none"
+      >
+        <path d="M4 20 L 14 14 L 12 24 Z" fill="hsl(var(--foreground))" />
+        <path d="M40 8 L 50 12 L 44 20 Z" fill="hsl(var(--accent))" stroke="hsl(var(--foreground))" strokeWidth="1.5" />
+        <path d="M70 30 L 80 26 L 78 38 Z" fill="hsl(var(--foreground))" />
+        <path d="M100 14 L 110 20 L 102 26 Z" fill="hsl(var(--accent))" stroke="hsl(var(--foreground))" strokeWidth="1.5" />
+        <path d="M20 56 L 30 50 L 28 62 Z" fill="hsl(var(--foreground))" />
+        <path d="M88 60 L 98 56 L 96 68 Z" fill="hsl(var(--accent))" stroke="hsl(var(--foreground))" strokeWidth="1.5" />
       </svg>
     </div>
   );
