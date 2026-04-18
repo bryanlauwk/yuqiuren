@@ -18,6 +18,9 @@ export function ArenaHero() {
         name: r.player_name,
         score: r.total_points,
         sessions: r.sessions_played,
+        avatarUrl: r.avatar_url,
+        cropX: r.avatar_crop_x ?? 0.5,
+        cropY: r.avatar_crop_y ?? 0.5,
         tint: i % 2 === 0,
       }))
     : Array.from({ length: 4 }).map((_, i) => ({
@@ -25,6 +28,9 @@ export function ArenaHero() {
         name: '',
         score: 0,
         sessions: 0,
+        avatarUrl: null as string | null,
+        cropX: 0.5,
+        cropY: 0.5,
         tint: i % 2 === 0,
       }));
 
@@ -116,10 +122,19 @@ export function ArenaHero() {
                     }`}
                   >
                     <span className="font-display text-lg w-5 text-foreground">{row.rank}</span>
-                    <div className="w-9 h-9 rounded-full bg-foreground/90 border-2 border-foreground flex items-center justify-center">
-                      <span className="font-display text-[10px] text-background">
-                        {row.name ? getInitials(row.name) : ''}
-                      </span>
+                    <div className="w-9 h-9 rounded-full bg-foreground/90 border-2 border-foreground flex items-center justify-center overflow-hidden shrink-0">
+                      {row.avatarUrl ? (
+                        <img
+                          src={row.avatarUrl}
+                          alt={row.name}
+                          className="w-full h-full object-cover"
+                          style={{ objectPosition: `${(row.cropX ?? 0.5) * 100}% ${(row.cropY ?? 0.5) * 100}%` }}
+                        />
+                      ) : (
+                        <span className="font-display text-[10px] text-background">
+                          {row.name ? getInitials(row.name) : ''}
+                        </span>
+                      )}
                     </div>
                     <div className="flex-1 min-w-0">
                       {row.name ? (
