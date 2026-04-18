@@ -6,6 +6,40 @@ import { useRankings } from '@/hooks/useRankings';
 export function ArenaHero() {
   const { t } = useLanguage();
   const { rankings, sessions, players } = useRankings();
+  const sectionRef = useRef<HTMLElement>(null);
+  const [scrollOffset, setScrollOffset] = useState(0);
+
+  useEffect(() => {
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (prefersReducedMotion) return;
+
+    let rafId = 0;
+    const update = () => {
+      if (!sectionRef.current) return;
+      const rect = sectionRef.current.getBoundingClientRect();
+      const vh = window.innerHeight;
+      // Normalized progress: 0 when section top hits viewport top, 1 when bottom leaves
+      const total = rect.height + vh;
+      const progress = Math.min(Math.max((vh - rect.top) / total, 0), 1);
+      setScrollOffset(progress);
+    };
+    const onScroll = () => {
+      cancelAnimationFrame(rafId);
+      rafId = requestAnimationFrame(update);
+    };
+    update();
+    window.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('resize', onScroll);
+    return () => {
+      window.removeEventListener('scroll', onScroll);
+      window.removeEventListener('resize', onScroll);
+      cancelAnimationFrame(rafId);
+    };
+  }, []);
+
+  // Tilt from -2deg (top) → +3deg (bottom), translate up to -20px
+  const phoneRotate = -2 + scrollOffset * 5;
+  const phoneTranslateY = -scrollOffset * 20;
 
   const handleScroll = () => {
     document.getElementById('rankings-anchor')?.scrollIntoView({ behavior: 'smooth' });
