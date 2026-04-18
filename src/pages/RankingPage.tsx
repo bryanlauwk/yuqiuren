@@ -3,8 +3,6 @@ import { Header } from '@/components/Header';
 import { Footer } from '@/components/Footer';
 import { ArenaHero } from '@/components/ArenaHero';
 
-import { CircleArrow } from '@/components/ink/CircleArrow';
-import { BadmintonDoodles } from '@/components/BadmintonDoodles';
 import { MobileRankingCard } from '@/components/MobileRankingCard';
 import { DesktopRankingTable } from '@/components/DesktopRankingTable';
 import { PhotoLightbox } from '@/components/PhotoLightbox';
@@ -28,13 +26,17 @@ export default function RankingPage() {
 
   return (
     <div className="min-h-screen bg-background flex flex-col relative">
-      <BadmintonDoodles />
       <Header />
       
       <ArenaHero />
 
-      <div id="rankings-anchor" className="container flex justify-center pt-10">
-        <CircleArrow size={56} className="text-foreground rotate-90" />
+      <div id="rankings-anchor" className="container pt-12 pb-2">
+        <div className="flex items-center gap-4">
+          <span className="font-display text-xs sm:text-sm tracking-[0.2em] text-foreground whitespace-nowrap">
+            ▪ LIVE STANDINGS · 2026
+          </span>
+          <div className="flex-1 h-[2px] bg-foreground" />
+        </div>
       </div>
 
       <main className="container mt-6 relative z-10 flex-1 pb-12">

@@ -1,5 +1,4 @@
 import { useLanguage } from '@/contexts/LanguageContext';
-import { FloatingShuttlecocks } from '@/components/hero/FloatingShuttlecocks';
 import { CircleArrow } from '@/components/ink/CircleArrow';
 
 export function ArenaHero() {
@@ -18,7 +17,6 @@ export function ArenaHero() {
 
   return (
     <section className="relative w-full overflow-hidden bg-background border-b-2 border-foreground">
-      <FloatingShuttlecocks />
       <div className="relative z-10 container py-16 sm:py-20 md:py-28">
         <div className="grid grid-cols-1 md:grid-cols-12 gap-10 md:gap-8 items-center">
           {/* Left: headline + CTA */}
@@ -86,12 +84,6 @@ export function ArenaHero() {
             </div>
           </div>
         </div>
-
-        {/* Corner accent */}
-        <CircleArrow
-          size={88}
-          className="hidden lg:block absolute top-8 right-8 text-foreground"
-        />
       </div>
     </section>
   );
