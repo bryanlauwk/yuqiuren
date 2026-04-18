@@ -33,8 +33,6 @@ export default function RankingPage() {
       
       <ArenaHero />
 
-      <PhoneShowcase />
-
       <div id="rankings-anchor" className="container flex justify-center pt-10">
         <CircleArrow size={56} className="text-foreground rotate-90" />
       </div>
