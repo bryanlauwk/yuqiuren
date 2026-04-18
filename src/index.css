@@ -4,88 +4,82 @@
 
 @layer base {
   :root {
-    /* Blue-White Sporting Theme */
-    --background: 215 35% 7%;
-    --foreground: 210 20% 95%;
+    /* Game On — Sporty Light Theme */
+    /* Background: warm off-white #FAFAF7 */
+    --background: 60 20% 97%;
+    --foreground: 120 20% 5%;
 
-    --card: 215 30% 11%;
-    --card-foreground: 210 20% 95%;
+    --card: 0 0% 100%;
+    --card-foreground: 120 20% 5%;
 
-    --popover: 215 30% 13%;
-    --popover-foreground: 210 20% 95%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 120 20% 5%;
 
-    /* Electric Blue - Energy & Sport */
-    --primary: 210 100% 55%;
-    --primary-foreground: 0 0% 100%;
+    /* Primary — neon lime #C6FF2E */
+    --primary: 76 100% 59%;
+    --primary-foreground: 138 70% 14%;
 
-    --secondary: 215 25% 15%;
-    --secondary-foreground: 210 15% 90%;
+    --secondary: 60 15% 92%;
+    --secondary-foreground: 120 20% 5%;
 
-    --muted: 215 25% 15%;
-    --muted-foreground: 215 15% 55%;
+    --muted: 60 15% 94%;
+    --muted-foreground: 120 8% 35%;
 
-    /* Cyan/Teal - Fresh & Dynamic */
-    --accent: 195 90% 45%;
-    --accent-foreground: 0 0% 100%;
+    /* Accent — deep forest, on lime */
+    --accent: 138 70% 14%;
+    --accent-foreground: 76 100% 59%;
 
-    --destructive: 0 60% 50%;
-    --destructive-foreground: 0 0% 98%;
+    --destructive: 0 70% 50%;
+    --destructive-foreground: 0 0% 100%;
 
-    --border: 215 25% 18%;
-    --input: 215 25% 18%;
-    --ring: 210 100% 55%;
+    --border: 120 20% 5%;
+    --input: 120 20% 5%;
+    --ring: 76 100% 59%;
 
-    --radius: 0.5rem;
+    --radius: 0.25rem;
 
-    /* Ranking tokens - universal sports */
-    --rank-gold: 45 100% 50%;
-    --rank-silver: 0 0% 75%;
-    --rank-bronze: 30 60% 45%;
+    /* Ranking accent — all lime in this aesthetic */
+    --rank-gold: 76 100% 59%;
+    --rank-silver: 60 15% 88%;
+    --rank-bronze: 60 10% 75%;
 
-    /* Shadows - blue-tinted */
-    --shadow-card: 0 4px 20px hsl(215 40% 4% / 0.5);
-    --shadow-elevated: 0 8px 40px hsl(215 40% 4% / 0.6);
-    --shadow-glow-gold: 0 0 30px hsl(45 100% 50% / 0.3);
-    --shadow-glow-blue: 0 0 40px hsl(210 100% 55% / 0.4);
+    /* Hard offset shadows — neo-brutalist */
+    --shadow-card: 4px 4px 0 0 hsl(120 20% 5%);
+    --shadow-elevated: 6px 6px 0 0 hsl(120 20% 5%);
 
-    /* Arena colors - blue tone */
-    --arena-blue: 210 100% 40%;
-    --arena-cyan: 195 80% 20%;
-    --arena-gold: 45 100% 50%;
-    
-    /* Status colors */
-    --finished: 145 60% 45%;
+    --finished: 138 70% 30%;
 
-    --sidebar-background: 215 30% 11%;
-    --sidebar-foreground: 210 20% 95%;
-    --sidebar-primary: 210 100% 55%;
-    --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 215 25% 15%;
-    --sidebar-accent-foreground: 210 20% 95%;
-    --sidebar-border: 215 25% 18%;
-    --sidebar-ring: 210 100% 55%;
+    --sidebar-background: 0 0% 100%;
+    --sidebar-foreground: 120 20% 5%;
+    --sidebar-primary: 76 100% 59%;
+    --sidebar-primary-foreground: 138 70% 14%;
+    --sidebar-accent: 60 15% 94%;
+    --sidebar-accent-foreground: 120 20% 5%;
+    --sidebar-border: 120 20% 5%;
+    --sidebar-ring: 76 100% 59%;
   }
 
   .dark {
-    --background: 215 35% 7%;
-    --foreground: 210 20% 95%;
-    --card: 215 30% 11%;
-    --card-foreground: 210 20% 95%;
-    --popover: 215 30% 13%;
-    --popover-foreground: 210 20% 95%;
-    --primary: 210 100% 55%;
-    --primary-foreground: 0 0% 100%;
-    --secondary: 215 25% 15%;
-    --secondary-foreground: 210 15% 90%;
-    --muted: 215 25% 15%;
-    --muted-foreground: 215 15% 55%;
-    --accent: 195 90% 45%;
-    --accent-foreground: 0 0% 100%;
-    --destructive: 0 60% 50%;
-    --destructive-foreground: 0 0% 98%;
-    --border: 215 25% 18%;
-    --input: 215 25% 18%;
-    --ring: 210 100% 55%;
+    /* Keep light "Game On" tokens — no separate dark mode for this aesthetic */
+    --background: 60 20% 97%;
+    --foreground: 120 20% 5%;
+    --card: 0 0% 100%;
+    --card-foreground: 120 20% 5%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 120 20% 5%;
+    --primary: 76 100% 59%;
+    --primary-foreground: 138 70% 14%;
+    --secondary: 60 15% 92%;
+    --secondary-foreground: 120 20% 5%;
+    --muted: 60 15% 94%;
+    --muted-foreground: 120 8% 35%;
+    --accent: 138 70% 14%;
+    --accent-foreground: 76 100% 59%;
+    --destructive: 0 70% 50%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 120 20% 5%;
+    --input: 120 20% 5%;
+    --ring: 76 100% 59%;
   }
 }
 
@@ -99,56 +93,15 @@
   }
 
   .font-display {
-    font-family: 'Plus Jakarta Sans', 'Inter', system-ui, sans-serif;
-    font-weight: 700;
-    letter-spacing: -0.02em;
+    font-family: 'Archivo', 'Plus Jakarta Sans', system-ui, sans-serif;
+    font-weight: 900;
+    letter-spacing: -0.03em;
+    text-transform: uppercase;
   }
 }
 
 @layer utilities {
-  /* Arena Hero Gradient */
-  .arena-hero-gradient {
-    background: linear-gradient(
-      135deg,
-      hsl(210 100% 20% / 0.9) 0%,
-      hsl(195 80% 10% / 0.95) 50%,
-      hsl(215 35% 7%) 100%
-    );
-  }
-
-  /* Motion streak effect */
-  .motion-streak {
-    position: absolute;
-    background: linear-gradient(
-      90deg,
-      transparent,
-      hsl(210 100% 55% / 0.15),
-      transparent
-    );
-    animation: streak 4s ease-in-out infinite;
-  }
-
-  @keyframes streak {
-    0%, 100% { transform: translateX(-100%) skewX(-15deg); opacity: 0; }
-    50% { transform: translateX(100%) skewX(-15deg); opacity: 1; }
-  }
-
-  /* Particle effect */
-  .arena-particles {
-    background-image: 
-      radial-gradient(circle at 20% 30%, hsl(210 100% 55% / 0.1) 1px, transparent 1px),
-      radial-gradient(circle at 80% 70%, hsl(195 90% 45% / 0.08) 1px, transparent 1px),
-      radial-gradient(circle at 50% 50%, hsl(210 80% 30% / 0.05) 1px, transparent 1px);
-    background-size: 100px 100px, 150px 150px, 200px 200px;
-    animation: particles-drift 20s linear infinite;
-  }
-
-  @keyframes particles-drift {
-    0% { background-position: 0 0, 0 0, 0 0; }
-    100% { background-position: 100px 100px, -150px 150px, 200px -200px; }
-  }
-
-  /* Card shadow */
+  /* Hard offset shadows — neo-brutalist */
   .card-shadow {
     box-shadow: var(--shadow-card);
   }
@@ -157,218 +110,88 @@
     box-shadow: var(--shadow-elevated);
   }
 
-  /* Glow effects for top ranks — softened */
-  .glow-gold {
-    box-shadow: 
-      0 0 12px hsl(45 100% 50% / 0.12),
-      inset 0 1px 0 hsl(45 100% 70% / 0.08);
+  /* Pop button — lime fill, hard shadow, translates on hover */
+  .btn-pop {
+    background: hsl(var(--primary));
+    color: hsl(var(--primary-foreground));
+    border: 2px solid hsl(var(--foreground));
+    box-shadow: 4px 4px 0 0 hsl(var(--foreground));
+    transition: transform 0.12s ease, box-shadow 0.12s ease;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
+  }
+  .btn-pop:hover {
+    transform: translate(-2px, -2px);
+    box-shadow: 6px 6px 0 0 hsl(var(--foreground));
+  }
+  .btn-pop:active {
+    transform: translate(2px, 2px);
+    box-shadow: 1px 1px 0 0 hsl(var(--foreground));
   }
 
-  .glow-silver {
-    box-shadow: 
-      0 0 12px hsl(0 0% 75% / 0.1),
-      inset 0 1px 0 hsl(0 0% 90% / 0.08);
+  /* Rank badge — lime square (top 3), no gradients */
+  .rank-badge-gold,
+  .rank-badge-silver,
+  .rank-badge-bronze {
+    background: hsl(var(--primary));
+    color: hsl(var(--foreground));
+    border: 2px solid hsl(var(--foreground));
+    border-radius: 4px;
   }
 
-  .glow-bronze {
-    box-shadow: 
-      0 0 12px hsl(30 60% 45% / 0.1),
-      inset 0 1px 0 hsl(30 60% 60% / 0.08);
+  .rank-badge-default {
+    background: hsl(var(--muted));
+    color: hsl(var(--foreground));
+    border: 2px solid hsl(var(--foreground));
+    border-radius: 4px;
   }
 
-  /* Row backgrounds for ranks — softened */
-  .rank-row-gold {
-    background: linear-gradient(
-      90deg,
-      hsl(45 100% 50% / 0.07) 0%,
-      hsl(45 100% 50% / 0.02) 50%,
-      transparent 100%
-    );
-    border-left: 3px solid hsl(var(--rank-gold));
-  }
-
-  .rank-row-silver {
-    background: linear-gradient(
-      90deg,
-      hsl(0 0% 75% / 0.05) 0%,
-      hsl(0 0% 75% / 0.02) 50%,
-      transparent 100%
-    );
-    border-left: 3px solid hsl(var(--rank-silver));
-  }
-
+  /* Top-3 row left bar */
+  .rank-row-gold,
+  .rank-row-silver,
   .rank-row-bronze {
-    background: linear-gradient(
-      90deg,
-      hsl(30 60% 45% / 0.05) 0%,
-      hsl(30 60% 45% / 0.02) 50%,
-      transparent 100%
-    );
-    border-left: 3px solid hsl(var(--rank-bronze));
+    border-left: 6px solid hsl(var(--primary));
   }
 
-  .rank-row-default {
-    background: transparent;
-    border-left: 3px solid hsl(215 25% 22%);
-  }
-
-  /* Accent bar for header — subtle */
-  .accent-bar {
-    background: linear-gradient(
-      90deg, 
-      hsl(var(--arena-blue) / 0.6) 0%, 
-      hsl(var(--arena-cyan) / 0.4) 50%, 
-      hsl(var(--arena-blue) / 0.6) 100%
-    );
-    height: 2px;
-  }
-
-  @keyframes shimmer {
-    0%, 100% { background-position: 0% 50%; }
-    50% { background-position: 100% 50%; }
+  /* Lime highlight slab (used behind hero text) */
+  .lime-slab {
+    background: hsl(var(--primary));
+    color: hsl(var(--primary-foreground));
+    padding: 0 0.2em;
+    box-decoration-break: clone;
+    -webkit-box-decoration-break: clone;
   }
 
   /* Fade in animation for staggered rows */
   @keyframes fade-in-up {
-    from {
-      opacity: 0;
-      transform: translateY(20px);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
   }
-
   .animate-fade-in-up {
     animation: fade-in-up 0.5s ease-out forwards;
     opacity: 0;
   }
 
-  /* Subtle hover scale for rows */
-  .hover-scale-subtle {
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
-  }
-
-  .hover-scale-subtle:hover {
-    transform: scale(1.01);
-  }
-
-  /* Text glow for points — subtle */
-  .text-glow-gold {
-    text-shadow: 0 0 8px hsl(45 100% 50% / 0.25);
-  }
-
-  .text-glow-white {
-    text-shadow: 0 0 6px hsl(0 0% 100% / 0.15);
-  }
-
-
-  /* Divider line */
-  .arena-divider {
-    height: 1px;
-    background: linear-gradient(
-      90deg,
-      transparent,
-      hsl(0 0% 25%),
-      transparent
-    );
-  }
-
   /* Loading pulse */
   @keyframes pulse-arena {
-    0%, 100% { opacity: 0.3; }
-    50% { opacity: 0.6; }
+    0%, 100% { opacity: 0.4; }
+    50% { opacity: 0.7; }
   }
-
   .animate-pulse-arena {
     animation: pulse-arena 1.5s ease-in-out infinite;
   }
 
-  /* Rank badge styles */
-  .rank-badge-gold {
-    background: linear-gradient(135deg, hsl(45 100% 55%) 0%, hsl(35 100% 45%) 100%);
-    color: hsl(0 0% 10%);
-    box-shadow: 0 1px 4px hsl(45 100% 50% / 0.2);
-  }
-
-  .rank-badge-silver {
-    background: linear-gradient(135deg, hsl(0 0% 80%) 0%, hsl(0 0% 65%) 100%);
-    color: hsl(0 0% 15%);
-    box-shadow: 0 1px 4px hsl(0 0% 75% / 0.15);
-  }
-
-  .rank-badge-bronze {
-    background: linear-gradient(135deg, hsl(30 60% 50%) 0%, hsl(25 60% 40%) 100%);
-    color: hsl(0 0% 10%);
-    box-shadow: 0 1px 4px hsl(30 60% 45% / 0.15);
-  }
-
-  .rank-badge-default {
-    background: hsl(0 0% 20%);
-    color: hsl(0 0% 70%);
-  }
-
-  /* Spotlight beam animation */
-  .spotlight-beam {
-    animation: spotlight-pulse 8s ease-in-out infinite;
-  }
-
-  @keyframes spotlight-pulse {
-    0%, 100% { opacity: 0.04; }
-    50% { opacity: 0.07; }
-  }
-
-  /* Shuttlecock floating animation */
+  /* Shuttlecock floating animation (kept for shared components) */
   @keyframes shuttlecock-float {
-    0%, 100% { 
-      transform: translateY(0) rotate(0deg); 
-    }
-    25% { 
-      transform: translateY(-12px) rotate(3deg); 
-    }
-    50% { 
-      transform: translateY(-6px) rotate(-2deg); 
-    }
-    75% { 
-      transform: translateY(-15px) rotate(2deg); 
-    }
+    0%, 100% { transform: translateY(0) rotate(0deg); }
+    25% { transform: translateY(-12px) rotate(3deg); }
+    50% { transform: translateY(-6px) rotate(-2deg); }
+    75% { transform: translateY(-15px) rotate(2deg); }
   }
 
-  /* Player glow breathing effect */
-  @keyframes player-glow-breathe {
-    0%, 100% { filter: drop-shadow(0 0 8px hsl(210 100% 55% / 0.2)); }
-    50% { filter: drop-shadow(0 0 15px hsl(210 100% 55% / 0.35)); }
-  }
-
-  .player-glow-left {
-    animation: player-glow-breathe 3s ease-in-out infinite;
-  }
-
-  .player-glow-right {
-    animation: player-glow-breathe 3s ease-in-out infinite 1.5s;
-  }
-
-  /* Table header shimmer */
-  .shimmer-row::after {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(
-      90deg,
-      transparent 0%,
-      hsl(210 100% 70% / 0.06) 40%,
-      hsl(195 90% 65% / 0.1) 50%,
-      hsl(210 100% 70% / 0.06) 60%,
-      transparent 100%
-    );
-    background-size: 200% 100%;
-    animation: table-shimmer 6s ease-in-out infinite;
-    pointer-events: none;
-  }
-
-  @keyframes table-shimmer {
-    0% { background-position: -200% 0; }
-    100% { background-position: 200% 0; }
+  .arena-divider {
+    height: 2px;
+    background: hsl(var(--foreground));
   }
 }

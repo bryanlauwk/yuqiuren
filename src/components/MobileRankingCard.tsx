@@ -20,69 +20,52 @@ export function MobileRankingCard({ ranking, onAvatarClick }: MobileRankingCardP
       .slice(0, 2);
   };
 
-  const getRankBadgeStyles = () => {
-    switch (ranking.rank) {
-      case 1:
-        return 'rank-badge-gold';
-      case 2:
-        return 'rank-badge-silver';
-      case 3:
-        return 'rank-badge-bronze';
-      default:
-        return null;
-    }
-  };
+  const isTopThree = ranking.rank <= 3;
 
   const getRankChangeDisplay = () => {
     if (ranking.rank_change > 0) {
       return (
         <div className="flex items-center gap-0.5 text-finished">
-          <ArrowUp className="w-3.5 h-3.5" />
-          <span className="text-xs font-bold">{ranking.rank_change}</span>
+          <ArrowUp className="w-3.5 h-3.5" strokeWidth={3} />
+          <span className="text-xs font-black">{ranking.rank_change}</span>
         </div>
       );
     }
     if (ranking.rank_change < 0) {
       return (
         <div className="flex items-center gap-0.5 text-destructive">
-          <ArrowDown className="w-3.5 h-3.5" />
-          <span className="text-xs font-bold">{Math.abs(ranking.rank_change)}</span>
+          <ArrowDown className="w-3.5 h-3.5" strokeWidth={3} />
+          <span className="text-xs font-black">{Math.abs(ranking.rank_change)}</span>
         </div>
       );
     }
     if (!ranking.is_new) {
       return (
         <div className="flex items-center text-muted-foreground">
-          <Minus className="w-3.5 h-3.5" />
+          <Minus className="w-3.5 h-3.5" strokeWidth={3} />
         </div>
       );
     }
     return null;
   };
 
-  const isTopThree = ranking.rank <= 3;
-  const badgeStyle = getRankBadgeStyles();
-
   return (
-    <div 
+    <div
       className={cn(
-        "rounded-2xl bg-card p-4 transition-shadow duration-200",
-        isTopThree ? "shadow-md p-5" : "shadow-sm hover:shadow-md"
+        "rounded bg-card border-2 border-foreground p-4 transition-transform duration-150",
+        "shadow-[4px_4px_0_0_hsl(var(--foreground))]",
+        isTopThree && "border-l-[8px] border-l-primary p-5"
       )}
     >
       {/* Row 1: Identity */}
       <div className="flex items-center gap-3">
-        {badgeStyle ? (
-          <div className={cn(
-            "flex-shrink-0 flex items-center justify-center rounded-full font-display font-bold",
-            badgeStyle,
-            isTopThree ? "w-10 h-10 text-lg" : "w-8 h-8 text-sm"
-          )}>
+        {isTopThree ? (
+          <div className="flex-shrink-0 flex items-center justify-center bg-primary border-2 border-foreground rounded font-display text-foreground w-11 h-11 text-xl">
             {ranking.rank}
           </div>
         ) : (
-          <div className="flex-shrink-0 w-8 h-8 flex items-center justify-center">
-            <span className="text-sm font-medium text-muted-foreground">{ranking.rank}</span>
+          <div className="flex-shrink-0 w-10 h-10 flex items-center justify-center border-2 border-foreground rounded bg-muted">
+            <span className="text-base font-display text-foreground">{ranking.rank}</span>
           </div>
         )}
 
@@ -90,9 +73,9 @@ export function MobileRankingCard({ ranking, onAvatarClick }: MobileRankingCardP
           onClick={() => ranking.full_avatar_url && onAvatarClick?.(ranking.full_avatar_url, ranking.player_name)}
           disabled={!ranking.full_avatar_url}
           className={cn(
-            "flex-shrink-0 rounded-full overflow-hidden bg-muted border border-border/50 transition-all",
+            "flex-shrink-0 rounded overflow-hidden bg-muted border-2 border-foreground transition-all",
             isTopThree ? "w-12 h-12" : "w-10 h-10",
-            ranking.full_avatar_url && "cursor-pointer hover:ring-2 hover:ring-primary/30 active:scale-95"
+            ranking.full_avatar_url && "cursor-pointer hover:-translate-y-0.5 active:scale-95"
           )}
         >
           {ranking.avatar_url ? (
@@ -107,7 +90,7 @@ export function MobileRankingCard({ ranking, onAvatarClick }: MobileRankingCardP
               }}
             />
           ) : (
-            <div className="w-full h-full flex items-center justify-center text-muted-foreground text-sm font-medium">
+            <div className="w-full h-full flex items-center justify-center text-foreground text-sm font-black">
               {getInitials(ranking.player_name)}
             </div>
           )}
@@ -115,8 +98,8 @@ export function MobileRankingCard({ ranking, onAvatarClick }: MobileRankingCardP
 
         <div className="flex-1 min-w-0">
           <p className={cn(
-            "font-bold text-foreground",
-            isTopThree ? "text-lg" : "text-base"
+            "font-display text-foreground tracking-tight truncate",
+            isTopThree ? "text-xl" : "text-lg"
           )}>
             {ranking.player_name}
           </p>
@@ -126,39 +109,40 @@ export function MobileRankingCard({ ranking, onAvatarClick }: MobileRankingCardP
       </div>
 
       {/* Row 2: Stats */}
-      <div className="grid grid-cols-3 gap-4 mt-3 pt-3">
-        <div className="text-center">
-          <p className={cn(
-            "font-display font-bold text-foreground/60",
-            isTopThree ? "text-lg" : "text-base"
-          )}>
+      <div className="grid grid-cols-3 gap-2 mt-4 pt-4 border-t-2 border-foreground/10">
+        <div className="text-center bg-muted rounded border-2 border-foreground py-2">
+          <p className={cn("font-display text-foreground", isTopThree ? "text-xl" : "text-lg")}>
             {ranking.sessions_played}
           </p>
-          <p className="text-[10px] uppercase tracking-wider text-foreground/50">
+          <p className="text-[10px] font-bold uppercase tracking-wider text-foreground/60">
             {t.ranking.sessions}
           </p>
         </div>
 
-        <div className="text-center">
-          <p className={cn(
-            "font-display font-bold text-foreground/60",
-            isTopThree ? "text-lg" : "text-base"
-          )}>
+        <div className="text-center bg-muted rounded border-2 border-foreground py-2">
+          <p className={cn("font-display text-foreground", isTopThree ? "text-xl" : "text-lg")}>
             {ranking.championships}
           </p>
-          <p className="text-[10px] uppercase tracking-wider text-foreground/50">
+          <p className="text-[10px] font-bold uppercase tracking-wider text-foreground/60">
             {t.ranking.wins}
           </p>
         </div>
 
-        <div className="text-center">
+        <div className={cn(
+          "text-center rounded border-2 border-foreground py-2",
+          ranking.rank === 1 ? "bg-primary" : "bg-foreground text-background"
+        )}>
           <p className={cn(
-            "font-display font-bold text-foreground",
-            isTopThree ? "text-xl" : "text-lg"
+            "font-display",
+            ranking.rank === 1 ? "text-foreground" : "text-background",
+            isTopThree ? "text-2xl" : "text-xl"
           )}>
             {ranking.total_points}
           </p>
-          <p className="text-[10px] uppercase tracking-wider text-foreground/50">
+          <p className={cn(
+            "text-[10px] font-bold uppercase tracking-wider",
+            ranking.rank === 1 ? "text-foreground/70" : "text-background/70"
+          )}>
             {t.ranking.points}
           </p>
         </div>
