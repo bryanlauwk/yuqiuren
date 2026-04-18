@@ -25,36 +25,42 @@ export function Header() {
   };
 
   return (
-    <header className="sticky top-0 z-50 bg-background/95 backdrop-blur-md border-b border-border">
-      <div className="container flex items-center justify-between h-16 sm:h-18">
-        <Link to="/" className="flex items-center gap-2.5 group">
-          <svg
-            viewBox="0 0 32 32"
-            className="w-8 h-8 sm:w-9 sm:h-9 text-primary transition-transform duration-300 group-hover:scale-105"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2.2"
-            strokeLinecap="round"
-          >
-            <path d="M6 26 C10 18, 12 10, 26 6" />
-            <path d="M26 26 C22 18, 20 10, 6 6" />
-            <circle cx="16" cy="13" r="2.2" fill="currentColor" stroke="none" />
-          </svg>
+    <header className="sticky top-0 z-50 bg-background border-b-2 border-foreground">
+      <div className="container flex items-center justify-between h-16 sm:h-20">
+        <Link to="/" className="flex items-center gap-3 group">
+          <div className="w-10 h-10 sm:w-11 sm:h-11 bg-primary border-2 border-foreground rounded flex items-center justify-center transition-transform group-hover:-translate-y-0.5 group-hover:-translate-x-0.5">
+            <svg
+              viewBox="0 0 32 32"
+              className="w-6 h-6 sm:w-7 sm:h-7 text-foreground"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2.8"
+              strokeLinecap="round"
+            >
+              <path d="M6 26 C10 18, 12 10, 26 6" />
+              <path d="M26 26 C22 18, 20 10, 6 6" />
+              <circle cx="16" cy="13" r="2.2" fill="currentColor" stroke="none" />
+            </svg>
+          </div>
+          <span className="font-display text-lg sm:text-xl text-foreground hidden xs:inline">
+            羽球人
+          </span>
         </Link>
 
-        <nav className="flex items-center gap-1">
+        <nav className="flex items-center gap-1 sm:gap-2">
           {navItems.map(({ path, label, icon: Icon, requiresAuth }) => {
             if (requiresAuth && !isAdmin) return null;
-            
+            const active = currentPath === path;
+
             return (
               <Link
                 key={path}
                 to={path}
                 className={cn(
-                  'px-3 sm:px-4 py-2 rounded-lg text-sm font-medium transition-all flex items-center gap-2',
-                  currentPath === path
-                    ? 'bg-primary/10 text-primary'
-                    : 'text-muted-foreground hover:text-foreground hover:bg-muted/50'
+                  'px-3 sm:px-4 py-2 rounded text-sm font-bold uppercase tracking-wide transition-all flex items-center gap-2 border-2',
+                  active
+                    ? 'bg-primary text-primary-foreground border-foreground shadow-[3px_3px_0_0_hsl(var(--foreground))]'
+                    : 'bg-transparent text-foreground border-transparent hover:border-foreground hover:bg-muted'
                 )}
               >
                 <Icon className="w-4 h-4" />
@@ -63,14 +69,12 @@ export function Header() {
             );
           })}
 
-          
-
           {user && isAdmin && (
             <Button
               variant="ghost"
               size="sm"
               onClick={handleSignOut}
-              className="text-muted-foreground hover:text-destructive ml-1 sm:ml-2"
+              className="text-foreground hover:text-destructive ml-1 sm:ml-2"
             >
               <LogOut className="w-4 h-4" />
               <span className="hidden sm:inline ml-2">{t.header.signOut}</span>

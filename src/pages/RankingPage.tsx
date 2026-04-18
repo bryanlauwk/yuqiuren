@@ -29,7 +29,7 @@ export default function RankingPage() {
       
       <ArenaHero />
 
-      <main className="container -mt-8 relative z-10 flex-1 pb-12">
+      <main className="container mt-12 relative z-10 flex-1 pb-12">
         {loading ? (
           <div className="space-y-3">
             {[...Array(8)].map((_, i) => (
