@@ -18,6 +18,9 @@ export function ArenaHero() {
         name: r.player_name,
         score: r.total_points,
         sessions: r.sessions_played,
+        avatarUrl: r.avatar_url,
+        cropX: r.avatar_crop_x ?? 0.5,
+        cropY: r.avatar_crop_y ?? 0.5,
         tint: i % 2 === 0,
       }))
     : Array.from({ length: 4 }).map((_, i) => ({
@@ -25,6 +28,9 @@ export function ArenaHero() {
         name: '',
         score: 0,
         sessions: 0,
+        avatarUrl: null as string | null,
+        cropX: 0.5,
+        cropY: 0.5,
         tint: i % 2 === 0,
       }));
 
