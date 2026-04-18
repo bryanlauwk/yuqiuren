@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { Header } from '@/components/Header';
 import { Footer } from '@/components/Footer';
 import { ArenaHero } from '@/components/ArenaHero';
-import { PhoneShowcase } from '@/components/PhoneShowcase';
+
 import { CircleArrow } from '@/components/ink/CircleArrow';
 import { BadmintonDoodles } from '@/components/BadmintonDoodles';
 import { MobileRankingCard } from '@/components/MobileRankingCard';
@@ -32,8 +32,6 @@ export default function RankingPage() {
       <Header />
       
       <ArenaHero />
-
-      <PhoneShowcase />
 
       <div id="rankings-anchor" className="container flex justify-center pt-10">
         <CircleArrow size={56} className="text-foreground rotate-90" />
