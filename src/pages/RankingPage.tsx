@@ -2,6 +2,8 @@ import { useState } from 'react';
 import { Header } from '@/components/Header';
 import { Footer } from '@/components/Footer';
 import { ArenaHero } from '@/components/ArenaHero';
+import { PhoneShowcase } from '@/components/PhoneShowcase';
+import { CircleArrow } from '@/components/ink/CircleArrow';
 import { BadmintonDoodles } from '@/components/BadmintonDoodles';
 import { MobileRankingCard } from '@/components/MobileRankingCard';
 import { DesktopRankingTable } from '@/components/DesktopRankingTable';
@@ -31,7 +33,13 @@ export default function RankingPage() {
       
       <ArenaHero />
 
-      <main className="container mt-12 relative z-10 flex-1 pb-12">
+      <PhoneShowcase />
+
+      <div id="rankings-anchor" className="container flex justify-center pt-10">
+        <CircleArrow size={56} className="text-foreground rotate-90" />
+      </div>
+
+      <main className="container mt-6 relative z-10 flex-1 pb-12">
         {loading ? (
           <div className="space-y-3">
             {[...Array(8)].map((_, i) => (

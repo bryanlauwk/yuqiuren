@@ -21,6 +21,11 @@ export const translations = {
       otherPlayers: "其他选手",
       shareRankings: "分享排名",
     },
+    showcase: {
+      headline: "追踪每一拍。",
+      subline: "实时积分、连胜奖励与场次记录，一目了然。",
+      cta: "查看排名",
+    },
     podium: {
       topPlayers: "前三甲",
       champion: "冠军",
@@ -145,6 +150,11 @@ export const translations = {
       tieMessage: "Rankings tied on points, wins, and sessions — podium displayed when tiebreaker is resolved",
       otherPlayers: "Other Players",
       shareRankings: "Share Rankings",
+    },
+    showcase: {
+      headline: "Track every rally.",
+      subline: "Live points, streak bonuses, and session history — all in one place.",
+      cta: "See Rankings",
     },
     podium: {
       topPlayers: "TOP PLAYERS",
@@ -280,6 +290,11 @@ export type TranslationKeys = {
     runnerUp: string;
     third: string;
     pts: string;
+  };
+  showcase: {
+    headline: string;
+    subline: string;
+    cta: string;
   };
   ranking: {
     sessions: string;
