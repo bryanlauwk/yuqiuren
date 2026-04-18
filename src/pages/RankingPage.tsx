@@ -25,7 +25,8 @@ export default function RankingPage() {
   };
 
   return (
-    <div className="min-h-screen bg-background flex flex-col">
+    <div className="min-h-screen bg-background flex flex-col relative">
+      <BadmintonDoodles />
       <Header />
       
       <ArenaHero />
