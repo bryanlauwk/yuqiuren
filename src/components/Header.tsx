@@ -27,22 +27,31 @@ export function Header() {
   return (
     <header className="sticky top-0 z-50 bg-background border-b-2 border-foreground">
       <div className="container flex items-center justify-between h-16 sm:h-20">
-        <Link to="/" className="flex items-center gap-3 group">
-          <div className="w-10 h-10 sm:w-11 sm:h-11 bg-primary border-2 border-foreground rounded flex items-center justify-center transition-transform group-hover:-translate-y-0.5 group-hover:-translate-x-0.5">
+        <Link to="/" className="flex items-center gap-2.5 group">
+          <div className="relative w-10 h-10 sm:w-11 sm:h-11 flex items-center justify-center">
             <svg
-              viewBox="0 0 32 32"
-              className="w-6 h-6 sm:w-7 sm:h-7 text-foreground"
+              viewBox="0 0 40 40"
+              className="w-full h-full"
               fill="none"
               stroke="currentColor"
-              strokeWidth="2.8"
               strokeLinecap="round"
+              strokeLinejoin="round"
             >
-              <path d="M6 26 C10 18, 12 10, 26 6" />
-              <path d="M26 26 C22 18, 20 10, 6 6" />
-              <circle cx="16" cy="13" r="2.2" fill="currentColor" stroke="none" />
+              {/* Shuttlecock — minimal monoline */}
+              <circle cx="20" cy="27" r="4.5" className="text-accent" fill="currentColor" stroke="none" />
+              <path
+                d="M20 22.5 L13 8 M20 22.5 L17 7 M20 22.5 L23 7 M20 22.5 L27 8"
+                className="text-foreground"
+                strokeWidth="2"
+              />
+              <path
+                d="M13 8 L17 7 L23 7 L27 8"
+                className="text-foreground"
+                strokeWidth="2"
+              />
             </svg>
           </div>
-          <span className="font-display text-lg sm:text-xl text-foreground hidden xs:inline">
+          <span className="font-display text-lg sm:text-xl text-foreground tracking-tight hidden xs:inline">
             羽球人
           </span>
         </Link>
