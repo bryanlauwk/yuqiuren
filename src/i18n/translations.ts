@@ -11,7 +11,7 @@ export const translations = {
     },
     home: {
       heroTitle: "2026 羽球人赛 · 积分榜",
-      heroSubtitle: "每一分都至关重要",
+      heroSubtitle: "球不落地，永不放弃",
       totalPlayers: "参赛人数",
       nextMatch: "下一场比赛",
       venue: "比赛场地",
