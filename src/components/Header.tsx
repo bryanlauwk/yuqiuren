@@ -28,28 +28,15 @@ export function Header() {
     <header className="sticky top-0 z-50 bg-background border-b-2 border-foreground">
       <div className="container flex items-center justify-between h-16 sm:h-20">
         <Link to="/" className="flex items-center gap-2.5 group">
-          <div className="relative w-10 h-10 sm:w-11 sm:h-11 flex items-center justify-center">
-            <svg
-              viewBox="0 0 40 40"
-              className="w-full h-full"
-              fill="none"
-              stroke="currentColor"
-              strokeLinecap="round"
-              strokeLinejoin="round"
+          {/* Heritage monogram — circle crest with italic Y + red sash */}
+          <div className="relative w-10 h-10 sm:w-11 sm:h-11 rounded-full border-[3px] border-primary bg-background flex items-center justify-center overflow-hidden shrink-0">
+            <span
+              className="text-primary text-[22px] sm:text-2xl font-black italic leading-none pr-[2px] mt-1 font-serif"
+              aria-hidden
             >
-              {/* Shuttlecock — minimal monoline */}
-              <circle cx="20" cy="27" r="4.5" className="text-accent" fill="currentColor" stroke="none" />
-              <path
-                d="M20 22.5 L13 8 M20 22.5 L17 7 M20 22.5 L23 7 M20 22.5 L27 8"
-                className="text-foreground"
-                strokeWidth="2"
-              />
-              <path
-                d="M13 8 L17 7 L23 7 L27 8"
-                className="text-foreground"
-                strokeWidth="2"
-              />
-            </svg>
+              Y
+            </span>
+            <div className="absolute left-1/2 top-1/2 w-[150%] h-[2.5px] bg-accent -translate-x-1/2 -translate-y-1/2 -rotate-45" />
           </div>
           <span className="font-display text-lg sm:text-xl text-foreground tracking-tight hidden xs:inline">
             羽球人
