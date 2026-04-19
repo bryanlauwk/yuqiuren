@@ -56,7 +56,7 @@ export function ArenaHero() {
         avatarUrl: r.avatar_url,
         cropX: r.avatar_crop_x ?? 0.5,
         cropY: r.avatar_crop_y ?? 0.5,
-        tint: i % 2 === 0,
+        tint: i === 0 ? 'red' : i % 2 === 1 ? 'blue' : 'white',
       }))
     : Array.from({ length: 4 }).map((_, i) => ({
         rank: i + 1,
@@ -66,7 +66,7 @@ export function ArenaHero() {
         avatarUrl: null as string | null,
         cropX: 0.5,
         cropY: 0.5,
-        tint: i % 2 === 0,
+        tint: i === 0 ? 'red' : i % 2 === 1 ? 'blue' : 'white',
       }));
 
   const getInitials = (name: string) =>
@@ -149,12 +149,17 @@ export function ArenaHero() {
               </div>
 
               <div className="bg-background rounded-[2rem] pt-10 pb-5 px-3 space-y-2">
-                {phoneRows.map((row) => (
+                {phoneRows.map((row) => {
+                  const tintClass =
+                    row.tint === 'red'
+                      ? 'bg-accent text-accent-foreground'
+                      : row.tint === 'blue'
+                      ? 'bg-muted'
+                      : 'bg-background';
+                  return (
                   <div
                     key={row.rank}
-                    className={`flex items-center gap-3 rounded-2xl border-2 border-foreground px-3 py-3 ${
-                      row.tint ? 'bg-accent' : 'bg-background'
-                    }`}
+                    className={`flex items-center gap-3 rounded-2xl border-2 border-foreground px-3 py-3 ${tintClass}`}
                   >
                     <span className="font-display text-lg w-5 text-foreground">{row.rank}</span>
                     <div className="w-9 h-9 rounded-full bg-foreground/90 border-2 border-foreground flex items-center justify-center overflow-hidden shrink-0">
@@ -192,7 +197,8 @@ export function ArenaHero() {
                       {row.score}
                     </span>
                   </div>
-                ))}
+                  );
+                })}
               </div>
             </div>
           </div>

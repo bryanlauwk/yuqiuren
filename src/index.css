@@ -4,82 +4,80 @@
 
 @layer base {
   :root {
-    /* Game On — Sporty Light Theme */
-    /* Background: warm off-white #FAFAF7 */
-    --background: 60 20% 97%;
-    --foreground: 120 20% 5%;
+    /* Jersey Theme — White / Royal Blue / Jersey Red */
+    --background: 0 0% 100%;
+    --foreground: 220 25% 8%;
 
     --card: 0 0% 100%;
-    --card-foreground: 120 20% 5%;
+    --card-foreground: 220 25% 8%;
 
     --popover: 0 0% 100%;
-    --popover-foreground: 120 20% 5%;
+    --popover-foreground: 220 25% 8%;
 
-    /* Primary — neon lime #C6FF2E */
-    --primary: 76 100% 59%;
-    --primary-foreground: 138 70% 14%;
+    /* Primary — royal blue #2A4FB8 */
+    --primary: 224 65% 45%;
+    --primary-foreground: 0 0% 100%;
 
-    --secondary: 60 15% 92%;
-    --secondary-foreground: 120 20% 5%;
+    --secondary: 220 20% 94%;
+    --secondary-foreground: 220 25% 8%;
 
-    --muted: 60 15% 94%;
-    --muted-foreground: 120 8% 35%;
+    --muted: 220 20% 96%;
+    --muted-foreground: 220 10% 35%;
 
-    /* Accent — deep forest, on lime */
-    --accent: 138 70% 14%;
-    --accent-foreground: 76 100% 59%;
+    /* Accent — jersey red #E63946 */
+    --accent: 354 76% 56%;
+    --accent-foreground: 0 0% 100%;
 
-    --destructive: 0 70% 50%;
+    --destructive: 0 75% 50%;
     --destructive-foreground: 0 0% 100%;
 
-    --border: 120 20% 5%;
-    --input: 120 20% 5%;
-    --ring: 76 100% 59%;
+    --border: 220 25% 8%;
+    --input: 220 25% 8%;
+    --ring: 224 65% 45%;
 
     --radius: 0.25rem;
 
-    /* Ranking accent — all lime in this aesthetic */
-    --rank-gold: 76 100% 59%;
-    --rank-silver: 60 15% 88%;
-    --rank-bronze: 60 10% 75%;
+    /* Ranking — blue base, red reserved for #1 */
+    --rank-gold: 354 76% 56%;
+    --rank-silver: 224 65% 45%;
+    --rank-bronze: 224 65% 45%;
 
-    /* Hard offset shadows — neo-brutalist */
-    --shadow-card: 4px 4px 0 0 hsl(120 20% 5%);
-    --shadow-elevated: 6px 6px 0 0 hsl(120 20% 5%);
+    /* Hard offset shadows — neo-brutalist (near-black) */
+    --shadow-card: 4px 4px 0 0 hsl(220 25% 8%);
+    --shadow-elevated: 6px 6px 0 0 hsl(220 25% 8%);
 
-    --finished: 138 70% 30%;
+    --finished: 224 65% 45%;
 
     --sidebar-background: 0 0% 100%;
-    --sidebar-foreground: 120 20% 5%;
-    --sidebar-primary: 76 100% 59%;
-    --sidebar-primary-foreground: 138 70% 14%;
-    --sidebar-accent: 60 15% 94%;
-    --sidebar-accent-foreground: 120 20% 5%;
-    --sidebar-border: 120 20% 5%;
-    --sidebar-ring: 76 100% 59%;
+    --sidebar-foreground: 220 25% 8%;
+    --sidebar-primary: 224 65% 45%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 220 20% 96%;
+    --sidebar-accent-foreground: 220 25% 8%;
+    --sidebar-border: 220 25% 8%;
+    --sidebar-ring: 224 65% 45%;
   }
 
   .dark {
-    /* Keep light "Game On" tokens — no separate dark mode for this aesthetic */
-    --background: 60 20% 97%;
-    --foreground: 120 20% 5%;
+    --background: 0 0% 100%;
+    --foreground: 220 25% 8%;
     --card: 0 0% 100%;
-    --card-foreground: 120 20% 5%;
+    --card-foreground: 220 25% 8%;
     --popover: 0 0% 100%;
-    --popover-foreground: 120 20% 5%;
-    --primary: 76 100% 59%;
-    --primary-foreground: 138 70% 14%;
-    --secondary: 60 15% 92%;
-    --secondary-foreground: 120 20% 5%;
-    --muted: 60 15% 94%;
-    --muted-foreground: 120 8% 35%;
-    --accent: 138 70% 14%;
-    --accent-foreground: 76 100% 59%;
-    --destructive: 0 70% 50%;
+    --popover-foreground: 220 25% 8%;
+    --primary: 224 65% 45%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 220 20% 94%;
+    --secondary-foreground: 220 25% 8%;
+    --muted: 220 20% 96%;
+    --muted-foreground: 220 10% 35%;
+    --accent: 354 76% 56%;
+    --accent-foreground: 0 0% 100%;
+    --destructive: 0 75% 50%;
     --destructive-foreground: 0 0% 100%;
-    --border: 120 20% 5%;
-    --input: 120 20% 5%;
-    --ring: 76 100% 59%;
+    --border: 220 25% 8%;
+    --input: 220 25% 8%;
+    --ring: 224 65% 45%;
   }
 }
 
@@ -130,12 +128,17 @@
     box-shadow: 1px 1px 0 0 hsl(var(--foreground));
   }
 
-  /* Rank badge — lime square (top 3), no gradients */
-  .rank-badge-gold,
+  /* Rank badge — #1 red, #2/#3 blue */
+  .rank-badge-gold {
+    background: hsl(var(--accent));
+    color: hsl(var(--accent-foreground));
+    border: 2px solid hsl(var(--foreground));
+    border-radius: 4px;
+  }
   .rank-badge-silver,
   .rank-badge-bronze {
     background: hsl(var(--primary));
-    color: hsl(var(--foreground));
+    color: hsl(var(--primary-foreground));
     border: 2px solid hsl(var(--foreground));
     border-radius: 4px;
   }
@@ -147,17 +150,27 @@
     border-radius: 4px;
   }
 
-  /* Top-3 row left bar */
-  .rank-row-gold,
+  /* Top-3 row left bar — #1 red, #2/#3 blue */
+  .rank-row-gold {
+    border-left: 6px solid hsl(var(--accent));
+  }
   .rank-row-silver,
   .rank-row-bronze {
     border-left: 6px solid hsl(var(--primary));
   }
 
-  /* Lime highlight slab (used behind hero text) */
+  /* Highlight slab (used behind hero text) — now blue */
   .lime-slab {
     background: hsl(var(--primary));
     color: hsl(var(--primary-foreground));
+    padding: 0 0.2em;
+    box-decoration-break: clone;
+    -webkit-box-decoration-break: clone;
+  }
+
+  .red-slab {
+    background: hsl(var(--accent));
+    color: hsl(var(--accent-foreground));
     padding: 0 0.2em;
     box-decoration-break: clone;
     -webkit-box-decoration-break: clone;
