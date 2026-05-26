@@ -41,13 +41,11 @@ export default function RankingPage() {
 
       <main className="container mt-6 relative z-10 flex-1 pb-12">
         {loading ? (
-          <div className="space-y-3">
+          <div className="space-y-2">
             {[...Array(8)].map((_, i) => (
-              <div 
-                key={i} 
-                className={`bg-card/50 animate-pulse-arena rounded-xl ${
-                  i === 0 ? 'h-[120px]' : i <= 2 ? 'h-[100px]' : 'h-[80px]'
-                }`}
+              <div
+                key={i}
+                className="bg-card/50 animate-pulse-arena rounded h-[52px]"
                 style={{ animationDelay: `${i * 0.1}s` }}
               />
             ))}
