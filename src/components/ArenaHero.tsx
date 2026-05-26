@@ -47,13 +47,6 @@ export function ArenaHero() {
   };
 
 
-  const getInitials = (name: string) =>
-    name
-      .split(' ')
-      .map((n) => n[0])
-      .join('')
-      .slice(0, 2)
-      .toUpperCase();
 
   return (
     <section ref={sectionRef} className="relative w-full overflow-hidden bg-background border-b-2 border-foreground">
