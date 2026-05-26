@@ -7,7 +7,7 @@ import { StarOfTheWeek } from '@/components/hero/StarOfTheWeek';
 
 export function ArenaHero() {
   const { t } = useLanguage();
-  const { rankings, sessions, players } = useRankings();
+  const { sessions, players } = useRankings();
   const sectionRef = useRef<HTMLElement>(null);
   const [scrollOffset, setScrollOffset] = useState(0);
 
@@ -20,7 +20,6 @@ export function ArenaHero() {
       if (!sectionRef.current) return;
       const rect = sectionRef.current.getBoundingClientRect();
       const vh = window.innerHeight;
-      // Normalized progress: 0 when section top hits viewport top, 1 when bottom leaves
       const total = rect.height + vh;
       const progress = Math.min(Math.max((vh - rect.top) / total, 0), 1);
       setScrollOffset(progress);
@@ -40,36 +39,13 @@ export function ArenaHero() {
   }, []);
 
   // Tilt from -2deg (top) → +3deg (bottom), translate up to -20px
-  const phoneRotate = -2 + scrollOffset * 5;
-  const phoneTranslateY = -scrollOffset * 20;
+  const posterRotate = -2 + scrollOffset * 5;
+  const posterTranslateY = -scrollOffset * 20;
 
   const handleScroll = () => {
     document.getElementById('rankings-anchor')?.scrollIntoView({ behavior: 'smooth' });
   };
 
-  // Top 4 from real data, with skeleton fallback while loading
-  const topFour = rankings.slice(0, 4);
-  const phoneRows = topFour.length > 0
-    ? topFour.map((r, i) => ({
-        rank: r.rank,
-        name: r.player_name,
-        score: r.total_points,
-        sessions: r.sessions_played,
-        avatarUrl: r.avatar_url,
-        cropX: r.avatar_crop_x ?? 0.5,
-        cropY: r.avatar_crop_y ?? 0.5,
-        tint: i === 0 ? 'red' : i % 2 === 1 ? 'blue' : 'white',
-      }))
-    : Array.from({ length: 4 }).map((_, i) => ({
-        rank: i + 1,
-        name: '',
-        score: 0,
-        sessions: 0,
-        avatarUrl: null as string | null,
-        cropX: 0.5,
-        cropY: 0.5,
-        tint: i === 0 ? 'red' : i % 2 === 1 ? 'blue' : 'white',
-      }));
 
   const getInitials = (name: string) =>
     name
