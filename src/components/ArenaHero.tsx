@@ -2,10 +2,12 @@ import { useEffect, useRef, useState } from 'react';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { CircleArrow } from '@/components/ink/CircleArrow';
 import { useRankings } from '@/hooks/useRankings';
+import { StarOfTheWeek } from '@/components/hero/StarOfTheWeek';
+
 
 export function ArenaHero() {
   const { t } = useLanguage();
-  const { rankings, sessions, players } = useRankings();
+  const { sessions, players } = useRankings();
   const sectionRef = useRef<HTMLElement>(null);
   const [scrollOffset, setScrollOffset] = useState(0);
 
@@ -18,7 +20,6 @@ export function ArenaHero() {
       if (!sectionRef.current) return;
       const rect = sectionRef.current.getBoundingClientRect();
       const vh = window.innerHeight;
-      // Normalized progress: 0 when section top hits viewport top, 1 when bottom leaves
       const total = rect.height + vh;
       const progress = Math.min(Math.max((vh - rect.top) / total, 0), 1);
       setScrollOffset(progress);
@@ -38,44 +39,14 @@ export function ArenaHero() {
   }, []);
 
   // Tilt from -2deg (top) → +3deg (bottom), translate up to -20px
-  const phoneRotate = -2 + scrollOffset * 5;
-  const phoneTranslateY = -scrollOffset * 20;
+  const posterRotate = -2 + scrollOffset * 5;
+  const posterTranslateY = -scrollOffset * 20;
 
   const handleScroll = () => {
     document.getElementById('rankings-anchor')?.scrollIntoView({ behavior: 'smooth' });
   };
 
-  // Top 4 from real data, with skeleton fallback while loading
-  const topFour = rankings.slice(0, 4);
-  const phoneRows = topFour.length > 0
-    ? topFour.map((r, i) => ({
-        rank: r.rank,
-        name: r.player_name,
-        score: r.total_points,
-        sessions: r.sessions_played,
-        avatarUrl: r.avatar_url,
-        cropX: r.avatar_crop_x ?? 0.5,
-        cropY: r.avatar_crop_y ?? 0.5,
-        tint: i === 0 ? 'red' : i % 2 === 1 ? 'blue' : 'white',
-      }))
-    : Array.from({ length: 4 }).map((_, i) => ({
-        rank: i + 1,
-        name: '',
-        score: 0,
-        sessions: 0,
-        avatarUrl: null as string | null,
-        cropX: 0.5,
-        cropY: 0.5,
-        tint: i === 0 ? 'red' : i % 2 === 1 ? 'blue' : 'white',
-      }));
 
-  const getInitials = (name: string) =>
-    name
-      .split(' ')
-      .map((n) => n[0])
-      .join('')
-      .slice(0, 2)
-      .toUpperCase();
 
   return (
     <section ref={sectionRef} className="relative w-full overflow-hidden bg-background border-b-2 border-foreground">
@@ -131,77 +102,11 @@ export function ArenaHero() {
             </div>
           </div>
 
-          {/* Right: tilted phone mockup */}
+          {/* Right: Star of the Week poster */}
           <div className="md:col-span-5 flex justify-center md:justify-end">
-            <div
-              className="relative bg-foreground rounded-[2.5rem] p-3 border-2 border-foreground shadow-[8px_8px_0_0_hsl(var(--accent))] transition-transform duration-200 ease-out will-change-transform"
-              style={{ transform: `rotate(${phoneRotate}deg) translateY(${phoneTranslateY}px)`, width: 280 }}
-            >
-              <div className="absolute top-3 left-1/2 -translate-x-1/2 w-20 h-5 bg-background rounded-full z-10" />
-
-              {/* LIVE badge */}
-              <div className="absolute -top-3 -right-3 z-20 flex items-center gap-1.5 bg-accent border-2 border-foreground rounded-md px-2 py-1 shadow-[3px_3px_0_0_hsl(var(--foreground))]">
-                <span className="relative flex h-1.5 w-1.5">
-                  <span className="absolute inline-flex h-full w-full rounded-full bg-foreground opacity-75 animate-ping" />
-                  <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-foreground" />
-                </span>
-                <span className="font-display text-[10px] tracking-widest text-accent-foreground">LIVE</span>
-              </div>
-
-              <div className="bg-background rounded-[2rem] pt-10 pb-5 px-3 space-y-2">
-                {phoneRows.map((row) => {
-                  const tintClass =
-                    row.tint === 'red'
-                      ? 'bg-accent text-accent-foreground'
-                      : row.tint === 'blue'
-                      ? 'bg-muted'
-                      : 'bg-background';
-                  return (
-                  <div
-                    key={row.rank}
-                    className={`flex items-center gap-3 rounded-2xl border-2 border-foreground px-3 py-3 ${tintClass}`}
-                  >
-                    <span className="font-display text-lg w-5 text-foreground">{row.rank}</span>
-                    <div className="w-9 h-9 rounded-full bg-foreground/90 border-2 border-foreground flex items-center justify-center overflow-hidden shrink-0">
-                      {row.avatarUrl ? (
-                        <img
-                          src={row.avatarUrl}
-                          alt={row.name}
-                          className="w-full h-full object-cover"
-                          style={{ objectPosition: `${(row.cropX ?? 0.5) * 100}% ${(row.cropY ?? 0.5) * 100}%` }}
-                        />
-                      ) : (
-                        <span className="font-display text-[10px] text-background">
-                          {row.name ? getInitials(row.name) : ''}
-                        </span>
-                      )}
-                    </div>
-                    <div className="flex-1 min-w-0">
-                      {row.name ? (
-                        <>
-                          <div className="font-display text-xs text-foreground truncate uppercase tracking-wide">
-                            {row.name}
-                          </div>
-                          <div className="text-[10px] text-foreground/60 font-medium">
-                            {row.sessions} {t.ranking.sessions}
-                          </div>
-                        </>
-                      ) : (
-                        <>
-                          <div className="h-2 w-20 bg-foreground/30 rounded-full animate-pulse" />
-                          <div className="h-1.5 w-12 bg-foreground/20 rounded-full mt-1.5 animate-pulse" />
-                        </>
-                      )}
-                    </div>
-                    <span className="font-display text-base text-foreground bg-background border-2 border-foreground rounded-md px-2 py-0.5">
-                      {row.score}
-                    </span>
-                  </div>
-                  );
-                })}
-              </div>
-            </div>
+            <StarOfTheWeek rotate={posterRotate} translateY={posterTranslateY} />
           </div>
+
         </div>
       </div>
     </section>

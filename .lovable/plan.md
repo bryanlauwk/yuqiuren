@@ -1,37 +1,65 @@
 
+## 本周之星海报（Star of the Week）
 
-## Goal
-Re-skin the site to match the jersey: **white base, royal blue, red accents**, on a **near-black** ink. Replace the current neon-lime "Game On" theme with a sportier, cleaner palette inspired by the uploaded jersey, while keeping the neo-brutalist hard-shadow aesthetic intact.
+把 `ArenaHero` 右侧的 4 行迷你排行榜换成一张大幅"本周之星"海报卡，和左侧标题形成"杂志/球队海报"式对仗。
 
-## New palette (token swap in `src/index.css`)
-- `--background`: white (`0 0% 100%`)
-- `--foreground` / ink: near-black (`220 25% 8%`) — keeps strong borders/shadows
-- `--primary`: royal blue `#2A4FB8` (`224 65% 45%`) — new "hero" color (replaces lime)
-- `--primary-foreground`: white
-- `--accent`: jersey red `#E63946` (`354 76% 56%`) — used for CTAs, LIVE badge, top‑1 highlight
-- `--accent-foreground`: white
-- `--muted`: very light blue‑gray (`220 20% 96%`)
-- `--rank-gold` → blue, top-row left bar uses red for #1, blue for #2/#3 (jersey-like layering)
-- Hard offset shadows stay near-black (unchanged behavior)
-- `.lime-slab` → renamed visually to a **blue slab** (keep class name for compatibility): blue bg + white text. (Optional: also add `.red-slab` for emphasis on one word.)
+### 选谁
 
-## Component touch-ups
-1. **`src/index.css`** — swap CSS variables only; all components automatically inherit. Update `.lime-slab` to blue. Update `.rank-badge-*` to use blue (top-3) with a red variant for `#1`.
-2. **`ArenaHero.tsx`** — change phone shadow from lime/foreground to **red** (`shadow-[8px_8px_0_0_hsl(var(--accent))]` becomes red automatically via accent token swap, no code change needed). Tinted rows alternate between **light-blue (muted)** and white instead of lime; row #1 gets a red tint. Small tweak to row backgrounds.
-3. **`MobileRankingCard.tsx` / `DesktopRankingTable.tsx` / `RankingRow.tsx` / `Podium.tsx`** — no structural change; primary-token swap recolors them. Minor: top-1 left bar uses `--accent` (red), top-2/3 use `--primary` (blue).
-4. **`Header.tsx`** — logo tile becomes blue (auto via primary), active nav pill becomes blue with white text (auto). No code change required.
-5. **Hero CTA** — currently `bg-accent` (was forest green) → now becomes red automatically. Looks great with white text on red, near-black border, blue slab in headline.
+**最近一场比赛的冠军**（不是赛季榜第一）—— 这样这块永远有"新故事"，而且和下面的赛季总榜没有信息重复。
 
-## Visual rhythm (jersey-inspired)
-- White canvas, blue as the dominant "team" color, red reserved for **#1, LIVE, and CTA** so it pops like the jersey's red slashes over the blue field.
-- Keep all hard 2px black borders + offset shadows for the brutalist sport-poster feel.
+数据来源：
+- 取 `tournament_sessions` 里日期最近的一场
+- 在 `session_results` 里找 `session_id = 最近场次 && result_type = 'champion'`
+- 关联 `players` 拿名字 + 头像
+- 如果一场有多个冠军（双打场），取第一个；其余在卡片底部用小字"& 同获冠军：XXX"带出
 
-## Files to edit
-- `src/index.css` (palette + `.lime-slab` + rank-badge tweak)
-- `src/components/ArenaHero.tsx` (row tint logic: row 1 = red, others alternate blue/white)
-- `src/components/MobileRankingCard.tsx` (top-1 left border red, top-2/3 blue; #1 points tile red)
-- `src/components/DesktopRankingTable.tsx` + `RankingRow.tsx` (same top-1 red treatment)
-- `src/components/Podium.tsx` (1st = red, 2nd/3rd = blue)
+如果还没有任何比赛，回退到赛季榜第一（保底）。
 
-No new dependencies. No DB changes. Existing translations and layout untouched.
+### 海报视觉
 
+整张卡占满右栏（替换现有手机 mockup）：
+
+```
+┌───────────────────────────────┐
+│  STAR OF THE WEEK    [LIVE]   │  ← 顶部小字 + 红色 LIVE 徽章
+│                               │
+│      ┌─────────────┐          │
+│      │             │          │
+│      │   大头像     │          │  ← 圆形/方形大头像，280×280
+│      │   (full_avatar) │      │     带 cinematic 光晕
+│      │             │          │
+│      └─────────────┘          │
+│                               │
+│   DICKY LIM                   │  ← font-display 巨字，名字
+│   冠军 · 第 X 场               │  ← 副标题：身份 + 场次序号
+│                               │
+│   ┌─────┬─────┬─────┐        │
+│   │ 12  │  3  │ #1  │        │  ← 3 个数据格子：本场积分 / 累计冠军 / 当前榜位
+│   │ PTS │ 🏆  │RANK │        │
+│   └─────┴─────┴─────┘        │
+│                               │
+│   2026.05.24                  │  ← 比赛日期
+└───────────────────────────────┘
+```
+
+风格延续现有 neo-brutalist：
+- 2px 黑边 + 红色硬阴影 `shadow-[8px_8px_0_0_hsl(var(--accent))]`
+- 头像背后用 `--accent` 红色斜切色块做"焦点光"
+- 名字用 `font-display` + `lime-slab`（其实是蓝色 slab）高亮
+- 整张卡保留原本的 scroll-tilt 视差动效（-2°→+3°）
+
+### 涉及文件
+
+**新增**
+- `src/components/hero/StarOfTheWeek.tsx` — 海报卡组件，内部用 `useRankings` 已有的 `sessions` + 新增的最近场次冠军查询
+
+**修改**
+- `src/components/ArenaHero.tsx` — 删除 `phoneRows` + 整个 phone mockup 块，换成 `<StarOfTheWeek />`
+- `src/hooks/useRankings.ts` — 暴露"最近一场冠军"派生数据（在已有 sessions/results 数据里 client-side 计算，不加新查询）
+- `src/i18n/translations.ts` — 加 `home.starOfTheWeek` / `home.champion` / `home.matchN` / `home.points` / `home.rank` 翻译键
+
+### 不做
+
+- 不加新表、不动 RLS、不动后端
+- 不动下面的完整排行榜
+- 不动 admin 流程
