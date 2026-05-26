@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
+import { Link } from 'react-router-dom';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { CircleArrow } from '@/components/ink/CircleArrow';
 import { useRankings } from '@/hooks/useRankings';
@@ -6,7 +7,7 @@ import { StarOfTheWeek } from '@/components/hero/StarOfTheWeek';
 
 
 export function ArenaHero() {
-  const { t } = useLanguage();
+  const { t, language } = useLanguage();
   const { sessions, players } = useRankings();
   const sectionRef = useRef<HTMLElement>(null);
   const [scrollOffset, setScrollOffset] = useState(0);
@@ -78,20 +79,35 @@ export function ArenaHero() {
               {t.home.heroSubtitle}
             </p>
 
-            {/* Live stat chip */}
+            {/* Live stat strip */}
             {(players.length > 0 || sessions.length > 0) && (
-              <div className="inline-flex items-center gap-2 mb-8 border-2 border-foreground rounded-md px-3 py-1.5 bg-background">
-                <span className="relative flex h-2 w-2">
-                  <span className="absolute inline-flex h-full w-full rounded-full bg-accent opacity-75 animate-ping" />
-                  <span className="relative inline-flex rounded-full h-2 w-2 bg-accent" />
-                </span>
-                <span className="font-display text-xs sm:text-sm tracking-wider text-foreground">
-                  {players.length} PLAYERS · {sessions.length} SESSIONS
-                </span>
+              <div className="flex flex-wrap items-center gap-2 mb-6">
+                <div className="inline-flex items-center gap-2 border-2 border-foreground rounded-md px-3 py-1.5 bg-background">
+                  <span className="relative flex h-2 w-2">
+                    <span className="absolute inline-flex h-full w-full rounded-full bg-accent opacity-75 animate-ping" />
+                    <span className="relative inline-flex rounded-full h-2 w-2 bg-accent" />
+                  </span>
+                  <span className="font-display text-xs sm:text-sm tracking-wider text-foreground">
+                    {players.length} {language === 'zh' ? '球员' : 'PLAYERS'}
+                  </span>
+                </div>
+                <div className="inline-flex items-center border-2 border-foreground rounded-md px-3 py-1.5 bg-background">
+                  <span className="font-display text-xs sm:text-sm tracking-wider text-foreground">
+                    {sessions.length} {language === 'zh' ? '场次' : 'SESSIONS'}
+                  </span>
+                </div>
+                {sessions[0]?.session_date && (
+                  <div className="inline-flex items-center border-2 border-foreground rounded-md px-3 py-1.5 bg-foreground text-background">
+                    <span className="font-display text-xs sm:text-sm tracking-wider">
+                      {language === 'zh' ? '最近 ' : 'LATEST '}
+                      {sessions[0].session_date.replace(/-/g, '.')}
+                    </span>
+                  </div>
+                )}
               </div>
             )}
 
-            <div>
+            <div className="flex flex-wrap items-center gap-3">
               <button
                 onClick={handleScroll}
                 className="btn-pop inline-flex items-center gap-3 bg-accent text-accent-foreground border-2 border-foreground px-6 py-3 font-display uppercase tracking-wide text-sm rounded-md"
@@ -99,6 +115,13 @@ export function ArenaHero() {
                 {t.showcase.cta}
                 <CircleArrow size={28} className="text-foreground" />
               </button>
+              <Link
+                to="/history"
+                className="btn-pop inline-flex items-center gap-2 bg-background text-foreground border-2 border-foreground px-5 py-3 font-display uppercase tracking-wide text-sm rounded-md hover:bg-foreground hover:text-background transition-colors"
+              >
+                {language === 'zh' ? '场次记录' : 'MATCH HISTORY'}
+                <span aria-hidden>→</span>
+              </Link>
             </div>
           </div>
 

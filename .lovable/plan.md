@@ -1,29 +1,36 @@
-## 紧凑桌面排行榜改进
+## 综合优化（4 处）
 
-### 问题
-桌面端 `DesktopRankingTable` 空白过多：行高很大（前3名 120px/100px，其余 80px）、Player 列独占过宽、边框粗重（2px）、不同排名球员的文字/头像大小差异大，导致视觉松散。
+### 1. 修 `StarOfTheWeek` 的空状态 bug
+**问题**：当 `data` 为 null（rankings 还未加载完）时，`data?.isFallback` 是 undefined → 走到非 fallback 分支 → 显示"本场冠军 · 第 undefined 场"，stat 全是 —。
 
-### 改动范围
-仅修改前端展示层，不涉及数据逻辑或后端。
+**改法** in `src/components/hero/StarOfTheWeek.tsx`:
+- 把 meta 行的条件改为：`!data` → 显示 skeleton（灰条 pulse）；`data.isFallback` → "赛季领跑者"；否则 → "本场冠军 · 第 N 场"
+- StatBox 也接 loading 状态显示 pulse 灰块而不是 "—"
+- 整体加 min-height 保持 layout 稳定
 
-### 具体调整
+### 2. 给 Hero 加 mini 数据条 → 升级现有 live stat chip
+当前已有 `X PLAYERS · Y SESSIONS` chip，扩展为 3 段信息：
+- 球员数
+- 已完成场数
+- 最近一场日期（`sessions[0].session_date`）
 
-**`src/components/DesktopRankingTable.tsx`**
-- 统一行高：`py-5` → `py-2.5`，行高从约 100-120px 压缩到约 48-52px
-- 统一头像尺寸：`w-14/h-14` vs `w-12/h-12` → 统一 `w-9 h-9`
-- 统一文字大小：所有球员 `text-base`，不再因排名变大
-- 缩小 Rank badge：`w-12 h-12 text-2xl` → `w-8 h-8 text-base`
-- 边框减薄：`border-b-2` → `border-b`（1px），颜色从 `border-foreground/10` 改 `border-foreground/15`
-- Top 3 指示：移除 `border-l-[8px]`，改用左侧 4px 细竖条 + 微妙背景色（`bg-accent/5` / `bg-primary/5`）
-- 列宽微调：Rank `w-20`→`w-16`，Sessions/Wins `w-28`→`w-24`，Points `w-32`→`w-28`
-- Header 字号从 `text-xs` 缩到 `text-[11px]`，高度更紧凑
-- #1 的 Points 高亮 badge：缩小 padding，改用 accent 红色（与 #1 rank badge 一致）
-- 其余球员 rank 数字颜色改为 `text-muted-foreground`
+放在 chip 下方，加一个二级 CTA "查看场次记录 →" 链接到 `/sessions`，让左侧不再下沉到空白。
 
-**`src/pages/RankingPage.tsx`**
-- Loading skeleton 高度统一缩小：`h-[120px]` / `h-[100px]` / `h-[80px]` → 统一 `h-[52px]`
+### 3. 排行榜上方加 summary 条
+在 `LIVE STANDINGS · 2026` 分隔线右侧，加 3 个小数据徽章：球员数 · 场次 · 当前 #1 名字。让分隔条不只是装饰。
 
-### 不变的部分
-- 外边框 `border-2` + 硬阴影（neo-brutalist 风格核心）
-- 整体动画和交互
-- 移动端 `MobileRankingCard` 不受影响
+`src/pages/RankingPage.tsx` 改 `<div id="rankings-anchor">` 块。
+
+### 4. Footer 变丰富
+当前 footer 只有语言切换 + 版权，过空。改造：
+- 左：站点 logo + 一句 slogan（"球不落地，永不放弃"）
+- 中：快速导航（排行榜 / 场次记录 / 管理员登录）
+- 右：语言切换 + 版权 + 当前赛季统计
+- 改成 3 列网格，桌面端 `md:grid-cols-3`，移动端单列
+
+`src/components/Footer.tsx` 整体重写。
+
+### 不动的部分
+- 数据逻辑、useRankings hook、表格组件
+- 移动端布局保持不变（footer 自然 stack）
+- 配色（5、6 两点先观察修复后效果再决定）

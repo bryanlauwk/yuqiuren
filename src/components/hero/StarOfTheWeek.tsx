@@ -140,47 +140,55 @@ export function StarOfTheWeek({ rotate, translateY }: Props) {
       {/* Name + meta */}
       <div className="p-4 space-y-3">
         <div>
-          <div className="font-display text-2xl leading-tight text-foreground uppercase tracking-tight break-words">
+          <div className="font-display text-2xl leading-tight text-foreground uppercase tracking-tight break-words min-h-[28px]">
             {data ? (
               <span className="lime-slab">{data.star.player_name}</span>
             ) : (
               <span className="inline-block h-7 w-40 bg-muted animate-pulse-arena rounded" />
             )}
           </div>
-          <div className="mt-1 font-display text-[11px] tracking-[0.2em] text-muted-foreground">
-            {data?.isFallback
-              ? language === 'zh'
-                ? '赛季领跑者'
-                : 'SEASON LEADER'
-              : language === 'zh'
-                ? `本场冠军 · 第 ${data?.matchIndex} 场`
-                : `MATCH CHAMPION · #${data?.matchIndex}`}
+          <div className="mt-1 font-display text-[11px] tracking-[0.2em] text-muted-foreground min-h-[14px]">
+            {!data ? (
+              <span className="inline-block h-3 w-32 bg-muted animate-pulse-arena rounded" />
+            ) : data.isFallback ? (
+              language === 'zh' ? '赛季领跑者' : 'SEASON LEADER'
+            ) : language === 'zh' ? (
+              `本场冠军 · 第 ${data.matchIndex} 场`
+            ) : (
+              `MATCH CHAMPION · #${data.matchIndex}`
+            )}
           </div>
         </div>
 
         {/* Stat trio */}
         <div className="grid grid-cols-3 gap-2">
           <StatBox
-            value={data ? (data.isFallback ? data.star.total_points : data.pointsThisMatch) : '—'}
+            value={data ? (data.isFallback ? data.star.total_points : data.pointsThisMatch) : null}
             label={data?.isFallback ? (language === 'zh' ? '总分' : 'PTS') : (language === 'zh' ? '本场' : 'MATCH')}
             tint="accent"
           />
           <StatBox
-            value={data ? data.star.championships : '—'}
+            value={data ? data.star.championships : null}
             label={language === 'zh' ? '冠军' : 'TITLES'}
             tint="primary"
           />
           <StatBox
-            value={data ? data.star.sessions_played : '—'}
+            value={data ? data.star.sessions_played : null}
             label={language === 'zh' ? '出场' : 'PLAYED'}
             tint="muted"
           />
         </div>
 
         {/* Footer line */}
-        <div className="flex items-center justify-between pt-2 border-t-2 border-foreground/10">
+        <div className="flex items-center justify-between pt-2 border-t-2 border-foreground/10 min-h-[18px]">
           <span className="font-display text-[10px] tracking-[0.2em] text-muted-foreground">
-            {data?.dateLabel ? formatDate(data.dateLabel) : '—'}
+            {!data ? (
+              <span className="inline-block h-2.5 w-16 bg-muted animate-pulse-arena rounded" />
+            ) : data.dateLabel ? (
+              formatDate(data.dateLabel)
+            ) : (
+              language === 'zh' ? '赛季累计' : 'SEASON TOTAL'
+            )}
           </span>
           {data && data.coChampionNames.length > 0 && (
             <span className="font-display text-[9px] tracking-wider text-muted-foreground truncate max-w-[60%] text-right">
@@ -198,7 +206,7 @@ function StatBox({
   label,
   tint,
 }: {
-  value: number | string;
+  value: number | string | null;
   label: string;
   tint: 'accent' | 'primary' | 'muted';
 }) {
@@ -210,8 +218,15 @@ function StatBox({
         : 'bg-muted text-foreground';
   return (
     <div className={`border-2 border-foreground rounded-md px-2 py-2 text-center ${bg}`}>
-      <div className="font-display text-xl leading-none">{value}</div>
+      <div className="font-display text-xl leading-none min-h-[20px] flex items-center justify-center">
+        {value === null ? (
+          <span className="inline-block h-4 w-6 bg-foreground/15 animate-pulse-arena rounded" />
+        ) : (
+          value
+        )}
+      </div>
       <div className="font-display text-[9px] tracking-[0.15em] mt-1 opacity-90">{label}</div>
     </div>
   );
 }
+

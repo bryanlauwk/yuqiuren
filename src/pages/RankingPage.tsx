@@ -12,8 +12,8 @@ import { useIsMobile } from '@/hooks/use-mobile';
 import { Trophy } from 'lucide-react';
 
 export default function RankingPage() {
-  const { rankings, loading, hasTopTies } = useRankings();
-  const { t } = useLanguage();
+  const { rankings, sessions, players, loading, hasTopTies } = useRankings();
+  const { t, language } = useLanguage();
   const isMobile = useIsMobile();
 
   const [lightboxOpen, setLightboxOpen] = useState(false);
@@ -24,6 +24,8 @@ export default function RankingPage() {
     setLightboxOpen(true);
   };
 
+  const leader = rankings[0];
+
   return (
     <div className="min-h-screen bg-background flex flex-col relative">
       <Header />
@@ -31,11 +33,26 @@ export default function RankingPage() {
       <ArenaHero />
 
       <div id="rankings-anchor" className="container pt-12 pb-2">
-        <div className="flex items-center gap-4">
+        <div className="flex items-center gap-3 sm:gap-4 flex-wrap">
           <span className="font-display text-xs sm:text-sm tracking-[0.2em] text-foreground whitespace-nowrap">
-            ▪ LIVE STANDINGS · 2026
+            ▪ {language === 'zh' ? '实时排行 · 2026' : 'LIVE STANDINGS · 2026'}
           </span>
-          <div className="flex-1 h-[2px] bg-foreground" />
+          <div className="flex-1 min-w-[40px] h-[2px] bg-foreground" />
+          {!loading && rankings.length > 0 && (
+            <div className="flex items-center gap-1.5 sm:gap-2 flex-wrap">
+              <span className="font-display text-[10px] sm:text-xs tracking-wider px-2 py-1 border-2 border-foreground rounded bg-background text-foreground">
+                {players.length}{language === 'zh' ? ' 人' : ' P'}
+              </span>
+              <span className="font-display text-[10px] sm:text-xs tracking-wider px-2 py-1 border-2 border-foreground rounded bg-background text-foreground">
+                {sessions.length}{language === 'zh' ? ' 场' : ' S'}
+              </span>
+              {leader && (
+                <span className="font-display text-[10px] sm:text-xs tracking-wider px-2 py-1 border-2 border-foreground rounded bg-accent text-accent-foreground max-w-[160px] truncate">
+                  #1 {leader.player_name}
+                </span>
+              )}
+            </div>
+          )}
         </div>
       </div>
 
