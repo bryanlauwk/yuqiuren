@@ -59,20 +59,20 @@ export function DesktopRankingTable({ rankings, onAvatarClick }: DesktopRankingT
     <div className="rounded bg-card border-2 border-foreground shadow-[6px_6px_0_0_hsl(var(--foreground))] overflow-hidden">
       <Table>
         <TableHeader>
-          <TableRow className="hover:bg-transparent border-b-2 border-foreground bg-foreground">
-            <TableHead className="w-20 text-center text-xs font-display text-background">
+          <TableRow className="hover:bg-transparent border-b border-foreground bg-foreground">
+            <TableHead className="w-16 text-center text-[11px] font-display text-background py-2">
               Rank
             </TableHead>
-            <TableHead className="text-xs font-display text-background">
+            <TableHead className="text-[11px] font-display text-background py-2">
               Player
             </TableHead>
-            <TableHead className="w-28 text-center text-xs font-display text-background">
+            <TableHead className="w-24 text-center text-[11px] font-display text-background py-2">
               {t.ranking.sessions}
             </TableHead>
-            <TableHead className="w-28 text-center text-xs font-display text-background">
+            <TableHead className="w-24 text-center text-[11px] font-display text-background py-2">
               {t.ranking.wins}
             </TableHead>
-            <TableHead className="w-32 text-center text-xs font-display text-background">
+            <TableHead className="w-28 text-center text-[11px] font-display text-background py-2">
               {t.ranking.points}
             </TableHead>
           </TableRow>
@@ -86,30 +86,36 @@ export function DesktopRankingTable({ rankings, onAvatarClick }: DesktopRankingT
               <TableRow
                 key={ranking.player_id}
                 className={cn(
-                  "transition-colors duration-150 border-b-2 border-foreground/10 hover:bg-muted",
-                  isTopThree && "border-l-[8px] border-l-primary"
+                  "transition-colors duration-150 border-b border-foreground/15 hover:bg-muted/60",
+                  isTopThree && (isFirst
+                    ? "bg-accent/5 border-l-4 border-l-accent"
+                    : "bg-primary/5 border-l-4 border-l-primary")
                 )}
               >
-                <TableCell className="text-center py-5">
+                <TableCell className="text-center py-2.5">
                   {isTopThree ? (
-                    <div className="inline-flex items-center justify-center bg-primary border-2 border-foreground rounded font-display text-foreground mx-auto w-12 h-12 text-2xl">
+                    <div
+                      className={cn(
+                        "inline-flex items-center justify-center border border-foreground rounded font-display mx-auto w-8 h-8 text-base",
+                        isFirst ? "bg-accent text-accent-foreground" : "bg-primary text-primary-foreground"
+                      )}
+                    >
                       {ranking.rank}
                     </div>
                   ) : (
-                    <span className="text-2xl font-display text-foreground">
+                    <span className="text-base font-display text-muted-foreground">
                       {ranking.rank}
                     </span>
                   )}
                 </TableCell>
 
-                <TableCell className="py-5">
-                  <div className="flex items-center gap-4">
+                <TableCell className="py-2.5">
+                  <div className="flex items-center gap-3">
                     <button
                       onClick={() => ranking.full_avatar_url && onAvatarClick?.(ranking.full_avatar_url, ranking.player_name)}
                       disabled={!ranking.full_avatar_url}
                       className={cn(
-                        "flex-shrink-0 rounded overflow-hidden bg-muted border-2 border-foreground transition-all",
-                        isTopThree ? "w-14 h-14" : "w-12 h-12",
+                        "flex-shrink-0 rounded overflow-hidden bg-muted border border-foreground transition-all w-9 h-9",
                         ranking.full_avatar_url && "cursor-pointer hover:-translate-y-0.5"
                       )}
                     >
@@ -125,17 +131,14 @@ export function DesktopRankingTable({ rankings, onAvatarClick }: DesktopRankingT
                           }}
                         />
                       ) : (
-                        <div className="w-full h-full flex items-center justify-center text-foreground text-sm font-black">
+                        <div className="w-full h-full flex items-center justify-center text-foreground text-xs font-black">
                           {getInitials(ranking.player_name)}
                         </div>
                       )}
                     </button>
 
-                    <div className="flex items-center gap-3">
-                      <p className={cn(
-                        "font-display text-foreground tracking-tight",
-                        isTopThree ? "text-2xl" : "text-xl"
-                      )}>
+                    <div className="flex items-center gap-2">
+                      <p className="font-display text-foreground text-base tracking-tight">
                         {ranking.player_name}
                       </p>
                       {getRankChangeDisplay(ranking)}
@@ -143,25 +146,25 @@ export function DesktopRankingTable({ rankings, onAvatarClick }: DesktopRankingT
                   </div>
                 </TableCell>
 
-                <TableCell className="text-center py-5">
-                  <p className={cn("font-display text-foreground", isTopThree ? "text-xl" : "text-lg")}>
+                <TableCell className="text-center py-2.5">
+                  <p className="font-display text-foreground text-base">
                     {ranking.sessions_played}
                   </p>
                 </TableCell>
 
-                <TableCell className="text-center py-5">
-                  <p className={cn("font-display text-foreground", isTopThree ? "text-xl" : "text-lg")}>
+                <TableCell className="text-center py-2.5">
+                  <p className="font-display text-foreground text-base">
                     {ranking.championships}
                   </p>
                 </TableCell>
 
-                <TableCell className="text-center py-5">
+                <TableCell className="text-center py-2.5">
                   {isFirst ? (
-                    <span className="inline-block bg-primary border-2 border-foreground px-3 py-1 rounded font-display text-2xl text-foreground">
+                    <span className="inline-block bg-accent text-accent-foreground border border-foreground px-2 py-0.5 rounded font-display text-base">
                       {ranking.total_points}
                     </span>
                   ) : (
-                    <p className={cn("font-display text-foreground", isTopThree ? "text-2xl" : "text-xl")}>
+                    <p className="font-display text-foreground text-base">
                       {ranking.total_points}
                     </p>
                   )}
