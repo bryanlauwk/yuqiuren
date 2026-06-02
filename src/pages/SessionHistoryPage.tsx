@@ -210,7 +210,7 @@ export default function SessionHistoryPage() {
                     const hasHighlights = sessionHighlights.length > 0;
                     if (!hasPoints && !hasHighlights) return null;
                     return (
-                      <div className="flex items-center justify-between gap-2 pt-3 mt-3 border-t border-border/30">
+                      <div className="flex flex-wrap items-center justify-between gap-x-3 gap-y-2 pt-3 mt-3 border-t border-border/30">
                         {hasPoints ? (
                           <span className="text-xs text-muted-foreground">
                             {t.admin.totalPoints}:{' '}
