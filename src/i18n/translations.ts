@@ -64,6 +64,18 @@ export const translations = {
       noSessions: "暂无场次记录",
       groupPhoto: "合影",
     },
+    highlights: {
+      title: "精彩集锦",
+      chip: "段集锦",
+      empty: "暂无集锦视频",
+      editorTitle: "管理集锦视频",
+      urlPlaceholder: "粘贴 YouTube 链接 (youtu.be/... 或 watch?v=...)",
+      titlePlaceholder: "标题（可选，例如：决赛 Game 3）",
+      add: "添加视频",
+      added: "已添加",
+      invalidUrl: "无效的 YouTube 链接",
+      manage: "管理集锦",
+    },
     admin: {
       title: "管理面板",
       description: "管理选手、场次和比赛结果",
