@@ -1,11 +1,12 @@
 import { useState, useRef } from 'react';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { Calendar, Trophy, Medal, Users, Trash2, Pencil, History, Camera, X, Loader2 } from 'lucide-react';
+import { Calendar, Trophy, Medal, Users, Trash2, Pencil, History, Camera, X, Loader2, Film } from 'lucide-react';
 import { useLanguage } from '@/contexts/LanguageContext';
 import type { TournamentSession, SessionResult, Player, SessionType } from '@/types/ranking';
 import { format } from 'date-fns';
 import { SessionResultsEditor } from './SessionResultsEditor';
+import { SessionHighlightsEditor } from './SessionHighlightsEditor';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
 
