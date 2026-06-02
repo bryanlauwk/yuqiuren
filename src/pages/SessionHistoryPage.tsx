@@ -250,6 +250,20 @@ export default function SessionHistoryPage() {
         onClose={() => setLightboxIndex(null)}
         onIndexChange={setLightboxIndex}
       />
+      {/* Highlights Gallery */}
+      {galleryFor && (() => {
+        const s = sessions.find((x) => x.id === galleryFor);
+        if (!s) return null;
+        const label = `${format(new Date(s.session_date), 'MMM d, yyyy')}${s.name ? ` · ${s.name}` : ''}`;
+        return (
+          <HighlightsGallery
+            open={!!galleryFor}
+            onClose={() => setGalleryFor(null)}
+            highlights={highlightsBySession.get(galleryFor) ?? []}
+            sessionLabel={label}
+          />
+        );
+      })()}
 
       <Footer />
     </div>
