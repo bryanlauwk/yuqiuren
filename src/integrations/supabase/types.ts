@@ -44,6 +44,41 @@ export type Database = {
         }
         Relationships: []
       }
+      session_highlights: {
+        Row: {
+          created_at: string
+          id: string
+          session_id: string
+          sort_order: number
+          title: string | null
+          youtube_url: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          session_id: string
+          sort_order?: number
+          title?: string | null
+          youtube_url: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          session_id?: string
+          sort_order?: number
+          title?: string | null
+          youtube_url?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "session_highlights_session_id_fkey"
+            columns: ["session_id"]
+            isOneToOne: false
+            referencedRelation: "tournament_sessions"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       session_results: {
         Row: {
           base_points: number

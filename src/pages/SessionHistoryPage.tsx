@@ -1,18 +1,33 @@
 import { Header } from '@/components/Header';
 import { Footer } from '@/components/Footer';
 import { Badge } from '@/components/ui/badge';
-import { Calendar, Trophy, Medal, Users, Image as ImageIcon } from 'lucide-react';
+import { Calendar, Trophy, Medal, Users, Image as ImageIcon, Play } from 'lucide-react';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { useRankings } from '@/hooks/useRankings';
+import { useAllHighlights } from '@/hooks/useHighlights';
 import { format } from 'date-fns';
 import type { SessionResult } from '@/types/ranking';
 import { useState, useMemo } from 'react';
 import { PhotoLightbox } from '@/components/PhotoLightbox';
+import { HighlightsGallery } from '@/components/HighlightsGallery';
 
 export default function SessionHistoryPage() {
   const { t } = useLanguage();
   const { sessions, results, players, loading } = useRankings();
+  const { highlights } = useAllHighlights();
   const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
+  const [galleryFor, setGalleryFor] = useState<string | null>(null);
+
+  // Group highlights by session_id
+  const highlightsBySession = useMemo(() => {
+    const map = new Map<string, typeof highlights>();
+    highlights.forEach((h) => {
+      const arr = map.get(h.session_id) ?? [];
+      arr.push(h);
+      map.set(h.session_id, arr);
+    });
+    return map;
+  }, [highlights]);
 
   // Collect all session photos for gallery navigation
   const allPhotos = useMemo(() => {
@@ -188,12 +203,38 @@ export default function SessionHistoryPage() {
                     <p className="text-sm text-muted-foreground">{t.admin.noResults}</p>
                   )}
 
-                  {/* Points Summary */}
-                  {sessionResults.length > 0 && (
-                    <div className="text-xs text-muted-foreground pt-3 mt-3 border-t border-border/30">
-                      {t.admin.totalPoints}: <span className="font-medium text-foreground">{sessionResults.reduce((sum, r) => sum + r.total_points, 0)}</span>
-                    </div>
-                  )}
+                  {/* Footer row: points + highlights chip */}
+                  {(() => {
+                    const sessionHighlights = highlightsBySession.get(session.id) ?? [];
+                    const hasPoints = sessionResults.length > 0;
+                    const hasHighlights = sessionHighlights.length > 0;
+                    if (!hasPoints && !hasHighlights) return null;
+                    return (
+                      <div className="flex items-center justify-between gap-2 pt-3 mt-3 border-t border-border/30">
+                        {hasPoints ? (
+                          <span className="text-xs text-muted-foreground">
+                            {t.admin.totalPoints}:{' '}
+                            <span className="font-medium text-foreground">
+                              {sessionResults.reduce((sum, r) => sum + r.total_points, 0)}
+                            </span>
+                          </span>
+                        ) : (
+                          <span />
+                        )}
+                        {hasHighlights && (
+                          <button
+                            type="button"
+                            onClick={() => setGalleryFor(session.id)}
+                            className="group inline-flex items-center gap-1.5 rounded-full border border-primary/40 bg-primary/5 px-2.5 py-1 text-xs font-medium text-primary transition-all hover:border-primary hover:bg-primary/15 hover:shadow-[0_0_12px_hsl(var(--primary)/0.35)]"
+                          >
+                            <Play className="h-3 w-3 fill-primary transition-transform group-hover:scale-110" />
+                            <span className="tabular-nums">{sessionHighlights.length}</span>
+                            <span>{t.highlights.chip}</span>
+                          </button>
+                        )}
+                      </div>
+                    );
+                  })()}
                 </div>
               );
             })}
@@ -209,6 +250,20 @@ export default function SessionHistoryPage() {
         onClose={() => setLightboxIndex(null)}
         onIndexChange={setLightboxIndex}
       />
+      {/* Highlights Gallery */}
+      {galleryFor && (() => {
+        const s = sessions.find((x) => x.id === galleryFor);
+        if (!s) return null;
+        const label = `${format(new Date(s.session_date), 'MMM d, yyyy')}${s.name ? ` · ${s.name}` : ''}`;
+        return (
+          <HighlightsGallery
+            open={!!galleryFor}
+            onClose={() => setGalleryFor(null)}
+            highlights={highlightsBySession.get(galleryFor) ?? []}
+            sessionLabel={label}
+          />
+        );
+      })()}
 
       <Footer />
     </div>

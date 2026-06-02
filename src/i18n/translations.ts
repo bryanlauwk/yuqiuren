@@ -64,6 +64,18 @@ export const translations = {
       noSessions: "暂无场次记录",
       groupPhoto: "合影",
     },
+    highlights: {
+      title: "精彩集锦",
+      chip: "段集锦",
+      empty: "暂无集锦视频",
+      editorTitle: "管理集锦视频",
+      urlPlaceholder: "粘贴 YouTube 链接 (youtu.be/... 或 watch?v=...)",
+      titlePlaceholder: "标题（可选，例如：决赛 Game 3）",
+      add: "添加视频",
+      added: "已添加",
+      invalidUrl: "无效的 YouTube 链接",
+      manage: "管理集锦",
+    },
     admin: {
       title: "管理面板",
       description: "管理选手、场次和比赛结果",
@@ -193,6 +205,18 @@ export const translations = {
       subtitle: "View all match sessions and results",
       noSessions: "No sessions recorded yet",
       groupPhoto: "Group Photo",
+    },
+    highlights: {
+      title: "Match Highlights",
+      chip: "highlights",
+      empty: "No highlight videos yet",
+      editorTitle: "Manage Highlights",
+      urlPlaceholder: "Paste YouTube URL (youtu.be/... or watch?v=...)",
+      titlePlaceholder: "Title (optional, e.g. Final Game 3)",
+      add: "Add Video",
+      added: "Added",
+      invalidUrl: "Invalid YouTube URL",
+      manage: "Manage Highlights",
     },
     admin: {
       title: "Admin Panel",
@@ -326,6 +350,18 @@ export type TranslationKeys = {
     subtitle: string;
     noSessions: string;
     groupPhoto: string;
+  };
+  highlights: {
+    title: string;
+    chip: string;
+    empty: string;
+    editorTitle: string;
+    urlPlaceholder: string;
+    titlePlaceholder: string;
+    add: string;
+    added: string;
+    invalidUrl: string;
+    manage: string;
   };
   admin: {
     title: string;
