@@ -1,9 +1,9 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { Dialog, DialogContent, DialogTitle } from '@/components/ui/dialog';
 import { LiteYouTubeEmbed } from './LiteYouTubeEmbed';
 import { parseYouTubeId, youtubeThumbnail } from '@/lib/youtube';
 import { cn } from '@/lib/utils';
-import { Play, Film } from 'lucide-react';
+import { Play, Film, ChevronLeft, ChevronRight, Repeat } from 'lucide-react';
 import type { SessionHighlight } from '@/types/ranking';
 import { useLanguage } from '@/contexts/LanguageContext';
 
@@ -17,6 +17,7 @@ interface HighlightsGalleryProps {
 export function HighlightsGallery({ open, onClose, highlights, sessionLabel }: HighlightsGalleryProps) {
   const { t } = useLanguage();
   const [activeIndex, setActiveIndex] = useState(0);
+  const [autoplayNext, setAutoplayNext] = useState(true);
 
   useEffect(() => {
     if (open) setActiveIndex(0);
@@ -27,7 +28,34 @@ export function HighlightsGallery({ open, onClose, highlights, sessionLabel }: H
     .map((h) => ({ raw: h, id: parseYouTubeId(h.youtube_url) }))
     .filter((x): x is { raw: SessionHighlight; id: string } => !!x.id);
 
+  const total = items.length;
+  const goPrev = useCallback(() => {
+    if (total === 0) return;
+    setActiveIndex((i) => (i - 1 + total) % total);
+  }, [total]);
+  const goNext = useCallback(() => {
+    if (total === 0) return;
+    setActiveIndex((i) => (i + 1) % total);
+  }, [total]);
+
+  // Keyboard navigation while dialog is open
+  useEffect(() => {
+    if (!open) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'ArrowLeft') {
+        e.preventDefault();
+        goPrev();
+      } else if (e.key === 'ArrowRight') {
+        e.preventDefault();
+        goNext();
+      }
+    };
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, [open, goPrev, goNext]);
+
   const active = items[activeIndex];
+  const hasMultiple = total > 1;
 
   return (
     <Dialog open={open} onOpenChange={(v) => !v && onClose()}>
@@ -47,8 +75,25 @@ export function HighlightsGallery({ open, onClose, highlights, sessionLabel }: H
             </p>
             <p className="truncate text-sm font-semibold text-foreground">{sessionLabel}</p>
           </div>
+          {hasMultiple && (
+            <button
+              type="button"
+              onClick={() => setAutoplayNext((v) => !v)}
+              aria-pressed={autoplayNext}
+              title={t.highlights.autoplayNext}
+              className={cn(
+                'flex items-center gap-1.5 rounded-md border px-2 py-1 text-[11px] font-medium transition-colors shrink-0',
+                autoplayNext
+                  ? 'border-primary/60 bg-primary/15 text-primary'
+                  : 'border-border/60 bg-black/40 text-muted-foreground hover:text-foreground',
+              )}
+            >
+              <Repeat className="h-3.5 w-3.5" />
+              <span className="hidden sm:inline">{t.highlights.autoplayNext}</span>
+            </button>
+          )}
           <span className="text-xs text-muted-foreground tabular-nums shrink-0">
-            {items.length > 0 ? `${activeIndex + 1} / ${items.length}` : '0'}
+            {total > 0 ? `${activeIndex + 1} / ${total}` : '0'}
           </span>
         </div>
 
@@ -62,19 +107,60 @@ export function HighlightsGallery({ open, onClose, highlights, sessionLabel }: H
             {/* Main player */}
             <div className="p-3 sm:p-4 md:p-5 bg-black/60 flex flex-col min-h-0">
               {active && (
-                <div className="w-full">
+                <div className="relative w-full group">
                   <LiteYouTubeEmbed
                     key={active.raw.id}
                     videoId={active.id}
                     title={active.raw.title || undefined}
                     autoPlay
+                    onEnded={autoplayNext && hasMultiple ? goNext : undefined}
                   />
+                  {hasMultiple && (
+                    <>
+                      <button
+                        type="button"
+                        onClick={goPrev}
+                        aria-label={t.highlights.prev}
+                        className="absolute left-2 top-1/2 -translate-y-1/2 z-10 flex h-10 w-10 items-center justify-center rounded-full bg-black/60 text-white backdrop-blur-sm transition-all hover:bg-black/80 hover:scale-105 active:scale-95 opacity-0 group-hover:opacity-100 focus-visible:opacity-100 sm:opacity-70"
+                      >
+                        <ChevronLeft className="h-6 w-6" />
+                      </button>
+                      <button
+                        type="button"
+                        onClick={goNext}
+                        aria-label={t.highlights.next}
+                        className="absolute right-2 top-1/2 -translate-y-1/2 z-10 flex h-10 w-10 items-center justify-center rounded-full bg-black/60 text-white backdrop-blur-sm transition-all hover:bg-black/80 hover:scale-105 active:scale-95 opacity-0 group-hover:opacity-100 focus-visible:opacity-100 sm:opacity-70"
+                      >
+                        <ChevronRight className="h-6 w-6" />
+                      </button>
+                    </>
+                  )}
                 </div>
               )}
               {active?.raw.title && (
                 <p className="mt-2 sm:mt-3 text-sm font-medium text-foreground line-clamp-2">
                   {active.raw.title}
                 </p>
+              )}
+              {hasMultiple && (
+                <div className="mt-3 flex items-center justify-between gap-2 md:hidden">
+                  <button
+                    type="button"
+                    onClick={goPrev}
+                    className="flex flex-1 items-center justify-center gap-1.5 rounded-md border border-border/60 bg-black/40 px-3 py-2 text-sm font-medium text-foreground active:scale-95 transition-transform"
+                  >
+                    <ChevronLeft className="h-4 w-4" />
+                    {t.highlights.prev}
+                  </button>
+                  <button
+                    type="button"
+                    onClick={goNext}
+                    className="flex flex-1 items-center justify-center gap-1.5 rounded-md border border-primary/40 bg-primary/15 px-3 py-2 text-sm font-medium text-primary active:scale-95 transition-transform"
+                  >
+                    {t.highlights.next}
+                    <ChevronRight className="h-4 w-4" />
+                  </button>
+                </div>
               )}
             </div>
 
