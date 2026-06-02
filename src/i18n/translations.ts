@@ -220,6 +220,9 @@ export const translations = {
       added: "Added",
       invalidUrl: "Invalid YouTube URL",
       manage: "Manage Highlights",
+      prev: "Previous",
+      next: "Next",
+      autoplayNext: "Autoplay",
     },
     admin: {
       title: "Admin Panel",
