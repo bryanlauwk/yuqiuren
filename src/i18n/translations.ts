@@ -206,6 +206,18 @@ export const translations = {
       noSessions: "No sessions recorded yet",
       groupPhoto: "Group Photo",
     },
+    highlights: {
+      title: "Match Highlights",
+      chip: "highlights",
+      empty: "No highlight videos yet",
+      editorTitle: "Manage Highlights",
+      urlPlaceholder: "Paste YouTube URL (youtu.be/... or watch?v=...)",
+      titlePlaceholder: "Title (optional, e.g. Final Game 3)",
+      add: "Add Video",
+      added: "Added",
+      invalidUrl: "Invalid YouTube URL",
+      manage: "Manage Highlights",
+    },
     admin: {
       title: "Admin Panel",
       description: "Manage players, sessions, and tournament results",
