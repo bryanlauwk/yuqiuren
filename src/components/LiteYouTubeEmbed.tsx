@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Play } from 'lucide-react';
 import { youtubeEmbedUrl, youtubeThumbnail } from '@/lib/youtube';
 import { cn } from '@/lib/utils';
@@ -9,14 +9,66 @@ interface LiteYouTubeEmbedProps {
   className?: string;
   /** Auto-play immediately by mounting the iframe on first render. */
   autoPlay?: boolean;
+  /** Fired when the video reaches the end (requires iframe JS API). */
+  onEnded?: () => void;
 }
 
 /**
  * Lightweight YouTube player: shows thumbnail + play button until clicked,
  * then swaps in a real iframe. Avoids loading dozens of iframes upfront.
  */
-export function LiteYouTubeEmbed({ videoId, title, className, autoPlay = false }: LiteYouTubeEmbedProps) {
+export function LiteYouTubeEmbed({ videoId, title, className, autoPlay = false, onEnded }: LiteYouTubeEmbedProps) {
   const [activated, setActivated] = useState(autoPlay);
+  const iframeRef = useRef<HTMLIFrameElement>(null);
+  const onEndedRef = useRef(onEnded);
+  onEndedRef.current = onEnded;
+
+  // Listen to YT iframe API postMessage events to detect playback end.
+  useEffect(() => {
+    if (!activated || !onEnded) return;
+    const iframe = iframeRef.current;
+    if (!iframe) return;
+
+    // Tell the iframe we want to receive state-change events.
+    const sendListening = () => {
+      iframe.contentWindow?.postMessage(
+        JSON.stringify({ event: 'listening', id: videoId, channel: 'widget' }),
+        '*',
+      );
+    };
+    const onLoad = () => {
+      sendListening();
+      // Subscribe to onStateChange events.
+      iframe.contentWindow?.postMessage(
+        JSON.stringify({ event: 'command', func: 'addEventListener', args: ['onStateChange'] }),
+        '*',
+      );
+    };
+    iframe.addEventListener('load', onLoad);
+
+    const handleMessage = (e: MessageEvent) => {
+      if (typeof e.data !== 'string') return;
+      if (!e.origin.includes('youtube')) return;
+      try {
+        const data = JSON.parse(e.data);
+        // State 0 = ENDED
+        if (data?.event === 'onStateChange' && data?.info === 0) {
+          onEndedRef.current?.();
+        }
+        if (data?.event === 'infoDelivery' && data?.info?.playerState === 0) {
+          onEndedRef.current?.();
+        }
+      } catch {
+        // ignore non-JSON messages
+      }
+    };
+    window.addEventListener('message', handleMessage);
+
+    return () => {
+      iframe.removeEventListener('load', onLoad);
+      window.removeEventListener('message', handleMessage);
+    };
+  }, [activated, videoId, onEnded]);
 
   return (
     <div
@@ -27,7 +79,8 @@ export function LiteYouTubeEmbed({ videoId, title, className, autoPlay = false }
     >
       {activated ? (
         <iframe
-          src={youtubeEmbedUrl(videoId)}
+          ref={iframeRef}
+          src={youtubeEmbedUrl(videoId, { autoplay: true, enableApi: !!onEnded })}
           title={title || 'Match highlight'}
           className="absolute inset-0 h-full w-full"
           allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"

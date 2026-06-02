@@ -38,6 +38,17 @@ export function youtubeThumbnail(id: string, quality: 'hq' | 'mq' | 'max' = 'hq'
   return `https://i.ytimg.com/vi/${id}/${map[quality]}.jpg`;
 }
 
-export function youtubeEmbedUrl(id: string): string {
-  return `https://www.youtube-nocookie.com/embed/${id}?autoplay=1&rel=0&modestbranding=1`;
+export function youtubeEmbedUrl(id: string, opts: { autoplay?: boolean; enableApi?: boolean } = {}): string {
+  const { autoplay = true, enableApi = false } = opts;
+  const params = new URLSearchParams({
+    autoplay: autoplay ? '1' : '0',
+    rel: '0',
+    modestbranding: '1',
+    playsinline: '1',
+  });
+  if (enableApi) {
+    params.set('enablejsapi', '1');
+    if (typeof window !== 'undefined') params.set('origin', window.location.origin);
+  }
+  return `https://www.youtube-nocookie.com/embed/${id}?${params.toString()}`;
 }
