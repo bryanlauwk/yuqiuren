@@ -351,6 +351,18 @@ export type TranslationKeys = {
     noSessions: string;
     groupPhoto: string;
   };
+  highlights: {
+    title: string;
+    chip: string;
+    empty: string;
+    editorTitle: string;
+    urlPlaceholder: string;
+    titlePlaceholder: string;
+    add: string;
+    added: string;
+    invalidUrl: string;
+    manage: string;
+  };
   admin: {
     title: string;
     description: string;
