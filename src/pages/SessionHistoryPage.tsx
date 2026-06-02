@@ -1,18 +1,33 @@
 import { Header } from '@/components/Header';
 import { Footer } from '@/components/Footer';
 import { Badge } from '@/components/ui/badge';
-import { Calendar, Trophy, Medal, Users, Image as ImageIcon } from 'lucide-react';
+import { Calendar, Trophy, Medal, Users, Image as ImageIcon, Play } from 'lucide-react';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { useRankings } from '@/hooks/useRankings';
+import { useAllHighlights } from '@/hooks/useHighlights';
 import { format } from 'date-fns';
 import type { SessionResult } from '@/types/ranking';
 import { useState, useMemo } from 'react';
 import { PhotoLightbox } from '@/components/PhotoLightbox';
+import { HighlightsGallery } from '@/components/HighlightsGallery';
 
 export default function SessionHistoryPage() {
   const { t } = useLanguage();
   const { sessions, results, players, loading } = useRankings();
+  const { highlights } = useAllHighlights();
   const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
+  const [galleryFor, setGalleryFor] = useState<string | null>(null);
+
+  // Group highlights by session_id
+  const highlightsBySession = useMemo(() => {
+    const map = new Map<string, typeof highlights>();
+    highlights.forEach((h) => {
+      const arr = map.get(h.session_id) ?? [];
+      arr.push(h);
+      map.set(h.session_id, arr);
+    });
+    return map;
+  }, [highlights]);
 
   // Collect all session photos for gallery navigation
   const allPhotos = useMemo(() => {
