@@ -35,6 +35,7 @@ export function SessionHistory({
 }: SessionHistoryProps) {
   const { t } = useLanguage();
   const [editingSession, setEditingSession] = useState<TournamentSession | null>(null);
+  const [highlightsForSession, setHighlightsForSession] = useState<TournamentSession | null>(null);
   const [uploadingSessionId, setUploadingSessionId] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [targetSessionId, setTargetSessionId] = useState<string | null>(null);
