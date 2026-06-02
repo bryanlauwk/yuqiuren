@@ -368,6 +368,9 @@ export type TranslationKeys = {
     added: string;
     invalidUrl: string;
     manage: string;
+    prev: string;
+    next: string;
+    autoplayNext: string;
   };
   admin: {
     title: string;
