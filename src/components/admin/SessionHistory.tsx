@@ -342,6 +342,15 @@ export function SessionHistory({
           onUpdateResults={onUpdateResults}
         />
       )}
+
+      {/* Highlights Editor */}
+      {highlightsForSession && (
+        <SessionHighlightsEditor
+          session={highlightsForSession}
+          open={!!highlightsForSession}
+          onOpenChange={(open) => !open && setHighlightsForSession(null)}
+        />
+      )}
     </div>
   );
 }
