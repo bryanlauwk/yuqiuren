@@ -225,10 +225,11 @@ export default function SessionHistoryPage() {
                           <button
                             type="button"
                             onClick={() => setGalleryFor(session.id)}
-                            className="group inline-flex items-center gap-1.5 rounded-full border border-primary/40 bg-primary/5 px-2.5 py-1 text-xs font-medium text-primary transition-all hover:border-primary hover:bg-primary/15 hover:shadow-[0_0_12px_hsl(var(--primary)/0.35)]"
+                            aria-label={`${t.highlights.title} (${sessionHighlights.length})`}
+                            className="group inline-flex min-h-9 shrink-0 items-center gap-1.5 rounded-full border border-primary/40 bg-primary/5 px-3 py-1.5 text-xs font-medium text-primary transition-all active:scale-95 hover:border-primary hover:bg-primary/15 hover:shadow-[0_0_12px_hsl(var(--primary)/0.35)]"
                           >
-                            <Play className="h-3 w-3 fill-primary transition-transform group-hover:scale-110" />
-                            <span className="tabular-nums">{sessionHighlights.length}</span>
+                            <Play className="h-3.5 w-3.5 fill-primary transition-transform group-hover:scale-110" />
+                            <span className="tabular-nums font-semibold">{sessionHighlights.length}</span>
                             <span>{t.highlights.chip}</span>
                           </button>
                         )}
