@@ -28,6 +28,15 @@ export interface SessionResult {
   created_at: string;
 }
 
+export interface SessionHighlight {
+  id: string;
+  session_id: string;
+  youtube_url: string;
+  title: string | null;
+  sort_order: number;
+  created_at: string;
+}
+
 export interface PlayerRanking {
   player_id: string;
   player_name: string;
@@ -39,9 +48,9 @@ export interface PlayerRanking {
   sessions_played: number;
   championships: number;
   rank: number;
-  rank_change: number; // positive = moved up, negative = moved down, 0 = no change
-  is_new: boolean; // true if player joined in the latest session
-  is_tied: boolean; // true if tied with adjacent player on all tiebreakers except name
+  rank_change: number;
+  is_new: boolean;
+  is_tied: boolean;
 }
 
 export type SessionType = '3_teams' | '2_teams';
