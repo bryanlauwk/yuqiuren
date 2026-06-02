@@ -203,12 +203,38 @@ export default function SessionHistoryPage() {
                     <p className="text-sm text-muted-foreground">{t.admin.noResults}</p>
                   )}
 
-                  {/* Points Summary */}
-                  {sessionResults.length > 0 && (
-                    <div className="text-xs text-muted-foreground pt-3 mt-3 border-t border-border/30">
-                      {t.admin.totalPoints}: <span className="font-medium text-foreground">{sessionResults.reduce((sum, r) => sum + r.total_points, 0)}</span>
-                    </div>
-                  )}
+                  {/* Footer row: points + highlights chip */}
+                  {(() => {
+                    const sessionHighlights = highlightsBySession.get(session.id) ?? [];
+                    const hasPoints = sessionResults.length > 0;
+                    const hasHighlights = sessionHighlights.length > 0;
+                    if (!hasPoints && !hasHighlights) return null;
+                    return (
+                      <div className="flex items-center justify-between gap-2 pt-3 mt-3 border-t border-border/30">
+                        {hasPoints ? (
+                          <span className="text-xs text-muted-foreground">
+                            {t.admin.totalPoints}:{' '}
+                            <span className="font-medium text-foreground">
+                              {sessionResults.reduce((sum, r) => sum + r.total_points, 0)}
+                            </span>
+                          </span>
+                        ) : (
+                          <span />
+                        )}
+                        {hasHighlights && (
+                          <button
+                            type="button"
+                            onClick={() => setGalleryFor(session.id)}
+                            className="group inline-flex items-center gap-1.5 rounded-full border border-primary/40 bg-primary/5 px-2.5 py-1 text-xs font-medium text-primary transition-all hover:border-primary hover:bg-primary/15 hover:shadow-[0_0_12px_hsl(var(--primary)/0.35)]"
+                          >
+                            <Play className="h-3 w-3 fill-primary transition-transform group-hover:scale-110" />
+                            <span className="tabular-nums">{sessionHighlights.length}</span>
+                            <span>{t.highlights.chip}</span>
+                          </button>
+                        )}
+                      </div>
+                    );
+                  })()}
                 </div>
               );
             })}
