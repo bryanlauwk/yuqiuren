@@ -75,6 +75,9 @@ export const translations = {
       added: "已添加",
       invalidUrl: "无效的 YouTube 链接",
       manage: "管理精彩片段",
+      prev: "上一段",
+      next: "下一段",
+      autoplayNext: "连播",
     },
     admin: {
       title: "管理面板",
