@@ -30,7 +30,7 @@ export function DesktopRankingTable({
   // Density-driven tokens. Everything keys off these so header + rows stay on the same grid.
   const d = compact
     ? {
-        rowPadY: 'py-1.5',
+        rowPadY: 'py-1 leading-none',
         headPadY: 'h-auto py-1 leading-none',
         cellPadX: 'px-2',
         firstPadX: 'pl-3 pr-2',
