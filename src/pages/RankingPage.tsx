@@ -64,10 +64,45 @@ export default function RankingPage() {
                   #1 {leader.player_name}
                 </span>
               )}
+              {!isMobile && (
+                <div
+                  role="group"
+                  aria-label={t.ranking.density}
+                  className="hidden md:inline-flex items-stretch border-2 border-foreground rounded overflow-hidden"
+                >
+                  <button
+                    type="button"
+                    onClick={() => setDensity('compact')}
+                    aria-pressed={density === 'compact'}
+                    className={cn(
+                      'font-display text-[10px] sm:text-xs tracking-wider px-2 py-1 transition-colors',
+                      density === 'compact'
+                        ? 'bg-foreground text-background'
+                        : 'bg-background text-foreground hover:bg-muted'
+                    )}
+                  >
+                    {t.ranking.compact}
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setDensity('comfortable')}
+                    aria-pressed={density === 'comfortable'}
+                    className={cn(
+                      'font-display text-[10px] sm:text-xs tracking-wider px-2 py-1 border-l-2 border-foreground transition-colors',
+                      density === 'comfortable'
+                        ? 'bg-foreground text-background'
+                        : 'bg-background text-foreground hover:bg-muted'
+                    )}
+                  >
+                    {t.ranking.comfortable}
+                  </button>
+                </div>
+              )}
             </div>
           )}
         </div>
       </div>
+
 
       <main className="container mt-6 relative z-10 flex-1 pb-12">
         {loading ? (
