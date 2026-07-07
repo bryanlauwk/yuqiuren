@@ -31,7 +31,7 @@ export function DesktopRankingTable({
   const d = compact
     ? {
         rowPadY: 'py-1.5',
-        headPadY: 'py-1.5',
+        headPadY: 'h-auto py-1 leading-none',
         cellPadX: 'px-2',
         firstPadX: 'pl-3 pr-2',
         lastPadX: 'pl-2 pr-3',
@@ -46,7 +46,7 @@ export function DesktopRankingTable({
       }
     : {
         rowPadY: 'py-2.5',
-        headPadY: 'py-2',
+        headPadY: 'h-auto py-1.5 leading-none',
         cellPadX: 'px-3',
         firstPadX: 'pl-4 pr-3',
         lastPadX: 'pl-3 pr-4',
