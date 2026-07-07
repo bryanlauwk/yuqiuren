@@ -2,272 +2,178 @@ import { ArrowUp, ArrowDown, Minus } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useLanguage } from '@/contexts/LanguageContext';
 import type { PlayerRanking } from '@/types/ranking';
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from '@/components/ui/table';
 
 interface DesktopRankingTableProps {
   rankings: PlayerRanking[];
   onAvatarClick?: (avatarUrl: string, playerName: string) => void;
-  playerCount?: number;
-  latestSessionDate?: string | null;
 }
 
-// Tight grid: rank / player (flex) / sessions / wins / points.
-const GRID = 'grid grid-cols-[56px_minmax(0,1fr)_80px_80px_96px] gap-4';
+export function DesktopRankingTable({ rankings, onAvatarClick }: DesktopRankingTableProps) {
+  const { t } = useLanguage();
 
-export function DesktopRankingTable({
-  rankings,
-  onAvatarClick,
-  playerCount,
-  latestSessionDate,
-}: DesktopRankingTableProps) {
-  const { t, language } = useLanguage();
-  const zh = language === 'zh';
+  const getInitials = (name: string) => {
+    return name
+      .split(' ')
+      .map(n => n[0])
+      .join('')
+      .toUpperCase()
+      .slice(0, 2);
+  };
 
-  const getInitials = (name: string) =>
-    name.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2);
-
-  const rankChange = (r: PlayerRanking) => {
-    if (r.rank_change > 0) {
+  const getRankChangeDisplay = (ranking: PlayerRanking) => {
+    if (ranking.rank_change > 0) {
       return (
-        <span className="inline-flex items-center gap-0.5 text-finished font-display font-bold text-xs tabular-nums">
-          <ArrowUp className="w-3 h-3" strokeWidth={3} />
-          {r.rank_change}
-        </span>
+        <div className="flex items-center gap-0.5 text-finished">
+          <ArrowUp className="w-3.5 h-3.5" strokeWidth={3} />
+          <span className="text-xs font-black">{ranking.rank_change}</span>
+        </div>
       );
     }
-    if (r.rank_change < 0) {
+    if (ranking.rank_change < 0) {
       return (
-        <span className="inline-flex items-center gap-0.5 text-destructive font-display font-bold text-xs tabular-nums">
-          <ArrowDown className="w-3 h-3" strokeWidth={3} />
-          {Math.abs(r.rank_change)}
-        </span>
+        <div className="flex items-center gap-0.5 text-destructive">
+          <ArrowDown className="w-3.5 h-3.5" strokeWidth={3} />
+          <span className="text-xs font-black">{Math.abs(ranking.rank_change)}</span>
+        </div>
       );
     }
-    if (!r.is_new) {
+    if (!ranking.is_new) {
       return (
-        <span className="inline-flex items-center text-muted-foreground">
-          <Minus className="w-3 h-3" strokeWidth={3} />
-        </span>
+        <div className="flex items-center text-muted-foreground">
+          <Minus className="w-3.5 h-3.5" strokeWidth={3} />
+        </div>
       );
     }
     return null;
   };
 
-  const medalColor = (rank: number) => {
-    if (rank === 1) return 'rank-gold';
-    if (rank === 2) return 'rank-silver';
-    return 'rank-bronze';
-  };
-
-  const topThree = rankings.filter(r => r.rank <= 3);
-  const rest = rankings.filter(r => r.rank > 3);
-
   return (
     <div className="rounded bg-card border-2 border-foreground shadow-[6px_6px_0_0_hsl(var(--foreground))] overflow-hidden">
-      <div className="max-w-4xl mx-auto w-full">
-        {/* Header */}
-        <div
-          className={cn(
-            GRID,
-            'px-6 py-2.5 bg-foreground text-background border-b-2 border-primary',
-            'text-[10px] font-display font-bold tracking-[0.2em] uppercase',
-          )}
-        >
-          <div>{zh ? '排名' : 'Rank'}</div>
-          <div>{zh ? '选手' : 'Player'}</div>
-          <div className="text-right">{zh ? '场次' : 'Sessions'}</div>
-          <div className="text-right">{zh ? '胜' : 'Wins'}</div>
-          <div className="text-right">{zh ? '积分' : 'Points'}</div>
-        </div>
-
-        {/* Top 3 */}
-        <div>
-          {topThree.map((r) => {
-            const color = medalColor(r.rank);
-            const isFirst = r.rank === 1;
-            const height = isFirst ? 'h-[88px]' : 'h-[76px]';
-            const avatarSize = isFirst ? 'w-12 h-12' : 'w-11 h-11';
-            const nameSize = isFirst ? 'text-2xl' : 'text-xl';
-            const pointsSize = isFirst ? 'text-3xl' : 'text-2xl';
-            const rankSize = isFirst ? 'text-4xl' : 'text-[2rem]';
+      <Table>
+        <TableHeader>
+          <TableRow className="hover:bg-transparent border-b border-foreground bg-foreground">
+            <TableHead className="w-16 text-center text-[11px] font-display text-background py-2">
+              Rank
+            </TableHead>
+            <TableHead className="text-[11px] font-display text-background py-2">
+              Player
+            </TableHead>
+            <TableHead className="w-24 text-center text-[11px] font-display text-background py-2">
+              {t.ranking.sessions}
+            </TableHead>
+            <TableHead className="w-24 text-center text-[11px] font-display text-background py-2">
+              {t.ranking.wins}
+            </TableHead>
+            <TableHead className="w-28 text-center text-[11px] font-display text-background py-2">
+              {t.ranking.points}
+            </TableHead>
+          </TableRow>
+        </TableHeader>
+        <TableBody>
+          {rankings.map((ranking) => {
+            const isTopThree = ranking.rank <= 3;
+            const isFirst = ranking.rank === 1;
 
             return (
-              <div
-                key={r.player_id}
+              <TableRow
+                key={ranking.player_id}
                 className={cn(
-                  GRID,
-                  'items-center px-6 border-b border-foreground/10',
-                  height,
+                  "transition-colors duration-150 border-b border-foreground/15 hover:bg-muted/60",
+                  isTopThree && (isFirst
+                    ? "bg-accent/5 border-l-4 border-l-accent"
+                    : "bg-primary/5 border-l-4 border-l-primary")
                 )}
-                style={{ borderLeft: `4px solid hsl(var(--${color}))` }}
               >
-                <div
-                  className={cn(
-                    'font-broadcast font-black leading-none tabular-nums',
-                    rankSize,
-                  )}
-                  style={{ color: `hsl(var(--${color}))` }}
-                >
-                  {String(r.rank).padStart(2, '0')}
-                </div>
-
-                <div className="flex items-center gap-3 min-w-0">
-                  <button
-                    onClick={() =>
-                      r.full_avatar_url && onAvatarClick?.(r.full_avatar_url, r.player_name)
-                    }
-                    disabled={!r.full_avatar_url}
-                    className={cn(
-                      'flex-shrink-0 rounded-full overflow-hidden bg-muted border-2 transition-transform',
-                      avatarSize,
-                      r.full_avatar_url && 'cursor-pointer hover:-translate-y-0.5',
-                    )}
-                    style={{ borderColor: `hsl(var(--${color}))` }}
-                  >
-                    {r.avatar_url ? (
-                      <img
-                        src={r.avatar_url}
-                        alt={r.player_name}
-                        className="w-full h-full object-cover"
-                        style={{
-                          objectPosition:
-                            r.avatar_crop_x !== null && r.avatar_crop_y !== null
-                              ? `${(r.avatar_crop_x ?? 0.5) * 100}% ${(r.avatar_crop_y ?? 0.5) * 100}%`
-                              : 'center',
-                        }}
-                      />
-                    ) : (
-                      <div className="w-full h-full flex items-center justify-center text-foreground text-xs font-black">
-                        {getInitials(r.player_name)}
-                      </div>
-                    )}
-                  </button>
-
-                  <div className="min-w-0 flex items-center gap-2">
-                    <span
+                <TableCell className="text-center py-2.5">
+                  {isTopThree ? (
+                    <div
                       className={cn(
-                        'font-broadcast font-black uppercase tracking-tight text-foreground leading-none truncate',
-                        nameSize,
+                        "inline-flex items-center justify-center border border-foreground rounded font-display mx-auto w-8 h-8 text-base",
+                        isFirst ? "bg-accent text-accent-foreground" : "bg-primary text-primary-foreground"
                       )}
                     >
-                      {r.player_name}
+                      {ranking.rank}
+                    </div>
+                  ) : (
+                    <span className="text-base font-display text-muted-foreground">
+                      {ranking.rank}
                     </span>
-                    {rankChange(r)}
-                    {r.is_new && (
-                      <span className="text-[10px] font-display font-bold uppercase text-muted-foreground tracking-widest">
-                        NEW
-                      </span>
-                    )}
-                  </div>
-                </div>
-
-                <div className="text-right font-display font-bold text-lg text-foreground tabular-nums">
-                  {r.sessions_played}
-                </div>
-                <div className="text-right font-display font-bold text-lg text-foreground tabular-nums">
-                  {r.championships}
-                </div>
-                <div
-                  className={cn(
-                    'text-right font-broadcast font-black tabular-nums leading-none border-l border-foreground/10 pl-4',
-                    pointsSize,
                   )}
-                  style={{ color: `hsl(var(--${color}))` }}
-                >
-                  {r.total_points}
-                </div>
-              </div>
+                </TableCell>
+
+                <TableCell className="py-2.5">
+                  <div className="flex items-center gap-3">
+                    <button
+                      onClick={() => ranking.full_avatar_url && onAvatarClick?.(ranking.full_avatar_url, ranking.player_name)}
+                      disabled={!ranking.full_avatar_url}
+                      className={cn(
+                        "flex-shrink-0 rounded overflow-hidden bg-muted border border-foreground transition-all w-9 h-9",
+                        ranking.full_avatar_url && "cursor-pointer hover:-translate-y-0.5"
+                      )}
+                    >
+                      {ranking.avatar_url ? (
+                        <img
+                          src={ranking.avatar_url}
+                          alt={ranking.player_name}
+                          className="w-full h-full object-cover"
+                          style={{
+                            objectPosition: ranking.avatar_crop_x !== null && ranking.avatar_crop_y !== null
+                              ? `${(ranking.avatar_crop_x ?? 0.5) * 100}% ${(ranking.avatar_crop_y ?? 0.5) * 100}%`
+                              : 'center'
+                          }}
+                        />
+                      ) : (
+                        <div className="w-full h-full flex items-center justify-center text-foreground text-xs font-black">
+                          {getInitials(ranking.player_name)}
+                        </div>
+                      )}
+                    </button>
+
+                    <div className="flex items-center gap-2">
+                      <p className="font-display text-foreground text-base tracking-tight">
+                        {ranking.player_name}
+                      </p>
+                      {getRankChangeDisplay(ranking)}
+                    </div>
+                  </div>
+                </TableCell>
+
+                <TableCell className="text-center py-2.5">
+                  <p className="font-display text-foreground text-base">
+                    {ranking.sessions_played}
+                  </p>
+                </TableCell>
+
+                <TableCell className="text-center py-2.5">
+                  <p className="font-display text-foreground text-base">
+                    {ranking.championships}
+                  </p>
+                </TableCell>
+
+                <TableCell className="text-center py-2.5">
+                  {isFirst ? (
+                    <span className="inline-block bg-accent text-accent-foreground border border-foreground px-2 py-0.5 rounded font-display text-base">
+                      {ranking.total_points}
+                    </span>
+                  ) : (
+                    <p className="font-display text-foreground text-base">
+                      {ranking.total_points}
+                    </p>
+                  )}
+                </TableCell>
+              </TableRow>
             );
           })}
-        </div>
-
-        {/* Compact rows */}
-        <div>
-          {rest.map((r, i) => (
-            <div
-              key={r.player_id}
-              className={cn(
-                GRID,
-                'items-center px-6 h-11 border-b border-foreground/5 transition-colors group hover:bg-muted',
-                i % 2 === 0 ? 'bg-transparent' : 'bg-muted/40',
-              )}
-            >
-              <div className="font-display font-bold text-sm text-muted-foreground tabular-nums">
-                {String(r.rank).padStart(2, '0')}
-              </div>
-
-              <div className="flex items-center gap-3 min-w-0">
-                <button
-                  onClick={() =>
-                    r.full_avatar_url && onAvatarClick?.(r.full_avatar_url, r.player_name)
-                  }
-                  disabled={!r.full_avatar_url}
-                  className={cn(
-                    'flex-shrink-0 w-7 h-7 rounded-full overflow-hidden bg-muted border border-foreground/30',
-                    r.full_avatar_url && 'cursor-pointer hover:border-primary',
-                  )}
-                >
-                  {r.avatar_url ? (
-                    <img
-                      src={r.avatar_url}
-                      alt={r.player_name}
-                      className="w-full h-full object-cover"
-                      style={{
-                        objectPosition:
-                          r.avatar_crop_x !== null && r.avatar_crop_y !== null
-                            ? `${(r.avatar_crop_x ?? 0.5) * 100}% ${(r.avatar_crop_y ?? 0.5) * 100}%`
-                            : 'center',
-                      }}
-                    />
-                  ) : (
-                    <div className="w-full h-full flex items-center justify-center text-foreground text-[9px] font-black">
-                      {getInitials(r.player_name)}
-                    </div>
-                  )}
-                </button>
-                <span className="font-display font-bold text-sm uppercase tracking-wide text-foreground truncate group-hover:text-primary transition-colors">
-                  {r.player_name}
-                </span>
-                <span className="flex-shrink-0">{rankChange(r)}</span>
-                {r.is_new && (
-                  <span className="text-[9px] font-display font-bold uppercase text-muted-foreground tracking-widest flex-shrink-0">
-                    NEW
-                  </span>
-                )}
-              </div>
-
-              <div className="text-right font-display font-bold text-sm text-muted-foreground tabular-nums">
-                {r.sessions_played}
-              </div>
-              <div className="text-right font-display font-bold text-sm text-muted-foreground tabular-nums">
-                {r.championships}
-              </div>
-              <div className="text-right font-display font-black text-base text-foreground tabular-nums border-l border-foreground/10 pl-4">
-                {r.total_points}
-              </div>
-            </div>
-          ))}
-        </div>
-
-        {/* Footer */}
-        <div className="px-6 py-2.5 bg-foreground/[0.03] border-t-2 border-foreground/10 flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <span className="w-1.5 h-1.5 bg-primary rounded-full animate-pulse" />
-            <span className="text-[10px] font-display font-bold tracking-[0.2em] uppercase text-muted-foreground">
-              {zh ? '实时数据' : 'Live Standings'}
-            </span>
-            {typeof playerCount === 'number' && (
-              <span className="text-[10px] font-display font-bold tracking-widest uppercase text-muted-foreground/70">
-                · {playerCount}{zh ? ' 名选手' : ' Players'}
-              </span>
-            )}
-          </div>
-          {latestSessionDate && (
-            <span className="text-[10px] font-display font-bold tracking-widest uppercase text-primary">
-              {zh ? '最近场次' : 'Latest'} · {latestSessionDate}
-            </span>
-          )}
-        </div>
-      </div>
+        </TableBody>
+      </Table>
     </div>
   );
 }

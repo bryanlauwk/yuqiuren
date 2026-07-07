@@ -94,9 +94,7 @@ export default function RankingPage() {
               <div className="animate-fade-in-up">
                 <DesktopRankingTable 
                   rankings={rankings} 
-                  onAvatarClick={handleAvatarClick}
-                  playerCount={players.length}
-                  latestSessionDate={sessions[0]?.session_date ?? null}
+                  onAvatarClick={handleAvatarClick} 
                 />
               </div>
             )}
