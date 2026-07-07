@@ -164,6 +164,9 @@ export function DesktopRankingTable({
             const rowPadY = isTopThree ? d.topRowPadY : d.rowPadY;
             const pct = Math.min(100, Math.round((ranking.total_points / maxPoints) * 100));
             const fillWidth = mounted ? `${pct}%` : '0%';
+            // The number sits at the bar's right edge; only use the fill's
+            // foreground color when the fill actually reaches under it.
+            const labelOnFill = pct >= 85;
 
             const badgeRotate = isFirst
               ? 'group-hover:rotate-6'
@@ -311,13 +314,12 @@ export function DesktopRankingTable({
                         className={cn(
                           'relative z-10 font-display tabular-nums',
                           d.pointsText,
-                          isFirst
-                            ? 'text-accent-foreground pr-10'
-                            : isSecond
-                            ? 'text-primary-foreground pr-2.5'
-                            : isThird
-                            ? 'text-foreground pr-2.5'
-                            : 'text-foreground pr-2.5'
+                          isFirst ? 'pr-14' : 'pr-2.5',
+                          labelOnFill && isFirst
+                            ? 'text-accent-foreground'
+                            : labelOnFill && isSecond
+                            ? 'text-primary-foreground'
+                            : 'text-foreground'
                         )}
                       >
                         {ranking.total_points}

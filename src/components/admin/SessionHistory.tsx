@@ -124,7 +124,7 @@ export function SessionHistory({
   };
 
   return (
-    <div className="bg-card rounded-2xl border border-border p-6 shadow-sm">
+    <div className="bg-card rounded border-2 border-foreground p-6 shadow-[4px_4px_0_0_hsl(var(--foreground))]">
       <input
         ref={fileInputRef}
         type="file"
