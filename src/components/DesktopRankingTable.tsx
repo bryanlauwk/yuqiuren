@@ -37,6 +37,7 @@ export function DesktopRankingTable({
     topRowPadY: 'py-4 leading-none',
     headPadY: 'h-auto py-2.5 leading-none',
     cellPadX: 'px-4',
+    sessionsPadX: 'pl-8 pr-4',
     firstPadX: 'pl-5 pr-4',
     lastPadX: 'pl-4 pr-5',
     rankColW: 'w-16',
@@ -51,15 +52,13 @@ export function DesktopRankingTable({
     text: 'text-lg',
     nameText: 'text-lg',
     topNameText: 'text-xl',
-    statText: 'text-lg',
-    topStatText: 'text-xl',
+    statText: 'text-lg font-black',
+    pointsText: 'text-lg font-black',
     headText: 'text-[11px]',
     gap: 'gap-5',
     sepH: 'h-2',
-    barH: 'h-9',
-    topBarH: 'h-12',
-    barText: 'text-base',
-    topBarText: 'text-lg',
+    barH: 'h-10',
+    topBarH: 'h-10',
   };
 
   const getInitials = (name: string) =>
@@ -274,14 +273,14 @@ export function DesktopRankingTable({
                     </div>
                   </TableCell>
 
-                  <TableCell className={cn(d.statColW, d.cellPadX, rowPadY, 'text-center align-middle')}>
-                    <p className={cn('font-display text-foreground tabular-nums', isTopThree ? d.topStatText : d.statText)}>
+                  <TableCell className={cn(d.statColW, d.sessionsPadX, rowPadY, 'text-right align-middle')}>
+                    <p className={cn('font-display text-foreground tabular-nums', d.statText)}>
                       {ranking.sessions_played}
                     </p>
                   </TableCell>
 
-                  <TableCell className={cn(d.statColW, d.cellPadX, rowPadY, 'text-center align-middle')}>
-                    <p className={cn('font-display text-foreground tabular-nums', isTopThree ? d.topStatText : d.statText)}>
+                  <TableCell className={cn(d.statColW, d.cellPadX, rowPadY, 'text-right align-middle')}>
+                    <p className={cn('font-display text-foreground tabular-nums', d.statText)}>
                       {ranking.championships}
                     </p>
                   </TableCell>
@@ -289,7 +288,7 @@ export function DesktopRankingTable({
                   <TableCell className={cn(d.pointsColW, d.lastPadX, rowPadY, 'align-middle')}>
                     <div
                       className={cn(
-                        'relative w-full flex items-center overflow-hidden bg-muted/60 rounded-md',
+                        'relative w-full flex items-center justify-end overflow-hidden bg-muted/60 rounded-md',
                         isTopThree
                           ? cn('border-2 border-foreground', d.topBarH)
                           : cn('border-2 border-foreground/40', d.barH)
@@ -310,13 +309,15 @@ export function DesktopRankingTable({
                       />
                       <span
                         className={cn(
-                          'relative z-10 font-display italic tabular-nums px-2.5',
-                          isTopThree ? d.topBarText : d.barText,
+                          'relative z-10 font-display tabular-nums',
+                          d.pointsText,
                           isFirst
-                            ? 'text-accent-foreground'
+                            ? 'text-accent-foreground pr-10'
                             : isSecond
-                            ? 'text-primary-foreground'
-                            : 'text-foreground'
+                            ? 'text-primary-foreground pr-2.5'
+                            : isThird
+                            ? 'text-foreground pr-2.5'
+                            : 'text-foreground pr-2.5'
                         )}
                       >
                         {ranking.total_points}
