@@ -99,7 +99,7 @@ export function MobileRankingCard({ ranking, onAvatarClick }: MobileRankingCardP
         <div className="flex-1 min-w-0">
           <p className={cn(
             "font-display text-foreground tracking-tight truncate",
-            isTopThree ? "text-xl" : "text-lg"
+            isTopThree ? "text-2xl" : "text-xl"
           )}>
             {ranking.player_name}
           </p>
@@ -111,7 +111,7 @@ export function MobileRankingCard({ ranking, onAvatarClick }: MobileRankingCardP
       {/* Row 2: Stats */}
       <div className="grid grid-cols-3 gap-2 mt-4 pt-4 border-t-2 border-foreground/10">
         <div className="text-center bg-muted rounded border-2 border-foreground py-2">
-          <p className={cn("font-display text-foreground", isTopThree ? "text-xl" : "text-lg")}>
+          <p className={cn("font-display text-foreground", isTopThree ? "text-2xl" : "text-xl")}>
             {ranking.sessions_played}
           </p>
           <p className="text-[10px] font-bold uppercase tracking-wider text-foreground/60">
@@ -120,7 +120,7 @@ export function MobileRankingCard({ ranking, onAvatarClick }: MobileRankingCardP
         </div>
 
         <div className="text-center bg-muted rounded border-2 border-foreground py-2">
-          <p className={cn("font-display text-foreground", isTopThree ? "text-xl" : "text-lg")}>
+          <p className={cn("font-display text-foreground", isTopThree ? "text-2xl" : "text-xl")}>
             {ranking.championships}
           </p>
           <p className="text-[10px] font-bold uppercase tracking-wider text-foreground/60">
@@ -135,7 +135,7 @@ export function MobileRankingCard({ ranking, onAvatarClick }: MobileRankingCardP
           <p className={cn(
             "font-display",
             ranking.rank === 1 ? "text-foreground" : "text-background",
-            isTopThree ? "text-2xl" : "text-xl"
+            isTopThree ? "text-3xl" : "text-2xl"
           )}>
             {ranking.total_points}
           </p>
