@@ -142,10 +142,12 @@ export default function RankingPage() {
               </div>
             ) : (
               <div className="animate-fade-in-up">
-                <DesktopRankingTable 
-                  rankings={rankings} 
-                  onAvatarClick={handleAvatarClick} 
+                <DesktopRankingTable
+                  rankings={rankings}
+                  onAvatarClick={handleAvatarClick}
+                  density={density}
                 />
+
               </div>
             )}
           </>
