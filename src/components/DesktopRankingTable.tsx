@@ -45,7 +45,7 @@ export function DesktopRankingTable({
         gap: 'gap-2.5',
       }
     : {
-        rowPadY: 'py-2.5',
+        rowPadY: 'py-1.5 leading-none',
         headPadY: 'h-auto py-1.5 leading-none',
         cellPadX: 'px-3',
         firstPadX: 'pl-4 pr-3',
