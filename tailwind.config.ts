@@ -24,6 +24,7 @@ export default {
       fontFamily: {
         sans: ['Plus Jakarta Sans', 'Inter', 'system-ui', 'sans-serif'],
         display: ['Archivo', 'Plus Jakarta Sans', 'system-ui', 'sans-serif'],
+        broadcast: ['"Barlow Condensed"', 'Archivo', 'system-ui', 'sans-serif'],
       },
       colors: {
         border: "hsl(var(--border))",
