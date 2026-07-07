@@ -20,6 +20,18 @@ export default function RankingPage() {
   const [lightboxOpen, setLightboxOpen] = useState(false);
   const [selectedAvatar, setSelectedAvatar] = useState<{ src: string; alt: string } | null>(null);
 
+  const [density, setDensity] = useState<RankingDensity>(() => {
+    if (typeof window === 'undefined') return 'comfortable';
+    const saved = window.localStorage.getItem('ranking-density');
+    return saved === 'compact' || saved === 'comfortable' ? saved : 'comfortable';
+  });
+  useEffect(() => {
+    try {
+      window.localStorage.setItem('ranking-density', density);
+    } catch {}
+  }, [density]);
+
+
   const handleAvatarClick = (avatarUrl: string, playerName: string) => {
     setSelectedAvatar({ src: avatarUrl, alt: playerName });
     setLightboxOpen(true);
