@@ -316,7 +316,7 @@ export function DesktopRankingTable({
                   <TableCell className={cn(d.pointsColW, d.lastPadX, rowPadY, 'align-middle')}>
                     <div
                       className={cn(
-                        'relative w-full flex items-center overflow-hidden bg-muted/60',
+                        'relative w-full flex items-center overflow-hidden bg-muted/60 rounded-md',
                         isTopThree
                           ? cn('border-2 border-foreground', d.topBarH)
                           : cn('border-2 border-foreground/40', d.barH)
