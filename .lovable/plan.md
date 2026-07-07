@@ -1,26 +1,36 @@
-## 改动
-仅 `src/components/DesktopRankingTable.tsx`，只调密度 token，行高由头像自然撑开（移除 `py-*` 上下 padding 的硬约束，改用 `min-h` 保底 + 头像尺寸驱动）。
+## 问题
+截图显示：排名号码徽章（红/蓝色方块）与球员头像之间几乎贴在一起，右侧名字与头像也偏近；行与行的分隔条较厚，整体节奏拥挤。
 
-### 头像尺寸放大
-| token | compact | comfortable |
-|---|---|---|
-| `avatar`（4+ 名） | `w-10 h-10` → `w-12 h-12` | `w-12 h-12` → `w-16 h-16` |
-| `topAvatar`（前三） | `w-11 h-11` → `w-14 h-14` | `w-14 h-14` → `w-20 h-20` |
+## 只改一个文件
+`src/components/DesktopRankingTable.tsx`，仅调 spacing / gap / 分隔条 token，不动列宽结构、颜色语义、动画。
 
-### 行高自适应
-- 删除 `rowPadY` / `topRowPadY` 上的固定 `py-2/2.5/3/4`，改为 `py-1.5` 的最小 padding，让 flex 容器和头像自然撑开高度。
-- 头像 `flex-shrink-0`，`TableCell` 保持 `align-middle`，行高会随头像 = `min(内容, avatar+padding)` 自动增长。
-- 分隔条 `sepH` 保持不变。
+### 1. 号码 ↔ 头像 之间加呼吸
+- `firstPadX`: `pl-5 pr-4` → `pl-5 pr-6`（rank 列右侧 padding 加大，把徽章推离头像）
+- 头像所在 cell 的 `cellPadX` 保持 `px-4`，但内部 flex 的 `gap` 由 `gap-5` → `gap-6`（头像 ↔ 名字更松）
 
-### 前三名徽章 & 进度条同步放大
-| token | compact | comfortable |
-|---|---|---|
-| `topRankBadge` | `w-9 h-9` → `w-11 h-11` | `w-10 h-10` → `w-14 h-14 text-xl` |
-| `rankBadge`（4+） | `w-7 h-7` | `w-8 h-8` → `w-9 h-9` |
-| `topBarH` | `h-8` → `h-10` | `h-10` → `h-12` |
-| `barH` | `h-6` → `h-7` | `h-7` → `h-9` |
+### 2. 前三名徽章微缩，避免视觉压迫
+- `topRankBadge`: `w-14 h-14 text-xl` → `w-12 h-12 text-lg`（仍明显大于 4+ 名的 `w-9 h-9`，但不再逼近头像尺寸）
+- `rankBadge`（4+）保持 `w-9 h-9 text-lg`
 
-### 兼容
-- 表格 `table-fixed` 列宽不变。
-- 其他样式（hover 抬升、渐变分隔、MAX 徽章、进度条动画）保留。
-- 不动移动端和其他文件。
+### 3. 头像与名字节奏
+- 前三头像 `topAvatar`: `w-20 h-20` → `w-[72px] h-[72px]`（略收，配合徽章缩小后整体协调）
+- 4+ 名 `avatar` 保持 `w-16 h-16`
+
+### 4. 行间分隔与行高
+- `sepH`: `h-2` → `h-1.5`（前二名下方渐变分隔条更纤细）
+- `topRowPadY`: `py-4` → `py-3.5`，`rowPadY`: `py-3.5` → `py-3`（配合徽章缩小，整体上下更均衡）
+
+### 5. 名字与升降箭头
+- 名字与 `getRankChangeDisplay` 之间 `gap-2` → `gap-2.5`，让 ↑3 / ↓2 与名字分离更清晰
+
+### 6. 数字列微调（保持之前对齐规则）
+- `sessionsPadX`: `pl-8 pr-4` → `pl-10 pr-4`（头像 → sessions 列拉开更多，避免第一排数字贴头像观感）
+
+## 不动
+- 表格列宽 / `table-fixed`
+- 颜色、border、shadow 语义
+- 进度条填充动画、MAX 徽章
+- 移动端、其他文件、翻译
+
+## 验证
+改完用 Playwright 截桌面端 `http://localhost:8080/` 排行区，肉眼确认号码与头像之间有明显留白、整体节奏舒展。
