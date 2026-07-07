@@ -238,4 +238,26 @@
     height: 2px;
     background: hsl(var(--foreground));
   }
+
+  /* Leader separator bars — themable via CSS vars, identical feel across light/dark. */
+  .leader-separator {
+    width: 100%;
+    display: block;
+  }
+  .leader-separator-1 {
+    background: linear-gradient(
+      to right,
+      hsl(var(--leader-sep-1-from) / var(--leader-sep-1-from-alpha)) 0%,
+      hsl(var(--leader-sep-1-via)  / var(--leader-sep-1-via-alpha))  50%,
+      hsl(var(--leader-sep-1-to)   / var(--leader-sep-1-to-alpha))   100%
+    );
+  }
+  .leader-separator-2 {
+    background: linear-gradient(
+      to right,
+      hsl(var(--leader-sep-2-from) / var(--leader-sep-2-from-alpha)) 0%,
+      hsl(var(--leader-sep-2-via)  / var(--leader-sep-2-via-alpha))  50%,
+      hsl(var(--leader-sep-2-to)   / var(--leader-sep-2-to-alpha))   100%
+    );
+  }
 }
