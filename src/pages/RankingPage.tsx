@@ -1,37 +1,24 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { Header } from '@/components/Header';
 import { Footer } from '@/components/Footer';
 import { ArenaHero } from '@/components/ArenaHero';
-
 import { MobileRankingCard } from '@/components/MobileRankingCard';
-import { DesktopRankingTable, type RankingDensity } from '@/components/DesktopRankingTable';
-
+import { DesktopRankingTable } from '@/components/DesktopRankingTable';
 import { PhotoLightbox } from '@/components/PhotoLightbox';
 import { useRankings } from '@/hooks/useRankings';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { Trophy } from 'lucide-react';
-import { cn } from '@/lib/utils';
 
 
 export default function RankingPage() {
-  const { rankings, sessions, players, loading, hasTopTies } = useRankings();
-  const { t, language } = useLanguage();
+  const { rankings, sessions, players, loading } = useRankings();
+  const { t } = useLanguage();
   const isMobile = useIsMobile();
 
   const [lightboxOpen, setLightboxOpen] = useState(false);
   const [selectedAvatar, setSelectedAvatar] = useState<{ src: string; alt: string } | null>(null);
 
-  const [density, setDensity] = useState<RankingDensity>(() => {
-    if (typeof window === 'undefined') return 'comfortable';
-    const saved = window.localStorage.getItem('ranking-density');
-    return saved === 'compact' || saved === 'comfortable' ? saved : 'comfortable';
-  });
-  useEffect(() => {
-    try {
-      window.localStorage.setItem('ranking-density', density);
-    } catch {}
-  }, [density]);
 
 
   const handleAvatarClick = (avatarUrl: string, playerName: string) => {
