@@ -257,7 +257,7 @@ export function DesktopRankingTable({
                         )}
                       </button>
 
-                      <div className="flex items-center gap-2 min-w-0">
+                      <div className="flex items-center gap-2.5 min-w-0">
                         <p
                           className={cn(
                             'font-display text-foreground tracking-tight truncate transition-colors',
