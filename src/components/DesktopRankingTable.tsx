@@ -33,8 +33,8 @@ export function DesktopRankingTable({
   const maxPoints = Math.max(rankings[0]?.total_points ?? 0, 1);
 
   const d = {
-    rowPadY: 'py-4 leading-none',
-    topRowPadY: 'py-5 leading-none',
+    rowPadY: 'py-3.5 leading-none',
+    topRowPadY: 'py-4 leading-none',
     headPadY: 'h-auto py-2.5 leading-none',
     cellPadX: 'px-4',
     firstPadX: 'pl-5 pr-4',
@@ -46,16 +46,20 @@ export function DesktopRankingTable({
     avatarRadius: 'rounded-lg',
     topAvatar: 'w-20 h-20',
     topAvatarRadius: 'rounded-xl',
-    rankBadge: 'w-9 h-9 text-base',
+    rankBadge: 'w-9 h-9 text-lg',
     topRankBadge: 'w-14 h-14 text-xl',
-    text: 'text-base',
+    text: 'text-lg',
+    nameText: 'text-lg',
+    topNameText: 'text-xl',
+    statText: 'text-lg',
+    topStatText: 'text-xl',
     headText: 'text-[11px]',
     gap: 'gap-5',
     sepH: 'h-2',
-    barH: 'h-8',
+    barH: 'h-9',
     topBarH: 'h-12',
-    barText: 'text-sm',
-    topBarText: 'text-base',
+    barText: 'text-base',
+    topBarText: 'text-lg',
   };
 
   const getInitials = (name: string) =>
@@ -258,7 +262,7 @@ export function DesktopRankingTable({
                         <p
                           className={cn(
                             'font-display text-foreground tracking-tight truncate transition-colors',
-                            d.text,
+                            isTopThree ? d.topNameText : d.nameText,
                             isFirst && 'group-hover:text-accent',
                             isSecond && 'group-hover:text-primary'
                           )}
@@ -271,13 +275,13 @@ export function DesktopRankingTable({
                   </TableCell>
 
                   <TableCell className={cn(d.statColW, d.cellPadX, rowPadY, 'text-center align-middle')}>
-                    <p className={cn('font-display text-foreground tabular-nums', d.text)}>
+                    <p className={cn('font-display text-foreground tabular-nums', isTopThree ? d.topStatText : d.statText)}>
                       {ranking.sessions_played}
                     </p>
                   </TableCell>
 
                   <TableCell className={cn(d.statColW, d.cellPadX, rowPadY, 'text-center align-middle')}>
-                    <p className={cn('font-display text-foreground tabular-nums', d.text)}>
+                    <p className={cn('font-display text-foreground tabular-nums', isTopThree ? d.topStatText : d.statText)}>
                       {ranking.championships}
                     </p>
                   </TableCell>
