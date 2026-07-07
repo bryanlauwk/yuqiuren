@@ -39,48 +39,52 @@ export function DesktopRankingTable({
 
   const d = compact
     ? {
-        rowPadY: 'py-2 leading-none',
-        topRowPadY: 'py-3 leading-none',
-        headPadY: 'h-auto py-1.5 leading-none',
-        cellPadX: 'px-2',
-        firstPadX: 'pl-3 pr-2',
-        lastPadX: 'pl-2 pr-3',
-        rankColW: 'w-12',
-        statColW: 'w-20',
-        pointsColW: 'w-36',
-        avatar: 'w-10 h-10',
-        topAvatar: 'w-11 h-11',
-        rankBadge: 'w-7 h-7 text-sm',
-        topRankBadge: 'w-9 h-9 text-base',
-        text: 'text-sm',
-        headText: 'text-[10px]',
-        gap: 'gap-3',
-        sepH: 'h-1.5',
-        barH: 'h-6',
-        topBarH: 'h-8',
-        barText: 'text-xs',
-        topBarText: 'text-sm',
-      }
-    : {
-        rowPadY: 'py-2.5 leading-none',
+        rowPadY: 'py-3 leading-none',
         topRowPadY: 'py-4 leading-none',
         headPadY: 'h-auto py-2 leading-none',
         cellPadX: 'px-3',
         firstPadX: 'pl-4 pr-3',
         lastPadX: 'pl-3 pr-4',
         rankColW: 'w-14',
-        statColW: 'w-24',
-        pointsColW: 'w-44',
+        statColW: 'w-20',
+        pointsColW: 'w-40',
         avatar: 'w-12 h-12',
-        topAvatar: 'w-14 h-14',
-        rankBadge: 'w-8 h-8 text-base',
-        topRankBadge: 'w-10 h-10 text-lg',
-        text: 'text-base',
-        headText: 'text-[11px]',
+        avatarRadius: 'rounded-md',
+        topAvatar: 'w-16 h-16',
+        topAvatarRadius: 'rounded-lg',
+        rankBadge: 'w-8 h-8 text-sm',
+        topRankBadge: 'w-11 h-11 text-base',
+        text: 'text-sm',
+        headText: 'text-[10px]',
         gap: 'gap-4',
-        sepH: 'h-2',
+        sepH: 'h-1.5',
         barH: 'h-7',
         topBarH: 'h-10',
+        barText: 'text-xs',
+        topBarText: 'text-sm',
+      }
+    : {
+        rowPadY: 'py-4 leading-none',
+        topRowPadY: 'py-5 leading-none',
+        headPadY: 'h-auto py-2.5 leading-none',
+        cellPadX: 'px-4',
+        firstPadX: 'pl-5 pr-4',
+        lastPadX: 'pl-4 pr-5',
+        rankColW: 'w-16',
+        statColW: 'w-24',
+        pointsColW: 'w-48',
+        avatar: 'w-16 h-16',
+        avatarRadius: 'rounded-lg',
+        topAvatar: 'w-20 h-20',
+        topAvatarRadius: 'rounded-xl',
+        rankBadge: 'w-9 h-9 text-base',
+        topRankBadge: 'w-14 h-14 text-xl',
+        text: 'text-base',
+        headText: 'text-[11px]',
+        gap: 'gap-5',
+        sepH: 'h-2',
+        barH: 'h-8',
+        topBarH: 'h-12',
         barText: 'text-sm',
         topBarText: 'text-base',
       };
@@ -227,7 +231,7 @@ export function DesktopRankingTable({
                     {isTopThree ? (
                       <div
                         className={cn(
-                          'inline-flex items-center justify-center border-2 border-foreground rounded font-display italic mx-auto shadow-[2px_2px_0_0_hsl(var(--foreground))] transition-transform duration-200',
+                          'inline-flex items-center justify-center border-2 border-foreground rounded-lg font-display italic mx-auto shadow-[2px_2px_0_0_hsl(var(--foreground))] transition-transform duration-200',
                           d.topRankBadge,
                           badgeRotate,
                           isFirst
@@ -255,10 +259,10 @@ export function DesktopRankingTable({
                         }
                         disabled={!ranking.full_avatar_url}
                         className={cn(
-                          'flex-shrink-0 rounded overflow-hidden bg-muted transition-all duration-200 group-hover:scale-110',
+                          'flex-shrink-0 overflow-hidden bg-muted transition-all duration-200 group-hover:scale-110',
                           isTopThree
-                            ? cn(d.topAvatar, 'border-2 border-foreground shadow-[2px_2px_0_0_hsl(var(--foreground))]')
-                            : cn(d.avatar, 'border border-foreground'),
+                            ? cn(d.topAvatar, d.topAvatarRadius, 'border-2 border-foreground shadow-[2px_2px_0_0_hsl(var(--foreground))]')
+                            : cn(d.avatar, d.avatarRadius, 'border-2 border-foreground/60'),
                           ranking.full_avatar_url && 'cursor-pointer'
                         )}
                       >
@@ -312,10 +316,10 @@ export function DesktopRankingTable({
                   <TableCell className={cn(d.pointsColW, d.lastPadX, rowPadY, 'align-middle')}>
                     <div
                       className={cn(
-                        'relative w-full flex items-center overflow-hidden bg-muted/60',
+                        'relative w-full flex items-center overflow-hidden bg-muted/60 rounded-md',
                         isTopThree
                           ? cn('border-2 border-foreground', d.topBarH)
-                          : cn('border border-foreground/40', d.barH)
+                          : cn('border-2 border-foreground/40', d.barH)
                       )}
                     >
                       <div
