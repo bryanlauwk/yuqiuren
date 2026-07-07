@@ -2,7 +2,6 @@ export const translations = {
   zh: {
     header: {
       brandName: "羽球人联赛",
-      subtitle: "2026 积分排行榜",
       rankings: "排行榜",
       sessionHistory: "场次记录",
       admin: "管理",
