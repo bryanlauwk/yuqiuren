@@ -37,6 +37,7 @@ export function DesktopRankingTable({
     topRowPadY: 'py-4 leading-none',
     headPadY: 'h-auto py-2.5 leading-none',
     cellPadX: 'px-4',
+    sessionsPadX: 'pl-8 pr-4',
     firstPadX: 'pl-5 pr-4',
     lastPadX: 'pl-4 pr-5',
     rankColW: 'w-16',
@@ -51,15 +52,13 @@ export function DesktopRankingTable({
     text: 'text-lg',
     nameText: 'text-lg',
     topNameText: 'text-xl',
-    statText: 'text-lg',
-    topStatText: 'text-xl',
+    statText: 'text-lg font-black',
+    pointsText: 'text-lg font-black',
     headText: 'text-[11px]',
     gap: 'gap-5',
     sepH: 'h-2',
-    barH: 'h-9',
-    topBarH: 'h-12',
-    barText: 'text-base',
-    topBarText: 'text-lg',
+    barH: 'h-10',
+    topBarH: 'h-10',
   };
 
   const getInitials = (name: string) =>
