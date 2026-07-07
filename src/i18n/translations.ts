@@ -338,7 +338,11 @@ export type TranslationKeys = {
     sessions: string;
     wins: string;
     points: string;
+    density: string;
+    compact: string;
+    comfortable: string;
   };
+
   countdown: {
     matchStarting: string;
     days: string;
