@@ -186,7 +186,11 @@ export const translations = {
       sessions: "sessions",
       wins: "wins",
       points: "points",
+      density: "View",
+      compact: "Compact",
+      comfortable: "Comfy",
     },
+
     countdown: {
       matchStarting: "Match starting!",
       days: "d",
