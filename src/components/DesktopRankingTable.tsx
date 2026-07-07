@@ -231,7 +231,7 @@ export function DesktopRankingTable({
                     {isTopThree ? (
                       <div
                         className={cn(
-                          'inline-flex items-center justify-center border-2 border-foreground rounded font-display italic mx-auto shadow-[2px_2px_0_0_hsl(var(--foreground))] transition-transform duration-200',
+                          'inline-flex items-center justify-center border-2 border-foreground rounded-lg font-display italic mx-auto shadow-[2px_2px_0_0_hsl(var(--foreground))] transition-transform duration-200',
                           d.topRankBadge,
                           badgeRotate,
                           isFirst
@@ -259,10 +259,10 @@ export function DesktopRankingTable({
                         }
                         disabled={!ranking.full_avatar_url}
                         className={cn(
-                          'flex-shrink-0 rounded overflow-hidden bg-muted transition-all duration-200 group-hover:scale-110',
+                          'flex-shrink-0 overflow-hidden bg-muted transition-all duration-200 group-hover:scale-110',
                           isTopThree
-                            ? cn(d.topAvatar, 'border-2 border-foreground shadow-[2px_2px_0_0_hsl(var(--foreground))]')
-                            : cn(d.avatar, 'border border-foreground'),
+                            ? cn(d.topAvatar, d.topAvatarRadius, 'border-2 border-foreground shadow-[2px_2px_0_0_hsl(var(--foreground))]')
+                            : cn(d.avatar, d.avatarRadius, 'border-2 border-foreground/60'),
                           ranking.full_avatar_url && 'cursor-pointer'
                         )}
                       >
@@ -319,7 +319,7 @@ export function DesktopRankingTable({
                         'relative w-full flex items-center overflow-hidden bg-muted/60',
                         isTopThree
                           ? cn('border-2 border-foreground', d.topBarH)
-                          : cn('border border-foreground/40', d.barH)
+                          : cn('border-2 border-foreground/40', d.barH)
                       )}
                     >
                       <div
