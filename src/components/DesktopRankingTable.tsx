@@ -1,4 +1,4 @@
-import { Fragment } from 'react';
+import { Fragment, useEffect, useState } from 'react';
 import { ArrowUp, ArrowDown, Minus } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useLanguage } from '@/contexts/LanguageContext';
@@ -28,41 +28,59 @@ export function DesktopRankingTable({
   const { t } = useLanguage();
   const compact = density === 'compact';
 
-  // Density-driven tokens. Everything keys off these so header + rows stay on the same grid.
+  // Trigger points-bar fill animation after mount.
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => {
+    const id = window.setTimeout(() => setMounted(true), 120);
+    return () => window.clearTimeout(id);
+  }, []);
+
+  const maxPoints = Math.max(rankings[0]?.total_points ?? 0, 1);
+
   const d = compact
     ? {
-        rowPadY: 'py-1 leading-none',
+        rowPadY: 'py-1.5 leading-none',
         topRowPadY: 'py-2.5 leading-none',
-        headPadY: 'h-auto py-1 leading-none',
+        headPadY: 'h-auto py-1.5 leading-none',
         cellPadX: 'px-2',
         firstPadX: 'pl-3 pr-2',
         lastPadX: 'pl-2 pr-3',
         rankColW: 'w-12',
         statColW: 'w-20',
-        pointsColW: 'w-24',
+        pointsColW: 'w-36',
         avatar: 'w-8 h-8',
         rankBadge: 'w-7 h-7 text-sm',
+        topRankBadge: 'w-9 h-9 text-base',
         text: 'text-sm',
         headText: 'text-[10px]',
         gap: 'gap-2.5',
         sepH: 'h-1.5',
+        barH: 'h-6',
+        topBarH: 'h-8',
+        barText: 'text-xs',
+        topBarText: 'text-sm',
       }
     : {
-        rowPadY: 'py-1.5 leading-none',
+        rowPadY: 'py-2 leading-none',
         topRowPadY: 'py-3.5 leading-none',
-        headPadY: 'h-auto py-1.5 leading-none',
+        headPadY: 'h-auto py-2 leading-none',
         cellPadX: 'px-3',
         firstPadX: 'pl-4 pr-3',
         lastPadX: 'pl-3 pr-4',
         rankColW: 'w-14',
         statColW: 'w-24',
-        pointsColW: 'w-28',
+        pointsColW: 'w-44',
         avatar: 'w-9 h-9',
         rankBadge: 'w-8 h-8 text-base',
+        topRankBadge: 'w-10 h-10 text-lg',
         text: 'text-base',
         headText: 'text-[11px]',
         gap: 'gap-3',
         sepH: 'h-2',
+        barH: 'h-7',
+        topBarH: 'h-10',
+        barText: 'text-sm',
+        topBarText: 'text-base',
       };
 
   const getInitials = (name: string) =>
@@ -99,14 +117,14 @@ export function DesktopRankingTable({
     <div className="rounded bg-card border-2 border-foreground shadow-[6px_6px_0_0_hsl(var(--foreground))] overflow-hidden">
       <Table className="table-fixed w-full">
         <TableHeader>
-          <TableRow className="hover:bg-transparent border-b border-foreground bg-foreground">
+          <TableRow className="hover:bg-transparent border-b-2 border-foreground bg-foreground">
             <TableHead
               className={cn(
                 d.rankColW,
                 d.firstPadX,
                 d.headPadY,
                 d.headText,
-                'text-center font-display text-background tracking-wider'
+                'text-center font-display italic text-background tracking-[0.2em] border-t border-t-background/20'
               )}
             >
               #
@@ -116,7 +134,7 @@ export function DesktopRankingTable({
                 d.cellPadX,
                 d.headPadY,
                 d.headText,
-                'text-left font-display text-background tracking-wider'
+                'text-left font-display text-background tracking-widest border-t border-t-background/20'
               )}
             >
               Player
@@ -127,7 +145,7 @@ export function DesktopRankingTable({
                 d.cellPadX,
                 d.headPadY,
                 d.headText,
-                'text-right font-display text-background tracking-wider'
+                'text-center font-display text-background tracking-widest border-t border-t-background/20'
               )}
             >
               {t.ranking.sessions}
@@ -138,7 +156,7 @@ export function DesktopRankingTable({
                 d.cellPadX,
                 d.headPadY,
                 d.headText,
-                'text-right font-display text-background tracking-wider'
+                'text-center font-display text-background tracking-widest border-t border-t-background/20'
               )}
             >
               {t.ranking.wins}
@@ -149,10 +167,13 @@ export function DesktopRankingTable({
                 d.lastPadX,
                 d.headPadY,
                 d.headText,
-                'text-right font-display text-background tracking-wider'
+                'text-left font-display text-background tracking-widest border-t border-t-background/20'
               )}
             >
-              {t.ranking.points}
+              <span className="inline-flex items-center gap-1.5">
+                <span className="inline-block w-1 h-3 bg-accent" />
+                {t.ranking.points}
+              </span>
             </TableHead>
           </TableRow>
         </TableHeader>
@@ -160,34 +181,64 @@ export function DesktopRankingTable({
           {rankings.map((ranking) => {
             const isTopThree = ranking.rank <= 3;
             const isFirst = ranking.rank === 1;
+            const isSecond = ranking.rank === 2;
+            const isThird = ranking.rank === 3;
             const rowPadY = isTopThree ? d.topRowPadY : d.rowPadY;
+            const pct = Math.min(100, Math.round((ranking.total_points / maxPoints) * 100));
+            const fillWidth = mounted ? `${pct}%` : '0%';
+
+            const badgeRotate = isFirst
+              ? 'group-hover:rotate-6'
+              : isSecond
+              ? 'group-hover:-rotate-3'
+              : isThird
+              ? 'group-hover:rotate-12'
+              : '';
+
+            const topHoverShadow = isFirst
+              ? 'hover:shadow-[6px_6px_0_0_hsl(var(--accent))]'
+              : isSecond
+              ? 'hover:shadow-[6px_6px_0_0_hsl(var(--primary))]'
+              : isThird
+              ? 'hover:shadow-[6px_6px_0_0_hsl(var(--muted-foreground))]'
+              : '';
 
             return (
               <Fragment key={ranking.player_id}>
                 <TableRow
                   className={cn(
-                    'align-middle transition-colors duration-150 border-b border-foreground/15 hover:bg-muted/60',
-                    isTopThree &&
-                      (isFirst
-                        ? 'bg-accent/5 border-l-4 border-l-accent'
-                        : 'bg-primary/5 border-l-4 border-l-primary')
+                    'group align-middle transition-all duration-200 border-b border-foreground/15 relative',
+                    isTopThree
+                      ? cn(
+                          'hover:-translate-y-0.5 hover:-translate-x-0.5',
+                          topHoverShadow,
+                          isFirst
+                            ? 'bg-accent/5 border-l-4 border-l-accent'
+                            : isSecond
+                            ? 'bg-primary/5 border-l-4 border-l-primary'
+                            : 'bg-muted/20 border-l-4 border-l-muted-foreground'
+                        )
+                      : 'hover:bg-muted/50'
                   )}
                 >
                   <TableCell className={cn(d.rankColW, d.firstPadX, rowPadY, 'text-center align-middle')}>
                     {isTopThree ? (
                       <div
                         className={cn(
-                          'inline-flex items-center justify-center border border-foreground rounded font-display mx-auto',
-                          d.rankBadge,
+                          'inline-flex items-center justify-center border-2 border-foreground rounded font-display italic mx-auto shadow-[2px_2px_0_0_hsl(var(--foreground))] transition-transform duration-200',
+                          d.topRankBadge,
+                          badgeRotate,
                           isFirst
                             ? 'bg-accent text-accent-foreground'
-                            : 'bg-primary text-primary-foreground'
+                            : isSecond
+                            ? 'bg-primary text-primary-foreground'
+                            : 'bg-card text-foreground'
                         )}
                       >
                         {ranking.rank}
                       </div>
                     ) : (
-                      <span className={cn('font-display text-muted-foreground tabular-nums', d.text)}>
+                      <span className={cn('font-display italic text-muted-foreground tabular-nums', d.text)}>
                         {ranking.rank}
                       </span>
                     )}
@@ -202,9 +253,10 @@ export function DesktopRankingTable({
                         }
                         disabled={!ranking.full_avatar_url}
                         className={cn(
-                          'flex-shrink-0 rounded overflow-hidden bg-muted border border-foreground transition-all',
+                          'flex-shrink-0 rounded overflow-hidden bg-muted border border-foreground transition-all duration-200 group-hover:scale-110',
                           d.avatar,
-                          ranking.full_avatar_url && 'cursor-pointer hover:-translate-y-0.5'
+                          !isTopThree && 'grayscale group-hover:grayscale-0',
+                          ranking.full_avatar_url && 'cursor-pointer'
                         )}
                       >
                         {ranking.avatar_url ? (
@@ -227,7 +279,14 @@ export function DesktopRankingTable({
                       </button>
 
                       <div className="flex items-center gap-2 min-w-0">
-                        <p className={cn('font-display text-foreground tracking-tight truncate', d.text)}>
+                        <p
+                          className={cn(
+                            'font-display text-foreground tracking-tight truncate transition-colors',
+                            d.text,
+                            isFirst && 'group-hover:text-accent',
+                            isSecond && 'group-hover:text-primary'
+                          )}
+                        >
                           {ranking.player_name}
                         </p>
                         {getRankChangeDisplay(ranking)}
@@ -235,33 +294,59 @@ export function DesktopRankingTable({
                     </div>
                   </TableCell>
 
-                  <TableCell className={cn(d.statColW, d.cellPadX, rowPadY, 'text-right align-middle')}>
+                  <TableCell className={cn(d.statColW, d.cellPadX, rowPadY, 'text-center align-middle')}>
                     <p className={cn('font-display text-foreground tabular-nums', d.text)}>
                       {ranking.sessions_played}
                     </p>
                   </TableCell>
 
-                  <TableCell className={cn(d.statColW, d.cellPadX, rowPadY, 'text-right align-middle')}>
+                  <TableCell className={cn(d.statColW, d.cellPadX, rowPadY, 'text-center align-middle')}>
                     <p className={cn('font-display text-foreground tabular-nums', d.text)}>
                       {ranking.championships}
                     </p>
                   </TableCell>
 
-                  <TableCell className={cn(d.pointsColW, d.lastPadX, rowPadY, 'text-right align-middle')}>
-                    {isFirst ? (
+                  <TableCell className={cn(d.pointsColW, d.lastPadX, rowPadY, 'align-middle')}>
+                    <div
+                      className={cn(
+                        'relative w-full flex items-center overflow-hidden bg-muted/60',
+                        isTopThree
+                          ? cn('border-2 border-foreground', d.topBarH)
+                          : cn('border border-foreground/40', d.barH)
+                      )}
+                    >
+                      <div
+                        className={cn(
+                          'absolute inset-y-0 left-0 transition-[width] duration-700 ease-out',
+                          isFirst
+                            ? 'bg-accent'
+                            : isSecond
+                            ? 'bg-primary'
+                            : isThird
+                            ? 'bg-muted-foreground/70'
+                            : 'bg-foreground/25'
+                        )}
+                        style={{ width: fillWidth }}
+                      />
                       <span
                         className={cn(
-                          'inline-block bg-accent text-accent-foreground border border-foreground px-2 py-0.5 rounded font-display tabular-nums',
-                          d.text
+                          'relative z-10 font-display italic tabular-nums px-2.5',
+                          isTopThree ? d.topBarText : d.barText,
+                          isFirst
+                            ? 'text-accent-foreground'
+                            : isSecond
+                            ? 'text-primary-foreground'
+                            : 'text-foreground'
                         )}
                       >
                         {ranking.total_points}
                       </span>
-                    ) : (
-                      <p className={cn('font-display text-foreground tabular-nums', d.text)}>
-                        {ranking.total_points}
-                      </p>
-                    )}
+                      {isFirst && (
+                        <span className="absolute right-1.5 top-1/2 -translate-y-1/2 z-10 bg-foreground text-accent text-[9px] font-black uppercase tracking-tighter px-1.5 py-0.5 leading-none">
+                          MAX
+                        </span>
+                      )}
+                    </div>
                   </TableCell>
                 </TableRow>
 
