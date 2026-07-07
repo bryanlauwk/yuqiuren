@@ -48,6 +48,22 @@
 
     --finished: 224 65% 45%;
 
+    /* Leader separator gradients (rank #1 → #2, and #2 → #3).
+       Configurable per theme; keep opacity strong enough to read on any background. */
+    --leader-sep-1-from: 354 76% 56%;
+    --leader-sep-1-via: 354 76% 56%;
+    --leader-sep-1-to: 354 76% 56%;
+    --leader-sep-1-from-alpha: 0.65;
+    --leader-sep-1-via-alpha: 1;
+    --leader-sep-1-to-alpha: 0.15;
+
+    --leader-sep-2-from: 224 65% 45%;
+    --leader-sep-2-via: 224 65% 45%;
+    --leader-sep-2-to: 224 65% 45%;
+    --leader-sep-2-from-alpha: 0.65;
+    --leader-sep-2-via-alpha: 1;
+    --leader-sep-2-to-alpha: 0.15;
+
     --sidebar-background: 0 0% 100%;
     --sidebar-foreground: 220 25% 8%;
     --sidebar-primary: 224 65% 45%;
@@ -78,6 +94,21 @@
     --border: 220 25% 8%;
     --input: 220 25% 8%;
     --ring: 224 65% 45%;
+
+    /* Leader separator gradients — dark mode mirror (same accents, same alphas for consistent feel). */
+    --leader-sep-1-from: 354 76% 56%;
+    --leader-sep-1-via: 354 76% 56%;
+    --leader-sep-1-to: 354 76% 56%;
+    --leader-sep-1-from-alpha: 0.65;
+    --leader-sep-1-via-alpha: 1;
+    --leader-sep-1-to-alpha: 0.15;
+
+    --leader-sep-2-from: 224 65% 45%;
+    --leader-sep-2-via: 224 65% 45%;
+    --leader-sep-2-to: 224 65% 45%;
+    --leader-sep-2-from-alpha: 0.65;
+    --leader-sep-2-via-alpha: 1;
+    --leader-sep-2-to-alpha: 0.15;
   }
 }
 
@@ -206,5 +237,27 @@
   .arena-divider {
     height: 2px;
     background: hsl(var(--foreground));
+  }
+
+  /* Leader separator bars — themable via CSS vars, identical feel across light/dark. */
+  .leader-separator {
+    width: 100%;
+    display: block;
+  }
+  .leader-separator-1 {
+    background: linear-gradient(
+      to right,
+      hsl(var(--leader-sep-1-from) / var(--leader-sep-1-from-alpha)) 0%,
+      hsl(var(--leader-sep-1-via)  / var(--leader-sep-1-via-alpha))  50%,
+      hsl(var(--leader-sep-1-to)   / var(--leader-sep-1-to-alpha))   100%
+    );
+  }
+  .leader-separator-2 {
+    background: linear-gradient(
+      to right,
+      hsl(var(--leader-sep-2-from) / var(--leader-sep-2-from-alpha)) 0%,
+      hsl(var(--leader-sep-2-via)  / var(--leader-sep-2-via-alpha))  50%,
+      hsl(var(--leader-sep-2-to)   / var(--leader-sep-2-to-alpha))   100%
+    );
   }
 }
