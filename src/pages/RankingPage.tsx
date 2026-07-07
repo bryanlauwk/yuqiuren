@@ -71,9 +71,7 @@ export default function RankingPage() {
                 <DesktopRankingTable
                   rankings={rankings}
                   onAvatarClick={handleAvatarClick}
-                  density={density}
                 />
-
               </div>
             )}
           </>
