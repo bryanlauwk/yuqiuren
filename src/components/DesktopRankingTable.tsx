@@ -273,14 +273,14 @@ export function DesktopRankingTable({
                     </div>
                   </TableCell>
 
-                  <TableCell className={cn(d.statColW, d.cellPadX, rowPadY, 'text-center align-middle')}>
-                    <p className={cn('font-display text-foreground tabular-nums', isTopThree ? d.topStatText : d.statText)}>
+                  <TableCell className={cn(d.statColW, d.sessionsPadX, rowPadY, 'text-right align-middle')}>
+                    <p className={cn('font-display text-foreground tabular-nums', d.statText)}>
                       {ranking.sessions_played}
                     </p>
                   </TableCell>
 
-                  <TableCell className={cn(d.statColW, d.cellPadX, rowPadY, 'text-center align-middle')}>
-                    <p className={cn('font-display text-foreground tabular-nums', isTopThree ? d.topStatText : d.statText)}>
+                  <TableCell className={cn(d.statColW, d.cellPadX, rowPadY, 'text-right align-middle')}>
+                    <p className={cn('font-display text-foreground tabular-nums', d.statText)}>
                       {ranking.championships}
                     </p>
                   </TableCell>
