@@ -12,7 +12,7 @@ import { Trophy } from 'lucide-react';
 
 
 export default function RankingPage() {
-  const { rankings, sessions, players, loading } = useRankings();
+  const { rankings, loading } = useRankings();
   const { t } = useLanguage();
   const isMobile = useIsMobile();
 
