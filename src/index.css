@@ -94,6 +94,21 @@
     --border: 220 25% 8%;
     --input: 220 25% 8%;
     --ring: 224 65% 45%;
+
+    /* Leader separator gradients — dark mode mirror (same accents, same alphas for consistent feel). */
+    --leader-sep-1-from: 354 76% 56%;
+    --leader-sep-1-via: 354 76% 56%;
+    --leader-sep-1-to: 354 76% 56%;
+    --leader-sep-1-from-alpha: 0.65;
+    --leader-sep-1-via-alpha: 1;
+    --leader-sep-1-to-alpha: 0.15;
+
+    --leader-sep-2-from: 224 65% 45%;
+    --leader-sep-2-via: 224 65% 45%;
+    --leader-sep-2-to: 224 65% 45%;
+    --leader-sep-2-from-alpha: 0.65;
+    --leader-sep-2-via-alpha: 1;
+    --leader-sep-2-to-alpha: 0.15;
   }
 }
 
