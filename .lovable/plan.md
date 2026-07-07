@@ -1,25 +1,26 @@
 ## 改动
-仅 `src/components/DesktopRankingTable.tsx`。
+仅 `src/components/DesktopRankingTable.tsx`，只调密度 token，行高由头像自然撑开（移除 `py-*` 上下 padding 的硬约束，改用 `min-h` 保底 + 头像尺寸驱动）。
 
-### 1. 移除 4 名后的灰度效果
-删除头像 button 上的 `!isTopThree && 'grayscale group-hover:grayscale-0'`，所有球员头像保持原色。
-
-### 2. 放大头像 + 增加间距
-密度 token 调整：
-
-| token | compact 旧 → 新 | comfortable 旧 → 新 |
+### 头像尺寸放大
+| token | compact | comfortable |
 |---|---|---|
-| `avatar`（普通行） | `w-8 h-8` → `w-10 h-10` | `w-9 h-9` → `w-12 h-12` |
-| 新增 `topAvatar`（前三名） | `w-11 h-11` | `w-14 h-14` |
-| `gap`（头像与文字） | `gap-2.5` → `gap-3` | `gap-3` → `gap-4` |
-| `rowPadY`（普通行） | `py-1.5` → `py-2` | `py-2` → `py-2.5` |
-| `topRowPadY` | `py-2.5` → `py-3` | `py-3.5` → `py-4` |
+| `avatar`（4+ 名） | `w-10 h-10` → `w-12 h-12` | `w-12 h-12` → `w-16 h-16` |
+| `topAvatar`（前三） | `w-11 h-11` → `w-14 h-14` | `w-14 h-14` → `w-20 h-20` |
 
-前三名头像加 `border-2` 黑边 + `shadow-[2px_2px_0_0_hsl(var(--foreground))]` 强化视觉重量；普通行头像保留 `border` 单线。
+### 行高自适应
+- 删除 `rowPadY` / `topRowPadY` 上的固定 `py-2/2.5/3/4`，改为 `py-1.5` 的最小 padding，让 flex 容器和头像自然撑开高度。
+- 头像 `flex-shrink-0`，`TableCell` 保持 `align-middle`，行高会随头像 = `min(内容, avatar+padding)` 自动增长。
+- 分隔条 `sepH` 保持不变。
 
-### 3. 兼容性
-- 保留 hover scale 110、圆角、点击 lightbox 逻辑。
-- 密度切换不受影响。
-- 列宽不变。
+### 前三名徽章 & 进度条同步放大
+| token | compact | comfortable |
+|---|---|---|
+| `topRankBadge` | `w-9 h-9` → `w-11 h-11` | `w-10 h-10` → `w-14 h-14 text-xl` |
+| `rankBadge`（4+） | `w-7 h-7` | `w-8 h-8` → `w-9 h-9` |
+| `topBarH` | `h-8` → `h-10` | `h-10` → `h-12` |
+| `barH` | `h-6` → `h-7` | `h-7` → `h-9` |
 
-不动其他文件。
+### 兼容
+- 表格 `table-fixed` 列宽不变。
+- 其他样式（hover 抬升、渐变分隔、MAX 徽章、进度条动画）保留。
+- 不动移动端和其他文件。
