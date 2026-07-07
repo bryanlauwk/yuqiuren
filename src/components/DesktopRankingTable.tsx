@@ -160,6 +160,7 @@ export function DesktopRankingTable({
           {rankings.map((ranking) => {
             const isTopThree = ranking.rank <= 3;
             const isFirst = ranking.rank === 1;
+            const rowPadY = isTopThree ? d.topRowPadY : d.rowPadY;
 
             return (
               <Fragment key={ranking.player_id}>
@@ -172,7 +173,7 @@ export function DesktopRankingTable({
                         : 'bg-primary/5 border-l-4 border-l-primary')
                   )}
                 >
-                  <TableCell className={cn(d.rankColW, d.firstPadX, d.rowPadY, 'text-center align-middle')}>
+                  <TableCell className={cn(d.rankColW, d.firstPadX, rowPadY, 'text-center align-middle')}>
                     {isTopThree ? (
                       <div
                         className={cn(
@@ -192,7 +193,7 @@ export function DesktopRankingTable({
                     )}
                   </TableCell>
 
-                  <TableCell className={cn(d.cellPadX, d.rowPadY, 'align-middle')}>
+                  <TableCell className={cn(d.cellPadX, rowPadY, 'align-middle')}>
                     <div className={cn('flex items-center min-w-0', d.gap)}>
                       <button
                         onClick={() =>
@@ -234,19 +235,19 @@ export function DesktopRankingTable({
                     </div>
                   </TableCell>
 
-                  <TableCell className={cn(d.statColW, d.cellPadX, d.rowPadY, 'text-right align-middle')}>
+                  <TableCell className={cn(d.statColW, d.cellPadX, rowPadY, 'text-right align-middle')}>
                     <p className={cn('font-display text-foreground tabular-nums', d.text)}>
                       {ranking.sessions_played}
                     </p>
                   </TableCell>
 
-                  <TableCell className={cn(d.statColW, d.cellPadX, d.rowPadY, 'text-right align-middle')}>
+                  <TableCell className={cn(d.statColW, d.cellPadX, rowPadY, 'text-right align-middle')}>
                     <p className={cn('font-display text-foreground tabular-nums', d.text)}>
                       {ranking.championships}
                     </p>
                   </TableCell>
 
-                  <TableCell className={cn(d.pointsColW, d.lastPadX, d.rowPadY, 'text-right align-middle')}>
+                  <TableCell className={cn(d.pointsColW, d.lastPadX, rowPadY, 'text-right align-middle')}>
                     {isFirst ? (
                       <span
                         className={cn(
@@ -269,11 +270,9 @@ export function DesktopRankingTable({
                     <TableCell colSpan={5} className="p-0 border-0 align-middle">
                       <div
                         className={cn(
-                          'w-full',
-                          compact ? 'h-1.5' : 'h-2.5',
-                          ranking.rank === 1
-                            ? 'bg-gradient-to-r from-accent/50 via-accent to-accent/10'
-                            : 'bg-gradient-to-r from-primary/50 via-primary to-primary/10'
+                          'leader-separator',
+                          d.sepH,
+                          ranking.rank === 1 ? 'leader-separator-1' : 'leader-separator-2'
                         )}
                       />
                     </TableCell>
