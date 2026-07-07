@@ -32,6 +32,7 @@ export function DesktopRankingTable({
   const d = compact
     ? {
         rowPadY: 'py-1 leading-none',
+        topRowPadY: 'py-2.5 leading-none',
         headPadY: 'h-auto py-1 leading-none',
         cellPadX: 'px-2',
         firstPadX: 'pl-3 pr-2',
@@ -44,9 +45,11 @@ export function DesktopRankingTable({
         text: 'text-sm',
         headText: 'text-[10px]',
         gap: 'gap-2.5',
+        sepH: 'h-1.5',
       }
     : {
         rowPadY: 'py-1.5 leading-none',
+        topRowPadY: 'py-3.5 leading-none',
         headPadY: 'h-auto py-1.5 leading-none',
         cellPadX: 'px-3',
         firstPadX: 'pl-4 pr-3',
@@ -59,6 +62,7 @@ export function DesktopRankingTable({
         text: 'text-base',
         headText: 'text-[11px]',
         gap: 'gap-3',
+        sepH: 'h-2',
       };
 
   const getInitials = (name: string) =>
