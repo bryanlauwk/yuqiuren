@@ -37,7 +37,11 @@ export const translations = {
       sessions: "场次",
       wins: "胜",
       points: "积分",
+      density: "视图",
+      compact: "紧凑",
+      comfortable: "舒适",
     },
+
     countdown: {
       matchStarting: "比赛即将开始！",
       days: "天",
