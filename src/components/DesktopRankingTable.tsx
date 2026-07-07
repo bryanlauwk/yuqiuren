@@ -275,13 +275,13 @@ export function DesktopRankingTable({
                   </TableCell>
 
                   <TableCell className={cn(d.statColW, d.cellPadX, rowPadY, 'text-center align-middle')}>
-                    <p className={cn('font-display text-foreground tabular-nums', d.text)}>
+                    <p className={cn('font-display text-foreground tabular-nums', isTopThree ? d.topStatText : d.statText)}>
                       {ranking.sessions_played}
                     </p>
                   </TableCell>
 
                   <TableCell className={cn(d.statColW, d.cellPadX, rowPadY, 'text-center align-middle')}>
-                    <p className={cn('font-display text-foreground tabular-nums', d.text)}>
+                    <p className={cn('font-display text-foreground tabular-nums', isTopThree ? d.topStatText : d.statText)}>
                       {ranking.championships}
                     </p>
                   </TableCell>
