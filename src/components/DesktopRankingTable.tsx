@@ -39,8 +39,8 @@ export function DesktopRankingTable({
 
   const d = compact
     ? {
-        rowPadY: 'py-1.5 leading-none',
-        topRowPadY: 'py-2.5 leading-none',
+        rowPadY: 'py-2 leading-none',
+        topRowPadY: 'py-3 leading-none',
         headPadY: 'h-auto py-1.5 leading-none',
         cellPadX: 'px-2',
         firstPadX: 'pl-3 pr-2',
@@ -48,12 +48,13 @@ export function DesktopRankingTable({
         rankColW: 'w-12',
         statColW: 'w-20',
         pointsColW: 'w-36',
-        avatar: 'w-8 h-8',
+        avatar: 'w-10 h-10',
+        topAvatar: 'w-11 h-11',
         rankBadge: 'w-7 h-7 text-sm',
         topRankBadge: 'w-9 h-9 text-base',
         text: 'text-sm',
         headText: 'text-[10px]',
-        gap: 'gap-2.5',
+        gap: 'gap-3',
         sepH: 'h-1.5',
         barH: 'h-6',
         topBarH: 'h-8',
@@ -61,8 +62,8 @@ export function DesktopRankingTable({
         topBarText: 'text-sm',
       }
     : {
-        rowPadY: 'py-2 leading-none',
-        topRowPadY: 'py-3.5 leading-none',
+        rowPadY: 'py-2.5 leading-none',
+        topRowPadY: 'py-4 leading-none',
         headPadY: 'h-auto py-2 leading-none',
         cellPadX: 'px-3',
         firstPadX: 'pl-4 pr-3',
@@ -70,12 +71,13 @@ export function DesktopRankingTable({
         rankColW: 'w-14',
         statColW: 'w-24',
         pointsColW: 'w-44',
-        avatar: 'w-9 h-9',
+        avatar: 'w-12 h-12',
+        topAvatar: 'w-14 h-14',
         rankBadge: 'w-8 h-8 text-base',
         topRankBadge: 'w-10 h-10 text-lg',
         text: 'text-base',
         headText: 'text-[11px]',
-        gap: 'gap-3',
+        gap: 'gap-4',
         sepH: 'h-2',
         barH: 'h-7',
         topBarH: 'h-10',
@@ -253,9 +255,10 @@ export function DesktopRankingTable({
                         }
                         disabled={!ranking.full_avatar_url}
                         className={cn(
-                          'flex-shrink-0 rounded overflow-hidden bg-muted border border-foreground transition-all duration-200 group-hover:scale-110',
-                          d.avatar,
-                          !isTopThree && 'grayscale group-hover:grayscale-0',
+                          'flex-shrink-0 rounded overflow-hidden bg-muted transition-all duration-200 group-hover:scale-110',
+                          isTopThree
+                            ? cn(d.topAvatar, 'border-2 border-foreground shadow-[2px_2px_0_0_hsl(var(--foreground))]')
+                            : cn(d.avatar, 'border border-foreground'),
                           ranking.full_avatar_url && 'cursor-pointer'
                         )}
                       >
