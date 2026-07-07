@@ -67,7 +67,7 @@ export default function RankingPage() {
                 ))}
               </div>
             ) : (
-              <div className="animate-fade-in-up max-w-4xl mx-auto">
+              <div className="animate-fade-in-up">
                 <DesktopRankingTable
                   rankings={rankings}
                   onAvatarClick={handleAvatarClick}

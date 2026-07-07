@@ -55,7 +55,7 @@ export function ArenaHero() {
         <div className="grid grid-cols-1 md:grid-cols-12 gap-10 md:gap-8 items-center">
           {/* Left: headline + CTA */}
           <div className="md:col-span-7">
-            <h1 className="font-display text-foreground leading-[0.9] tracking-tighter text-5xl sm:text-7xl md:text-8xl lg:text-[7.5rem] mb-6">
+            <h1 className="font-display text-foreground leading-[0.9] tracking-tighter text-5xl sm:text-7xl md:text-8xl lg:text-[7.5rem] mb-6 break-keep">
               <span className="sm:hidden">
                 <span className="lime-slab">2026</span>
                 <br />
