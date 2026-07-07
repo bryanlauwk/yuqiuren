@@ -25,22 +25,22 @@ export function AdminStats({ players, sessions, results }: AdminStatsProps) {
       label: t.admin.sessionsPlayed,
       value: sessions.length,
       icon: Calendar,
-      color: 'text-chart-2',
-      bgColor: 'bg-chart-2/10',
+      color: 'text-foreground',
+      bgColor: 'bg-muted',
     },
     {
       label: t.admin.championships,
       value: totalChampions,
       icon: Trophy,
-      color: 'text-champion',
-      bgColor: 'bg-champion/10',
+      color: 'text-accent',
+      bgColor: 'bg-accent/10',
     },
     {
       label: t.admin.pointsAwarded,
       value: totalPoints,
       icon: TrendingUp,
-      color: 'text-chart-4',
-      bgColor: 'bg-chart-4/10',
+      color: 'text-primary',
+      bgColor: 'bg-primary/10',
     },
   ];
 
@@ -49,14 +49,14 @@ export function AdminStats({ players, sessions, results }: AdminStatsProps) {
       {stats.map((stat) => (
         <div
           key={stat.label}
-          className="bg-card border border-border rounded-xl p-4 shadow-sm hover:shadow-md transition-shadow"
+          className="bg-card border-2 border-foreground rounded p-4 shadow-[3px_3px_0_0_hsl(var(--foreground))] transition-all hover:-translate-y-0.5 hover:-translate-x-0.5 hover:shadow-[4px_4px_0_0_hsl(var(--foreground))]"
         >
           <div className="flex items-center gap-3">
-            <div className={`p-2 rounded-lg ${stat.bgColor}`}>
+            <div className={`p-2 rounded border-2 border-foreground ${stat.bgColor}`}>
               <stat.icon className={`w-5 h-5 ${stat.color}`} />
             </div>
             <div>
-              <p className="text-2xl font-bold text-foreground">{stat.value}</p>
+              <p className="font-display text-2xl text-foreground">{stat.value}</p>
               <p className="text-xs text-muted-foreground">{stat.label}</p>
             </div>
           </div>

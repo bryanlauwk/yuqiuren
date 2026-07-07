@@ -58,6 +58,31 @@ export const translations = {
     footer: {
       designedBy: "版权所有",
     },
+    auth: {
+      adminLogin: "管理员登录",
+      createAccount: "创建账号",
+      tagline: "羽球人 · 联赛管理",
+      email: "邮箱",
+      emailPlaceholder: "admin@example.com",
+      password: "密码",
+      signIn: "登录",
+      signUpAction: "注册",
+      noAccount: "还没有账号？",
+      haveAccount: "已有账号？",
+      signInLink: "去登录",
+      signUpLink: "去注册",
+      adminOnlyNote: "仅拥有管理员权限的账号可访问管理面板",
+      accountExistsTitle: "账号已存在",
+      accountExistsDesc: "该邮箱已注册，请直接登录。",
+      signUpFailedTitle: "注册失败",
+      accountCreatedTitle: "账号已创建",
+      accountCreatedDesc: "现在可以登录。注意：管理员权限需由现有管理员分配。",
+      signInFailedTitle: "登录失败",
+    },
+    notFound: {
+      message: "页面不存在",
+      back: "返回首页",
+    },
     history: {
       title: "场次记录",
       subtitle: "查看所有比赛场次及结果",
@@ -202,6 +227,31 @@ export const translations = {
     },
     footer: {
       designedBy: "Designed by",
+    },
+    auth: {
+      adminLogin: "Admin Login",
+      createAccount: "Create Account",
+      tagline: "YuQiuRen · League Management",
+      email: "Email Address",
+      emailPlaceholder: "admin@example.com",
+      password: "Password",
+      signIn: "Sign In",
+      signUpAction: "Create Account",
+      noAccount: "Don't have an account?",
+      haveAccount: "Already have an account?",
+      signInLink: "Sign in",
+      signUpLink: "Sign up",
+      adminOnlyNote: "Only users with admin role can access the management panel",
+      accountExistsTitle: "Account exists",
+      accountExistsDesc: "This email is already registered. Try signing in.",
+      signUpFailedTitle: "Sign up failed",
+      accountCreatedTitle: "Account created",
+      accountCreatedDesc: "You can now sign in. Note: Admin role must be assigned by an existing admin.",
+      signInFailedTitle: "Sign in failed",
+    },
+    notFound: {
+      message: "Page not found",
+      back: "Back to home",
     },
     history: {
       title: "Session History",
@@ -350,6 +400,31 @@ export type TranslationKeys = {
   };
   footer: {
     designedBy: string;
+  };
+  auth: {
+    adminLogin: string;
+    createAccount: string;
+    tagline: string;
+    email: string;
+    emailPlaceholder: string;
+    password: string;
+    signIn: string;
+    signUpAction: string;
+    noAccount: string;
+    haveAccount: string;
+    signInLink: string;
+    signUpLink: string;
+    adminOnlyNote: string;
+    accountExistsTitle: string;
+    accountExistsDesc: string;
+    signUpFailedTitle: string;
+    accountCreatedTitle: string;
+    accountCreatedDesc: string;
+    signInFailedTitle: string;
+  };
+  notFound: {
+    message: string;
+    back: string;
   };
   history: {
     title: string;
