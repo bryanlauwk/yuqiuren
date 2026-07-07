@@ -12,21 +12,16 @@ import {
   TableRow,
 } from '@/components/ui/table';
 
-export type RankingDensity = 'compact' | 'comfortable';
-
 interface DesktopRankingTableProps {
   rankings: PlayerRanking[];
   onAvatarClick?: (avatarUrl: string, playerName: string) => void;
-  density?: RankingDensity;
 }
 
 export function DesktopRankingTable({
   rankings,
   onAvatarClick,
-  density = 'comfortable',
 }: DesktopRankingTableProps) {
   const { t } = useLanguage();
-  const compact = density === 'compact';
 
   // Trigger points-bar fill animation after mount.
   const [mounted, setMounted] = useState(false);
@@ -37,57 +32,31 @@ export function DesktopRankingTable({
 
   const maxPoints = Math.max(rankings[0]?.total_points ?? 0, 1);
 
-  const d = compact
-    ? {
-        rowPadY: 'py-3 leading-none',
-        topRowPadY: 'py-4 leading-none',
-        headPadY: 'h-auto py-2 leading-none',
-        cellPadX: 'px-3',
-        firstPadX: 'pl-4 pr-3',
-        lastPadX: 'pl-3 pr-4',
-        rankColW: 'w-14',
-        statColW: 'w-20',
-        pointsColW: 'w-40',
-        avatar: 'w-12 h-12',
-        avatarRadius: 'rounded-md',
-        topAvatar: 'w-16 h-16',
-        topAvatarRadius: 'rounded-lg',
-        rankBadge: 'w-8 h-8 text-sm',
-        topRankBadge: 'w-11 h-11 text-base',
-        text: 'text-sm',
-        headText: 'text-[10px]',
-        gap: 'gap-4',
-        sepH: 'h-1.5',
-        barH: 'h-7',
-        topBarH: 'h-10',
-        barText: 'text-xs',
-        topBarText: 'text-sm',
-      }
-    : {
-        rowPadY: 'py-4 leading-none',
-        topRowPadY: 'py-5 leading-none',
-        headPadY: 'h-auto py-2.5 leading-none',
-        cellPadX: 'px-4',
-        firstPadX: 'pl-5 pr-4',
-        lastPadX: 'pl-4 pr-5',
-        rankColW: 'w-16',
-        statColW: 'w-24',
-        pointsColW: 'w-48',
-        avatar: 'w-16 h-16',
-        avatarRadius: 'rounded-lg',
-        topAvatar: 'w-20 h-20',
-        topAvatarRadius: 'rounded-xl',
-        rankBadge: 'w-9 h-9 text-base',
-        topRankBadge: 'w-14 h-14 text-xl',
-        text: 'text-base',
-        headText: 'text-[11px]',
-        gap: 'gap-5',
-        sepH: 'h-2',
-        barH: 'h-8',
-        topBarH: 'h-12',
-        barText: 'text-sm',
-        topBarText: 'text-base',
-      };
+  const d = {
+    rowPadY: 'py-4 leading-none',
+    topRowPadY: 'py-5 leading-none',
+    headPadY: 'h-auto py-2.5 leading-none',
+    cellPadX: 'px-4',
+    firstPadX: 'pl-5 pr-4',
+    lastPadX: 'pl-4 pr-5',
+    rankColW: 'w-16',
+    statColW: 'w-24',
+    pointsColW: 'w-48',
+    avatar: 'w-16 h-16',
+    avatarRadius: 'rounded-lg',
+    topAvatar: 'w-20 h-20',
+    topAvatarRadius: 'rounded-xl',
+    rankBadge: 'w-9 h-9 text-base',
+    topRankBadge: 'w-14 h-14 text-xl',
+    text: 'text-base',
+    headText: 'text-[11px]',
+    gap: 'gap-5',
+    sepH: 'h-2',
+    barH: 'h-8',
+    topBarH: 'h-12',
+    barText: 'text-sm',
+    topBarText: 'text-base',
+  };
 
   const getInitials = (name: string) =>
     name.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2);

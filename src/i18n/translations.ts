@@ -2,7 +2,6 @@ export const translations = {
   zh: {
     header: {
       brandName: "羽球人联赛",
-      subtitle: "2026 积分排行榜",
       rankings: "排行榜",
       sessionHistory: "场次记录",
       admin: "管理",
@@ -37,9 +36,6 @@ export const translations = {
       sessions: "场次",
       wins: "胜",
       points: "积分",
-      density: "视图",
-      compact: "紧凑",
-      comfortable: "舒适",
     },
 
     countdown: {
@@ -151,7 +147,6 @@ export const translations = {
   en: {
     header: {
       brandName: "Badminton League",
-      subtitle: "2026 Rankings",
       rankings: "Rankings",
       sessionHistory: "History",
       admin: "Admin",
@@ -186,9 +181,6 @@ export const translations = {
       sessions: "sessions",
       wins: "wins",
       points: "points",
-      density: "View",
-      compact: "Compact",
-      comfortable: "Comfy",
     },
 
     countdown: {
@@ -303,7 +295,6 @@ export type Language = keyof typeof translations;
 export type TranslationKeys = {
   header: {
     brandName: string;
-    subtitle: string;
     rankings: string;
     sessionHistory: string;
     admin: string;
@@ -338,9 +329,6 @@ export type TranslationKeys = {
     sessions: string;
     wins: string;
     points: string;
-    density: string;
-    compact: string;
-    comfortable: string;
   };
 
   countdown: {

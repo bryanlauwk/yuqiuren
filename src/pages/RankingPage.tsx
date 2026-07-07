@@ -1,37 +1,24 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { Header } from '@/components/Header';
 import { Footer } from '@/components/Footer';
 import { ArenaHero } from '@/components/ArenaHero';
-
 import { MobileRankingCard } from '@/components/MobileRankingCard';
-import { DesktopRankingTable, type RankingDensity } from '@/components/DesktopRankingTable';
-
+import { DesktopRankingTable } from '@/components/DesktopRankingTable';
 import { PhotoLightbox } from '@/components/PhotoLightbox';
 import { useRankings } from '@/hooks/useRankings';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { Trophy } from 'lucide-react';
-import { cn } from '@/lib/utils';
 
 
 export default function RankingPage() {
-  const { rankings, sessions, players, loading, hasTopTies } = useRankings();
-  const { t, language } = useLanguage();
+  const { rankings, loading } = useRankings();
+  const { t } = useLanguage();
   const isMobile = useIsMobile();
 
   const [lightboxOpen, setLightboxOpen] = useState(false);
   const [selectedAvatar, setSelectedAvatar] = useState<{ src: string; alt: string } | null>(null);
 
-  const [density, setDensity] = useState<RankingDensity>(() => {
-    if (typeof window === 'undefined') return 'comfortable';
-    const saved = window.localStorage.getItem('ranking-density');
-    return saved === 'compact' || saved === 'comfortable' ? saved : 'comfortable';
-  });
-  useEffect(() => {
-    try {
-      window.localStorage.setItem('ranking-density', density);
-    } catch {}
-  }, [density]);
 
 
   const handleAvatarClick = (avatarUrl: string, playerName: string) => {
@@ -39,74 +26,13 @@ export default function RankingPage() {
     setLightboxOpen(true);
   };
 
-  const leader = rankings[0];
-
   return (
     <div className="min-h-screen bg-background flex flex-col relative">
       <Header />
       
       <ArenaHero />
 
-      <div id="rankings-anchor" className="container pt-12 pb-2">
-        <div className="flex items-center gap-3 sm:gap-4 flex-wrap">
-          <span className="font-display text-xs sm:text-sm tracking-[0.2em] text-foreground whitespace-nowrap">
-            ▪ {language === 'zh' ? '实时排行 · 2026' : 'LIVE STANDINGS · 2026'}
-          </span>
-          <div className="flex-1 min-w-[40px] h-[2px] bg-foreground" />
-          {!loading && rankings.length > 0 && (
-            <div className="flex items-center gap-1.5 sm:gap-2 flex-wrap">
-              <span className="font-display text-[10px] sm:text-xs tracking-wider px-2 py-1 border-2 border-foreground rounded bg-background text-foreground">
-                {players.length}{language === 'zh' ? ' 人' : ' P'}
-              </span>
-              <span className="font-display text-[10px] sm:text-xs tracking-wider px-2 py-1 border-2 border-foreground rounded bg-background text-foreground">
-                {sessions.length}{language === 'zh' ? ' 场' : ' S'}
-              </span>
-              {leader && (
-                <span className="font-display text-[10px] sm:text-xs tracking-wider px-2 py-1 border-2 border-foreground rounded bg-accent text-accent-foreground max-w-[160px] truncate">
-                  #1 {leader.player_name}
-                </span>
-              )}
-              {!isMobile && (
-                <div
-                  role="group"
-                  aria-label={t.ranking.density}
-                  className="hidden md:inline-flex items-stretch border-2 border-foreground rounded overflow-hidden"
-                >
-                  <button
-                    type="button"
-                    onClick={() => setDensity('compact')}
-                    aria-pressed={density === 'compact'}
-                    className={cn(
-                      'font-display text-[10px] sm:text-xs tracking-wider px-2 py-1 transition-colors',
-                      density === 'compact'
-                        ? 'bg-foreground text-background'
-                        : 'bg-background text-foreground hover:bg-muted'
-                    )}
-                  >
-                    {t.ranking.compact}
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => setDensity('comfortable')}
-                    aria-pressed={density === 'comfortable'}
-                    className={cn(
-                      'font-display text-[10px] sm:text-xs tracking-wider px-2 py-1 border-l-2 border-foreground transition-colors',
-                      density === 'comfortable'
-                        ? 'bg-foreground text-background'
-                        : 'bg-background text-foreground hover:bg-muted'
-                    )}
-                  >
-                    {t.ranking.comfortable}
-                  </button>
-                </div>
-              )}
-            </div>
-          )}
-        </div>
-      </div>
-
-
-      <main className="container mt-6 relative z-10 flex-1 pb-12">
+      <main id="rankings-anchor" className="container mt-10 relative z-10 flex-1 pb-12 scroll-mt-24">
         {loading ? (
           <div className="space-y-2">
             {[...Array(8)].map((_, i) => (
@@ -145,9 +71,7 @@ export default function RankingPage() {
                 <DesktopRankingTable
                   rankings={rankings}
                   onAvatarClick={handleAvatarClick}
-                  density={density}
                 />
-
               </div>
             )}
           </>
