@@ -255,9 +255,10 @@ export function DesktopRankingTable({
                         }
                         disabled={!ranking.full_avatar_url}
                         className={cn(
-                          'flex-shrink-0 rounded overflow-hidden bg-muted border border-foreground transition-all duration-200 group-hover:scale-110',
-                          d.avatar,
-                          !isTopThree && 'grayscale group-hover:grayscale-0',
+                          'flex-shrink-0 rounded overflow-hidden bg-muted transition-all duration-200 group-hover:scale-110',
+                          isTopThree
+                            ? cn(d.topAvatar, 'border-2 border-foreground shadow-[2px_2px_0_0_hsl(var(--foreground))]')
+                            : cn(d.avatar, 'border border-foreground'),
                           ranking.full_avatar_url && 'cursor-pointer'
                         )}
                       >
