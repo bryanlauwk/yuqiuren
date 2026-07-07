@@ -288,7 +288,7 @@ export function DesktopRankingTable({
                   <TableCell className={cn(d.pointsColW, d.lastPadX, rowPadY, 'align-middle')}>
                     <div
                       className={cn(
-                        'relative w-full flex items-center overflow-hidden bg-muted/60 rounded-md',
+                        'relative w-full flex items-center justify-end overflow-hidden bg-muted/60 rounded-md',
                         isTopThree
                           ? cn('border-2 border-foreground', d.topBarH)
                           : cn('border-2 border-foreground/40', d.barH)
@@ -309,13 +309,15 @@ export function DesktopRankingTable({
                       />
                       <span
                         className={cn(
-                          'relative z-10 font-display italic tabular-nums px-2.5',
-                          isTopThree ? d.topBarText : d.barText,
+                          'relative z-10 font-display tabular-nums',
+                          d.pointsText,
                           isFirst
-                            ? 'text-accent-foreground'
+                            ? 'text-accent-foreground pr-10'
                             : isSecond
-                            ? 'text-primary-foreground'
-                            : 'text-foreground'
+                            ? 'text-primary-foreground pr-2.5'
+                            : isThird
+                            ? 'text-foreground pr-2.5'
+                            : 'text-foreground pr-2.5'
                         )}
                       >
                         {ranking.total_points}
