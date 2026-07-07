@@ -262,7 +262,7 @@ export function DesktopRankingTable({
                         <p
                           className={cn(
                             'font-display text-foreground tracking-tight truncate transition-colors',
-                            d.text,
+                            isTopThree ? d.topNameText : d.nameText,
                             isFirst && 'group-hover:text-accent',
                             isSecond && 'group-hover:text-primary'
                           )}
