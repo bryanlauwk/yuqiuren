@@ -1,15 +1,18 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Header } from '@/components/Header';
 import { Footer } from '@/components/Footer';
 import { ArenaHero } from '@/components/ArenaHero';
 
 import { MobileRankingCard } from '@/components/MobileRankingCard';
-import { DesktopRankingTable } from '@/components/DesktopRankingTable';
+import { DesktopRankingTable, type RankingDensity } from '@/components/DesktopRankingTable';
+
 import { PhotoLightbox } from '@/components/PhotoLightbox';
 import { useRankings } from '@/hooks/useRankings';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { Trophy } from 'lucide-react';
+import { cn } from '@/lib/utils';
+
 
 export default function RankingPage() {
   const { rankings, sessions, players, loading, hasTopTies } = useRankings();
@@ -18,6 +21,18 @@ export default function RankingPage() {
 
   const [lightboxOpen, setLightboxOpen] = useState(false);
   const [selectedAvatar, setSelectedAvatar] = useState<{ src: string; alt: string } | null>(null);
+
+  const [density, setDensity] = useState<RankingDensity>(() => {
+    if (typeof window === 'undefined') return 'comfortable';
+    const saved = window.localStorage.getItem('ranking-density');
+    return saved === 'compact' || saved === 'comfortable' ? saved : 'comfortable';
+  });
+  useEffect(() => {
+    try {
+      window.localStorage.setItem('ranking-density', density);
+    } catch {}
+  }, [density]);
+
 
   const handleAvatarClick = (avatarUrl: string, playerName: string) => {
     setSelectedAvatar({ src: avatarUrl, alt: playerName });
@@ -51,10 +66,45 @@ export default function RankingPage() {
                   #1 {leader.player_name}
                 </span>
               )}
+              {!isMobile && (
+                <div
+                  role="group"
+                  aria-label={t.ranking.density}
+                  className="hidden md:inline-flex items-stretch border-2 border-foreground rounded overflow-hidden"
+                >
+                  <button
+                    type="button"
+                    onClick={() => setDensity('compact')}
+                    aria-pressed={density === 'compact'}
+                    className={cn(
+                      'font-display text-[10px] sm:text-xs tracking-wider px-2 py-1 transition-colors',
+                      density === 'compact'
+                        ? 'bg-foreground text-background'
+                        : 'bg-background text-foreground hover:bg-muted'
+                    )}
+                  >
+                    {t.ranking.compact}
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setDensity('comfortable')}
+                    aria-pressed={density === 'comfortable'}
+                    className={cn(
+                      'font-display text-[10px] sm:text-xs tracking-wider px-2 py-1 border-l-2 border-foreground transition-colors',
+                      density === 'comfortable'
+                        ? 'bg-foreground text-background'
+                        : 'bg-background text-foreground hover:bg-muted'
+                    )}
+                  >
+                    {t.ranking.comfortable}
+                  </button>
+                </div>
+              )}
             </div>
           )}
         </div>
       </div>
+
 
       <main className="container mt-6 relative z-10 flex-1 pb-12">
         {loading ? (
@@ -92,10 +142,12 @@ export default function RankingPage() {
               </div>
             ) : (
               <div className="animate-fade-in-up">
-                <DesktopRankingTable 
-                  rankings={rankings} 
-                  onAvatarClick={handleAvatarClick} 
+                <DesktopRankingTable
+                  rankings={rankings}
+                  onAvatarClick={handleAvatarClick}
+                  density={density}
                 />
+
               </div>
             )}
           </>

@@ -11,22 +11,57 @@ import {
   TableRow,
 } from '@/components/ui/table';
 
+export type RankingDensity = 'compact' | 'comfortable';
+
 interface DesktopRankingTableProps {
   rankings: PlayerRanking[];
   onAvatarClick?: (avatarUrl: string, playerName: string) => void;
+  density?: RankingDensity;
 }
 
-export function DesktopRankingTable({ rankings, onAvatarClick }: DesktopRankingTableProps) {
+export function DesktopRankingTable({
+  rankings,
+  onAvatarClick,
+  density = 'comfortable',
+}: DesktopRankingTableProps) {
   const { t } = useLanguage();
+  const compact = density === 'compact';
 
-  const getInitials = (name: string) => {
-    return name
-      .split(' ')
-      .map(n => n[0])
-      .join('')
-      .toUpperCase()
-      .slice(0, 2);
-  };
+  // Density-driven tokens. Everything keys off these so header + rows stay on the same grid.
+  const d = compact
+    ? {
+        rowPadY: 'py-1.5',
+        headPadY: 'py-1.5',
+        cellPadX: 'px-2',
+        firstPadX: 'pl-3 pr-2',
+        lastPadX: 'pl-2 pr-3',
+        rankColW: 'w-12',
+        statColW: 'w-20',
+        pointsColW: 'w-24',
+        avatar: 'w-8 h-8',
+        rankBadge: 'w-7 h-7 text-sm',
+        text: 'text-sm',
+        headText: 'text-[10px]',
+        gap: 'gap-2.5',
+      }
+    : {
+        rowPadY: 'py-2.5',
+        headPadY: 'py-2',
+        cellPadX: 'px-3',
+        firstPadX: 'pl-4 pr-3',
+        lastPadX: 'pl-3 pr-4',
+        rankColW: 'w-14',
+        statColW: 'w-24',
+        pointsColW: 'w-28',
+        avatar: 'w-9 h-9',
+        rankBadge: 'w-8 h-8 text-base',
+        text: 'text-base',
+        headText: 'text-[11px]',
+        gap: 'gap-3',
+      };
+
+  const getInitials = (name: string) =>
+    name.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2);
 
   const getRankChangeDisplay = (ranking: PlayerRanking) => {
     if (ranking.rank_change > 0) {
@@ -57,22 +92,61 @@ export function DesktopRankingTable({ rankings, onAvatarClick }: DesktopRankingT
 
   return (
     <div className="rounded bg-card border-2 border-foreground shadow-[6px_6px_0_0_hsl(var(--foreground))] overflow-hidden">
-      <Table>
+      <Table className="table-fixed w-full">
         <TableHeader>
           <TableRow className="hover:bg-transparent border-b border-foreground bg-foreground">
-            <TableHead className="w-16 text-center text-[11px] font-display text-background py-2">
-              Rank
+            <TableHead
+              className={cn(
+                d.rankColW,
+                d.firstPadX,
+                d.headPadY,
+                d.headText,
+                'text-center font-display text-background tracking-wider'
+              )}
+            >
+              #
             </TableHead>
-            <TableHead className="text-[11px] font-display text-background py-2">
+            <TableHead
+              className={cn(
+                d.cellPadX,
+                d.headPadY,
+                d.headText,
+                'text-left font-display text-background tracking-wider'
+              )}
+            >
               Player
             </TableHead>
-            <TableHead className="w-24 text-center text-[11px] font-display text-background py-2">
+            <TableHead
+              className={cn(
+                d.statColW,
+                d.cellPadX,
+                d.headPadY,
+                d.headText,
+                'text-right font-display text-background tracking-wider'
+              )}
+            >
               {t.ranking.sessions}
             </TableHead>
-            <TableHead className="w-24 text-center text-[11px] font-display text-background py-2">
+            <TableHead
+              className={cn(
+                d.statColW,
+                d.cellPadX,
+                d.headPadY,
+                d.headText,
+                'text-right font-display text-background tracking-wider'
+              )}
+            >
               {t.ranking.wins}
             </TableHead>
-            <TableHead className="w-28 text-center text-[11px] font-display text-background py-2">
+            <TableHead
+              className={cn(
+                d.pointsColW,
+                d.lastPadX,
+                d.headPadY,
+                d.headText,
+                'text-right font-display text-background tracking-wider'
+              )}
+            >
               {t.ranking.points}
             </TableHead>
           </TableRow>
@@ -86,37 +160,45 @@ export function DesktopRankingTable({ rankings, onAvatarClick }: DesktopRankingT
               <TableRow
                 key={ranking.player_id}
                 className={cn(
-                  "transition-colors duration-150 border-b border-foreground/15 hover:bg-muted/60",
-                  isTopThree && (isFirst
-                    ? "bg-accent/5 border-l-4 border-l-accent"
-                    : "bg-primary/5 border-l-4 border-l-primary")
+                  'align-middle transition-colors duration-150 border-b border-foreground/15 hover:bg-muted/60',
+                  isTopThree &&
+                    (isFirst
+                      ? 'bg-accent/5 border-l-4 border-l-accent'
+                      : 'bg-primary/5 border-l-4 border-l-primary')
                 )}
               >
-                <TableCell className="text-center py-2.5">
+                <TableCell className={cn(d.rankColW, d.firstPadX, d.rowPadY, 'text-center align-middle')}>
                   {isTopThree ? (
                     <div
                       className={cn(
-                        "inline-flex items-center justify-center border border-foreground rounded font-display mx-auto w-8 h-8 text-base",
-                        isFirst ? "bg-accent text-accent-foreground" : "bg-primary text-primary-foreground"
+                        'inline-flex items-center justify-center border border-foreground rounded font-display mx-auto',
+                        d.rankBadge,
+                        isFirst
+                          ? 'bg-accent text-accent-foreground'
+                          : 'bg-primary text-primary-foreground'
                       )}
                     >
                       {ranking.rank}
                     </div>
                   ) : (
-                    <span className="text-base font-display text-muted-foreground">
+                    <span className={cn('font-display text-muted-foreground tabular-nums', d.text)}>
                       {ranking.rank}
                     </span>
                   )}
                 </TableCell>
 
-                <TableCell className="py-2.5">
-                  <div className="flex items-center gap-3">
+                <TableCell className={cn(d.cellPadX, d.rowPadY, 'align-middle')}>
+                  <div className={cn('flex items-center min-w-0', d.gap)}>
                     <button
-                      onClick={() => ranking.full_avatar_url && onAvatarClick?.(ranking.full_avatar_url, ranking.player_name)}
+                      onClick={() =>
+                        ranking.full_avatar_url &&
+                        onAvatarClick?.(ranking.full_avatar_url, ranking.player_name)
+                      }
                       disabled={!ranking.full_avatar_url}
                       className={cn(
-                        "flex-shrink-0 rounded overflow-hidden bg-muted border border-foreground transition-all w-9 h-9",
-                        ranking.full_avatar_url && "cursor-pointer hover:-translate-y-0.5"
+                        'flex-shrink-0 rounded overflow-hidden bg-muted border border-foreground transition-all',
+                        d.avatar,
+                        ranking.full_avatar_url && 'cursor-pointer hover:-translate-y-0.5'
                       )}
                     >
                       {ranking.avatar_url ? (
@@ -125,9 +207,10 @@ export function DesktopRankingTable({ rankings, onAvatarClick }: DesktopRankingT
                           alt={ranking.player_name}
                           className="w-full h-full object-cover"
                           style={{
-                            objectPosition: ranking.avatar_crop_x !== null && ranking.avatar_crop_y !== null
-                              ? `${(ranking.avatar_crop_x ?? 0.5) * 100}% ${(ranking.avatar_crop_y ?? 0.5) * 100}%`
-                              : 'center'
+                            objectPosition:
+                              ranking.avatar_crop_x !== null && ranking.avatar_crop_y !== null
+                                ? `${(ranking.avatar_crop_x ?? 0.5) * 100}% ${(ranking.avatar_crop_y ?? 0.5) * 100}%`
+                                : 'center',
                           }}
                         />
                       ) : (
@@ -137,8 +220,8 @@ export function DesktopRankingTable({ rankings, onAvatarClick }: DesktopRankingT
                       )}
                     </button>
 
-                    <div className="flex items-center gap-2">
-                      <p className="font-display text-foreground text-base tracking-tight">
+                    <div className="flex items-center gap-2 min-w-0">
+                      <p className={cn('font-display text-foreground tracking-tight truncate', d.text)}>
                         {ranking.player_name}
                       </p>
                       {getRankChangeDisplay(ranking)}
@@ -146,25 +229,30 @@ export function DesktopRankingTable({ rankings, onAvatarClick }: DesktopRankingT
                   </div>
                 </TableCell>
 
-                <TableCell className="text-center py-2.5">
-                  <p className="font-display text-foreground text-base">
+                <TableCell className={cn(d.statColW, d.cellPadX, d.rowPadY, 'text-right align-middle')}>
+                  <p className={cn('font-display text-foreground tabular-nums', d.text)}>
                     {ranking.sessions_played}
                   </p>
                 </TableCell>
 
-                <TableCell className="text-center py-2.5">
-                  <p className="font-display text-foreground text-base">
+                <TableCell className={cn(d.statColW, d.cellPadX, d.rowPadY, 'text-right align-middle')}>
+                  <p className={cn('font-display text-foreground tabular-nums', d.text)}>
                     {ranking.championships}
                   </p>
                 </TableCell>
 
-                <TableCell className="text-center py-2.5">
+                <TableCell className={cn(d.pointsColW, d.lastPadX, d.rowPadY, 'text-right align-middle')}>
                   {isFirst ? (
-                    <span className="inline-block bg-accent text-accent-foreground border border-foreground px-2 py-0.5 rounded font-display text-base">
+                    <span
+                      className={cn(
+                        'inline-block bg-accent text-accent-foreground border border-foreground px-2 py-0.5 rounded font-display tabular-nums',
+                        d.text
+                      )}
+                    >
                       {ranking.total_points}
                     </span>
                   ) : (
-                    <p className="font-display text-foreground text-base">
+                    <p className={cn('font-display text-foreground tabular-nums', d.text)}>
                       {ranking.total_points}
                     </p>
                   )}
