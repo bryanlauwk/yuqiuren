@@ -11,6 +11,8 @@ import { useRankings } from '@/hooks/useRankings';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { Trophy } from 'lucide-react';
+import { cn } from '@/lib/utils';
+
 
 export default function RankingPage() {
   const { rankings, sessions, players, loading, hasTopTies } = useRankings();
