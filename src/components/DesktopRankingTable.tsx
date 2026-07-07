@@ -1,3 +1,4 @@
+import { Fragment } from 'react';
 import { ArrowUp, ArrowDown, Minus } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useLanguage } from '@/contexts/LanguageContext';
@@ -157,107 +158,124 @@ export function DesktopRankingTable({
             const isFirst = ranking.rank === 1;
 
             return (
-              <TableRow
-                key={ranking.player_id}
-                className={cn(
-                  'align-middle transition-colors duration-150 border-b border-foreground/15 hover:bg-muted/60',
-                  isTopThree &&
-                    (isFirst
-                      ? 'bg-accent/5 border-l-4 border-l-accent'
-                      : 'bg-primary/5 border-l-4 border-l-primary')
-                )}
-              >
-                <TableCell className={cn(d.rankColW, d.firstPadX, d.rowPadY, 'text-center align-middle')}>
-                  {isTopThree ? (
-                    <div
-                      className={cn(
-                        'inline-flex items-center justify-center border border-foreground rounded font-display mx-auto',
-                        d.rankBadge,
-                        isFirst
-                          ? 'bg-accent text-accent-foreground'
-                          : 'bg-primary text-primary-foreground'
-                      )}
-                    >
-                      {ranking.rank}
-                    </div>
-                  ) : (
-                    <span className={cn('font-display text-muted-foreground tabular-nums', d.text)}>
-                      {ranking.rank}
-                    </span>
+              <Fragment key={ranking.player_id}>
+                <TableRow
+                  className={cn(
+                    'align-middle transition-colors duration-150 border-b border-foreground/15 hover:bg-muted/60',
+                    isTopThree &&
+                      (isFirst
+                        ? 'bg-accent/5 border-l-4 border-l-accent'
+                        : 'bg-primary/5 border-l-4 border-l-primary')
                   )}
-                </TableCell>
+                >
+                  <TableCell className={cn(d.rankColW, d.firstPadX, d.rowPadY, 'text-center align-middle')}>
+                    {isTopThree ? (
+                      <div
+                        className={cn(
+                          'inline-flex items-center justify-center border border-foreground rounded font-display mx-auto',
+                          d.rankBadge,
+                          isFirst
+                            ? 'bg-accent text-accent-foreground'
+                            : 'bg-primary text-primary-foreground'
+                        )}
+                      >
+                        {ranking.rank}
+                      </div>
+                    ) : (
+                      <span className={cn('font-display text-muted-foreground tabular-nums', d.text)}>
+                        {ranking.rank}
+                      </span>
+                    )}
+                  </TableCell>
 
-                <TableCell className={cn(d.cellPadX, d.rowPadY, 'align-middle')}>
-                  <div className={cn('flex items-center min-w-0', d.gap)}>
-                    <button
-                      onClick={() =>
-                        ranking.full_avatar_url &&
-                        onAvatarClick?.(ranking.full_avatar_url, ranking.player_name)
-                      }
-                      disabled={!ranking.full_avatar_url}
-                      className={cn(
-                        'flex-shrink-0 rounded overflow-hidden bg-muted border border-foreground transition-all',
-                        d.avatar,
-                        ranking.full_avatar_url && 'cursor-pointer hover:-translate-y-0.5'
-                      )}
-                    >
-                      {ranking.avatar_url ? (
-                        <img
-                          src={ranking.avatar_url}
-                          alt={ranking.player_name}
-                          className="w-full h-full object-cover"
-                          style={{
-                            objectPosition:
-                              ranking.avatar_crop_x !== null && ranking.avatar_crop_y !== null
-                                ? `${(ranking.avatar_crop_x ?? 0.5) * 100}% ${(ranking.avatar_crop_y ?? 0.5) * 100}%`
-                                : 'center',
-                          }}
-                        />
-                      ) : (
-                        <div className="w-full h-full flex items-center justify-center text-foreground text-xs font-black">
-                          {getInitials(ranking.player_name)}
-                        </div>
-                      )}
-                    </button>
+                  <TableCell className={cn(d.cellPadX, d.rowPadY, 'align-middle')}>
+                    <div className={cn('flex items-center min-w-0', d.gap)}>
+                      <button
+                        onClick={() =>
+                          ranking.full_avatar_url &&
+                          onAvatarClick?.(ranking.full_avatar_url, ranking.player_name)
+                        }
+                        disabled={!ranking.full_avatar_url}
+                        className={cn(
+                          'flex-shrink-0 rounded overflow-hidden bg-muted border border-foreground transition-all',
+                          d.avatar,
+                          ranking.full_avatar_url && 'cursor-pointer hover:-translate-y-0.5'
+                        )}
+                      >
+                        {ranking.avatar_url ? (
+                          <img
+                            src={ranking.avatar_url}
+                            alt={ranking.player_name}
+                            className="w-full h-full object-cover"
+                            style={{
+                              objectPosition:
+                                ranking.avatar_crop_x !== null && ranking.avatar_crop_y !== null
+                                  ? `${(ranking.avatar_crop_x ?? 0.5) * 100}% ${(ranking.avatar_crop_y ?? 0.5) * 100}%`
+                                  : 'center',
+                            }}
+                          />
+                        ) : (
+                          <div className="w-full h-full flex items-center justify-center text-foreground text-xs font-black">
+                            {getInitials(ranking.player_name)}
+                          </div>
+                        )}
+                      </button>
 
-                    <div className="flex items-center gap-2 min-w-0">
-                      <p className={cn('font-display text-foreground tracking-tight truncate', d.text)}>
-                        {ranking.player_name}
-                      </p>
-                      {getRankChangeDisplay(ranking)}
+                      <div className="flex items-center gap-2 min-w-0">
+                        <p className={cn('font-display text-foreground tracking-tight truncate', d.text)}>
+                          {ranking.player_name}
+                        </p>
+                        {getRankChangeDisplay(ranking)}
+                      </div>
                     </div>
-                  </div>
-                </TableCell>
+                  </TableCell>
 
-                <TableCell className={cn(d.statColW, d.cellPadX, d.rowPadY, 'text-right align-middle')}>
-                  <p className={cn('font-display text-foreground tabular-nums', d.text)}>
-                    {ranking.sessions_played}
-                  </p>
-                </TableCell>
-
-                <TableCell className={cn(d.statColW, d.cellPadX, d.rowPadY, 'text-right align-middle')}>
-                  <p className={cn('font-display text-foreground tabular-nums', d.text)}>
-                    {ranking.championships}
-                  </p>
-                </TableCell>
-
-                <TableCell className={cn(d.pointsColW, d.lastPadX, d.rowPadY, 'text-right align-middle')}>
-                  {isFirst ? (
-                    <span
-                      className={cn(
-                        'inline-block bg-accent text-accent-foreground border border-foreground px-2 py-0.5 rounded font-display tabular-nums',
-                        d.text
-                      )}
-                    >
-                      {ranking.total_points}
-                    </span>
-                  ) : (
+                  <TableCell className={cn(d.statColW, d.cellPadX, d.rowPadY, 'text-right align-middle')}>
                     <p className={cn('font-display text-foreground tabular-nums', d.text)}>
-                      {ranking.total_points}
+                      {ranking.sessions_played}
                     </p>
-                  )}
-                </TableCell>
-              </TableRow>
+                  </TableCell>
+
+                  <TableCell className={cn(d.statColW, d.cellPadX, d.rowPadY, 'text-right align-middle')}>
+                    <p className={cn('font-display text-foreground tabular-nums', d.text)}>
+                      {ranking.championships}
+                    </p>
+                  </TableCell>
+
+                  <TableCell className={cn(d.pointsColW, d.lastPadX, d.rowPadY, 'text-right align-middle')}>
+                    {isFirst ? (
+                      <span
+                        className={cn(
+                          'inline-block bg-accent text-accent-foreground border border-foreground px-2 py-0.5 rounded font-display tabular-nums',
+                          d.text
+                        )}
+                      >
+                        {ranking.total_points}
+                      </span>
+                    ) : (
+                      <p className={cn('font-display text-foreground tabular-nums', d.text)}>
+                        {ranking.total_points}
+                      </p>
+                    )}
+                  </TableCell>
+                </TableRow>
+
+                {ranking.rank <= 2 && (
+                  <TableRow className="border-0 hover:bg-transparent bg-transparent">
+                    <TableCell colSpan={5} className="p-0 border-0 align-middle">
+                      <div
+                        className={cn(
+                          'w-full',
+                          compact ? 'h-1.5' : 'h-2.5',
+                          ranking.rank === 1
+                            ? 'bg-gradient-to-r from-accent/50 via-accent to-accent/10'
+                            : 'bg-gradient-to-r from-primary/50 via-primary to-primary/10'
+                        )}
+                      />
+                    </TableCell>
+                  </TableRow>
+                )}
+              </Fragment>
             );
           })}
         </TableBody>
