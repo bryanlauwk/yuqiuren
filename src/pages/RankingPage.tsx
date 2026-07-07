@@ -1,10 +1,11 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Header } from '@/components/Header';
 import { Footer } from '@/components/Footer';
 import { ArenaHero } from '@/components/ArenaHero';
 
 import { MobileRankingCard } from '@/components/MobileRankingCard';
-import { DesktopRankingTable } from '@/components/DesktopRankingTable';
+import { DesktopRankingTable, type RankingDensity } from '@/components/DesktopRankingTable';
+
 import { PhotoLightbox } from '@/components/PhotoLightbox';
 import { useRankings } from '@/hooks/useRankings';
 import { useLanguage } from '@/contexts/LanguageContext';
