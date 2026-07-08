@@ -61,6 +61,7 @@ export default function RankingPage() {
                   >
                     <MobileRankingCard
                       ranking={ranking}
+                      maxPoints={Math.max(rankings[0]?.total_points ?? 0, 1)}
                       onAvatarClick={handleAvatarClick}
                     />
                   </div>
