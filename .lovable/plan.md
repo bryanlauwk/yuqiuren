@@ -1,36 +1,59 @@
-## 问题
-截图显示：排名号码徽章（红/蓝色方块）与球员头像之间几乎贴在一起，右侧名字与头像也偏近；行与行的分隔条较厚，整体节奏拥挤。
+# 本周之星多元化奖项方案
 
-## 只改一个文件
-`src/components/DesktopRankingTable.tsx`，仅调 spacing / gap / 分隔条 token，不动列宽结构、颜色语义、动画。
+将 `StarOfTheWeek` 从"只展示榜首球员"升级为"每周轮换不同类别的荣誉"，让首页焦点更丰富、有惊喜感。
 
-### 1. 号码 ↔ 头像 之间加呼吸
-- `firstPadX`: `pl-5 pr-4` → `pl-5 pr-6`（rank 列右侧 padding 加大，把徽章推离头像）
-- 头像所在 cell 的 `cellPadX` 保持 `px-4`，但内部 flex 的 `gap` 由 `gap-5` → `gap-6`（头像 ↔ 名字更松）
+## 奖项类别（基于现有数据可计算，无需新增字段）
 
-### 2. 前三名徽章微缩，避免视觉压迫
-- `topRankBadge`: `w-14 h-14 text-xl` → `w-12 h-12 text-lg`（仍明显大于 4+ 名的 `w-9 h-9`，但不再逼近头像尺寸）
-- `rankBadge`（4+）保持 `w-9 h-9 text-lg`
+| 类别 | 中文标签 | 判定逻辑 |
+|---|---|---|
+| `champion` | 本场冠军 | 最新场次冠军（现有逻辑） |
+| `leader` | 赛季领跑者 | 榜首（现有 fallback） |
+| `rookie` | 最佳新人 | `is_new === true` 中积分最高者，或最近 2 场首次登场者 |
+| `climber` | 最佳进步 | `rank_change` 正值最大者（本周排名上升最多） |
+| `iron_man` | 全勤铁人 | `sessions_played` 最多的非榜首球员 |
+| `hot_streak` | 连冠热浪 | 最近连续夺冠场次最多者（从 results 计算） |
+| `potential` | 最具潜质 | 出场 ≤ 3 场但场均积分最高者 |
 
-### 3. 头像与名字节奏
-- 前三头像 `topAvatar`: `w-20 h-20` → `w-[72px] h-[72px]`（略收，配合徽章缩小后整体协调）
-- 4+ 名 `avatar` 保持 `w-16 h-16`
+若某类别本周无合格候选，自动跳过。
 
-### 4. 行间分隔与行高
-- `sepH`: `h-2` → `h-1.5`（前二名下方渐变分隔条更纤细）
-- `topRowPadY`: `py-4` → `py-3.5`，`rowPadY`: `py-3.5` → `py-3`（配合徽章缩小，整体上下更均衡）
+## 轮换策略
 
-### 5. 名字与升降箭头
-- 名字与 `getRankChangeDisplay` 之间 `gap-2` → `gap-2.5`，让 ↑3 / ↓2 与名字分离更清晰
+- 计算所有本周"有效"的奖项候选列表（按上表顺序）。
+- 用 `当前 ISO 周数 % 候选数` 选定本周展示的奖项——每周自动切换，同一周内稳定不闪烁。
+- 冠军类别永远优先出现在有新场次的那一周，其余周从剩余池轮换。
 
-### 6. 数字列微调（保持之前对齐规则）
-- `sessionsPadX`: `pl-8 pr-4` → `pl-10 pr-4`（头像 → sessions 列拉开更多，避免第一排数字贴头像观感）
+## UI 变化（`StarOfTheWeek.tsx`）
 
-## 不动
-- 表格列宽 / `table-fixed`
-- 颜色、border、shadow 语义
-- 进度条填充动画、MAX 徽章
-- 移动端、其他文件、翻译
+保留现有海报结构（头像块 + 名称 + 三格 stat + 底部日期），只调整：
 
-## 验证
-改完用 Playwright 截桌面端 `http://localhost:8080/` 排行区，肉眼确认号码与头像之间有明显留白、整体节奏舒展。
+1. **头部条**：`STAR OF THE WEEK` → 动态奖项名（如 `最佳新人 / TOP ROOKIE`、`最佳进步 / TOP CLIMBER`）。LIVE 徽标保留。
+2. **对角 accent 色**：按奖项换色调
+   - champion/leader → accent（现状）
+   - rookie → primary
+   - climber → 绿色（`--finished` 已有）
+   - iron_man → muted 深色
+   - hot_streak → destructive（火焰红）
+   - potential → accent + primary 双色叠加（保持一致 tokens）
+3. **副标题行**：显示该奖项的关键指标，例如
+   - 最佳进步 → `本周上升 5 位 / UP 5 SPOTS`
+   - 铁人 → `出场 12 场 / 12 SESSIONS`
+   - 潜质 → `场均 8.5 分 / 8.5 AVG`
+4. **Stat 三格**：中间格改为奖项对应的"高光数字"，其余两格保持球员总分与冠军数，标签相应调整。
+5. **角标 `#rank`**：保留，仍显示球员当前赛季排名。
+6. **淡入过渡**：切换球员/奖项时用现有 `animate-fade-in-up`，避免生硬。
+
+## 技术要点
+
+- 全部计算在 `StarOfTheWeek` 内 `useMemo` 完成，输入仍是 `useRankings()` 返回的 `rankings / sessions / results / players`——不需要新增 hook、schema、迁移。
+- 新增一个纯函数 `pickWeeklyAward(rankings, sessions, results)` 返回 `{ awardKey, player, headline, subtitle, statValue, statLabel, tint }`。
+- 中英文文案加进 `src/i18n/translations.ts` 的 `home` 分组下新键 `awards.*`。
+- ISO 周数用简单函数计算，无需引入 dayjs。
+
+## 不改动
+
+- `ArenaHero`、`RankingPage`、桌面/移动榜单、Supabase schema、类型定义。
+- 海报的尺寸、边框、阴影、旋转/位移动画。
+
+## 打开问题
+
+若你希望"手动指定本周奖项"（管理员在 admin 面板选择），可以在此基础上再加一个 `weekly_spotlight` 表，本轮先做自动轮换。
