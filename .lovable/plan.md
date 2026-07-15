@@ -1,26 +1,39 @@
-## 再次精简 LatestSessionPhoto
-
-进一步去除重复元素，桌面版改为长方形照片。
+## 合照卡片升级：悬停质感 + 多场轮播
 
 ### 移除
-- 照片左上角 `#matchIndex` 徽章（重复）
-- 照片右下角日期徽章（与 footer 日期重复）
-- 底部 footer 整行（日期 + 查看更多）
+- 顶部标签条（"最新赛事合照 / LATEST MATCH PHOTO" + LIVE 指示）— 冗余
 
-### 保留
-- 顶部标签条："最新赛事合照 / LATEST MATCH PHOTO" + LIVE 指示
-- 合照图片（唯一主视觉）
+### 桌面版悬停动效（质感提升）
+- 静态阴影：`shadow-[8px_8px_0_0_hsl(var(--accent))]`
+- 悬停时：
+  - 阴影加深并抬升 → `hover:shadow-[12px_12px_0_0_hsl(var(--accent))]`
+  - 卡片轻微上浮 + 旋转归零 → `hover:-translate-y-1 hover:rotate-0`
+  - 图片轻微 zoom → `img` 用 `group-hover:scale-[1.03]`
+- 过渡：`transition-all duration-300 ease-out`
+- 保留 scroll-driven rotate/translateY 作为基础 transform（悬停时用 CSS 覆盖）
 
-### 桌面版改长方形
-- 照片容器从 `aspect-square` 改为 `aspect-[4/3]`（横向长方形，更适合团体合照）
-- 卡片宽度维持 340px（桌面 hero 右侧仍居中显示）
+### 多场轮播（核心新增）
+选取最近 6 场有 `group_photo_url` 的场次：
+
+**移动端**：水平滚动条（swipe）
+- `flex overflow-x-auto snap-x snap-mandatory` 
+- 每张卡片 `w-[280px] shrink-0 snap-center`
+- 隐藏滚动条（`scrollbar-hide` 或内联 CSS）
+
+**桌面端**：主图 + 缩略图网格
+- 主展示区：第一张大图（4:3，宽 420px）
+- 下方 2×2 或 1×4 缩略图小网格（80px 方块，可点击切换主图）
+- 点击缩略图 → setState 更新 activeIndex，主图切换（带 fade 过渡）
+- 悬停缩略图：边框由 muted → accent
 
 ### 技术细节
 只改 `src/components/hero/LatestSessionPhoto.tsx`：
-- 删除 `matchIndex` useMemo 及相关 JSX
-- 删除照片上的两个绝对定位徽章
-- 删除底部 footer div 及 `Link` import（如无其他用途）
-- `aspect-square` → `aspect-[4/3]`
-- 保留 loading / no-photo fallback
+- 用 `useState<number>(0)` 管理 activeIndex
+- `sessions.filter(s => s.group_photo_url).slice(0, 6)` 取候选
+- 用 `useIsMobile()` 分叉 UI（已在项目中使用）
+- 主图切换动画：`key={activeIndex}` + `animate-fade-in`
+- 保留 loading / no-photo fallback（当无任何合照时）
+- 不再依赖 rotate/translateY props 做主要形态；桌面网格用固定布局，仅保留一点手感倾斜给主图
 
-不改动其它文件。
+不改 `ArenaHero.tsx`（props 接口保持兼容，即使桌面不再强调倾斜）。
+不改后端 / schema。
