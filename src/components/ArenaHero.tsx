@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { CircleArrow } from '@/components/ink/CircleArrow';
 import { useRankings } from '@/hooks/useRankings';
-import { StarOfTheWeek } from '@/components/hero/StarOfTheWeek';
+import { LatestSessionPhoto } from '@/components/hero/LatestSessionPhoto';
 import { CourtLines } from '@/components/hero/CourtLines';
 
 
@@ -132,7 +132,7 @@ export function ArenaHero() {
 
           {/* Right: Star of the Week poster */}
           <div className="md:col-span-5 flex justify-center md:justify-end">
-            <StarOfTheWeek rotate={posterRotate} translateY={posterTranslateY} />
+            <LatestSessionPhoto rotate={posterRotate} translateY={posterTranslateY} />
           </div>
 
         </div>
