@@ -18,7 +18,7 @@ function formatDate(iso: string) {
 
 export function LatestSessionPhoto({ rotate, translateY }: Props) {
   const { language } = useLanguage();
-  const { sessions, results, players, loading } = useRankings();
+  const { sessions, loading } = useRankings();
 
   const latest = useMemo(() => {
     const withPhoto = sessions.find((s) => s.group_photo_url);
@@ -27,27 +27,9 @@ export function LatestSessionPhoto({ rotate, translateY }: Props) {
 
   const matchIndex = useMemo(() => {
     if (!latest) return null;
-    // sessions are ordered newest → oldest; match # = sessions.length - index
     const idx = sessions.findIndex((s) => s.id === latest.id);
     return idx >= 0 ? sessions.length - idx : null;
   }, [latest, sessions]);
-
-  const champions = useMemo(() => {
-    if (!latest) return [] as string[];
-    const ids = results
-      .filter((r) => r.session_id === latest.id && r.result_type === 'champion')
-      .map((r) => r.player_id);
-    return ids
-      .map((id) => players.find((p) => p.id === id)?.name)
-      .filter(Boolean) as string[];
-  }, [latest, results, players]);
-
-  const playerCount = useMemo(() => {
-    if (!latest) return 0;
-    return new Set(
-      results.filter((r) => r.session_id === latest.id).map((r) => r.player_id),
-    ).size;
-  }, [latest, results]);
 
   return (
     <div
@@ -106,91 +88,20 @@ export function LatestSessionPhoto({ rotate, translateY }: Props) {
         )}
       </div>
 
-      {/* Meta */}
-      <div className="p-4 space-y-3">
-        <div>
-          <div className="font-display text-xl leading-tight text-foreground uppercase tracking-tight break-words min-h-[24px]">
-            {latest ? (
-              <span className="lime-slab">
-                {latest.name || (language === 'zh' ? '羽球场次' : 'BADMINTON SESSION')}
-              </span>
-            ) : (
-              <span className="inline-block h-6 w-40 bg-muted animate-pulse-arena rounded" />
-            )}
-          </div>
-          <div className="mt-1 font-display text-[11px] tracking-[0.2em] text-muted-foreground min-h-[14px]">
-            {latest ? (
-              champions.length > 0 ? (
-                <>
-                  {language === 'zh' ? '冠军 · ' : 'CHAMPION · '}
-                  <span className="text-foreground">{champions.join(', ')}</span>
-                </>
-              ) : (
-                language === 'zh' ? '等待战报更新' : 'AWAITING RESULTS'
-              )
-            ) : (
-              <span className="inline-block h-3 w-32 bg-muted animate-pulse-arena rounded" />
-            )}
-          </div>
-        </div>
-
-        {/* Stat trio */}
-        <div className="grid grid-cols-3 gap-2">
-          <StatBox
-            value={matchIndex}
-            label={language === 'zh' ? '场次' : 'MATCH'}
-            className="bg-accent text-accent-foreground"
-          />
-          <StatBox
-            value={playerCount || null}
-            label={language === 'zh' ? '出席' : 'PLAYERS'}
-            className="bg-primary text-primary-foreground"
-          />
-          <StatBox
-            value={champions.length || null}
-            label={language === 'zh' ? '冠军' : 'CHAMPS'}
-            className="bg-muted text-foreground"
-          />
-        </div>
-
-        {/* Footer line */}
-        <div className="flex items-center justify-between pt-2 border-t-2 border-foreground/10 min-h-[18px]">
-          <span className="font-display text-[10px] tracking-[0.2em] text-muted-foreground">
-            {latest
-              ? formatDate(latest.session_date)
-              : language === 'zh' ? '暂无场次' : 'NO SESSION'}
-          </span>
-          <Link
-            to="/history"
-            className="font-display text-[10px] tracking-[0.2em] text-foreground hover:text-accent transition-colors"
-          >
-            {language === 'zh' ? '查看更多 →' : 'VIEW MORE →'}
-          </Link>
-        </div>
+      {/* Minimal footer */}
+      <div className="flex items-center justify-between px-4 py-2.5">
+        <span className="font-display text-[10px] tracking-[0.2em] text-muted-foreground">
+          {latest
+            ? formatDate(latest.session_date)
+            : language === 'zh' ? '暂无场次' : 'NO SESSION'}
+        </span>
+        <Link
+          to="/history"
+          className="font-display text-[10px] tracking-[0.2em] text-foreground hover:text-accent transition-colors"
+        >
+          {language === 'zh' ? '查看更多 →' : 'VIEW MORE →'}
+        </Link>
       </div>
-    </div>
-  );
-}
-
-function StatBox({
-  value,
-  label,
-  className,
-}: {
-  value: number | string | null;
-  label: string;
-  className: string;
-}) {
-  return (
-    <div className={`border-2 border-foreground rounded-md px-2 py-2 text-center ${className}`}>
-      <div className="font-display text-xl leading-none min-h-[20px] flex items-center justify-center">
-        {value === null || value === undefined ? (
-          <span className="inline-block h-4 w-6 bg-foreground/15 animate-pulse-arena rounded" />
-        ) : (
-          value
-        )}
-      </div>
-      <div className="font-display text-[9px] tracking-[0.15em] mt-1 opacity-90">{label}</div>
     </div>
   );
 }
