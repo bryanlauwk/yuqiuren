@@ -1,6 +1,7 @@
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { useRankings } from '@/hooks/useRankings';
+import { useIsMobile } from '@/hooks/use-mobile';
 
 interface Props {
   rotate: number;
@@ -10,55 +11,131 @@ interface Props {
 export function LatestSessionPhoto({ rotate, translateY }: Props) {
   const { language } = useLanguage();
   const { sessions, loading } = useRankings();
+  const isMobile = useIsMobile();
+  const [activeIndex, setActiveIndex] = useState(0);
 
-  const latest = useMemo(() => {
-    const withPhoto = sessions.find((s) => s.group_photo_url);
-    return withPhoto ?? sessions[0] ?? null;
-  }, [sessions]);
+  const photoSessions = useMemo(
+    () => sessions.filter((s) => s.group_photo_url).slice(0, 6),
+    [sessions],
+  );
 
-  return (
-    <div
-      className="relative bg-background border-2 border-foreground rounded-2xl shadow-[8px_8px_0_0_hsl(var(--accent))] transition-transform duration-200 ease-out will-change-transform overflow-hidden animate-fade-in-up w-[340px] md:w-[420px]"
-      style={{
-        transform: `rotate(${rotate}deg) translateY(${translateY}px)`,
-      }}
-    >
-      {/* Header strip */}
-      <div className="flex items-center justify-between border-b-2 border-foreground bg-foreground text-background px-4 py-2 gap-3">
-        <span className="font-display text-[11px] tracking-[0.25em] truncate">
-          {language === 'zh' ? '最新赛事合照' : 'LATEST MATCH PHOTO'}
-        </span>
-        <span className="flex items-center gap-1.5 bg-accent text-accent-foreground border-2 border-background rounded-md px-1.5 py-0.5 shrink-0">
-          <span className="relative flex h-1.5 w-1.5">
-            <span className="absolute inline-flex h-full w-full rounded-full bg-background opacity-75 animate-ping" />
-            <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-background" />
-          </span>
-          <span className="font-display text-[9px] tracking-widest">LIVE</span>
-        </span>
+  const active = photoSessions[activeIndex] ?? null;
+
+  // Empty / loading state
+  if (loading || photoSessions.length === 0) {
+    return (
+      <div
+        className="relative bg-background border-2 border-foreground rounded-2xl shadow-[8px_8px_0_0_hsl(var(--accent))] overflow-hidden w-[320px] md:w-[440px]"
+        style={{ transform: `rotate(${rotate}deg) translateY(${translateY}px)` }}
+      >
+        <div className="relative bg-muted aspect-square md:aspect-[4/3] w-full">
+          {loading ? (
+            <div className="w-full h-full animate-pulse-arena bg-muted" />
+          ) : (
+            <div className="w-full h-full flex flex-col items-center justify-center gap-2 text-muted-foreground p-4 text-center">
+              <div className="font-display text-sm tracking-[0.2em]">
+                {language === 'zh' ? '暂无合照' : 'NO PHOTO YET'}
+              </div>
+              <div className="font-display text-[10px] tracking-widest opacity-70">
+                {language === 'zh' ? '管理员可在后台上传' : 'ADMIN CAN UPLOAD'}
+              </div>
+            </div>
+          )}
+        </div>
       </div>
+    );
+  }
 
-      {/* Photo block */}
-      <div className="relative bg-muted aspect-square md:aspect-[4/3] w-full overflow-hidden">
-        {loading ? (
-          <div className="w-full h-full animate-pulse-arena bg-muted" />
-        ) : latest?.group_photo_url ? (
-          <img
-            src={latest.group_photo_url}
-            alt={latest.name || 'Session group photo'}
-            className="w-full h-full object-cover"
-            loading="lazy"
-          />
-        ) : (
-          <div className="w-full h-full flex flex-col items-center justify-center gap-2 text-muted-foreground p-4 text-center">
-            <div className="font-display text-sm tracking-[0.2em]">
-              {language === 'zh' ? '暂无合照' : 'NO PHOTO YET'}
+  // Mobile: horizontal snap carousel
+  if (isMobile) {
+    return (
+      <div
+        className="w-full max-w-[360px]"
+        style={{ transform: `rotate(${rotate * 0.5}deg) translateY(${translateY}px)` }}
+      >
+        <div
+          className="flex gap-3 overflow-x-auto snap-x snap-mandatory pb-3 -mx-4 px-4"
+          style={{ scrollbarWidth: 'none' }}
+        >
+          {photoSessions.map((s) => (
+            <div
+              key={s.id}
+              className="shrink-0 w-[280px] snap-center bg-background border-2 border-foreground rounded-2xl shadow-[6px_6px_0_0_hsl(var(--accent))] overflow-hidden"
+            >
+              <div className="relative bg-muted aspect-square w-full overflow-hidden">
+                <img
+                  src={s.group_photo_url!}
+                  alt={s.name || 'Session group photo'}
+                  className="w-full h-full object-cover"
+                  loading="lazy"
+                />
+              </div>
             </div>
-            <div className="font-display text-[10px] tracking-widest opacity-70">
-              {language === 'zh' ? '管理员可在后台上传' : 'ADMIN CAN UPLOAD'}
-            </div>
+          ))}
+        </div>
+        {photoSessions.length > 1 && (
+          <div className="flex justify-center gap-1.5 mt-1">
+            {photoSessions.map((_, i) => (
+              <span
+                key={i}
+                className="h-1.5 w-1.5 rounded-full bg-foreground/30"
+              />
+            ))}
           </div>
         )}
       </div>
+    );
+  }
+
+  // Desktop: main image + thumbnail row
+  return (
+    <div className="w-[440px]">
+      {/* Main image */}
+      <div
+        className="group relative bg-background border-2 border-foreground rounded-2xl shadow-[8px_8px_0_0_hsl(var(--accent))] overflow-hidden transition-all duration-300 ease-out hover:shadow-[12px_12px_0_0_hsl(var(--accent))] hover:-translate-y-1 will-change-transform"
+        style={{ transform: `rotate(${rotate}deg) translateY(${translateY}px)` }}
+      >
+        <div className="relative bg-muted aspect-[4/3] w-full overflow-hidden">
+          {active?.group_photo_url && (
+            <img
+              key={active.id}
+              src={active.group_photo_url}
+              alt={active.name || 'Session group photo'}
+              className="w-full h-full object-cover animate-fade-in transition-transform duration-500 ease-out group-hover:scale-[1.03]"
+              loading="lazy"
+            />
+          )}
+        </div>
+      </div>
+
+      {/* Thumbnail strip */}
+      {photoSessions.length > 1 && (
+        <div className="mt-4 grid grid-cols-6 gap-2">
+          {photoSessions.map((s, i) => {
+            const isActive = i === activeIndex;
+            return (
+              <button
+                key={s.id}
+                type="button"
+                onClick={() => setActiveIndex(i)}
+                aria-label={s.name || `Session ${i + 1}`}
+                className={`relative aspect-square overflow-hidden rounded-md border-2 transition-all duration-200 ${
+                  isActive
+                    ? 'border-accent shadow-[3px_3px_0_0_hsl(var(--foreground))] scale-[1.02]'
+                    : 'border-foreground/30 hover:border-foreground opacity-70 hover:opacity-100'
+                }`}
+              >
+                <img
+                  src={s.group_photo_url!}
+                  alt=""
+                  className="w-full h-full object-cover"
+                  loading="lazy"
+                />
+              </button>
+            );
+          })}
+        </div>
+      )}
     </div>
   );
 }
