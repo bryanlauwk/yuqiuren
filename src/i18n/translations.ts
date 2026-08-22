@@ -215,7 +215,16 @@ export const translations = {
       sessions: "sessions",
       wins: "wins",
       points: "points",
+      player: "player",
+      details: "full stats",
+      winRate: "win rate",
+      avgPoints: "avg pts",
+      rankChange: "rank change",
+      newPlayer: "new",
+      expand: "Expand stats",
+      collapse: "Collapse stats",
     },
+
 
     countdown: {
       matchStarting: "Match starting!",
