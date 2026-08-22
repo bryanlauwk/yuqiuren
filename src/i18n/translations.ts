@@ -36,7 +36,16 @@ export const translations = {
       sessions: "场次",
       wins: "胜",
       points: "积分",
+      player: "球员",
+      details: "详细数据",
+      winRate: "冠军率",
+      avgPoints: "场均分",
+      rankChange: "排名变化",
+      newPlayer: "新加入",
+      expand: "展开详情",
+      collapse: "收起详情",
     },
+
 
     countdown: {
       matchStarting: "比赛即将开始！",
@@ -206,7 +215,16 @@ export const translations = {
       sessions: "sessions",
       wins: "wins",
       points: "points",
+      player: "player",
+      details: "full stats",
+      winRate: "win rate",
+      avgPoints: "avg pts",
+      rankChange: "rank change",
+      newPlayer: "new",
+      expand: "Expand stats",
+      collapse: "Collapse stats",
     },
+
 
     countdown: {
       matchStarting: "Match starting!",
@@ -379,7 +397,16 @@ export type TranslationKeys = {
     sessions: string;
     wins: string;
     points: string;
+    player: string;
+    details: string;
+    winRate: string;
+    avgPoints: string;
+    rankChange: string;
+    newPlayer: string;
+    expand: string;
+    collapse: string;
   };
+
 
   countdown: {
     matchStarting: string;

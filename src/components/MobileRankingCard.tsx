@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { ArrowUp, ArrowDown, Minus } from 'lucide-react';
+import { ArrowUp, ArrowDown, Minus, ChevronDown, Sparkles } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useLanguage } from '@/contexts/LanguageContext';
 import type { PlayerRanking } from '@/types/ranking';
@@ -12,6 +12,7 @@ interface MobileRankingCardProps {
 
 export function MobileRankingCard({ ranking, maxPoints, onAvatarClick }: MobileRankingCardProps) {
   const { t } = useLanguage();
+  const [expanded, setExpanded] = useState(false);
 
   const [mounted, setMounted] = useState(false);
   useEffect(() => {
@@ -26,7 +27,15 @@ export function MobileRankingCard({ ranking, maxPoints, onAvatarClick }: MobileR
 
   const pct = Math.min(100, Math.round((ranking.total_points / Math.max(maxPoints, 1)) * 100));
   const fillWidth = mounted ? `${pct}%` : '0%';
-  const labelOnFill = pct >= 78;
+
+  const winRate =
+    ranking.sessions_played > 0
+      ? Math.round((ranking.championships / ranking.sessions_played) * 100)
+      : 0;
+  const avgPoints =
+    ranking.sessions_played > 0
+      ? (ranking.total_points / ranking.sessions_played).toFixed(1)
+      : '0.0';
 
   const getInitials = (name: string) =>
     name.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2);
@@ -48,14 +57,14 @@ export function MobileRankingCard({ ranking, maxPoints, onAvatarClick }: MobileR
         </div>
       );
     }
-    if (!ranking.is_new) {
-      return (
-        <div className="flex items-center text-muted-foreground">
-          <Minus className="w-3.5 h-3.5" strokeWidth={3} />
-        </div>
-      );
+    if (ranking.is_new) {
+      return <Sparkles className="w-3.5 h-3.5 text-accent" strokeWidth={3} />;
     }
-    return null;
+    return (
+      <div className="flex items-center text-muted-foreground">
+        <Minus className="w-3.5 h-3.5" strokeWidth={3} />
+      </div>
+    );
   };
 
   const accentBorder = isFirst
@@ -90,139 +99,143 @@ export function MobileRankingCard({ ranking, maxPoints, onAvatarClick }: MobileR
     ? 'bg-muted-foreground/70'
     : 'bg-foreground/25';
 
-  const nameHover = isFirst
-    ? 'group-active:text-accent'
-    : isSecond
-    ? 'group-active:text-primary'
-    : '';
-
   return (
     <div
       className={cn(
-        'group rounded bg-card border-2 border-foreground transition-transform duration-150 active:-translate-y-0.5',
+        'rounded bg-card border-2 border-foreground overflow-hidden',
         'shadow-[4px_4px_0_0_hsl(var(--foreground))]',
         accentTint,
-        accentBorder,
-        isTopThree ? 'p-4' : 'p-3.5'
+        accentBorder
       )}
     >
-      {/* Row 1: Identity */}
-      <div className="flex items-center gap-3">
-        {isTopThree ? (
+      {/* Lean row — tap anywhere to expand */}
+      <div className="flex items-stretch">
+        <button
+          type="button"
+          onClick={() => setExpanded(v => !v)}
+          aria-expanded={expanded}
+          aria-label={expanded ? t.ranking.collapse : t.ranking.expand}
+          className="flex-1 min-w-0 flex items-center gap-3 px-3 py-2.5 min-h-[64px] text-left active:bg-foreground/5 transition-colors"
+        >
+          {/* Rank */}
           <div
             className={cn(
-              'flex-shrink-0 inline-flex items-center justify-center border-2 border-foreground rounded-lg font-display italic shadow-[2px_2px_0_0_hsl(var(--foreground))] w-12 h-12 text-xl',
-              badgeStyle
+              'flex-shrink-0 inline-flex items-center justify-center border-2 rounded-lg font-display italic tabular-nums',
+              isTopThree
+                ? cn('w-12 h-12 text-xl border-foreground shadow-[2px_2px_0_0_hsl(var(--foreground))]', badgeStyle)
+                : 'w-11 h-11 text-lg border-foreground/50 bg-muted text-muted-foreground'
             )}
           >
             {ranking.rank}
           </div>
-        ) : (
-          <div className="flex-shrink-0 w-10 h-10 flex items-center justify-center border-2 border-foreground/60 rounded bg-muted">
-            <span className="text-lg font-display italic text-muted-foreground tabular-nums">
-              {ranking.rank}
-            </span>
-          </div>
-        )}
 
-        <button
-          onClick={() =>
-            ranking.full_avatar_url &&
-            onAvatarClick?.(ranking.full_avatar_url, ranking.player_name)
-          }
-          disabled={!ranking.full_avatar_url}
-          className={cn(
-            'flex-shrink-0 overflow-hidden bg-muted transition-all',
-            isTopThree
-              ? 'w-14 h-14 rounded-xl border-2 border-foreground shadow-[2px_2px_0_0_hsl(var(--foreground))]'
-              : 'w-11 h-11 rounded-lg border-2 border-foreground/60',
-            ranking.full_avatar_url && 'cursor-pointer active:scale-95'
-          )}
-        >
-          {ranking.avatar_url ? (
-            <img
-              src={ranking.avatar_url}
-              alt={ranking.player_name}
-              className="w-full h-full object-cover"
-              style={{
-                objectPosition:
-                  ranking.avatar_crop_x !== null && ranking.avatar_crop_y !== null
-                    ? `${(ranking.avatar_crop_x ?? 0.5) * 100}% ${(ranking.avatar_crop_y ?? 0.5) * 100}%`
-                    : 'center',
-              }}
-            />
-          ) : (
-            <div className="w-full h-full flex items-center justify-center text-foreground text-sm font-black">
-              {getInitials(ranking.player_name)}
+          {/* Name + rank delta */}
+          <div className="flex-1 min-w-0">
+            <div className="flex items-center gap-2">
+              <p
+                className={cn(
+                  'font-display text-foreground tracking-tight truncate',
+                  isTopThree ? 'text-2xl' : 'text-xl'
+                )}
+              >
+                {ranking.player_name}
+              </p>
+              {getRankChangeDisplay()}
             </div>
-          )}
-        </button>
+            {/* Points bar — the one metric that always shows */}
+            <div className="mt-1.5 relative h-2 rounded-full bg-muted/70 overflow-hidden">
+              <div
+                className={cn('absolute inset-y-0 left-0 transition-[width] duration-700 ease-out', barFill)}
+                style={{ width: fillWidth }}
+              />
+            </div>
+          </div>
 
-        <div className="flex-1 min-w-0 flex items-center gap-2">
-          <p
+          {/* Points value */}
+          <div className="flex-shrink-0 text-right">
+            <p className="font-display text-2xl font-black tabular-nums leading-none text-foreground">
+              {ranking.total_points}
+            </p>
+            <p className="text-[10px] font-bold uppercase tracking-wider text-foreground/50 mt-0.5">
+              {t.ranking.points}
+            </p>
+          </div>
+
+          <ChevronDown
             className={cn(
-              'font-display text-foreground tracking-tight truncate transition-colors',
-              isTopThree ? 'text-2xl' : 'text-xl',
-              nameHover
+              'flex-shrink-0 w-5 h-5 text-foreground/40 transition-transform duration-200',
+              expanded && 'rotate-180'
             )}
-          >
-            {ranking.player_name}
-          </p>
-          {getRankChangeDisplay()}
-        </div>
-      </div>
-
-      {/* Row 2: Stats */}
-      <div className="mt-3 pt-3 border-t border-foreground/15 grid grid-cols-[1fr_1fr_1.6fr] gap-2 items-center">
-        <div className="flex items-baseline gap-1.5">
-          <p className="font-display text-foreground text-2xl font-black tabular-nums leading-none">
-            {ranking.sessions_played}
-          </p>
-          <p className="text-[10px] font-bold uppercase tracking-wider text-foreground/60">
-            {t.ranking.sessions}
-          </p>
-        </div>
-
-        <div className="flex items-baseline gap-1.5">
-          <p className="font-display text-foreground text-2xl font-black tabular-nums leading-none">
-            {ranking.championships}
-          </p>
-          <p className="text-[10px] font-bold uppercase tracking-wider text-foreground/60">
-            {t.ranking.wins}
-          </p>
-        </div>
-
-        {/* Points bar */}
-        <div
-          className={cn(
-            'relative w-full h-10 flex items-center justify-end overflow-hidden bg-muted/60 rounded-md',
-            isTopThree ? 'border-2 border-foreground' : 'border-2 border-foreground/40'
-          )}
-        >
-          <div
-            className={cn('absolute inset-y-0 left-0 transition-[width] duration-700 ease-out', barFill)}
-            style={{ width: fillWidth }}
+            strokeWidth={3}
           />
-          <span
-            className={cn(
-              'relative z-10 font-display text-lg font-black tabular-nums',
-              isFirst ? 'pr-12' : 'pr-2.5',
-              labelOnFill && isFirst
-                ? 'text-accent-foreground'
-                : labelOnFill && isSecond
-                ? 'text-primary-foreground'
-                : 'text-foreground'
-            )}
-          >
-            {ranking.total_points}
-          </span>
-          {isFirst && (
-            <span className="absolute right-1.5 top-1/2 -translate-y-1/2 z-10 bg-foreground text-accent text-[9px] font-black uppercase tracking-tighter px-1.5 py-0.5 leading-none">
-              MAX
-            </span>
-          )}
+        </button>
+      </div>
+
+      {/* Micro-dashboard */}
+      <div
+        className={cn(
+          'grid transition-[grid-template-rows] duration-300 ease-out',
+          expanded ? 'grid-rows-[1fr]' : 'grid-rows-[0fr]'
+        )}
+      >
+        <div className="overflow-hidden">
+          <div className="px-3 pb-3 pt-3 border-t-2 border-foreground/15">
+            <div className="flex items-center gap-3">
+              <button
+                type="button"
+                onClick={() =>
+                  ranking.full_avatar_url &&
+                  onAvatarClick?.(ranking.full_avatar_url, ranking.player_name)
+                }
+                disabled={!ranking.full_avatar_url}
+                aria-label={ranking.player_name}
+                className={cn(
+                  'flex-shrink-0 w-16 h-16 min-w-[48px] min-h-[48px] overflow-hidden bg-muted rounded-xl border-2 border-foreground shadow-[2px_2px_0_0_hsl(var(--foreground))]',
+                  ranking.full_avatar_url && 'active:scale-95 transition-transform'
+                )}
+              >
+                {ranking.avatar_url ? (
+                  <img
+                    src={ranking.avatar_url}
+                    alt={ranking.player_name}
+                    className="w-full h-full object-cover"
+                    style={{
+                      objectPosition:
+                        ranking.avatar_crop_x !== null && ranking.avatar_crop_y !== null
+                          ? `${(ranking.avatar_crop_x ?? 0.5) * 100}% ${(ranking.avatar_crop_y ?? 0.5) * 100}%`
+                          : 'center',
+                    }}
+                  />
+                ) : (
+                  <div className="w-full h-full flex items-center justify-center text-foreground text-base font-black">
+                    {getInitials(ranking.player_name)}
+                  </div>
+                )}
+              </button>
+
+              <div className="flex-1 grid grid-cols-2 gap-2">
+                <Stat label={t.ranking.sessions} value={ranking.sessions_played} />
+                <Stat label={t.ranking.wins} value={ranking.championships} />
+                <Stat label={t.ranking.winRate} value={`${winRate}%`} />
+                <Stat label={t.ranking.avgPoints} value={avgPoints} />
+              </div>
+            </div>
+          </div>
         </div>
       </div>
+    </div>
+  );
+}
+
+function Stat({ label, value }: { label: string; value: string | number }) {
+  return (
+    <div className="rounded-md border-2 border-foreground/15 bg-muted/40 px-2.5 py-1.5">
+      <p className="font-display text-xl font-black tabular-nums leading-none text-foreground">
+        {value}
+      </p>
+      <p className="text-[10px] font-bold uppercase tracking-wider text-foreground/50 mt-1">
+        {label}
+      </p>
     </div>
   );
 }

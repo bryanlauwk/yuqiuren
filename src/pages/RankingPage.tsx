@@ -52,21 +52,38 @@ export default function RankingPage() {
         ) : (
           <>
             {isMobile ? (
-              <div className="space-y-4">
-                {rankings.map((ranking, index) => (
-                  <div 
-                    key={ranking.player_id}
-                    className="animate-fade-in-up"
-                    style={{ animationDelay: `${index * 0.05}s` }}
-                  >
-                    <MobileRankingCard
-                      ranking={ranking}
-                      maxPoints={Math.max(rankings[0]?.total_points ?? 0, 1)}
-                      onAvatarClick={handleAvatarClick}
-                    />
-                  </div>
-                ))}
+              <div>
+                {/* Sticky column legend — never lose track of what you're reading */}
+                <div className="sticky top-16 z-20 -mx-4 px-4 py-2 bg-background/95 backdrop-blur border-b-2 border-foreground flex items-center gap-3">
+                  <span className="w-12 text-[10px] font-black uppercase tracking-wider text-foreground/50">
+                    #
+                  </span>
+                  <span className="flex-1 text-[10px] font-black uppercase tracking-wider text-foreground/50">
+                    {t.ranking.player}
+                  </span>
+                  <span className="text-[10px] font-black uppercase tracking-wider text-foreground/50">
+                    {t.ranking.points}
+                  </span>
+                  <span className="w-5" />
+                </div>
+
+                <div className="space-y-3 pt-3">
+                  {rankings.map((ranking, index) => (
+                    <div
+                      key={ranking.player_id}
+                      className="animate-fade-in-up"
+                      style={{ animationDelay: `${index * 0.05}s` }}
+                    >
+                      <MobileRankingCard
+                        ranking={ranking}
+                        maxPoints={Math.max(rankings[0]?.total_points ?? 0, 1)}
+                        onAvatarClick={handleAvatarClick}
+                      />
+                    </div>
+                  ))}
+                </div>
               </div>
+
             ) : (
               <div className="animate-fade-in-up">
                 <DesktopRankingTable
