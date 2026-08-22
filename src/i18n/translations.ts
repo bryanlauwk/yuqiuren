@@ -397,7 +397,16 @@ export type TranslationKeys = {
     sessions: string;
     wins: string;
     points: string;
+    player: string;
+    details: string;
+    winRate: string;
+    avgPoints: string;
+    rankChange: string;
+    newPlayer: string;
+    expand: string;
+    collapse: string;
   };
+
 
   countdown: {
     matchStarting: string;
