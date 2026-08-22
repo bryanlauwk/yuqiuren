@@ -36,7 +36,16 @@ export const translations = {
       sessions: "场次",
       wins: "胜",
       points: "积分",
+      player: "球员",
+      details: "详细数据",
+      winRate: "冠军率",
+      avgPoints: "场均分",
+      rankChange: "排名变化",
+      newPlayer: "新加入",
+      expand: "展开详情",
+      collapse: "收起详情",
     },
+
 
     countdown: {
       matchStarting: "比赛即将开始！",
