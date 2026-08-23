@@ -2,6 +2,8 @@ import { Fragment, useEffect, useState } from 'react';
 import { ArrowUp, ArrowDown, Minus } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useLanguage } from '@/contexts/LanguageContext';
+import { TierBadge } from '@/components/TierBadge';
+
 import type { PlayerRanking } from '@/types/ranking';
 import {
   Table,
@@ -260,19 +262,25 @@ export function DesktopRankingTable({
                         )}
                       </button>
 
-                      <div className="flex items-center gap-2.5 min-w-0">
-                        <p
-                          className={cn(
-                            'font-display text-foreground tracking-tight truncate transition-colors',
-                            isTopThree ? d.topNameText : d.nameText,
-                            isFirst && 'group-hover:text-accent',
-                            isSecond && 'group-hover:text-primary'
-                          )}
-                        >
-                          {ranking.player_name}
-                        </p>
-                        {getRankChangeDisplay(ranking)}
+                      <div className="min-w-0">
+                        <div className="flex items-center gap-2.5 min-w-0">
+                          <p
+                            className={cn(
+                              'font-display text-foreground tracking-tight truncate transition-colors',
+                              isTopThree ? d.topNameText : d.nameText,
+                              isFirst && 'group-hover:text-accent',
+                              isSecond && 'group-hover:text-primary'
+                            )}
+                          >
+                            {ranking.player_name}
+                          </p>
+                          {getRankChangeDisplay(ranking)}
+                        </div>
+                        <div className="mt-1.5">
+                          <TierBadge points={ranking.total_points} size={isTopThree ? 'md' : 'sm'} />
+                        </div>
                       </div>
+
                     </div>
                   </TableCell>
 

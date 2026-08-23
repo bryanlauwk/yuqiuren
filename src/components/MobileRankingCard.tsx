@@ -2,6 +2,8 @@ import { useEffect, useState } from 'react';
 import { ArrowUp, ArrowDown, Minus, ChevronDown, Sparkles } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useLanguage } from '@/contexts/LanguageContext';
+import { TierBadge } from '@/components/TierBadge';
+
 import type { PlayerRanking } from '@/types/ranking';
 
 interface MobileRankingCardProps {
@@ -141,7 +143,9 @@ export function MobileRankingCard({ ranking, maxPoints, onAvatarClick }: MobileR
                 {ranking.player_name}
               </p>
               {getRankChangeDisplay()}
+              <TierBadge points={ranking.total_points} />
             </div>
+
             {/* Points bar — the one metric that always shows */}
             <div className="mt-1.5 relative h-2 rounded-full bg-muted/70 overflow-hidden">
               <div

@@ -4,112 +4,90 @@
 
 @layer base {
   :root {
-    /* Jersey Theme — White / Royal Blue / Jersey Red */
-    --background: 0 0% 100%;
-    --foreground: 220 25% 8%;
+    /* Night Court — dark arena floor, electric blue, neon lime */
+    --background: 225 45% 6%;
+    --foreground: 210 40% 96%;
 
-    --card: 0 0% 100%;
-    --card-foreground: 220 25% 8%;
+    --card: 224 38% 11%;
+    --card-foreground: 210 40% 96%;
 
-    --popover: 0 0% 100%;
-    --popover-foreground: 220 25% 8%;
+    --popover: 224 38% 11%;
+    --popover-foreground: 210 40% 96%;
 
-    /* Primary — royal blue #2A4FB8 */
-    --primary: 224 65% 45%;
-    --primary-foreground: 0 0% 100%;
+    /* Primary — electric blue #2E6BFF */
+    --primary: 222 100% 59%;
+    --primary-foreground: 225 45% 6%;
 
-    --secondary: 220 20% 94%;
-    --secondary-foreground: 220 25% 8%;
+    --secondary: 224 32% 16%;
+    --secondary-foreground: 210 40% 96%;
 
-    --muted: 220 20% 96%;
-    --muted-foreground: 220 10% 35%;
+    --muted: 224 30% 18%;
+    --muted-foreground: 214 20% 68%;
 
-    /* Accent — jersey red #E63946 */
-    --accent: 354 76% 56%;
-    --accent-foreground: 0 0% 100%;
+    /* Accent — neon lime #8BFF3C */
+    --accent: 93 100% 62%;
+    --accent-foreground: 225 45% 6%;
 
-    --destructive: 0 75% 50%;
-    --destructive-foreground: 0 0% 100%;
+    --destructive: 0 85% 60%;
+    --destructive-foreground: 210 40% 98%;
 
-    --border: 220 25% 8%;
-    --input: 220 25% 8%;
-    --ring: 224 65% 45%;
+    --border: 214 25% 30%;
+    --input: 214 25% 30%;
+    --ring: 222 100% 59%;
 
     --radius: 0.25rem;
 
-    /* Ranking — blue base, red reserved for #1 */
-    --rank-gold: 354 76% 56%;
-    --rank-silver: 224 65% 45%;
-    --rank-bronze: 224 65% 45%;
+    /* Ranking — #1 keeps the hot red, others electric blue */
+    --rank-gold: 354 90% 60%;
+    --rank-silver: 222 100% 59%;
+    --rank-bronze: 222 100% 59%;
 
-    /* Hard offset shadows — neo-brutalist (near-black) */
-    --shadow-card: 4px 4px 0 0 hsl(220 25% 8%);
-    --shadow-elevated: 6px 6px 0 0 hsl(220 25% 8%);
+    /* Hard offset shadows — glow-lit outline */
+    --shadow-card: 4px 4px 0 0 hsl(214 25% 30%);
+    --shadow-elevated: 6px 6px 0 0 hsl(214 25% 30%);
 
-    --finished: 224 65% 45%;
+    --finished: 93 100% 62%;
 
-    /* Leader separator gradients (rank #1 → #2, and #2 → #3).
-       Configurable per theme; keep opacity strong enough to read on any background. */
-    --leader-sep-1-from: 354 76% 56%;
-    --leader-sep-1-via: 354 76% 56%;
-    --leader-sep-1-to: 354 76% 56%;
+    /* Gamified tier colors */
+    --tier-legend: 354 90% 62%;
+    --tier-master: 280 90% 68%;
+    --tier-diamond: 190 95% 60%;
+    --tier-platinum: 222 100% 65%;
+    --tier-gold: 45 95% 60%;
+
+    /* Neon glow shadows */
+    --glow-primary: 0 0 24px hsl(222 100% 59% / 0.45);
+    --glow-accent: 0 0 24px hsl(93 100% 62% / 0.45);
+
+    /* Leader separator gradients */
+    --leader-sep-1-from: 354 90% 60%;
+    --leader-sep-1-via: 354 90% 60%;
+    --leader-sep-1-to: 354 90% 60%;
     --leader-sep-1-from-alpha: 0.65;
     --leader-sep-1-via-alpha: 1;
     --leader-sep-1-to-alpha: 0.15;
 
-    --leader-sep-2-from: 224 65% 45%;
-    --leader-sep-2-via: 224 65% 45%;
-    --leader-sep-2-to: 224 65% 45%;
+    --leader-sep-2-from: 222 100% 59%;
+    --leader-sep-2-via: 222 100% 59%;
+    --leader-sep-2-to: 222 100% 59%;
     --leader-sep-2-from-alpha: 0.65;
     --leader-sep-2-via-alpha: 1;
     --leader-sep-2-to-alpha: 0.15;
 
-    --sidebar-background: 0 0% 100%;
-    --sidebar-foreground: 220 25% 8%;
-    --sidebar-primary: 224 65% 45%;
-    --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 220 20% 96%;
-    --sidebar-accent-foreground: 220 25% 8%;
-    --sidebar-border: 220 25% 8%;
-    --sidebar-ring: 224 65% 45%;
+    --sidebar-background: 224 38% 11%;
+    --sidebar-foreground: 210 40% 96%;
+    --sidebar-primary: 222 100% 59%;
+    --sidebar-primary-foreground: 225 45% 6%;
+    --sidebar-accent: 224 32% 16%;
+    --sidebar-accent-foreground: 210 40% 96%;
+    --sidebar-border: 214 25% 30%;
+    --sidebar-ring: 222 100% 59%;
   }
 
   .dark {
-    --background: 0 0% 100%;
-    --foreground: 220 25% 8%;
-    --card: 0 0% 100%;
-    --card-foreground: 220 25% 8%;
-    --popover: 0 0% 100%;
-    --popover-foreground: 220 25% 8%;
-    --primary: 224 65% 45%;
-    --primary-foreground: 0 0% 100%;
-    --secondary: 220 20% 94%;
-    --secondary-foreground: 220 25% 8%;
-    --muted: 220 20% 96%;
-    --muted-foreground: 220 10% 35%;
-    --accent: 354 76% 56%;
-    --accent-foreground: 0 0% 100%;
-    --destructive: 0 75% 50%;
-    --destructive-foreground: 0 0% 100%;
-    --border: 220 25% 8%;
-    --input: 220 25% 8%;
-    --ring: 224 65% 45%;
-
-    /* Leader separator gradients — dark mode mirror (same accents, same alphas for consistent feel). */
-    --leader-sep-1-from: 354 76% 56%;
-    --leader-sep-1-via: 354 76% 56%;
-    --leader-sep-1-to: 354 76% 56%;
-    --leader-sep-1-from-alpha: 0.65;
-    --leader-sep-1-via-alpha: 1;
-    --leader-sep-1-to-alpha: 0.15;
-
-    --leader-sep-2-from: 224 65% 45%;
-    --leader-sep-2-via: 224 65% 45%;
-    --leader-sep-2-to: 224 65% 45%;
-    --leader-sep-2-from-alpha: 0.65;
-    --leader-sep-2-via-alpha: 1;
-    --leader-sep-2-to-alpha: 0.15;
+    color-scheme: dark;
   }
+
 }
 
 @layer base {
