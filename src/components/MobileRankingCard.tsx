@@ -2,6 +2,8 @@ import { useEffect, useState } from 'react';
 import { ArrowUp, ArrowDown, Minus, ChevronDown, Sparkles } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useLanguage } from '@/contexts/LanguageContext';
+import { TierBadge } from '@/components/TierBadge';
+
 import type { PlayerRanking } from '@/types/ranking';
 
 interface MobileRankingCardProps {
