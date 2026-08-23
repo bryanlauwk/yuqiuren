@@ -143,7 +143,9 @@ export function MobileRankingCard({ ranking, maxPoints, onAvatarClick }: MobileR
                 {ranking.player_name}
               </p>
               {getRankChangeDisplay()}
+              <TierBadge points={ranking.total_points} />
             </div>
+
             {/* Points bar — the one metric that always shows */}
             <div className="mt-1.5 relative h-2 rounded-full bg-muted/70 overflow-hidden">
               <div
