@@ -13,6 +13,9 @@ export function LatestSessionPhoto({ rotate, translateY }: Props) {
   const { sessions, loading } = useRankings();
   const isMobile = useIsMobile();
   const [activeIndex, setActiveIndex] = useState(0);
+  const [dragX, setDragX] = useState(0);
+  const [dragging, setDragging] = useState(false);
+
 
   const photoSessions = useMemo(
     () => sessions.filter((s) => s.group_photo_url).slice(0, 6),
