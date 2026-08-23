@@ -85,6 +85,18 @@ export default {
         champion: "hsl(var(--champion))",
         "runner-up": "hsl(var(--runner-up))",
         attendance: "hsl(var(--attendance))",
+        // Gamified tiers
+        tier: {
+          legend: "hsl(var(--tier-legend))",
+          master: "hsl(var(--tier-master))",
+          diamond: "hsl(var(--tier-diamond))",
+          platinum: "hsl(var(--tier-platinum))",
+          gold: "hsl(var(--tier-gold))",
+        },
+      },
+      boxShadow: {
+        "glow-primary": "var(--glow-primary)",
+        "glow-accent": "var(--glow-accent)",
       },
       borderRadius: {
         lg: "var(--radius)",
