@@ -87,13 +87,42 @@ export function LatestSessionPhoto({ rotate, translateY }: Props) {
     );
   }
 
-  // Desktop: main image + thumbnail row
+  // Desktop: draggable main image + thumbnail row
+  const go = (dir: 1 | -1) =>
+    setActiveIndex((i) => (i + dir + photoSessions.length) % photoSessions.length);
+
+  const onPointerDown = (e: React.PointerEvent) => {
+    if (photoSessions.length < 2) return;
+    const startX = e.clientX;
+    const el = e.currentTarget as HTMLElement;
+    el.setPointerCapture(e.pointerId);
+    setDragging(true);
+
+    const onMove = (ev: PointerEvent) => setDragX(ev.clientX - startX);
+    const onUp = (ev: PointerEvent) => {
+      const dx = ev.clientX - startX;
+      setDragging(false);
+      setDragX(0);
+      if (Math.abs(dx) > 60) go(dx < 0 ? 1 : -1);
+      el.removeEventListener('pointermove', onMove);
+      el.removeEventListener('pointerup', onUp);
+    };
+    el.addEventListener('pointermove', onMove);
+    el.addEventListener('pointerup', onUp);
+  };
+
   return (
     <div className="w-[440px]">
-      {/* Main image */}
+      {/* Main image — drag left/right to browse */}
       <div
-        className="group relative bg-background border-2 border-foreground rounded-2xl shadow-[8px_8px_0_0_hsl(var(--accent))] overflow-hidden transition-all duration-300 ease-out hover:shadow-[12px_12px_0_0_hsl(var(--accent))] hover:-translate-y-1 will-change-transform"
-        style={{ transform: `rotate(${rotate}deg) translateY(${translateY}px)` }}
+        onPointerDown={onPointerDown}
+        className={`group relative bg-background border-2 border-foreground rounded-2xl shadow-[8px_8px_0_0_hsl(var(--accent))] overflow-hidden transition-all duration-300 ease-out hover:shadow-[12px_12px_0_0_hsl(var(--accent))] hover:-translate-y-1 will-change-transform touch-none select-none ${
+          photoSessions.length > 1 ? (dragging ? 'cursor-grabbing' : 'cursor-grab') : ''
+        }`}
+        style={{
+          transform: `rotate(${rotate}deg) translateY(${translateY}px) translateX(${dragX * 0.35}px)`,
+          transition: dragging ? 'none' : undefined,
+        }}
       >
         <div className="relative bg-muted aspect-[4/3] w-full overflow-hidden">
           {active?.group_photo_url && (
@@ -103,10 +132,12 @@ export function LatestSessionPhoto({ rotate, translateY }: Props) {
               alt={active.name || 'Session group photo'}
               className="w-full h-full object-cover animate-fade-in transition-transform duration-500 ease-out group-hover:scale-[1.03]"
               loading="lazy"
+              draggable={false}
             />
           )}
         </div>
       </div>
+
 
       {/* Thumbnail strip */}
       {photoSessions.length > 1 && (
