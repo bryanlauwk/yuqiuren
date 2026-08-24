@@ -2,7 +2,6 @@ import { Fragment, useEffect, useState } from 'react';
 import { ArrowUp, ArrowDown, Minus } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useLanguage } from '@/contexts/LanguageContext';
-import { TierBadge } from '@/components/TierBadge';
 
 import type { PlayerRanking } from '@/types/ranking';
 import {
@@ -275,9 +274,6 @@ export function DesktopRankingTable({
                             {ranking.player_name}
                           </p>
                           {getRankChangeDisplay(ranking)}
-                        </div>
-                        <div className="mt-1.5">
-                          <TierBadge points={ranking.total_points} size={isTopThree ? 'md' : 'sm'} />
                         </div>
                       </div>
 
