@@ -1,5 +1,5 @@
 export interface Tier {
-  key: 'legend' | 'master' | 'diamond' | 'platinum' | 'gold';
+  key: 'lindan' | 'lcw' | 'taufik' | 'gade' | 'rookie';
   /** CSS variable name holding the tier color (HSL triplet). */
   token: string;
   labelZh: string;
@@ -9,11 +9,11 @@ export interface Tier {
 
 /** Highest first — first match wins. */
 export const TIERS: Tier[] = [
-  { key: 'legend', token: '--tier-legend', labelZh: '王者', labelEn: 'LEGEND', min: 60 },
-  { key: 'master', token: '--tier-master', labelZh: '宗师', labelEn: 'MASTER', min: 40 },
-  { key: 'diamond', token: '--tier-diamond', labelZh: '钻石', labelEn: 'DIAMOND', min: 25 },
-  { key: 'platinum', token: '--tier-platinum', labelZh: '白金', labelEn: 'PLATINUM', min: 12 },
-  { key: 'gold', token: '--tier-gold', labelZh: '黄金', labelEn: 'GOLD', min: 0 },
+  { key: 'lindan', token: '--tier-legend', labelZh: '林丹杯', labelEn: 'LIN DAN CUP', min: 60 },
+  { key: 'lcw', token: '--tier-master', labelZh: '李宗伟杯', labelEn: 'LEE C.W. CUP', min: 40 },
+  { key: 'taufik', token: '--tier-diamond', labelZh: '陶菲克杯', labelEn: 'TAUFIK CUP', min: 25 },
+  { key: 'gade', token: '--tier-platinum', labelZh: '盖德杯', labelEn: 'GADE CUP', min: 12 },
+  { key: 'rookie', token: '--tier-gold', labelZh: '新拍杯', labelEn: 'ROOKIE CUP', min: 0 },
 ];
 
 export function getTier(points: number): Tier {
