@@ -4,6 +4,8 @@ import { Medal, Shield, LogOut, History } from 'lucide-react';
 import { useAuth } from '@/hooks/useAuth';
 import { Button } from '@/components/ui/button';
 import { LanguageSwitcher } from '@/components/LanguageSwitcher';
+import { ThemeToggle } from '@/components/ThemeToggle';
+
 
 import { useLanguage } from '@/contexts/LanguageContext';
 
@@ -67,6 +69,8 @@ export function Header() {
           })}
 
           <LanguageSwitcher />
+          <ThemeToggle />
+
 
           {user && isAdmin && (
             <Button

@@ -4,6 +4,83 @@
 
 @layer base {
   :root {
+    /* Day Court — bright hall, electric blue, lime */
+    --background: 210 40% 98%;
+    --foreground: 225 45% 10%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 225 45% 10%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 225 45% 10%;
+
+    --primary: 222 100% 52%;
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 214 30% 94%;
+    --secondary-foreground: 225 45% 10%;
+
+    --muted: 214 28% 92%;
+    --muted-foreground: 220 14% 40%;
+
+    --accent: 93 75% 40%;
+    --accent-foreground: 0 0% 100%;
+
+    --destructive: 0 78% 50%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 214 20% 78%;
+    --input: 214 20% 78%;
+    --ring: 222 100% 52%;
+
+    --radius: 0.25rem;
+
+    --rank-gold: 354 78% 48%;
+    --rank-silver: 222 100% 52%;
+    --rank-bronze: 222 100% 52%;
+
+    --shadow-card: 4px 4px 0 0 hsl(214 20% 70%);
+    --shadow-elevated: 6px 6px 0 0 hsl(214 20% 70%);
+
+    --finished: 93 75% 40%;
+
+    /* Gamified tier colors — darker for contrast on light bg */
+    --tier-legend: 354 78% 48%;
+    --tier-master: 280 70% 50%;
+    --tier-diamond: 190 80% 40%;
+    --tier-platinum: 222 100% 52%;
+    --tier-gold: 40 90% 42%;
+
+    --glow-primary: 0 0 16px hsl(222 100% 52% / 0.25);
+    --glow-accent: 0 0 16px hsl(93 75% 40% / 0.25);
+
+    --leader-sep-1-from: 354 78% 48%;
+    --leader-sep-1-via: 354 78% 48%;
+    --leader-sep-1-to: 354 78% 48%;
+    --leader-sep-1-from-alpha: 0.6;
+    --leader-sep-1-via-alpha: 1;
+    --leader-sep-1-to-alpha: 0.12;
+
+    --leader-sep-2-from: 222 100% 52%;
+    --leader-sep-2-via: 222 100% 52%;
+    --leader-sep-2-to: 222 100% 52%;
+    --leader-sep-2-from-alpha: 0.6;
+    --leader-sep-2-via-alpha: 1;
+    --leader-sep-2-to-alpha: 0.12;
+
+    --sidebar-background: 0 0% 100%;
+    --sidebar-foreground: 225 45% 10%;
+    --sidebar-primary: 222 100% 52%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 214 30% 94%;
+    --sidebar-accent-foreground: 225 45% 10%;
+    --sidebar-border: 214 20% 78%;
+    --sidebar-ring: 222 100% 52%;
+  }
+
+  .dark {
+    color-scheme: dark;
+
     /* Night Court — dark arena floor, electric blue, neon lime */
     --background: 225 45% 6%;
     --foreground: 210 40% 96%;
@@ -14,7 +91,6 @@
     --popover: 224 38% 11%;
     --popover-foreground: 210 40% 96%;
 
-    /* Primary — electric blue #2E6BFF */
     --primary: 222 100% 59%;
     --primary-foreground: 225 45% 6%;
 
@@ -24,7 +100,6 @@
     --muted: 224 30% 18%;
     --muted-foreground: 214 20% 68%;
 
-    /* Accent — neon lime #8BFF3C */
     --accent: 93 100% 62%;
     --accent-foreground: 225 45% 6%;
 
@@ -35,31 +110,24 @@
     --input: 214 25% 30%;
     --ring: 222 100% 59%;
 
-    --radius: 0.25rem;
-
-    /* Ranking — #1 keeps the hot red, others electric blue */
     --rank-gold: 354 90% 60%;
     --rank-silver: 222 100% 59%;
     --rank-bronze: 222 100% 59%;
 
-    /* Hard offset shadows — glow-lit outline */
     --shadow-card: 4px 4px 0 0 hsl(214 25% 30%);
     --shadow-elevated: 6px 6px 0 0 hsl(214 25% 30%);
 
     --finished: 93 100% 62%;
 
-    /* Gamified tier colors */
     --tier-legend: 354 90% 62%;
     --tier-master: 280 90% 68%;
     --tier-diamond: 190 95% 60%;
     --tier-platinum: 222 100% 65%;
     --tier-gold: 45 95% 60%;
 
-    /* Neon glow shadows */
     --glow-primary: 0 0 24px hsl(222 100% 59% / 0.45);
     --glow-accent: 0 0 24px hsl(93 100% 62% / 0.45);
 
-    /* Leader separator gradients */
     --leader-sep-1-from: 354 90% 60%;
     --leader-sep-1-via: 354 90% 60%;
     --leader-sep-1-to: 354 90% 60%;
@@ -84,11 +152,8 @@
     --sidebar-ring: 222 100% 59%;
   }
 
-  .dark {
-    color-scheme: dark;
-  }
-
 }
+
 
 @layer base {
   * {
