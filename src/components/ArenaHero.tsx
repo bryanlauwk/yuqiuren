@@ -61,7 +61,7 @@ export function ArenaHero() {
           {/* Left: headline + CTA */}
           <div className="md:col-span-7">
             <h1 className="font-display text-foreground leading-[0.9] tracking-tighter text-5xl sm:text-7xl md:text-8xl lg:text-[7.5rem] mb-6 break-keep">
-              <span className="sm:hidden">
+              <span className="sm:hidden block leading-[1.08]">
                 <span className="lime-slab">2026</span>
                 <br />
                 羽球人赛

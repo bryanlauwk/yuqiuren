@@ -9,7 +9,7 @@ export const translations = {
       share: "分享",
     },
     home: {
-      heroTitle: "2026 羽球人赛 · 积分榜",
+      heroTitle: "2026 羽球人赛 积分榜",
       heroSubtitle: "球不落地，永不放弃",
       totalPlayers: "参赛人数",
       nextMatch: "下一场比赛",
