@@ -89,6 +89,7 @@ export function LatestSessionPhoto() {
               key={session.id}
               type="button"
               onClick={() => setActiveIndex(index)}
+              aria-label={`${isZh ? '查看合照' : 'View photo'} ${index + 1}`}
               aria-current={index === activeIndex}
               className={`relative h-14 w-24 shrink-0 overflow-hidden border-2 transition-all sm:h-16 sm:w-28 ${
                 index === activeIndex
