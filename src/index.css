@@ -217,12 +217,6 @@
     color: hsl(var(--band-foreground));
   }
 
-  .hero-photo-overlay {
-    background-image:
-      linear-gradient(to bottom, transparent 66%, hsl(var(--band-surface) / 0.14) 78%, hsl(var(--band-surface) / 0.92) 100%),
-      linear-gradient(to right, hsl(var(--band-surface) / 0.2), transparent 38%, transparent 72%, hsl(var(--band-surface) / 0.12));
-  }
-
   .brand-photo-overlay {
     background-image: linear-gradient(
       to top,
