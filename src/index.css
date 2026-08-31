@@ -218,8 +218,8 @@
   }
 
   .hero-photo-image {
-    -webkit-mask-image: linear-gradient(to bottom, transparent 0%, transparent 10%, black 52%, black 100%);
-    mask-image: linear-gradient(to bottom, transparent 0%, transparent 10%, black 52%, black 100%);
+    -webkit-mask-image: linear-gradient(to bottom, transparent 0%, black 6%, black 100%);
+    mask-image: linear-gradient(to bottom, transparent 0%, black 6%, black 100%);
   }
 
   .hero-photo-overlay {

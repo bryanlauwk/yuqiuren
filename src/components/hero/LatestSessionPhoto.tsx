@@ -37,12 +37,12 @@ export function LatestSessionPhoto() {
   }
 
   return (
-    <div className="relative -mt-24 aspect-[4/3] w-full overflow-hidden sm:-mt-56 lg:-mt-80">
+    <div className="relative -mt-4 h-64 w-full overflow-hidden sm:-mt-12 sm:h-[clamp(24rem,47vw,42rem)]">
       <img
         key={active.id}
         src={active.group_photo_url!}
         alt={active.name || (isZh ? '近期赛事合照' : 'Recent match group photo')}
-        className="hero-photo-image absolute inset-0 h-full w-full animate-fade-in object-cover object-center"
+        className="hero-photo-image absolute inset-0 h-full w-full origin-bottom scale-[1.2] animate-fade-in object-cover object-bottom sm:scale-100"
       />
       <div className="hero-photo-overlay absolute inset-0" />
 
@@ -81,7 +81,7 @@ export function LatestSessionPhoto() {
           </div>
 
           {photoSessions.length > 1 && (
-            <div className="mt-4 flex gap-2 overflow-x-auto no-scrollbar sm:mt-5">
+            <div className="mt-5 hidden gap-2 overflow-x-auto no-scrollbar sm:flex">
               {photoSessions.map((session, index) => (
                 <button
                   key={session.id}
