@@ -21,7 +21,7 @@ export function LatestSessionPhoto() {
 
   if (loading || !active) {
     return (
-      <div className="relative flex min-h-56 items-center justify-center px-4 py-12 sm:min-h-72">
+      <div className="brand-surface relative flex min-h-56 items-center justify-center border-b-2 border-foreground px-4 py-12 sm:min-h-72">
         {loading ? (
           <div className="h-36 w-full max-w-5xl animate-pulse-arena bg-[hsl(var(--band-foreground))]/10" />
         ) : (
@@ -37,12 +37,12 @@ export function LatestSessionPhoto() {
   }
 
   return (
-    <div className="relative -mt-4 h-64 w-full overflow-hidden sm:-mt-12 sm:h-[clamp(24rem,47vw,42rem)]">
+    <div className="brand-surface relative h-64 w-full overflow-hidden border-b-2 border-foreground sm:h-[clamp(25rem,50vw,44rem)]">
       <img
         key={active.id}
         src={active.group_photo_url!}
         alt={active.name || (isZh ? '近期赛事合照' : 'Recent match group photo')}
-        className="hero-photo-image absolute inset-0 h-full w-full origin-bottom scale-[1.2] animate-fade-in object-cover object-bottom sm:scale-100"
+        className="absolute inset-0 h-full w-full origin-bottom scale-[1.2] animate-fade-in object-cover object-bottom sm:scale-100"
       />
       <div className="hero-photo-overlay absolute inset-0" />
 
