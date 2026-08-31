@@ -12,6 +12,7 @@ import { ProtectedRoute } from "@/components/ProtectedRoute";
 import RankingPage from "./pages/RankingPage";
 
 const AdminRanking = lazy(() => import("./pages/AdminRanking"));
+const RosterPage = lazy(() => import("./pages/RosterPage"));
 const SessionHistoryPage = lazy(() => import("./pages/SessionHistoryPage"));
 const Auth = lazy(() => import("./pages/Auth"));
 const NotFound = lazy(() => import("./pages/NotFound"));
@@ -62,6 +63,7 @@ const App = () => (
             <Suspense fallback={<RouteFallback />}>
               <Routes>
                 <Route path="/" element={<RankingPage />} />
+                <Route path="/roster" element={<RosterPage />} />
                 <Route path="/history" element={<SessionHistoryPage />} />
                 <Route
                   path="/admin"

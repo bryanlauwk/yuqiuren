@@ -3,7 +3,6 @@ import { ArrowDown, Play } from 'lucide-react';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { useRankings } from '@/hooks/useRankings';
 import { LatestSessionPhoto } from '@/components/hero/LatestSessionPhoto';
-import { ScheduleStrip } from '@/components/ScheduleStrip';
 import { CourtLines } from '@/components/hero/CourtLines';
 
 export function ArenaHero() {
@@ -68,20 +67,6 @@ export function ArenaHero() {
           </Link>
         </div>
 
-        <div className="mt-12 border-t border-[hsl(var(--band-foreground))]/25 py-5 sm:mt-14">
-          <div className="mb-3 flex items-center justify-between gap-4">
-            <span className="font-sans text-[10px] font-black uppercase tracking-[0.26em] text-[hsl(var(--band-foreground))]/65">
-              {isZh ? '近期赛事' : 'RECENT MATCH DAYS'}
-            </span>
-            <Link
-              to="/history"
-              className="font-sans text-[10px] font-black uppercase tracking-[0.18em] band-fg underline decoration-accent decoration-2 underline-offset-4"
-            >
-              {isZh ? '全部场次' : 'ALL MATCHES'} →
-            </Link>
-          </div>
-          <ScheduleStrip />
-        </div>
       </div>
 
       <LatestSessionPhoto />

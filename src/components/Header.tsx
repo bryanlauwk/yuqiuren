@@ -15,6 +15,7 @@ export function Header() {
 
   const navItems = [
     { to: '/#rankings-anchor', label: isZh ? '排行榜' : 'Rankings', active: pathname === '/' && hash !== '#about' },
+    { to: '/roster', label: isZh ? '球员名册' : 'Roster', active: pathname === '/roster' },
     { to: '/history', label: isZh ? '赛事纪录' : 'Matches', active: pathname === '/history' && hash !== '#highlights' },
     { to: '/history#highlights', label: isZh ? '精彩片段' : 'Highlights', active: pathname === '/history' && hash === '#highlights' },
     { to: '/#about', label: isZh ? '关于' : 'About', active: pathname === '/' && hash === '#about' },

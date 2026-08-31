@@ -10,6 +10,7 @@ export function Footer() {
 
   const navLinks = [
     { to: '/#rankings-anchor', label: isZh ? '排行榜' : 'Rankings' },
+    { to: '/roster', label: isZh ? '球员名册' : 'Roster' },
     { to: '/history', label: isZh ? '赛事纪录' : 'Matches' },
     { to: '/history#highlights', label: isZh ? '精彩片段' : 'Highlights' },
     { to: '/auth', label: isZh ? '管理员登录' : 'Admin' },
