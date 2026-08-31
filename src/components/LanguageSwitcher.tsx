@@ -1,5 +1,4 @@
 import { useLanguage } from '@/contexts/LanguageContext';
-import { Button } from '@/components/ui/button';
 import { Globe } from 'lucide-react';
 
 export function LanguageSwitcher() {
@@ -10,17 +9,13 @@ export function LanguageSwitcher() {
   };
 
   return (
-    <Button
-      variant="ghost"
-      size="sm"
+    <button
       onClick={toggleLanguage}
-      className="text-muted-foreground hover:text-foreground gap-1.5"
+      className="inline-flex items-center gap-1.5 px-2.5 sm:px-3 py-2 rounded border-2 border-foreground text-xs font-bold uppercase tracking-wide text-foreground bg-background hover:bg-muted transition-colors"
       title={language === 'zh' ? 'Switch to English' : '切换到中文'}
     >
       <Globe className="w-4 h-4" />
-      <span className="text-xs font-medium">
-        {language === 'zh' ? 'EN' : '中'}
-      </span>
-    </Button>
+      <span className="hidden sm:inline">{language === 'zh' ? 'EN' : '中文'}</span>
+    </button>
   );
 }
