@@ -23,15 +23,36 @@ export function AvatarCropEditor({
   const [cropY, setCropY] = useState(initialCropY);
   const [isDragging, setIsDragging] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
-  const [imageLoaded, setImageLoaded] = useState(false);
+  const imgRef = useRef<HTMLImageElement>(null);
+  const [imgSize, setImgSize] = useState<{ w: number; h: number } | null>(null);
+
+  // Compute the rect of the actually-displayed (object-contain) image within the square container.
+  const getDisplayedRect = () => {
+    if (!containerRef.current || !imgSize) return null;
+    const c = containerRef.current.getBoundingClientRect();
+    const scale = Math.min(c.width / imgSize.w, c.height / imgSize.h);
+    const dw = imgSize.w * scale;
+    const dh = imgSize.h * scale;
+    return {
+      left: (c.width - dw) / 2,
+      top: (c.height - dh) / 2,
+      width: dw,
+      height: dh,
+      containerWidth: c.width,
+      containerHeight: c.height,
+    };
+  };
 
   const handleMove = (clientX: number, clientY: number) => {
     if (!containerRef.current || !isDragging) return;
-
     const rect = containerRef.current.getBoundingClientRect();
-    const x = Math.max(0, Math.min(1, (clientX - rect.left) / rect.width));
-    const y = Math.max(0, Math.min(1, (clientY - rect.top) / rect.height));
-
+    const disp = getDisplayedRect();
+    if (!disp) return;
+    // Position within the displayed image, normalized to [0,1] of the source image.
+    const relX = clientX - rect.left - disp.left;
+    const relY = clientY - rect.top - disp.top;
+    const x = Math.max(0, Math.min(1, relX / disp.width));
+    const y = Math.max(0, Math.min(1, relY / disp.height));
     setCropX(x);
     setCropY(y);
   };
@@ -41,24 +62,16 @@ export function AvatarCropEditor({
     setIsDragging(true);
     handleMove(e.clientX, e.clientY);
   };
-
   const handleMouseMove = (e: React.MouseEvent) => {
-    if (isDragging) {
-      handleMove(e.clientX, e.clientY);
-    }
+    if (isDragging) handleMove(e.clientX, e.clientY);
   };
-
-  const handleMouseUp = () => {
-    setIsDragging(false);
-  };
-
+  const handleMouseUp = () => setIsDragging(false);
   const handleTouchStart = (e: React.TouchEvent) => {
     e.preventDefault();
     setIsDragging(true);
     const touch = e.touches[0];
     handleMove(touch.clientX, touch.clientY);
   };
-
   const handleTouchMove = (e: React.TouchEvent) => {
     if (isDragging) {
       const touch = e.touches[0];
@@ -66,26 +79,24 @@ export function AvatarCropEditor({
     }
   };
 
-  const handleTouchEnd = () => {
-    setIsDragging(false);
-  };
-
   useEffect(() => {
-    const handleGlobalMouseUp = () => setIsDragging(false);
-    window.addEventListener('mouseup', handleGlobalMouseUp);
-    window.addEventListener('touchend', handleGlobalMouseUp);
+    const handleGlobalUp = () => setIsDragging(false);
+    window.addEventListener('mouseup', handleGlobalUp);
+    window.addEventListener('touchend', handleGlobalUp);
     return () => {
-      window.removeEventListener('mouseup', handleGlobalMouseUp);
-      window.removeEventListener('touchend', handleGlobalMouseUp);
+      window.removeEventListener('mouseup', handleGlobalUp);
+      window.removeEventListener('touchend', handleGlobalUp);
     };
   }, []);
 
-  // Calculate the visible portion of the image in the circle
-  const circleSize = 120;
-  const previewOffset = {
-    x: (0.5 - cropX) * 100,
-    y: (0.5 - cropY) * 100,
-  };
+  // Compute marker position in container coordinates from (cropX, cropY) in source-image space.
+  const disp = getDisplayedRect();
+  const markerLeftPct = disp
+    ? ((disp.left + cropX * disp.width) / disp.containerWidth) * 100
+    : cropX * 100;
+  const markerTopPct = disp
+    ? ((disp.top + cropY * disp.height) / disp.containerHeight) * 100
+    : cropY * 100;
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-background/80 backdrop-blur-sm p-4">
@@ -107,39 +118,35 @@ export function AvatarCropEditor({
           onMouseLeave={handleMouseUp}
           onTouchStart={handleTouchStart}
           onTouchMove={handleTouchMove}
-          onTouchEnd={handleTouchEnd}
+          onTouchEnd={handleMouseUp}
         >
+          {/* object-contain so container coords map directly to source-image coords */}
           <img
+            ref={imgRef}
             src={fullImageUrl}
             alt="Full avatar"
-            className="w-full h-full object-cover"
+            className="w-full h-full object-contain"
             draggable={false}
-            onLoad={() => setImageLoaded(true)}
+            onLoad={(e) => {
+              const el = e.currentTarget;
+              setImgSize({ w: el.naturalWidth, h: el.naturalHeight });
+            }}
           />
-          
-          {/* Overlay with circular cutout */}
-          {imageLoaded && (
+
+          {imgSize && (
             <>
-              {/* Dark overlay */}
-              <div className="absolute inset-0 bg-background/60 pointer-events-none" />
-              
-              {/* Circle indicator at crop position */}
+              <div className="absolute inset-0 bg-background/40 pointer-events-none" />
               <div
                 className="absolute w-24 h-24 border-4 border-primary rounded-full pointer-events-none transform -translate-x-1/2 -translate-y-1/2 shadow-lg"
                 style={{
-                  left: `${cropX * 100}%`,
-                  top: `${cropY * 100}%`,
+                  left: `${markerLeftPct}%`,
+                  top: `${markerTopPct}%`,
                   boxShadow: '0 0 0 9999px rgba(0,0,0,0.4)',
                 }}
               />
-              
-              {/* Move icon at center */}
               <div
                 className="absolute pointer-events-none transform -translate-x-1/2 -translate-y-1/2"
-                style={{
-                  left: `${cropX * 100}%`,
-                  top: `${cropY * 100}%`,
-                }}
+                style={{ left: `${markerLeftPct}%`, top: `${markerTopPct}%` }}
               >
                 <Move className="w-6 h-6 text-primary-foreground drop-shadow-lg" />
               </div>
@@ -147,22 +154,18 @@ export function AvatarCropEditor({
           )}
         </div>
 
-        {/* Preview */}
+        {/* Preview — mirror how consumers render the avatar (object-cover + objectPosition %) */}
         <div className="flex items-center gap-4 mb-6">
           <span className="text-sm text-muted-foreground">
             {t.admin?.preview || 'Preview'}:
           </span>
-          <div
-            className="w-16 h-16 rounded-full overflow-hidden border-2 border-border"
-            style={{ borderRadius: '60% 40% 50% 50% / 50% 50% 40% 60%' }}
-          >
-            <div
-              className="w-full h-full"
-              style={{
-                backgroundImage: `url(${fullImageUrl})`,
-                backgroundSize: '200%',
-                backgroundPosition: `${cropX * 100}% ${cropY * 100}%`,
-              }}
+          <div className="w-16 h-16 rounded-full overflow-hidden border-2 border-border">
+            <img
+              src={fullImageUrl}
+              alt="Preview"
+              className="w-full h-full object-cover"
+              style={{ objectPosition: `${cropX * 100}% ${cropY * 100}%` }}
+              draggable={false}
             />
           </div>
         </div>

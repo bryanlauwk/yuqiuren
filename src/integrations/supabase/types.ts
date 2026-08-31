@@ -10,7 +10,7 @@ export type Database = {
   // Allows to automatically instantiate createClient with right options
   // instead of createClient<Database, { PostgrestVersion: 'XX' }>(URL, KEY)
   __InternalSupabase: {
-    PostgrestVersion: "14.1"
+    PostgrestVersion: "14.5"
   }
   public: {
     Tables: {
@@ -43,6 +43,41 @@ export type Database = {
           name?: string
         }
         Relationships: []
+      }
+      session_highlights: {
+        Row: {
+          created_at: string
+          id: string
+          session_id: string
+          sort_order: number
+          title: string | null
+          youtube_url: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          session_id: string
+          sort_order?: number
+          title?: string | null
+          youtube_url: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          session_id?: string
+          sort_order?: number
+          title?: string | null
+          youtube_url?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "session_highlights_session_id_fkey"
+            columns: ["session_id"]
+            isOneToOne: false
+            referencedRelation: "tournament_sessions"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       session_results: {
         Row: {
@@ -145,13 +180,7 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      has_role: {
-        Args: {
-          _role: Database["public"]["Enums"]["app_role"]
-          _user_id: string
-        }
-        Returns: boolean
-      }
+      [_ in never]: never
     }
     Enums: {
       app_role: "admin" | "user"
