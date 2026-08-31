@@ -68,6 +68,12 @@
     --leader-sep-2-via-alpha: 1;
     --leader-sep-2-to-alpha: 0.12;
 
+    /* Brand band — pro-league banner gradient */
+    --band-from: 224 80% 22%;
+    --band-via: 222 100% 42%;
+    --band-to: 150 60% 42%;
+    --band-foreground: 0 0% 100%;
+
     --sidebar-background: 0 0% 100%;
     --sidebar-foreground: 225 45% 10%;
     --sidebar-primary: 222 100% 52%;
@@ -137,6 +143,11 @@
 
     --leader-sep-2-from: 222 100% 59%;
     --leader-sep-2-via: 222 100% 59%;
+    --band-from: 225 60% 8%;
+    --band-via: 222 90% 26%;
+    --band-to: 150 70% 30%;
+    --band-foreground: 0 0% 100%;
+
     --leader-sep-2-to: 222 100% 59%;
     --leader-sep-2-from-alpha: 0.65;
     --leader-sep-2-via-alpha: 1;
@@ -164,6 +175,13 @@
     @apply bg-background text-foreground font-sans antialiased;
   }
 
+  .font-condensed {
+    font-family: 'Anton', 'Archivo', system-ui, sans-serif;
+    font-weight: 400;
+    letter-spacing: 0.005em;
+    text-transform: uppercase;
+  }
+
   .font-display {
     font-family: 'Archivo', 'Plus Jakarta Sans', system-ui, sans-serif;
     font-weight: 900;
@@ -173,6 +191,29 @@
 }
 
 @layer utilities {
+  /* Pro-league banner band */
+  .brand-band {
+    background-image: linear-gradient(
+      152deg,
+      hsl(var(--band-from)) 0%,
+      hsl(var(--band-via)) 58%,
+      hsl(var(--band-to)) 100%
+    );
+    color: hsl(var(--band-foreground));
+  }
+
+  .band-fg {
+    color: hsl(var(--band-foreground));
+  }
+
+  .no-scrollbar {
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+
   /* Hard offset shadows — neo-brutalist */
   .card-shadow {
     box-shadow: var(--shadow-card);
