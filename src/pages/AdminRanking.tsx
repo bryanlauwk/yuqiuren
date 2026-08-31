@@ -1,6 +1,7 @@
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Header } from '@/components/Header';
+import { Footer } from '@/components/Footer';
 import { PlayerManager } from '@/components/admin/PlayerManager';
 import { SessionCreator } from '@/components/admin/SessionCreator';
 import { SessionHistory } from '@/components/admin/SessionHistory';
@@ -55,17 +56,17 @@ export default function AdminRanking() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-background via-background to-primary/5">
+    <div className="min-h-screen bg-background flex flex-col">
       <Header />
-      
-      <main className="container py-8">
+
+      <main className="container py-8 flex-1">
         {/* Header Section */}
         <div className="flex items-center gap-4 mb-8">
-          <div className="p-3 rounded-xl bg-primary text-primary-foreground shadow-lg">
+          <div className="p-3 rounded bg-primary text-primary-foreground border-2 border-foreground shadow-[3px_3px_0_0_hsl(var(--foreground))]">
             <Settings className="w-6 h-6" />
           </div>
           <div>
-            <h1 className="text-2xl sm:text-3xl font-bold text-foreground">
+            <h1 className="font-display text-2xl sm:text-3xl text-foreground tracking-tight">
               {t.admin.title}
             </h1>
             <p className="text-sm text-muted-foreground">
@@ -113,6 +114,8 @@ export default function AdminRanking() {
           </div>
         </div>
       </main>
+
+      <Footer />
     </div>
   );
 }

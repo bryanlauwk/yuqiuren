@@ -1,11 +1,12 @@
 import { useState, useRef } from 'react';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { Calendar, Trophy, Medal, Users, Trash2, Pencil, History, Camera, X, Loader2 } from 'lucide-react';
+import { Calendar, Trophy, Medal, Users, Trash2, Pencil, History, Camera, X, Loader2, Film } from 'lucide-react';
 import { useLanguage } from '@/contexts/LanguageContext';
 import type { TournamentSession, SessionResult, Player, SessionType } from '@/types/ranking';
 import { format } from 'date-fns';
 import { SessionResultsEditor } from './SessionResultsEditor';
+import { SessionHighlightsEditor } from './SessionHighlightsEditor';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
 
@@ -34,6 +35,7 @@ export function SessionHistory({
 }: SessionHistoryProps) {
   const { t } = useLanguage();
   const [editingSession, setEditingSession] = useState<TournamentSession | null>(null);
+  const [highlightsForSession, setHighlightsForSession] = useState<TournamentSession | null>(null);
   const [uploadingSessionId, setUploadingSessionId] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [targetSessionId, setTargetSessionId] = useState<string | null>(null);
@@ -122,7 +124,7 @@ export function SessionHistory({
   };
 
   return (
-    <div className="bg-card rounded-2xl border border-border p-6 shadow-sm">
+    <div className="bg-card rounded border-2 border-foreground p-6 shadow-[4px_4px_0_0_hsl(var(--foreground))]">
       <input
         ref={fileInputRef}
         type="file"
@@ -197,6 +199,15 @@ export function SessionHistory({
                       ) : (
                         <Camera className="w-4 h-4" />
                       )}
+                    </Button>
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      className="h-8 w-8 text-muted-foreground hover:text-primary hover:bg-primary/10"
+                      onClick={() => setHighlightsForSession(session)}
+                      title={t.highlights.manage}
+                    >
+                      <Film className="w-4 h-4" />
                     </Button>
                     <Button
                       variant="ghost"
@@ -329,6 +340,15 @@ export function SessionHistory({
           open={!!editingSession}
           onOpenChange={(open) => !open && setEditingSession(null)}
           onUpdateResults={onUpdateResults}
+        />
+      )}
+
+      {/* Highlights Editor */}
+      {highlightsForSession && (
+        <SessionHighlightsEditor
+          session={highlightsForSession}
+          open={!!highlightsForSession}
+          onOpenChange={(open) => !open && setHighlightsForSession(null)}
         />
       )}
     </div>
