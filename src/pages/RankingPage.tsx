@@ -9,11 +9,12 @@ import { useRankings } from '@/hooks/useRankings';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { Trophy } from 'lucide-react';
+import { SectionHeading } from '@/components/SectionHeading';
 
 
 export default function RankingPage() {
   const { rankings, loading } = useRankings();
-  const { t } = useLanguage();
+  const { t, language } = useLanguage();
   const isMobile = useIsMobile();
 
   const [lightboxOpen, setLightboxOpen] = useState(false);
@@ -32,7 +33,12 @@ export default function RankingPage() {
       
       <ArenaHero />
 
-      <main id="rankings-anchor" className="container mt-10 relative z-10 flex-1 pb-12 scroll-mt-24">
+      <main id="rankings-anchor" className="container relative z-10 flex-1 py-12 scroll-mt-28 sm:py-16">
+        <SectionHeading
+          kicker="LEAGUE TABLE · 2026 SEASON"
+          title={language === 'zh' ? '联赛积分榜' : 'League Standings'}
+          className="mb-8 border-b-2 border-foreground pb-5"
+        />
         {loading ? (
           <div className="space-y-2">
             {[...Array(8)].map((_, i) => (

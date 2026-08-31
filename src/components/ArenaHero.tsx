@@ -1,142 +1,90 @@
-import { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
+import { ArrowDown, Play } from 'lucide-react';
 import { useLanguage } from '@/contexts/LanguageContext';
-import { CircleArrow } from '@/components/ink/CircleArrow';
 import { useRankings } from '@/hooks/useRankings';
 import { LatestSessionPhoto } from '@/components/hero/LatestSessionPhoto';
+import { ScheduleStrip } from '@/components/ScheduleStrip';
 import { CourtLines } from '@/components/hero/CourtLines';
-
 
 export function ArenaHero() {
   const { t, language } = useLanguage();
   const { sessions, players } = useRankings();
-  const sectionRef = useRef<HTMLElement>(null);
-  const [scrollOffset, setScrollOffset] = useState(0);
+  const isZh = language === 'zh';
 
-  useEffect(() => {
-    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    if (prefersReducedMotion) return;
-
-    let rafId = 0;
-    const update = () => {
-      if (!sectionRef.current) return;
-      const rect = sectionRef.current.getBoundingClientRect();
-      const vh = window.innerHeight;
-      const total = rect.height + vh;
-      const progress = Math.min(Math.max((vh - rect.top) / total, 0), 1);
-      setScrollOffset(progress);
-    };
-    const onScroll = () => {
-      cancelAnimationFrame(rafId);
-      rafId = requestAnimationFrame(update);
-    };
-    update();
-    window.addEventListener('scroll', onScroll, { passive: true });
-    window.addEventListener('resize', onScroll);
-    return () => {
-      window.removeEventListener('scroll', onScroll);
-      window.removeEventListener('resize', onScroll);
-      cancelAnimationFrame(rafId);
-    };
-  }, []);
-
-  // Tilt from -2deg (top) → +3deg (bottom), translate up to -20px
-  const posterRotate = -2 + scrollOffset * 5;
-  const posterTranslateY = -scrollOffset * 20;
-
-  const handleScroll = () => {
+  const scrollToRankings = () => {
     document.getElementById('rankings-anchor')?.scrollIntoView({ behavior: 'smooth' });
   };
 
-
-
   return (
-    <section ref={sectionRef} className="relative w-full overflow-hidden bg-background border-b-2 border-foreground">
-      {/* Court-line texture behind content (desktop only) */}
-      <div className="absolute inset-0 text-foreground/40 pointer-events-none" aria-hidden>
+    <section className="brand-band relative w-full overflow-hidden border-b-2 border-foreground">
+      <div className="absolute inset-0 pointer-events-none opacity-20 band-fg" aria-hidden>
         <CourtLines />
       </div>
-      <div className="relative z-10 container py-16 sm:py-20 md:py-28">
-        <div className="grid grid-cols-1 md:grid-cols-12 gap-10 md:gap-8 items-center">
-          {/* Left: headline + CTA */}
-          <div className="md:col-span-7">
-            <h1 className="font-display text-foreground leading-[0.9] tracking-tighter text-5xl sm:text-7xl md:text-8xl lg:text-[7.5rem] mb-6 break-keep">
-              <span className="sm:hidden block leading-[1.08]">
-                <span className="lime-slab">2026</span>
-                <br />
-                羽球人赛
-                <br />
-                <span className="lime-slab">积分榜.</span>
-              </span>
-              <span className="hidden sm:inline">
-                {t.home.heroTitle.split(' ').map((word, i, arr) => {
-                  const isLast = i === arr.length - 1;
-                  return (
-                    <span key={i}>
-                      {isLast ? <span className="lime-slab">{word}.</span> : <>{word} </>}
-                    </span>
-                  );
-                })}
-              </span>
-            </h1>
 
-            <p className="text-base sm:text-lg md:text-xl text-accent font-medium uppercase tracking-wider max-w-2xl mb-5">
+      <div className="relative z-10 container pt-12 sm:pt-16 md:pt-20">
+        <div className="flex flex-col gap-8 xl:grid xl:grid-cols-[minmax(0,1fr)_18rem] xl:items-end">
+          <div>
+            <div className="mb-4 flex items-center gap-3 font-sans text-[10px] font-extrabold uppercase tracking-[0.28em] text-[hsl(var(--band-foreground))]/75 sm:text-xs">
+              <span className="h-2 w-2 bg-accent" />
+              {isZh ? '羽球人 · 社区联赛' : 'YUQIUREN · COMMUNITY LEAGUE'}
+            </div>
+
+            <h1 className="max-w-6xl font-display text-[clamp(3rem,10vw,9rem)] leading-[0.82] band-fg">
+              <span className="block whitespace-nowrap">2026 {isZh ? '羽球人赛' : 'YUQIUREN'}</span>
+              <span className="block text-accent">{isZh ? '积分榜' : 'LEAGUE TABLE'}</span>
+            </h1>
+          </div>
+
+          <div className="pb-1 xl:pb-3">
+            <p className="max-w-sm font-sans text-sm font-semibold leading-relaxed text-[hsl(var(--band-foreground))]/80 sm:text-base">
               {t.home.heroSubtitle}
             </p>
-
-            {/* Live stat strip */}
-            {(players.length > 0 || sessions.length > 0) && (
-              <div className="flex flex-wrap items-center gap-2 mb-6">
-                <div className="inline-flex items-center gap-2 border-2 border-foreground rounded-md px-3 py-1.5 bg-background">
-                  <span className="relative flex h-2 w-2">
-                    <span className="absolute inline-flex h-full w-full rounded-full bg-accent opacity-75 animate-ping" />
-                    <span className="relative inline-flex rounded-full h-2 w-2 bg-accent" />
-                  </span>
-                  <span className="font-display text-xs sm:text-sm tracking-wider text-foreground">
-                    {players.length} {language === 'zh' ? '球员' : 'PLAYERS'}
-                  </span>
-                </div>
-                <div className="inline-flex items-center border-2 border-foreground rounded-md px-3 py-1.5 bg-background">
-                  <span className="font-display text-xs sm:text-sm tracking-wider text-foreground">
-                    {sessions.length} {language === 'zh' ? '场次' : 'SESSIONS'}
-                  </span>
-                </div>
-                {sessions[0]?.session_date && (
-                  <div className="inline-flex items-center border-2 border-foreground rounded-md px-3 py-1.5 bg-foreground text-background">
-                    <span className="font-display text-xs sm:text-sm tracking-wider">
-                      {language === 'zh' ? '最近 ' : 'LATEST '}
-                      {sessions[0].session_date.replace(/-/g, '.')}
-                    </span>
-                  </div>
-                )}
-              </div>
-            )}
-
-            <div className="flex flex-wrap items-center gap-3">
-              <button
-                onClick={handleScroll}
-                className="btn-pop inline-flex items-center gap-3 bg-accent text-accent-foreground border-2 border-foreground px-6 py-3 font-display uppercase tracking-wide text-sm rounded-md"
-              >
-                {t.showcase.cta}
-                <CircleArrow size={28} className="text-foreground" />
-              </button>
-              <Link
-                to="/history"
-                className="btn-pop inline-flex items-center gap-2 bg-background text-foreground border-2 border-foreground px-5 py-3 font-display uppercase tracking-wide text-sm rounded-md hover:bg-foreground hover:text-background transition-colors"
-              >
-                {language === 'zh' ? '场次记录' : 'MATCH HISTORY'}
-                <span aria-hidden>→</span>
-              </Link>
+            <div className="mt-5 flex flex-wrap gap-2 text-[10px] font-extrabold uppercase tracking-[0.16em] text-[hsl(var(--band-foreground))]/75">
+              <span className="border border-[hsl(var(--band-foreground))]/30 px-3 py-2">
+                {players.length} {isZh ? '名球员' : 'PLAYERS'}
+              </span>
+              <span className="border border-[hsl(var(--band-foreground))]/30 px-3 py-2">
+                {sessions.length} {isZh ? '场赛事' : 'MATCH DAYS'}
+              </span>
             </div>
           </div>
+        </div>
 
-          {/* Right: Star of the Week poster */}
-          <div className="md:col-span-5 flex justify-center md:justify-end">
-            <LatestSessionPhoto rotate={posterRotate} translateY={posterTranslateY} />
+        <div className="mt-8 flex flex-wrap items-center gap-3 sm:mt-10">
+          <button
+            type="button"
+            onClick={scrollToRankings}
+            className="inline-flex min-h-12 items-center gap-3 border-2 border-[hsl(var(--band-foreground))] bg-accent px-5 py-3 font-sans text-xs font-black uppercase tracking-[0.14em] text-accent-foreground shadow-[4px_4px_0_0_hsl(var(--band-foreground))] transition-transform hover:-translate-y-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[hsl(var(--band-foreground))] focus-visible:ring-offset-2 focus-visible:ring-offset-[hsl(var(--band-surface))]"
+          >
+            {isZh ? '查看积分榜' : 'VIEW STANDINGS'}
+            <ArrowDown className="h-4 w-4" />
+          </button>
+          <Link
+            to="/history#highlights"
+            className="inline-flex min-h-12 items-center gap-3 border-2 border-[hsl(var(--band-foreground))]/70 bg-[hsl(var(--band-foreground))]/10 px-5 py-3 font-sans text-xs font-black uppercase tracking-[0.14em] band-fg transition-all hover:-translate-y-1 hover:bg-[hsl(var(--band-foreground))]/20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[hsl(var(--band-foreground))]"
+          >
+            <Play className="h-4 w-4 fill-current" />
+            {isZh ? '看精彩片段' : 'WATCH HIGHLIGHTS'}
+          </Link>
+        </div>
+
+        <div className="mt-12 border-t border-[hsl(var(--band-foreground))]/25 py-5 sm:mt-14">
+          <div className="mb-3 flex items-center justify-between gap-4">
+            <span className="font-sans text-[10px] font-black uppercase tracking-[0.26em] text-[hsl(var(--band-foreground))]/65">
+              {isZh ? '近期赛事' : 'RECENT MATCH DAYS'}
+            </span>
+            <Link
+              to="/history"
+              className="font-sans text-[10px] font-black uppercase tracking-[0.18em] band-fg underline decoration-accent decoration-2 underline-offset-4"
+            >
+              {isZh ? '全部场次' : 'ALL MATCHES'} →
+            </Link>
           </div>
-
+          <ScheduleStrip />
         </div>
       </div>
+
+      <LatestSessionPhoto />
     </section>
   );
 }

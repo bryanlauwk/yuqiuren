@@ -65,7 +65,7 @@ export default function SessionHistoryPage() {
     <div className="min-h-screen bg-background flex flex-col">
       <Header />
       
-      <main className="flex-1 container py-10 sm:py-12">
+      <main id="highlights" className="flex-1 container py-10 sm:py-12 scroll-mt-28">
         {/* Page Header */}
         <div className="text-center mb-10">
           <h1 className="font-display text-4xl sm:text-5xl text-foreground tracking-tight mb-3 break-keep">

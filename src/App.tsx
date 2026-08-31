@@ -2,7 +2,8 @@ import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { useEffect } from "react";
+import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
 import { LanguageProvider } from "@/contexts/LanguageContext";
 import { ThemeProvider } from "@/contexts/ThemeContext";
 
@@ -21,6 +22,23 @@ const queryClient = new QueryClient({
   },
 });
 
+function HashScroll() {
+  const { hash, pathname } = useLocation();
+
+  useEffect(() => {
+    if (!hash) {
+      window.scrollTo({ top: 0 });
+      return;
+    }
+
+    window.requestAnimationFrame(() => {
+      document.getElementById(hash.slice(1))?.scrollIntoView({ behavior: "smooth" });
+    });
+  }, [hash, pathname]);
+
+  return null;
+}
+
 const App = () => (
   <QueryClientProvider client={queryClient}>
     <ThemeProvider>
@@ -29,6 +47,7 @@ const App = () => (
         <Toaster />
         <Sonner position="top-center" />
         <BrowserRouter>
+          <HashScroll />
           <Routes>
             <Route path="/" element={<RankingPage />} />
             <Route path="/history" element={<SessionHistoryPage />} />
