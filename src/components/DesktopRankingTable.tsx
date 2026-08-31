@@ -116,15 +116,15 @@ export function DesktopRankingTable({
                 'text-left font-display text-background tracking-widest border-t border-t-background/20'
               )}
             >
-              Player
+              {t.ranking.player}
             </TableHead>
             <TableHead
               className={cn(
                 d.statColW,
-                d.cellPadX,
+                d.sessionsPadX,
                 d.headPadY,
                 d.headText,
-                'text-center font-display text-background tracking-widest border-t border-t-background/20'
+                'text-right font-display text-background tracking-widest border-t border-t-background/20'
               )}
             >
               {t.ranking.sessions}
@@ -135,7 +135,7 @@ export function DesktopRankingTable({
                 d.cellPadX,
                 d.headPadY,
                 d.headText,
-                'text-center font-display text-background tracking-widest border-t border-t-background/20'
+                'text-right font-display text-background tracking-widest border-t border-t-background/20'
               )}
             >
               {t.ranking.wins}
