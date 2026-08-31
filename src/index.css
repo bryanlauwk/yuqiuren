@@ -217,11 +217,6 @@
     color: hsl(var(--band-foreground));
   }
 
-  .hero-photo-image {
-    -webkit-mask-image: linear-gradient(to bottom, transparent 0%, black 6%, black 100%);
-    mask-image: linear-gradient(to bottom, transparent 0%, black 6%, black 100%);
-  }
-
   .hero-photo-overlay {
     background-image:
       linear-gradient(to bottom, transparent 66%, hsl(var(--band-surface) / 0.14) 78%, hsl(var(--band-surface) / 0.92) 100%),
