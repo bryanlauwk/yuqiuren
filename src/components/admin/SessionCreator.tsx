@@ -125,7 +125,7 @@ export function SessionCreator({ players, onCreateSession, onRecordResults }: Se
   };
 
   return (
-    <div className="bg-card rounded-2xl border border-border p-6 shadow-sm">
+    <div className="bg-card rounded border-2 border-foreground p-6 shadow-[4px_4px_0_0_hsl(var(--foreground))]">
       <div className="flex items-center justify-between mb-6">
         <div className="flex items-center gap-3">
           <div className="p-2 rounded-lg bg-primary/10">

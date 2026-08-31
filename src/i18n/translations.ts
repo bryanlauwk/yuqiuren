@@ -2,7 +2,6 @@ export const translations = {
   zh: {
     header: {
       brandName: "羽球人联赛",
-      subtitle: "2026 积分排行榜",
       rankings: "排行榜",
       sessionHistory: "场次记录",
       admin: "管理",
@@ -10,8 +9,8 @@ export const translations = {
       share: "分享",
     },
     home: {
-      heroTitle: "2026 羽球人赛 · 积分榜",
-      heroSubtitle: "每一分都至关重要",
+      heroTitle: "2026 羽球人赛 积分榜",
+      heroSubtitle: "球不落地，永不放弃",
       totalPlayers: "参赛人数",
       nextMatch: "下一场比赛",
       venue: "比赛场地",
@@ -20,6 +19,11 @@ export const translations = {
       tieMessage: "积分相同时，按胜场、场次及字母顺序排列，待分出高下后显示领奖台",
       otherPlayers: "其他选手",
       shareRankings: "分享排名",
+    },
+    showcase: {
+      headline: "追踪每一拍。",
+      subline: "实时积分、连胜奖励与场次记录，一目了然。",
+      cta: "查看排名",
     },
     podium: {
       topPlayers: "前三甲",
@@ -32,7 +36,17 @@ export const translations = {
       sessions: "场次",
       wins: "胜",
       points: "积分",
+      player: "球员",
+      details: "详细数据",
+      winRate: "冠军率",
+      avgPoints: "场均分",
+      rankChange: "排名变化",
+      newPlayer: "新加入",
+      expand: "展开详情",
+      collapse: "收起详情",
     },
+
+
     countdown: {
       matchStarting: "比赛即将开始！",
       days: "天",
@@ -53,11 +67,51 @@ export const translations = {
     footer: {
       designedBy: "版权所有",
     },
+    auth: {
+      adminLogin: "管理员登录",
+      createAccount: "创建账号",
+      tagline: "羽球人 · 联赛管理",
+      email: "邮箱",
+      emailPlaceholder: "admin@example.com",
+      password: "密码",
+      signIn: "登录",
+      signUpAction: "注册",
+      noAccount: "还没有账号？",
+      haveAccount: "已有账号？",
+      signInLink: "去登录",
+      signUpLink: "去注册",
+      adminOnlyNote: "仅拥有管理员权限的账号可访问管理面板",
+      accountExistsTitle: "账号已存在",
+      accountExistsDesc: "该邮箱已注册，请直接登录。",
+      signUpFailedTitle: "注册失败",
+      accountCreatedTitle: "账号已创建",
+      accountCreatedDesc: "现在可以登录。注意：管理员权限需由现有管理员分配。",
+      signInFailedTitle: "登录失败",
+    },
+    notFound: {
+      message: "页面不存在",
+      back: "返回首页",
+    },
     history: {
       title: "场次记录",
       subtitle: "查看所有比赛场次及结果",
       noSessions: "暂无场次记录",
       groupPhoto: "合影",
+    },
+    highlights: {
+      title: "精彩片段",
+      chip: "段精彩片段",
+      empty: "暂无精彩片段",
+      editorTitle: "管理精彩片段",
+      urlPlaceholder: "粘贴 YouTube 链接 (youtu.be/... 或 watch?v=...)",
+      titlePlaceholder: "标题（可选，例如：决赛 Game 3）",
+      add: "添加视频",
+      added: "已添加",
+      invalidUrl: "无效的 YouTube 链接",
+      manage: "管理精彩片段",
+      prev: "上一段",
+      next: "下一段",
+      autoplayNext: "连播",
     },
     admin: {
       title: "管理面板",
@@ -127,7 +181,6 @@ export const translations = {
   en: {
     header: {
       brandName: "Badminton League",
-      subtitle: "2026 Rankings",
       rankings: "Rankings",
       sessionHistory: "History",
       admin: "Admin",
@@ -146,6 +199,11 @@ export const translations = {
       otherPlayers: "Other Players",
       shareRankings: "Share Rankings",
     },
+    showcase: {
+      headline: "Track every rally.",
+      subline: "Live points, streak bonuses, and session history — all in one place.",
+      cta: "See Rankings",
+    },
     podium: {
       topPlayers: "TOP PLAYERS",
       champion: "CHAMPION",
@@ -157,7 +215,17 @@ export const translations = {
       sessions: "sessions",
       wins: "wins",
       points: "points",
+      player: "player",
+      details: "full stats",
+      winRate: "win rate",
+      avgPoints: "avg pts",
+      rankChange: "rank change",
+      newPlayer: "new",
+      expand: "Expand stats",
+      collapse: "Collapse stats",
     },
+
+
     countdown: {
       matchStarting: "Match starting!",
       days: "d",
@@ -178,11 +246,51 @@ export const translations = {
     footer: {
       designedBy: "Designed by",
     },
+    auth: {
+      adminLogin: "Admin Login",
+      createAccount: "Create Account",
+      tagline: "YuQiuRen · League Management",
+      email: "Email Address",
+      emailPlaceholder: "admin@example.com",
+      password: "Password",
+      signIn: "Sign In",
+      signUpAction: "Create Account",
+      noAccount: "Don't have an account?",
+      haveAccount: "Already have an account?",
+      signInLink: "Sign in",
+      signUpLink: "Sign up",
+      adminOnlyNote: "Only users with admin role can access the management panel",
+      accountExistsTitle: "Account exists",
+      accountExistsDesc: "This email is already registered. Try signing in.",
+      signUpFailedTitle: "Sign up failed",
+      accountCreatedTitle: "Account created",
+      accountCreatedDesc: "You can now sign in. Note: Admin role must be assigned by an existing admin.",
+      signInFailedTitle: "Sign in failed",
+    },
+    notFound: {
+      message: "Page not found",
+      back: "Back to home",
+    },
     history: {
       title: "Session History",
       subtitle: "View all match sessions and results",
       noSessions: "No sessions recorded yet",
       groupPhoto: "Group Photo",
+    },
+    highlights: {
+      title: "Match Highlights",
+      chip: "highlights",
+      empty: "No highlight videos yet",
+      editorTitle: "Manage Highlights",
+      urlPlaceholder: "Paste YouTube URL (youtu.be/... or watch?v=...)",
+      titlePlaceholder: "Title (optional, e.g. Final Game 3)",
+      add: "Add Video",
+      added: "Added",
+      invalidUrl: "Invalid YouTube URL",
+      manage: "Manage Highlights",
+      prev: "Previous",
+      next: "Next",
+      autoplayNext: "Autoplay",
     },
     admin: {
       title: "Admin Panel",
@@ -255,7 +363,6 @@ export type Language = keyof typeof translations;
 export type TranslationKeys = {
   header: {
     brandName: string;
-    subtitle: string;
     rankings: string;
     sessionHistory: string;
     admin: string;
@@ -281,11 +388,26 @@ export type TranslationKeys = {
     third: string;
     pts: string;
   };
+  showcase: {
+    headline: string;
+    subline: string;
+    cta: string;
+  };
   ranking: {
     sessions: string;
     wins: string;
     points: string;
+    player: string;
+    details: string;
+    winRate: string;
+    avgPoints: string;
+    rankChange: string;
+    newPlayer: string;
+    expand: string;
+    collapse: string;
   };
+
+
   countdown: {
     matchStarting: string;
     days: string;
@@ -306,11 +428,51 @@ export type TranslationKeys = {
   footer: {
     designedBy: string;
   };
+  auth: {
+    adminLogin: string;
+    createAccount: string;
+    tagline: string;
+    email: string;
+    emailPlaceholder: string;
+    password: string;
+    signIn: string;
+    signUpAction: string;
+    noAccount: string;
+    haveAccount: string;
+    signInLink: string;
+    signUpLink: string;
+    adminOnlyNote: string;
+    accountExistsTitle: string;
+    accountExistsDesc: string;
+    signUpFailedTitle: string;
+    accountCreatedTitle: string;
+    accountCreatedDesc: string;
+    signInFailedTitle: string;
+  };
+  notFound: {
+    message: string;
+    back: string;
+  };
   history: {
     title: string;
     subtitle: string;
     noSessions: string;
     groupPhoto: string;
+  };
+  highlights: {
+    title: string;
+    chip: string;
+    empty: string;
+    editorTitle: string;
+    urlPlaceholder: string;
+    titlePlaceholder: string;
+    add: string;
+    added: string;
+    invalidUrl: string;
+    manage: string;
+    prev: string;
+    next: string;
+    autoplayNext: string;
   };
   admin: {
     title: string;

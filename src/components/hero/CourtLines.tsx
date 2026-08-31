@@ -8,9 +8,9 @@ export function CourtLines() {
     >
       <defs>
         <linearGradient id="courtLineGradient" x1="0%" y1="0%" x2="0%" y2="100%">
-          <stop offset="0%" stopColor="white" stopOpacity="0" />
-          <stop offset="50%" stopColor="white" stopOpacity="0.08" />
-          <stop offset="100%" stopColor="white" stopOpacity="0.03" />
+          <stop offset="0%" stopColor="currentColor" stopOpacity="0" />
+          <stop offset="50%" stopColor="currentColor" stopOpacity="0.35" />
+          <stop offset="100%" stopColor="currentColor" stopOpacity="0.15" />
         </linearGradient>
       </defs>
       
@@ -36,18 +36,18 @@ export function CourtLines() {
       </g>
       
       {/* Net silhouette */}
-      <g opacity="0.06">
+      <g opacity="0.2">
         {/* Net posts */}
-        <rect x="160" y="290" width="8" height="110" fill="white" />
-        <rect x="832" y="290" width="8" height="110" fill="white" />
+        <rect x="160" y="290" width="8" height="110" fill="currentColor" />
+        <rect x="832" y="290" width="8" height="110" fill="currentColor" />
         
         {/* Net top line */}
-        <line x1="164" y1="295" x2="836" y2="295" stroke="white" strokeWidth="3" />
+        <line x1="164" y1="295" x2="836" y2="295" stroke="currentColor" strokeWidth="3" />
         
         {/* Net mesh (simplified) */}
-        <line x1="164" y1="320" x2="836" y2="320" stroke="white" strokeWidth="1" />
-        <line x1="164" y1="345" x2="836" y2="345" stroke="white" strokeWidth="1" />
-        <line x1="164" y1="370" x2="836" y2="370" stroke="white" strokeWidth="1" />
+        <line x1="164" y1="320" x2="836" y2="320" stroke="currentColor" strokeWidth="1" />
+        <line x1="164" y1="345" x2="836" y2="345" stroke="currentColor" strokeWidth="1" />
+        <line x1="164" y1="370" x2="836" y2="370" stroke="currentColor" strokeWidth="1" />
         
         {/* Vertical net lines */}
         {[...Array(15)].map((_, i) => (
@@ -57,7 +57,7 @@ export function CourtLines() {
             y1="295"
             x2={164 + i * 48}
             y2="400"
-            stroke="white"
+            stroke="currentColor"
             strokeWidth="1"
           />
         ))}

@@ -1,6 +1,8 @@
+import { Fragment, useEffect, useState } from 'react';
 import { ArrowUp, ArrowDown, Minus } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useLanguage } from '@/contexts/LanguageContext';
+
 import type { PlayerRanking } from '@/types/ranking';
 import {
   Table,
@@ -16,52 +18,74 @@ interface DesktopRankingTableProps {
   onAvatarClick?: (avatarUrl: string, playerName: string) => void;
 }
 
-export function DesktopRankingTable({ rankings, onAvatarClick }: DesktopRankingTableProps) {
+export function DesktopRankingTable({
+  rankings,
+  onAvatarClick,
+}: DesktopRankingTableProps) {
   const { t } = useLanguage();
 
-  const getInitials = (name: string) => {
-    return name
-      .split(' ')
-      .map(n => n[0])
-      .join('')
-      .toUpperCase()
-      .slice(0, 2);
+  // Trigger points-bar fill animation after mount.
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => {
+    const id = window.setTimeout(() => setMounted(true), 120);
+    return () => window.clearTimeout(id);
+  }, []);
+
+  const maxPoints = Math.max(rankings[0]?.total_points ?? 0, 1);
+
+  const d = {
+    rowPadY: 'py-3 leading-none',
+    topRowPadY: 'py-3.5 leading-none',
+    headPadY: 'h-auto py-2.5 leading-none',
+    cellPadX: 'px-2 lg:px-4',
+    sessionsPadX: 'pl-4 lg:pl-10 pr-2 lg:pr-4',
+    firstPadX: 'pl-3 lg:pl-5 pr-3 lg:pr-6',
+    lastPadX: 'pl-2 lg:pl-4 pr-3 lg:pr-5',
+    rankColW: 'w-12 lg:w-16',
+    statColW: 'w-16 lg:w-24',
+    pointsColW: 'w-36 lg:w-48',
+    avatar: 'w-16 h-16',
+    avatarRadius: 'rounded-lg',
+    topAvatar: 'w-[72px] h-[72px]',
+    topAvatarRadius: 'rounded-xl',
+    rankBadge: 'w-9 h-9 text-lg',
+    topRankBadge: 'w-12 h-12 text-lg',
+    text: 'text-lg',
+    nameText: 'text-lg',
+    topNameText: 'text-xl',
+    statText: 'text-lg font-black',
+    pointsText: 'text-lg font-black',
+    headText: 'text-[11px]',
+    gap: 'gap-3 lg:gap-6',
+    sepH: 'h-1.5',
+    barH: 'h-10',
+    topBarH: 'h-10',
   };
 
-  const getRankBadgeStyles = (rank: number) => {
-    switch (rank) {
-      case 1:
-        return 'rank-badge-gold';
-      case 2:
-        return 'rank-badge-silver';
-      case 3:
-        return 'rank-badge-bronze';
-      default:
-        return null;
-    }
-  };
+  const getInitials = (name: string) =>
+    name.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2);
 
   const getRankChangeDisplay = (ranking: PlayerRanking) => {
     if (ranking.rank_change > 0) {
       return (
         <div className="flex items-center gap-0.5 text-finished">
-          <ArrowUp className="w-3 h-3" />
-          <span className="text-xs font-medium">{ranking.rank_change}</span>
+          <ArrowUp className="w-3.5 h-3.5" strokeWidth={3} />
+          <span className="text-xs font-black">{ranking.rank_change}</span>
         </div>
       );
     }
     if (ranking.rank_change < 0) {
       return (
         <div className="flex items-center gap-0.5 text-destructive">
-          <ArrowDown className="w-3 h-3" />
-          <span className="text-xs font-medium">{Math.abs(ranking.rank_change)}</span>
+          <ArrowDown className="w-3.5 h-3.5" strokeWidth={3} />
+          <span className="text-xs font-black">{Math.abs(ranking.rank_change)}</span>
         </div>
       );
     }
     if (!ranking.is_new) {
       return (
         <div className="flex items-center text-muted-foreground">
-          <Minus className="w-3 h-3" />
+          <Minus className="w-3.5 h-3.5" strokeWidth={3} />
         </div>
       );
     }
@@ -69,121 +93,264 @@ export function DesktopRankingTable({ rankings, onAvatarClick }: DesktopRankingT
   };
 
   return (
-    <div className="rounded-2xl bg-card shadow-lg overflow-hidden">
-      <Table>
+    <div className="rounded bg-card border-2 border-foreground shadow-[6px_6px_0_0_hsl(var(--foreground))] overflow-hidden">
+      <Table className="table-fixed w-full">
         <TableHeader>
-          <TableRow className="hover:bg-transparent border-b border-border/40">
-            <TableHead className="sticky top-0 z-20 bg-card w-20 text-center text-sm text-muted-foreground font-medium">
-              Rank
+          <TableRow className="hover:bg-transparent border-b-2 border-foreground bg-foreground">
+            <TableHead
+              className={cn(
+                d.rankColW,
+                d.firstPadX,
+                d.headPadY,
+                d.headText,
+                'text-center font-display italic text-background tracking-[0.2em] border-t border-t-background/20'
+              )}
+            >
+              #
             </TableHead>
-            <TableHead className="sticky top-0 z-20 bg-card text-sm text-muted-foreground font-medium">
-              Player
+            <TableHead
+              className={cn(
+                d.cellPadX,
+                d.headPadY,
+                d.headText,
+                'text-left font-display text-background tracking-widest border-t border-t-background/20'
+              )}
+            >
+              {t.ranking.player}
             </TableHead>
-            <TableHead className="sticky top-0 z-20 bg-card w-28 text-center text-sm text-muted-foreground font-medium">
+            <TableHead
+              className={cn(
+                d.statColW,
+                d.sessionsPadX,
+                d.headPadY,
+                d.headText,
+                'text-right font-display text-background tracking-widest border-t border-t-background/20'
+              )}
+            >
               {t.ranking.sessions}
             </TableHead>
-            <TableHead className="sticky top-0 z-20 bg-card w-28 text-center text-sm text-muted-foreground font-medium">
+            <TableHead
+              className={cn(
+                d.statColW,
+                d.cellPadX,
+                d.headPadY,
+                d.headText,
+                'text-right font-display text-background tracking-widest border-t border-t-background/20'
+              )}
+            >
               {t.ranking.wins}
             </TableHead>
-            <TableHead className="sticky top-0 z-20 bg-card w-32 text-center text-sm text-muted-foreground font-medium">
-              {t.ranking.points}
+            <TableHead
+              className={cn(
+                d.pointsColW,
+                d.lastPadX,
+                d.headPadY,
+                d.headText,
+                'text-left font-display text-background tracking-widest border-t border-t-background/20'
+              )}
+            >
+              <span className="inline-flex items-center gap-1.5">
+                <span className="inline-block w-1 h-3 bg-accent" />
+                {t.ranking.points}
+              </span>
             </TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
           {rankings.map((ranking) => {
             const isTopThree = ranking.rank <= 3;
-            const badgeStyle = getRankBadgeStyles(ranking.rank);
-            
-            return (
-              <TableRow 
-                key={ranking.player_id}
-                className="transition-colors duration-200 border-b border-border/40 hover:bg-muted/30"
-              >
-                <TableCell className="text-center py-5">
-                  {badgeStyle ? (
-                    <div className={cn(
-                      "inline-flex items-center justify-center rounded-full font-display font-bold mx-auto",
-                      badgeStyle,
-                      "w-10 h-10 text-lg"
-                    )}>
-                      {ranking.rank}
-                    </div>
-                  ) : (
-                    <span className="text-base font-medium text-muted-foreground">
-                      {ranking.rank}
-                    </span>
-                  )}
-                </TableCell>
+            const isFirst = ranking.rank === 1;
+            const isSecond = ranking.rank === 2;
+            const isThird = ranking.rank === 3;
+            const rowPadY = isTopThree ? d.topRowPadY : d.rowPadY;
+            const pct = Math.min(100, Math.round((ranking.total_points / maxPoints) * 100));
+            const fillWidth = mounted ? `${pct}%` : '0%';
+            // The number sits at the bar's right edge; only use the fill's
+            // foreground color when the fill actually reaches under it.
+            const labelOnFill = pct >= 85;
 
-                <TableCell className="py-5">
-                  <div className="flex items-center gap-4">
-                    <button
-                      onClick={() => ranking.full_avatar_url && onAvatarClick?.(ranking.full_avatar_url, ranking.player_name)}
-                      disabled={!ranking.full_avatar_url}
+            const badgeRotate = isFirst
+              ? 'group-hover:rotate-6'
+              : isSecond
+              ? 'group-hover:-rotate-3'
+              : isThird
+              ? 'group-hover:rotate-12'
+              : '';
+
+            const topHoverShadow = isFirst
+              ? 'hover:shadow-[6px_6px_0_0_hsl(var(--accent))]'
+              : isSecond
+              ? 'hover:shadow-[6px_6px_0_0_hsl(var(--primary))]'
+              : isThird
+              ? 'hover:shadow-[6px_6px_0_0_hsl(var(--muted-foreground))]'
+              : '';
+
+            return (
+              <Fragment key={ranking.player_id}>
+                <TableRow
+                  className={cn(
+                    'group align-middle transition-all duration-200 border-b border-foreground/15 relative',
+                    isTopThree
+                      ? cn(
+                          'hover:-translate-y-0.5 hover:-translate-x-0.5',
+                          topHoverShadow,
+                          isFirst
+                            ? 'bg-accent/5 border-l-4 border-l-accent'
+                            : isSecond
+                            ? 'bg-primary/5 border-l-4 border-l-primary'
+                            : 'bg-muted/20 border-l-4 border-l-muted-foreground'
+                        )
+                      : 'hover:bg-muted/50'
+                  )}
+                >
+                  <TableCell className={cn(d.rankColW, d.firstPadX, rowPadY, 'text-center align-middle')}>
+                    {isTopThree ? (
+                      <div
+                        className={cn(
+                          'inline-flex items-center justify-center border-2 border-foreground rounded-lg font-display italic mx-auto shadow-[2px_2px_0_0_hsl(var(--foreground))] transition-transform duration-200',
+                          d.topRankBadge,
+                          badgeRotate,
+                          isFirst
+                            ? 'bg-accent text-accent-foreground'
+                            : isSecond
+                            ? 'bg-primary text-primary-foreground'
+                            : 'bg-card text-foreground'
+                        )}
+                      >
+                        {ranking.rank}
+                      </div>
+                    ) : (
+                      <span className={cn('font-display italic text-muted-foreground tabular-nums', d.text)}>
+                        {ranking.rank}
+                      </span>
+                    )}
+                  </TableCell>
+
+                  <TableCell className={cn(d.cellPadX, rowPadY, 'align-middle')}>
+                    <div className={cn('flex items-center min-w-0', d.gap)}>
+                      <button
+                        onClick={() =>
+                          ranking.full_avatar_url &&
+                          onAvatarClick?.(ranking.full_avatar_url, ranking.player_name)
+                        }
+                        disabled={!ranking.full_avatar_url}
+                        className={cn(
+                          'flex-shrink-0 overflow-hidden bg-muted transition-all duration-200 group-hover:scale-110',
+                          isTopThree
+                            ? cn(d.topAvatar, d.topAvatarRadius, 'border-2 border-foreground shadow-[2px_2px_0_0_hsl(var(--foreground))]')
+                            : cn(d.avatar, d.avatarRadius, 'border-2 border-foreground/60'),
+                          ranking.full_avatar_url && 'cursor-pointer'
+                        )}
+                      >
+                        {ranking.avatar_url ? (
+                          <img
+                            src={ranking.avatar_url}
+                            alt={ranking.player_name}
+                            className="w-full h-full object-cover"
+                            style={{
+                              objectPosition:
+                                ranking.avatar_crop_x !== null && ranking.avatar_crop_y !== null
+                                  ? `${(ranking.avatar_crop_x ?? 0.5) * 100}% ${(ranking.avatar_crop_y ?? 0.5) * 100}%`
+                                  : 'center',
+                            }}
+                          />
+                        ) : (
+                          <div className="w-full h-full flex items-center justify-center text-foreground text-xs font-black">
+                            {getInitials(ranking.player_name)}
+                          </div>
+                        )}
+                      </button>
+
+                      <div className="min-w-0">
+                        <div className="flex items-center gap-2.5 min-w-0">
+                          <p
+                            className={cn(
+                              'font-display text-foreground tracking-tight truncate transition-colors',
+                              isTopThree ? d.topNameText : d.nameText,
+                              isFirst && 'group-hover:text-accent',
+                              isSecond && 'group-hover:text-primary'
+                            )}
+                          >
+                            {ranking.player_name}
+                          </p>
+                          {getRankChangeDisplay(ranking)}
+                        </div>
+                      </div>
+
+                    </div>
+                  </TableCell>
+
+                  <TableCell className={cn(d.statColW, d.sessionsPadX, rowPadY, 'text-right align-middle')}>
+                    <p className={cn('font-display text-foreground tabular-nums', d.statText)}>
+                      {ranking.sessions_played}
+                    </p>
+                  </TableCell>
+
+                  <TableCell className={cn(d.statColW, d.cellPadX, rowPadY, 'text-right align-middle')}>
+                    <p className={cn('font-display text-foreground tabular-nums', d.statText)}>
+                      {ranking.championships}
+                    </p>
+                  </TableCell>
+
+                  <TableCell className={cn(d.pointsColW, d.lastPadX, rowPadY, 'align-middle')}>
+                    <div
                       className={cn(
-                        "flex-shrink-0 rounded-full overflow-hidden bg-muted border border-border/50 transition-all",
-                        isTopThree ? "w-14 h-14" : "w-11 h-11",
-                        ranking.full_avatar_url && "cursor-pointer hover:ring-2 hover:ring-primary/30"
+                        'relative w-full flex items-center justify-end overflow-hidden bg-muted/60 rounded-md',
+                        isTopThree
+                          ? cn('border-2 border-foreground', d.topBarH)
+                          : cn('border-2 border-foreground/40', d.barH)
                       )}
                     >
-                      {ranking.avatar_url ? (
-                        <img
-                          src={ranking.avatar_url}
-                          alt={ranking.player_name}
-                          className="w-full h-full object-cover"
-                          style={{
-                            objectPosition: ranking.avatar_crop_x !== null && ranking.avatar_crop_y !== null
-                              ? `${(ranking.avatar_crop_x ?? 0.5) * 100}% ${(ranking.avatar_crop_y ?? 0.5) * 100}%`
-                              : 'center'
-                          }}
-                        />
-                      ) : (
-                        <div className="w-full h-full flex items-center justify-center text-muted-foreground text-sm font-medium">
-                          {getInitials(ranking.player_name)}
-                        </div>
+                      <div
+                        className={cn(
+                          'absolute inset-y-0 left-0 transition-[width] duration-700 ease-out',
+                          isFirst
+                            ? 'bg-accent'
+                            : isSecond
+                            ? 'bg-primary'
+                            : isThird
+                            ? 'bg-muted-foreground/70'
+                            : 'bg-foreground/25'
+                        )}
+                        style={{ width: fillWidth }}
+                      />
+                      <span
+                        className={cn(
+                          'relative z-10 font-display tabular-nums',
+                          d.pointsText,
+                          isFirst ? 'pr-14' : 'pr-2.5',
+                          labelOnFill && isFirst
+                            ? 'text-accent-foreground'
+                            : labelOnFill && isSecond
+                            ? 'text-primary-foreground'
+                            : 'text-foreground'
+                        )}
+                      >
+                        {ranking.total_points}
+                      </span>
+                      {isFirst && (
+                        <span className="absolute right-1.5 top-1/2 -translate-y-1/2 z-10 bg-foreground text-accent text-[9px] font-black uppercase tracking-tighter px-1.5 py-0.5 leading-none">
+                          MAX
+                        </span>
                       )}
-                    </button>
-
-                    <div className="flex items-center gap-2">
-                      <p className={cn(
-                        "font-bold text-foreground",
-                        isTopThree ? "text-xl" : "text-lg"
-                      )}>
-                        {ranking.player_name}
-                      </p>
-                      {getRankChangeDisplay(ranking)}
                     </div>
-                  </div>
-                </TableCell>
+                  </TableCell>
+                </TableRow>
 
-                <TableCell className="text-center py-5">
-                  <p className={cn(
-                    "font-display font-bold text-foreground/60",
-                    isTopThree ? "text-lg" : "text-base"
-                  )}>
-                    {ranking.sessions_played}
-                  </p>
-                </TableCell>
-
-                <TableCell className="text-center py-5">
-                  <p className={cn(
-                    "font-display font-bold text-foreground/60",
-                    isTopThree ? "text-lg" : "text-base"
-                  )}>
-                    {ranking.championships}
-                  </p>
-                </TableCell>
-
-                <TableCell className="text-center py-5">
-                  <p className={cn(
-                    "font-display font-bold text-foreground",
-                    isTopThree ? "text-xl" : "text-lg"
-                  )}>
-                    {ranking.total_points}
-                  </p>
-                </TableCell>
-              </TableRow>
+                {ranking.rank <= 2 && (
+                  <TableRow className="border-0 hover:bg-transparent bg-transparent">
+                    <TableCell colSpan={5} className="p-0 border-0 align-middle">
+                      <div
+                        className={cn(
+                          'leader-separator',
+                          d.sepH,
+                          ranking.rank === 1 ? 'leader-separator-1' : 'leader-separator-2'
+                        )}
+                      />
+                    </TableCell>
+                  </TableRow>
+                )}
+              </Fragment>
             );
           })}
         </TableBody>
