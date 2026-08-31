@@ -37,12 +37,12 @@ export function LatestSessionPhoto() {
   }
 
   return (
-    <div className="relative -mt-px h-[clamp(26rem,52vw,48rem)] overflow-hidden">
+    <div className="relative -mt-px aspect-[4/3] w-full overflow-hidden">
       <img
         key={active.id}
         src={active.group_photo_url!}
         alt={active.name || (isZh ? '近期赛事合照' : 'Recent match group photo')}
-        className="hero-photo-image absolute inset-0 h-full w-full animate-fade-in object-cover object-[center_30%]"
+        className="hero-photo-image absolute inset-0 h-full w-full animate-fade-in object-cover object-center"
       />
       <div className="hero-photo-overlay absolute inset-0" />
 

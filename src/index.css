@@ -218,13 +218,13 @@
   }
 
   .hero-photo-image {
-    -webkit-mask-image: linear-gradient(to bottom, transparent 0%, black 24%, black 100%);
-    mask-image: linear-gradient(to bottom, transparent 0%, black 24%, black 100%);
+    -webkit-mask-image: linear-gradient(to bottom, transparent 0%, black 18%, black 100%);
+    mask-image: linear-gradient(to bottom, transparent 0%, black 18%, black 100%);
   }
 
   .hero-photo-overlay {
     background-image:
-      linear-gradient(to bottom, transparent 42%, hsl(var(--band-surface) / 0.18) 62%, hsl(var(--band-surface) / 0.96) 100%),
+      linear-gradient(to bottom, transparent 66%, hsl(var(--band-surface) / 0.14) 78%, hsl(var(--band-surface) / 0.92) 100%),
       linear-gradient(to right, hsl(var(--band-surface) / 0.2), transparent 38%, transparent 72%, hsl(var(--band-surface) / 0.12));
   }
 
