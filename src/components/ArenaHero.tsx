@@ -49,7 +49,7 @@ export function ArenaHero() {
           </div>
         </div>
 
-        <div className="mt-8 flex flex-wrap items-center gap-3 sm:mt-10">
+        <div className="mt-8 flex flex-wrap items-center gap-3 sm:mt-10 sm:-translate-y-8">
           <button
             type="button"
             onClick={scrollToRankings}
