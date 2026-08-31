@@ -10,7 +10,6 @@ import { useLanguage } from '@/contexts/LanguageContext';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { Trophy } from 'lucide-react';
 import { SectionHeading } from '@/components/SectionHeading';
-import { RosterSection } from '@/components/RosterSection';
 import { Reveal } from '@/components/Reveal';
 
 
@@ -34,8 +33,6 @@ export default function RankingPage() {
       <Header />
       
       <ArenaHero />
-
-      <RosterSection />
 
       <main id="rankings-anchor" className="container relative z-10 flex-1 py-12 scroll-mt-28 sm:py-16">
         <Reveal>
