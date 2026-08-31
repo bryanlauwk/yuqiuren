@@ -2,17 +2,19 @@ import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { useEffect } from "react";
+import { lazy, Suspense, useEffect } from "react";
 import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
 import { LanguageProvider } from "@/contexts/LanguageContext";
 import { ThemeProvider } from "@/contexts/ThemeContext";
+import { RankingsProvider } from "@/hooks/useRankings";
 
 import { ProtectedRoute } from "@/components/ProtectedRoute";
 import RankingPage from "./pages/RankingPage";
-import AdminRanking from "./pages/AdminRanking";
-import SessionHistoryPage from "./pages/SessionHistoryPage";
-import Auth from "./pages/Auth";
-import NotFound from "./pages/NotFound";
+
+const AdminRanking = lazy(() => import("./pages/AdminRanking"));
+const SessionHistoryPage = lazy(() => import("./pages/SessionHistoryPage"));
+const Auth = lazy(() => import("./pages/Auth"));
+const NotFound = lazy(() => import("./pages/NotFound"));
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -39,31 +41,43 @@ function HashScroll() {
   return null;
 }
 
+function RouteFallback() {
+  return (
+    <div className="grid min-h-[45dvh] place-items-center bg-background">
+      <div className="font-display text-2xl text-primary animate-pulse-arena">YUQIUREN</div>
+    </div>
+  );
+}
+
 const App = () => (
   <QueryClientProvider client={queryClient}>
     <ThemeProvider>
     <LanguageProvider>
-      <TooltipProvider>
-        <Toaster />
-        <Sonner position="top-center" />
-        <BrowserRouter>
-          <HashScroll />
-          <Routes>
-            <Route path="/" element={<RankingPage />} />
-            <Route path="/history" element={<SessionHistoryPage />} />
-            <Route 
-              path="/admin" 
-              element={
-                <ProtectedRoute requireAdmin>
-                  <AdminRanking />
-                </ProtectedRoute>
-              } 
-            />
-            <Route path="/auth" element={<Auth />} />
-            <Route path="*" element={<NotFound />} />
-          </Routes>
-        </BrowserRouter>
-      </TooltipProvider>
+      <RankingsProvider>
+        <TooltipProvider>
+          <Toaster />
+          <Sonner position="top-center" />
+          <BrowserRouter>
+            <HashScroll />
+            <Suspense fallback={<RouteFallback />}>
+              <Routes>
+                <Route path="/" element={<RankingPage />} />
+                <Route path="/history" element={<SessionHistoryPage />} />
+                <Route
+                  path="/admin"
+                  element={
+                    <ProtectedRoute requireAdmin>
+                      <AdminRanking />
+                    </ProtectedRoute>
+                  }
+                />
+                <Route path="/auth" element={<Auth />} />
+                <Route path="*" element={<NotFound />} />
+              </Routes>
+            </Suspense>
+          </BrowserRouter>
+        </TooltipProvider>
+      </RankingsProvider>
     </LanguageProvider>
     </ThemeProvider>
   </QueryClientProvider>

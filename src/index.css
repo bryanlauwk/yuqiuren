@@ -177,15 +177,19 @@
     @apply bg-background text-foreground font-sans antialiased;
   }
 
+  html {
+    scroll-behavior: smooth;
+  }
+
   .font-condensed {
-    font-family: 'Anton', 'Archivo', system-ui, sans-serif;
+    font-family: 'Anton', system-ui, sans-serif;
     font-weight: 400;
     letter-spacing: 0.005em;
     text-transform: uppercase;
   }
 
   .font-display {
-    font-family: 'Anton', 'Archivo', 'Plus Jakarta Sans', system-ui, sans-serif;
+    font-family: 'Anton', 'Plus Jakarta Sans', system-ui, sans-serif;
     font-weight: 400;
     letter-spacing: 0;
     text-transform: uppercase;
@@ -317,6 +321,51 @@
     opacity: 0;
   }
 
+  @keyframes bar-grow {
+    from { transform: scaleX(0); }
+    to { transform: scaleX(1); }
+  }
+
+  .animate-bar-grow {
+    animation: bar-grow 0.75s cubic-bezier(0.22, 1, 0.36, 1) both;
+  }
+
+  .reveal-section {
+    opacity: 0;
+    transform: translateY(28px);
+    transition:
+      opacity 0.65s cubic-bezier(0.22, 1, 0.36, 1),
+      transform 0.65s cubic-bezier(0.22, 1, 0.36, 1);
+    transition-delay: var(--reveal-delay, 0ms);
+  }
+
+  .reveal-section.is-visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .player-card {
+    perspective: 1200px;
+  }
+
+  .player-card-inner {
+    transform-style: preserve-3d;
+    transition: transform 0.55s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  .player-card[data-flipped="true"] .player-card-inner {
+    transform: rotateY(180deg);
+  }
+
+  .player-card-face {
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+  }
+
+  .player-card-back {
+    transform: rotateY(180deg);
+  }
+
   /* Loading pulse */
   @keyframes pulse-arena {
     0%, 100% { opacity: 0.4; }
@@ -359,5 +408,25 @@
       hsl(var(--leader-sep-2-via)  / var(--leader-sep-2-via-alpha))  50%,
       hsl(var(--leader-sep-2-to)   / var(--leader-sep-2-to-alpha))   100%
     );
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+  }
+
+  .reveal-section {
+    opacity: 1;
+    transform: none;
   }
 }

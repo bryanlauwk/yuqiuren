@@ -79,14 +79,14 @@ export function PhotoLightbox({
     });
   };
 
-  const handleDoubleClick = () => {
+  const handleDoubleClick = useCallback(() => {
     if (scale > 1) {
       setScale(1);
       setPosition({ x: 0, y: 0 });
     } else {
       setScale(2.5);
     }
-  };
+  }, [scale]);
 
   // Double tap detection for mobile
   const handleTap = useCallback(() => {
@@ -95,7 +95,7 @@ export function PhotoLightbox({
       handleDoubleClick();
     }
     setLastTap(now);
-  }, [lastTap, scale]);
+  }, [handleDoubleClick, lastTap]);
 
   // Mouse drag handlers
   const handleMouseDown = (e: React.MouseEvent) => {

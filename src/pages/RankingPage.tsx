@@ -10,6 +10,8 @@ import { useLanguage } from '@/contexts/LanguageContext';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { Trophy } from 'lucide-react';
 import { SectionHeading } from '@/components/SectionHeading';
+import { RosterSection } from '@/components/RosterSection';
+import { Reveal } from '@/components/Reveal';
 
 
 export default function RankingPage() {
@@ -33,13 +35,16 @@ export default function RankingPage() {
       
       <ArenaHero />
 
+      <RosterSection />
+
       <main id="rankings-anchor" className="container relative z-10 flex-1 py-12 scroll-mt-28 sm:py-16">
-        <SectionHeading
-          kicker="LEAGUE TABLE · 2026 SEASON"
-          title={language === 'zh' ? '联赛积分榜' : 'League Standings'}
-          className="mb-8 border-b-2 border-foreground pb-5"
-        />
-        {loading ? (
+        <Reveal>
+          <SectionHeading
+            kicker="LEAGUE TABLE · 2026 SEASON"
+            title={language === 'zh' ? '联赛积分榜' : 'League Standings'}
+            className="mb-8 border-b-2 border-foreground pb-5"
+          />
+          {loading ? (
           <div className="space-y-2">
             {[...Array(8)].map((_, i) => (
               <div
@@ -60,7 +65,7 @@ export default function RankingPage() {
             {isMobile ? (
               <div>
                 {/* Sticky column legend — never lose track of what you're reading */}
-                <div className="sticky top-16 z-20 -mx-4 px-4 py-2 bg-background/95 backdrop-blur border-b-2 border-foreground flex items-center gap-3">
+                <div className="sticky top-[97px] z-20 -mx-4 px-4 py-2 bg-background/95 backdrop-blur border-b-2 border-foreground flex items-center gap-3">
                   <span className="w-12 text-[10px] font-black uppercase tracking-wider text-foreground/50">
                     #
                   </span>
@@ -99,7 +104,8 @@ export default function RankingPage() {
               </div>
             )}
           </>
-        )}
+          )}
+        </Reveal>
       </main>
 
       <Footer />

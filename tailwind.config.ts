@@ -24,8 +24,8 @@ export default {
     extend: {
       fontFamily: {
         sans: ['Plus Jakarta Sans', 'Inter', 'system-ui', 'sans-serif'],
-        display: ['Anton', 'Archivo', 'Plus Jakarta Sans', 'system-ui', 'sans-serif'],
-        condensed: ['Anton', 'Archivo', 'system-ui', 'sans-serif'],
+        display: ['Anton', 'Plus Jakarta Sans', 'system-ui', 'sans-serif'],
+        condensed: ['Anton', 'system-ui', 'sans-serif'],
       },
       colors: {
         border: "hsl(var(--border))",

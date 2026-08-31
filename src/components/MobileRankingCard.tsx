@@ -1,7 +1,9 @@
-import { useEffect, useState } from 'react';
-import { ArrowUp, ArrowDown, Minus, ChevronDown, Sparkles } from 'lucide-react';
+import { useState } from 'react';
+import { ChevronDown } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useLanguage } from '@/contexts/LanguageContext';
+import { getAveragePoints, getInitials, getWinRate } from '@/lib/ranking-display';
+import { RankDelta } from '@/components/RankDelta';
 
 import type { PlayerRanking } from '@/types/ranking';
 
@@ -15,58 +17,14 @@ export function MobileRankingCard({ ranking, maxPoints, onAvatarClick }: MobileR
   const { t } = useLanguage();
   const [expanded, setExpanded] = useState(false);
 
-  const [mounted, setMounted] = useState(false);
-  useEffect(() => {
-    const id = window.setTimeout(() => setMounted(true), 120);
-    return () => window.clearTimeout(id);
-  }, []);
-
   const isTopThree = ranking.rank <= 3;
   const isFirst = ranking.rank === 1;
   const isSecond = ranking.rank === 2;
   const isThird = ranking.rank === 3;
 
   const pct = Math.min(100, Math.round((ranking.total_points / Math.max(maxPoints, 1)) * 100));
-  const fillWidth = mounted ? `${pct}%` : '0%';
-
-  const winRate =
-    ranking.sessions_played > 0
-      ? Math.round((ranking.championships / ranking.sessions_played) * 100)
-      : 0;
-  const avgPoints =
-    ranking.sessions_played > 0
-      ? (ranking.total_points / ranking.sessions_played).toFixed(1)
-      : '0.0';
-
-  const getInitials = (name: string) =>
-    name.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2);
-
-  const getRankChangeDisplay = () => {
-    if (ranking.rank_change > 0) {
-      return (
-        <div className="flex items-center gap-0.5 text-finished">
-          <ArrowUp className="w-3.5 h-3.5" strokeWidth={3} />
-          <span className="text-xs font-black">{ranking.rank_change}</span>
-        </div>
-      );
-    }
-    if (ranking.rank_change < 0) {
-      return (
-        <div className="flex items-center gap-0.5 text-destructive">
-          <ArrowDown className="w-3.5 h-3.5" strokeWidth={3} />
-          <span className="text-xs font-black">{Math.abs(ranking.rank_change)}</span>
-        </div>
-      );
-    }
-    if (ranking.is_new) {
-      return <Sparkles className="w-3.5 h-3.5 text-accent" strokeWidth={3} />;
-    }
-    return (
-      <div className="flex items-center text-muted-foreground">
-        <Minus className="w-3.5 h-3.5" strokeWidth={3} />
-      </div>
-    );
-  };
+  const winRate = getWinRate(ranking);
+  const avgPoints = getAveragePoints(ranking);
 
   const accentBorder = isFirst
     ? 'border-l-[6px] border-l-accent'
@@ -141,14 +99,14 @@ export function MobileRankingCard({ ranking, maxPoints, onAvatarClick }: MobileR
               >
                 {ranking.player_name}
               </p>
-              {getRankChangeDisplay()}
+              <RankDelta ranking={ranking} />
             </div>
 
             {/* Points bar — the one metric that always shows */}
             <div className="mt-1.5 relative h-2 rounded-full bg-muted/70 overflow-hidden">
               <div
-                className={cn('absolute inset-y-0 left-0 transition-[width] duration-700 ease-out', barFill)}
-                style={{ width: fillWidth }}
+                className={cn('absolute inset-y-0 left-0 origin-left animate-bar-grow', barFill)}
+                style={{ width: `${pct}%` }}
               />
             </div>
           </div>
@@ -200,6 +158,7 @@ export function MobileRankingCard({ ranking, maxPoints, onAvatarClick }: MobileR
                   <img
                     src={ranking.avatar_url}
                     alt={ranking.player_name}
+                    loading="lazy"
                     className="w-full h-full object-cover"
                     style={{
                       objectPosition:

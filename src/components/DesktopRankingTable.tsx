@@ -1,7 +1,8 @@
-import { Fragment, useEffect, useState } from 'react';
-import { ArrowUp, ArrowDown, Minus } from 'lucide-react';
+import { Fragment } from 'react';
 import { cn } from '@/lib/utils';
 import { useLanguage } from '@/contexts/LanguageContext';
+import { getInitials } from '@/lib/ranking-display';
+import { RankDelta } from '@/components/RankDelta';
 
 import type { PlayerRanking } from '@/types/ranking';
 import {
@@ -22,14 +23,7 @@ export function DesktopRankingTable({
   rankings,
   onAvatarClick,
 }: DesktopRankingTableProps) {
-  const { t } = useLanguage();
-
-  // Trigger points-bar fill animation after mount.
-  const [mounted, setMounted] = useState(false);
-  useEffect(() => {
-    const id = window.setTimeout(() => setMounted(true), 120);
-    return () => window.clearTimeout(id);
-  }, []);
+  const { t, language } = useLanguage();
 
   const maxPoints = Math.max(rankings[0]?.total_points ?? 0, 1);
 
@@ -50,7 +44,7 @@ export function DesktopRankingTable({
     topAvatarRadius: 'rounded-xl',
     rankBadge: 'w-9 h-9 text-lg',
     topRankBadge: 'w-12 h-12 text-lg',
-    text: 'text-lg',
+    text: 'text-2xl',
     nameText: 'text-lg',
     topNameText: 'text-xl',
     statText: 'text-lg font-black',
@@ -60,36 +54,6 @@ export function DesktopRankingTable({
     sepH: 'h-1.5',
     barH: 'h-10',
     topBarH: 'h-10',
-  };
-
-  const getInitials = (name: string) =>
-    name.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2);
-
-  const getRankChangeDisplay = (ranking: PlayerRanking) => {
-    if (ranking.rank_change > 0) {
-      return (
-        <div className="flex items-center gap-0.5 text-finished">
-          <ArrowUp className="w-3.5 h-3.5" strokeWidth={3} />
-          <span className="text-xs font-black">{ranking.rank_change}</span>
-        </div>
-      );
-    }
-    if (ranking.rank_change < 0) {
-      return (
-        <div className="flex items-center gap-0.5 text-destructive">
-          <ArrowDown className="w-3.5 h-3.5" strokeWidth={3} />
-          <span className="text-xs font-black">{Math.abs(ranking.rank_change)}</span>
-        </div>
-      );
-    }
-    if (!ranking.is_new) {
-      return (
-        <div className="flex items-center text-muted-foreground">
-          <Minus className="w-3.5 h-3.5" strokeWidth={3} />
-        </div>
-      );
-    }
-    return null;
   };
 
   return (
@@ -103,20 +67,20 @@ export function DesktopRankingTable({
                 d.firstPadX,
                 d.headPadY,
                 d.headText,
-                'text-center font-display italic text-background tracking-[0.2em] border-t border-t-background/20'
+                'text-center text-background border-t border-t-background/20'
               )}
             >
-              #
+              <HeaderLabel kicker={language === 'zh' ? '名次' : 'POS'} label="#" align="center" />
             </TableHead>
             <TableHead
               className={cn(
                 d.cellPadX,
                 d.headPadY,
                 d.headText,
-                'text-left font-display text-background tracking-widest border-t border-t-background/20'
+                'text-left text-background border-t border-t-background/20'
               )}
             >
-              {t.ranking.player}
+              <HeaderLabel kicker={language === 'zh' ? '球员资料' : 'PLAYER'} label={t.ranking.player} />
             </TableHead>
             <TableHead
               className={cn(
@@ -124,10 +88,10 @@ export function DesktopRankingTable({
                 d.sessionsPadX,
                 d.headPadY,
                 d.headText,
-                'text-right font-display text-background tracking-widest border-t border-t-background/20'
+                'text-right text-background border-t border-t-background/20'
               )}
             >
-              {t.ranking.sessions}
+              <HeaderLabel kicker={language === 'zh' ? '出赛' : 'PLAYED'} label={t.ranking.sessions} align="right" />
             </TableHead>
             <TableHead
               className={cn(
@@ -135,10 +99,10 @@ export function DesktopRankingTable({
                 d.cellPadX,
                 d.headPadY,
                 d.headText,
-                'text-right font-display text-background tracking-widest border-t border-t-background/20'
+                'text-right text-background border-t border-t-background/20'
               )}
             >
-              {t.ranking.wins}
+              <HeaderLabel kicker={language === 'zh' ? '冠军' : 'WINS'} label={t.ranking.wins} align="right" />
             </TableHead>
             <TableHead
               className={cn(
@@ -146,13 +110,10 @@ export function DesktopRankingTable({
                 d.lastPadX,
                 d.headPadY,
                 d.headText,
-                'text-left font-display text-background tracking-widest border-t border-t-background/20'
+                'text-left text-background border-t border-t-background/20'
               )}
             >
-              <span className="inline-flex items-center gap-1.5">
-                <span className="inline-block w-1 h-3 bg-accent" />
-                {t.ranking.points}
-              </span>
+              <HeaderLabel kicker={language === 'zh' ? '赛季累计' : 'SEASON TOTAL'} label={t.ranking.points} accent />
             </TableHead>
           </TableRow>
         </TableHeader>
@@ -164,7 +125,6 @@ export function DesktopRankingTable({
             const isThird = ranking.rank === 3;
             const rowPadY = isTopThree ? d.topRowPadY : d.rowPadY;
             const pct = Math.min(100, Math.round((ranking.total_points / maxPoints) * 100));
-            const fillWidth = mounted ? `${pct}%` : '0%';
             // The number sits at the bar's right edge; only use the fill's
             // foreground color when the fill actually reaches under it.
             const labelOnFill = pct >= 85;
@@ -246,6 +206,7 @@ export function DesktopRankingTable({
                           <img
                             src={ranking.avatar_url}
                             alt={ranking.player_name}
+                            loading="lazy"
                             className="w-full h-full object-cover"
                             style={{
                               objectPosition:
@@ -273,7 +234,7 @@ export function DesktopRankingTable({
                           >
                             {ranking.player_name}
                           </p>
-                          {getRankChangeDisplay(ranking)}
+                          <RankDelta ranking={ranking} />
                         </div>
                       </div>
 
@@ -303,7 +264,7 @@ export function DesktopRankingTable({
                     >
                       <div
                         className={cn(
-                          'absolute inset-y-0 left-0 transition-[width] duration-700 ease-out',
+                          'absolute inset-y-0 left-0 origin-left animate-bar-grow',
                           isFirst
                             ? 'bg-accent'
                             : isSecond
@@ -312,7 +273,7 @@ export function DesktopRankingTable({
                             ? 'bg-muted-foreground/70'
                             : 'bg-foreground/25'
                         )}
-                        style={{ width: fillWidth }}
+                        style={{ width: `${pct}%` }}
                       />
                       <span
                         className={cn(
@@ -356,5 +317,28 @@ export function DesktopRankingTable({
         </TableBody>
       </Table>
     </div>
+  );
+}
+
+function HeaderLabel({
+  kicker,
+  label,
+  align = 'left',
+  accent = false,
+}: {
+  kicker: string;
+  label: string;
+  align?: 'left' | 'center' | 'right';
+  accent?: boolean;
+}) {
+  return (
+    <span className={cn('block leading-none', align === 'center' && 'text-center', align === 'right' && 'text-right')}>
+      <span className="mb-1 block font-sans text-[7px] font-black uppercase tracking-[0.18em] text-background/50">
+        {kicker}
+      </span>
+      <span className={cn('font-display text-sm tracking-wide text-background', accent && 'text-accent')}>
+        {label}
+      </span>
+    </span>
   );
 }

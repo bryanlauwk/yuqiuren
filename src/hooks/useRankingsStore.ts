@@ -2,7 +2,7 @@ import { useState, useEffect, useMemo } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import type { Player, TournamentSession, SessionResult, PlayerRanking, SessionType, ResultType } from '@/types/ranking';
 
-export function useRankings() {
+export function useRankingsStore() {
   const [players, setPlayers] = useState<Player[]>([]);
   const [sessions, setSessions] = useState<TournamentSession[]>([]);
   const [results, setResults] = useState<SessionResult[]>([]);

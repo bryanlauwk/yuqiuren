@@ -19,8 +19,24 @@ export default tseslint.config(
     },
     rules: {
       ...reactHooks.configs.recommended.rules,
+      // React Compiler is not enabled in this app. Keep the core Hooks rules,
+      // but defer compiler-specific purity constraints until that migration.
+      "react-hooks/immutability": "off",
+      "react-hooks/purity": "off",
+      "react-hooks/refs": "off",
+      "react-hooks/set-state-in-effect": "off",
       "react-refresh/only-export-components": ["warn", { allowConstantExport: true }],
       "@typescript-eslint/no-unused-vars": "off",
+    },
+  },
+  {
+    files: [
+      "src/components/ui/**/*.{ts,tsx}",
+      "src/contexts/**/*.{ts,tsx}",
+      "src/hooks/useRankings.tsx",
+    ],
+    rules: {
+      "react-refresh/only-export-components": "off",
     },
   },
 );

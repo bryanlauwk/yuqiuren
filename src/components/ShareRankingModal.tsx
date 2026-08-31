@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
 import { Progress } from '@/components/ui/progress';
@@ -24,14 +24,7 @@ export function ShareRankingModal({ open, onClose, rankings }: ShareRankingModal
 
   const brandName = language === 'zh' ? '羽球人联赛' : 'Badminton League';
 
-  // Generate image when modal opens
-  useEffect(() => {
-    if (open && !imageUrl && rankings.length > 0) {
-      generateImage();
-    }
-  }, [open, rankings]);
-
-  const generateImage = async () => {
+  const generateImage = useCallback(async () => {
     if (rankings.length === 0) return;
     
     setIsGenerating(true);
@@ -82,7 +75,14 @@ export function ShareRankingModal({ open, onClose, rankings }: ShareRankingModal
       clearInterval(progressInterval);
       setIsGenerating(false);
     }
-  };
+  }, [language, rankings]);
+
+  // Generate image when modal opens
+  useEffect(() => {
+    if (open && !imageUrl && rankings.length > 0) {
+      generateImage();
+    }
+  }, [generateImage, imageUrl, open, rankings.length]);
 
   const handleDownload = () => {
     if (!imageUrl) return;
