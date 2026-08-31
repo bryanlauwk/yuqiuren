@@ -1,4 +1,5 @@
 import type { Config } from "tailwindcss";
+import tailwindcssAnimate from "tailwindcss-animate";
 
 export default {
   darkMode: ["class"],
@@ -23,7 +24,8 @@ export default {
     extend: {
       fontFamily: {
         sans: ['Plus Jakarta Sans', 'Inter', 'system-ui', 'sans-serif'],
-        display: ['Plus Jakarta Sans', 'Inter', 'system-ui', 'sans-serif'],
+        display: ['Anton', 'Archivo', 'Plus Jakarta Sans', 'system-ui', 'sans-serif'],
+        condensed: ['Anton', 'Archivo', 'system-ui', 'sans-serif'],
       },
       colors: {
         border: "hsl(var(--border))",
@@ -79,12 +81,24 @@ export default {
         "rank-gold": "hsl(var(--rank-gold))",
         "rank-silver": "hsl(var(--rank-silver))",
         "rank-bronze": "hsl(var(--rank-bronze))",
-        "arena-red": "hsl(var(--arena-red))",
-        "arena-green": "hsl(var(--arena-green))",
+        "arena-blue": "hsl(var(--arena-blue))",
+        "arena-cyan": "hsl(var(--arena-cyan))",
         "arena-gold": "hsl(var(--arena-gold))",
         champion: "hsl(var(--champion))",
         "runner-up": "hsl(var(--runner-up))",
         attendance: "hsl(var(--attendance))",
+        // Gamified tiers
+        tier: {
+          legend: "hsl(var(--tier-legend))",
+          master: "hsl(var(--tier-master))",
+          diamond: "hsl(var(--tier-diamond))",
+          platinum: "hsl(var(--tier-platinum))",
+          gold: "hsl(var(--tier-gold))",
+        },
+      },
+      boxShadow: {
+        "glow-primary": "var(--glow-primary)",
+        "glow-accent": "var(--glow-accent)",
       },
       borderRadius: {
         lg: "var(--radius)",
@@ -120,5 +134,5 @@ export default {
       },
     },
   },
-  plugins: [require("tailwindcss-animate")],
+  plugins: [tailwindcssAnimate],
 } satisfies Config;
