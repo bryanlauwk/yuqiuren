@@ -37,7 +37,7 @@ export function LatestSessionPhoto() {
   }
 
   return (
-    <div className="relative -mt-px aspect-[4/3] w-full overflow-hidden">
+    <div className="relative -mt-16 aspect-[4/3] w-full overflow-hidden sm:-mt-24 lg:-mt-32">
       <img
         key={active.id}
         src={active.group_photo_url!}
