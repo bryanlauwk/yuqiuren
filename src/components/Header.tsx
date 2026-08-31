@@ -1,25 +1,23 @@
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { cn } from '@/lib/utils';
-import { Medal, Shield, LogOut, History } from 'lucide-react';
+import { LogOut, Shield } from 'lucide-react';
 import { useAuth } from '@/hooks/useAuth';
-import { Button } from '@/components/ui/button';
+import { useLanguage } from '@/contexts/LanguageContext';
 import { LanguageSwitcher } from '@/components/LanguageSwitcher';
 import { ThemeToggle } from '@/components/ThemeToggle';
-
-
-import { useLanguage } from '@/contexts/LanguageContext';
+import { cn } from '@/lib/utils';
 
 export function Header() {
-  const location = useLocation();
+  const { pathname, hash } = useLocation();
   const navigate = useNavigate();
-  const currentPath = location.pathname;
   const { user, isAdmin, signOut } = useAuth();
-  const { t } = useLanguage();
+  const { language } = useLanguage();
+  const isZh = language === 'zh';
 
   const navItems = [
-    { path: '/', label: t.header.rankings, icon: Medal },
-    { path: '/history', label: t.header.sessionHistory, icon: History },
-    { path: '/admin', label: t.header.admin, icon: Shield, requiresAuth: true },
+    { to: '/#rankings-anchor', label: isZh ? '排行榜' : 'Rankings', active: pathname === '/' && hash !== '#about' },
+    { to: '/history', label: isZh ? '赛事纪录' : 'Matches', active: pathname === '/history' && hash !== '#highlights' },
+    { to: '/history#highlights', label: isZh ? '精彩片段' : 'Highlights', active: pathname === '/history' && hash === '#highlights' },
+    { to: '/#about', label: isZh ? '关于' : 'About', active: pathname === '/' && hash === '#about' },
   ];
 
   const handleSignOut = async () => {
@@ -28,62 +26,62 @@ export function Header() {
   };
 
   return (
-    <header className="sticky top-0 z-50 bg-background border-b-2 border-foreground">
-      <div className="container flex items-center justify-between h-16 sm:h-20">
-        <Link to="/" className="flex items-center gap-2.5 group">
-          {/* Heritage monogram — circle crest with italic Y + red sash */}
-          <div className="relative w-10 h-10 sm:w-11 sm:h-11 rounded-full border-[3px] border-primary bg-background flex items-center justify-center overflow-hidden shrink-0">
-            <span
-              className="text-primary text-[22px] sm:text-2xl font-black italic leading-none pr-[2px] mt-1 font-serif"
-              aria-hidden
-            >
+    <header className="sticky top-0 z-50 border-b-2 border-foreground bg-background/95 backdrop-blur-xl">
+      <div className="container grid min-h-16 grid-cols-[1fr_auto] items-center gap-4 md:min-h-20 md:grid-cols-[1fr_auto_1fr]">
+        <Link to="/" className="group flex w-fit items-center gap-3" aria-label={isZh ? '羽球人首页' : 'YuQiuRen home'}>
+          <div className="relative grid h-10 w-10 shrink-0 place-items-center overflow-hidden rounded-full border-[3px] border-primary bg-background sm:h-11 sm:w-11">
+            <span className="pr-[2px] pt-1 font-serif text-[22px] font-black italic leading-none text-primary sm:text-2xl" aria-hidden>
               Y
             </span>
-            <div className="absolute left-1/2 top-1/2 w-[150%] h-[2.5px] bg-accent -translate-x-1/2 -translate-y-1/2 -rotate-45" />
+            <div className="absolute left-1/2 top-1/2 h-[2.5px] w-[150%] -translate-x-1/2 -translate-y-1/2 -rotate-45 bg-accent" />
           </div>
-          <span className="font-display text-lg sm:text-xl text-foreground tracking-tight hidden xs:inline">
-            羽球人
-          </span>
+          <div className="leading-none">
+            <span className="block font-display text-xl tracking-tight text-foreground sm:text-2xl">羽球人</span>
+            <span className="hidden font-sans text-[8px] font-black uppercase tracking-[0.26em] text-muted-foreground sm:block">
+              Badminton League
+            </span>
+          </div>
         </Link>
 
-        <nav className="flex items-center gap-1 sm:gap-2">
-          {navItems.map(({ path, label, icon: Icon, requiresAuth }) => {
-            if (requiresAuth && !isAdmin) return null;
-            const active = currentPath === path;
+        <nav className="order-3 col-span-2 flex items-center overflow-x-auto border-t border-border md:order-none md:col-span-1 md:border-0" aria-label={isZh ? '主导航' : 'Main navigation'}>
+          {navItems.map((item) => (
+            <Link
+              key={item.to}
+              to={item.to}
+              className={cn(
+                'relative shrink-0 px-3 py-3 font-sans text-[10px] font-black uppercase tracking-[0.15em] text-foreground transition-colors sm:px-4 md:py-7 md:text-xs',
+                'after:absolute after:inset-x-3 after:bottom-1 after:h-[3px] after:origin-left after:bg-accent after:transition-transform md:after:bottom-4',
+                item.active ? 'after:scale-x-100' : 'after:scale-x-0 hover:text-primary hover:after:scale-x-100',
+              )}
+            >
+              {item.label}
+            </Link>
+          ))}
+        </nav>
 
-            return (
-              <Link
-                key={path}
-                to={path}
-                className={cn(
-                  'px-3 sm:px-4 py-2 rounded text-sm font-bold uppercase tracking-wide transition-all flex items-center gap-2 border-2',
-                  active
-                    ? 'bg-primary text-primary-foreground border-foreground shadow-[3px_3px_0_0_hsl(var(--foreground))]'
-                    : 'bg-transparent text-foreground border-transparent hover:border-foreground hover:bg-muted'
-                )}
-              >
-                <Icon className="w-4 h-4" />
-                <span className="hidden sm:inline">{label}</span>
-              </Link>
-            );
-          })}
-
+        <div className="flex items-center justify-end gap-1">
+          {isAdmin && (
+            <Link
+              to="/admin"
+              aria-label={isZh ? '管理后台' : 'Admin'}
+              className="grid h-9 w-9 place-items-center text-foreground transition-colors hover:bg-muted hover:text-primary"
+            >
+              <Shield className="h-4 w-4" />
+            </Link>
+          )}
           <LanguageSwitcher />
           <ThemeToggle />
-
-
           {user && isAdmin && (
-            <Button
-              variant="ghost"
-              size="sm"
+            <button
+              type="button"
               onClick={handleSignOut}
-              className="text-foreground hover:text-destructive ml-1 sm:ml-2"
+              aria-label={isZh ? '退出登录' : 'Sign out'}
+              className="grid h-9 w-9 place-items-center text-foreground transition-colors hover:bg-muted hover:text-destructive"
             >
-              <LogOut className="w-4 h-4" />
-              <span className="hidden sm:inline ml-2">{t.header.signOut}</span>
-            </Button>
+              <LogOut className="h-4 w-4" />
+            </button>
           )}
-        </nav>
+        </div>
       </div>
     </header>
   );

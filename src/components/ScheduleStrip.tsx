@@ -25,7 +25,7 @@ export function ScheduleStrip() {
         {[...Array(4)].map((_, i) => (
           <div
             key={i}
-            className="h-[86px] w-[190px] shrink-0 rounded-lg bg-[hsl(var(--band-foreground))]/10 animate-pulse-arena"
+            className="h-[86px] w-[190px] shrink-0 border-l-2 border-accent bg-[hsl(var(--band-foreground))]/10 animate-pulse-arena"
           />
         ))}
       </div>
@@ -40,7 +40,7 @@ export function ScheduleStrip() {
         <Link
           key={s.id}
           to="/history"
-          className="group snap-start shrink-0 w-[200px] rounded-lg border border-[hsl(var(--band-foreground))]/25 bg-[hsl(var(--band-foreground))]/10 backdrop-blur-sm px-4 py-3 transition-colors hover:bg-[hsl(var(--band-foreground))]/20"
+          className="group snap-start shrink-0 w-[200px] border border-[hsl(var(--band-foreground))]/25 border-l-2 border-l-accent bg-[hsl(var(--band-foreground))]/10 backdrop-blur-sm px-4 py-3 transition-all hover:-translate-y-0.5 hover:bg-[hsl(var(--band-foreground))]/20"
         >
           <div className="font-display text-[10px] tracking-[0.2em] band-fg opacity-70 mb-1">
             {i === 0 ? (language === 'zh' ? '最近场次' : 'LATEST') : language === 'zh' ? '场次' : 'SESSION'}

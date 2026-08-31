@@ -73,6 +73,7 @@
     --band-via: 222 100% 42%;
     --band-to: 150 60% 42%;
     --band-foreground: 0 0% 100%;
+    --band-surface: 224 72% 16%;
 
     --sidebar-background: 0 0% 100%;
     --sidebar-foreground: 225 45% 10%;
@@ -147,6 +148,7 @@
     --band-via: 222 90% 26%;
     --band-to: 150 70% 30%;
     --band-foreground: 0 0% 100%;
+    --band-surface: 225 58% 7%;
 
     --leader-sep-2-to: 222 100% 59%;
     --leader-sep-2-from-alpha: 0.65;
@@ -183,9 +185,9 @@
   }
 
   .font-display {
-    font-family: 'Archivo', 'Plus Jakarta Sans', system-ui, sans-serif;
-    font-weight: 900;
-    letter-spacing: -0.03em;
+    font-family: 'Anton', 'Archivo', 'Plus Jakarta Sans', system-ui, sans-serif;
+    font-weight: 400;
+    letter-spacing: 0;
     text-transform: uppercase;
   }
 }
@@ -204,6 +206,20 @@
 
   .band-fg {
     color: hsl(var(--band-foreground));
+  }
+
+  .brand-surface {
+    background-color: hsl(var(--band-surface));
+    color: hsl(var(--band-foreground));
+  }
+
+  .brand-photo-overlay {
+    background-image: linear-gradient(
+      to top,
+      hsl(var(--band-surface) / 0.94) 0%,
+      hsl(var(--band-surface) / 0.22) 52%,
+      transparent 100%
+    );
   }
 
   .no-scrollbar {
