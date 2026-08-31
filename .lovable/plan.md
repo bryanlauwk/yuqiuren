@@ -1,39 +1,47 @@
-## 合照卡片升级：悬停质感 + 多场轮播
+# 向「职业联赛官网」风格渐进转型
 
-### 移除
-- 顶部标签条（"最新赛事合照 / LATEST MATCH PHOTO" + LIVE 指示）— 冗余
+参考 thelamaddrops.com（美国职业匹克球联赛 LA Mad Drops 官网）的观感：宽屏品牌横幅、超大压缩体全大写标题、抠图球员照片、点击展开的「球员名片 → 数据面板」、赛程条、大色块分区。
 
-### 桌面版悬停动效（质感提升）
-- 静态阴影：`shadow-[8px_8px_0_0_hsl(var(--accent))]`
-- 悬停时：
-  - 阴影加深并抬升 → `hover:shadow-[12px_12px_0_0_hsl(var(--accent))]`
-  - 卡片轻微上浮 + 旋转归零 → `hover:-translate-y-1 hover:rotate-0`
-  - 图片轻微 zoom → `img` 用 `group-hover:scale-[1.03]`
-- 过渡：`transition-all duration-300 ease-out`
-- 保留 scroll-driven rotate/translateY 作为基础 transform（悬停时用 CSS 覆盖）
+目标是把「羽球人」从数据表格网站，升级成一支「球队官网」的感觉，同时保留现有排行榜/场次纪录/精彩片段等功能。分阶段推进，每阶段可独立验收。
 
-### 多场轮播（核心新增）
-选取最近 6 场有 `group_photo_url` 的场次：
+## 阶段一：品牌与排版基调（视觉地基）
 
-**移动端**：水平滚动条（swipe）
-- `flex overflow-x-auto snap-x snap-mandatory` 
-- 每张卡片 `w-[280px] shrink-0 snap-center`
-- 隐藏滚动条（`scrollbar-hide` 或内联 CSS）
+- 引入压缩体大写显示字型（Anton / Archivo Black 类）用于标题、球员名、排名数字；正文保持现有无衬线字体。
+- 统一色彩语言：延续 Day Court 亮色为默认，但把 primary 蓝 / accent 绿做成大色块「品牌带」，用于分区分隔（参考对方的深蓝 → 渐变绿）。
+- 分区节奏：每个板块加统一的大标题（小号 kicker 标签 + 超大标题），取代当前偏平的段落标题。
+- Header 改为职业球队式：左 logo、中间大写导航（排行榜 / 赛事纪录 / 精彩片段 / 关于）、右侧语言与主题切换。
 
-**桌面端**：主图 + 缩略图网格
-- 主展示区：第一张大图（4:3，宽 420px）
-- 下方 2×2 或 1×4 缩略图小网格（80px 方块，可点击切换主图）
-- 点击缩略图 → setState 更新 activeIndex，主图切换（带 fade 过渡）
-- 悬停缩略图：边框由 muted → accent
+## 阶段二：Hero 改造成「球队横幅」
 
-### 技术细节
-只改 `src/components/hero/LatestSessionPhoto.tsx`：
-- 用 `useState<number>(0)` 管理 activeIndex
-- `sessions.filter(s => s.group_photo_url).slice(0, 6)` 取候选
-- 用 `useIsMobile()` 分叉 UI（已在项目中使用）
-- 主图切换动画：`key={activeIndex}` + `animate-fade-in`
-- 保留 loading / no-photo fallback（当无任何合照时）
-- 不再依赖 rotate/translateY props 做主要形态；桌面网格用固定布局，仅保留一点手感倾斜给主图
+- 现有 ArenaHero 改为全宽品牌横幅：超大双行标题（例：2026 羽球人赛 / 积分榜），底部叠加真实赛事合照。
+- 主 CTA 双按钮：查看积分榜 / 看精彩片段。
+- 下方接一条「近期赛事条」：日期 + 场次 + 出席人数，横向滚动，仿对方 Upcoming Schedule。
+- 保留现有最新合照轮播，作为 Hero 底部的照片带。
 
-不改 `ArenaHero.tsx`（props 接口保持兼容，即使桌面不再强调倾斜）。
-不改后端 / schema。
+## 阶段三：球员名册（Roster）新板块
+
+- 新增「2026 球员名册」板块：卡片网格，卡片正面是球员头像 + 名字 + 城市/标签，点击/悬停翻面展示数据面板（场次、胜率、积分、排名、最佳连胜）。
+- 数据全部来自现有排行榜数据，不新增后端表。
+- 移动端为可横向滑动的卡片列表，点击进入全屏球员详情弹窗。
+
+## 阶段四：排行榜融入新语言
+
+- 桌面表格保留现有紧凑对齐结构，只更新字型、表头 kicker 样式、行悬停与前三名强调，使其与新品牌一致。
+- 移动端沿用现有可展开行，仅同步字型与色块。
+- 排名数字改用压缩体大号显示。
+
+## 阶段五：细节与动效
+
+- 分区进场淡入上移、卡片翻转、CTA 悬停位移等轻量动效（Motion）。
+- 深色模式同步校准，确保新色块在两种主题下对比度达标。
+
+## 技术要点
+
+- 全部走语义 token：新字型加进 `tailwind.config.ts` 的 `fontFamily`（`display`），新色块与渐变以 CSS 变量形式写进 `src/index.css` 的 `:root` 与 `.dark`，组件内不写死颜色。
+- 新增组件：`RosterSection.tsx`、`PlayerCard.tsx`、`SectionHeading.tsx`、`ScheduleStrip.tsx`；改动 `ArenaHero.tsx`、`Header.tsx`、`DesktopRankingTable.tsx`、`MobileRankingCard.tsx`、`Footer.tsx`。
+- 球员城市/标签等名册字段若需要，后续再评估是否加进 players 表；阶段三先只用现有字段。
+- 不改动排行榜计分逻辑、RLS 与管理后台功能。
+
+## 建议起点
+
+先做阶段一 + 阶段二（字型、色块节奏、Hero 横幅、赛事条），一轮即可看出整体气质变化，再决定是否继续名册与排行榜改造。
