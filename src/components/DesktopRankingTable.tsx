@@ -31,13 +31,10 @@ export function DesktopRankingTable({
     rowPadY: 'py-3 leading-none',
     topRowPadY: 'py-3.5 leading-none',
     headPadY: 'h-auto py-2.5 leading-none',
-    cellPadX: 'px-2 lg:px-4',
-    sessionsPadX: 'pl-4 lg:pl-10 pr-2 lg:pr-4',
-    firstPadX: 'pl-3 lg:pl-5 pr-3 lg:pr-6',
-    lastPadX: 'pl-2 lg:pl-4 pr-3 lg:pr-5',
-    rankColW: 'w-12 lg:w-16',
-    statColW: 'w-16 lg:w-24',
-    pointsColW: 'w-36 lg:w-48',
+    cellPadX: 'px-2 lg:px-3',
+    sessionsPadX: 'pl-4 lg:pl-6 pr-2 lg:pr-4',
+    firstPadX: 'pl-3 lg:pl-5 pr-3 lg:pr-4',
+    lastPadX: 'pl-2 lg:pl-3 pr-3 lg:pr-5',
     avatar: 'w-16 h-16',
     avatarRadius: 'rounded-lg',
     topAvatar: 'w-[72px] h-[72px]',
@@ -50,7 +47,7 @@ export function DesktopRankingTable({
     statText: 'text-lg font-black',
     pointsText: 'text-lg font-black',
     headText: 'text-[11px]',
-    gap: 'gap-3 lg:gap-6',
+    gap: 'gap-3 lg:gap-4',
     sepH: 'h-1.5',
     barH: 'h-10',
     topBarH: 'h-10',
@@ -59,11 +56,17 @@ export function DesktopRankingTable({
   return (
     <div className="rounded bg-card border-2 border-foreground shadow-[6px_6px_0_0_hsl(var(--foreground))] overflow-hidden">
       <Table className="table-fixed w-full">
+        <colgroup>
+          <col className="w-[7%]" />
+          <col className="w-[35%]" />
+          <col className="w-[7%]" />
+          <col className="w-[7%]" />
+          <col className="w-[44%]" />
+        </colgroup>
         <TableHeader>
           <TableRow className="hover:bg-transparent border-b-2 border-foreground bg-foreground">
             <TableHead
               className={cn(
-                d.rankColW,
                 d.firstPadX,
                 d.headPadY,
                 d.headText,
@@ -84,7 +87,6 @@ export function DesktopRankingTable({
             </TableHead>
             <TableHead
               className={cn(
-                d.statColW,
                 d.sessionsPadX,
                 d.headPadY,
                 d.headText,
@@ -95,7 +97,6 @@ export function DesktopRankingTable({
             </TableHead>
             <TableHead
               className={cn(
-                d.statColW,
                 d.cellPadX,
                 d.headPadY,
                 d.headText,
@@ -106,7 +107,6 @@ export function DesktopRankingTable({
             </TableHead>
             <TableHead
               className={cn(
-                d.pointsColW,
                 d.lastPadX,
                 d.headPadY,
                 d.headText,
@@ -125,8 +125,6 @@ export function DesktopRankingTable({
             const isThird = ranking.rank === 3;
             const rowPadY = isTopThree ? d.topRowPadY : d.rowPadY;
             const pct = Math.min(100, Math.round((ranking.total_points / maxPoints) * 100));
-            // The number sits at the bar's right edge; only use the fill's
-            // foreground color when the fill actually reaches under it.
             const labelOnFill = pct >= 85;
 
             const badgeRotate = isFirst
@@ -163,7 +161,7 @@ export function DesktopRankingTable({
                       : 'hover:bg-muted/50'
                   )}
                 >
-                  <TableCell className={cn(d.rankColW, d.firstPadX, rowPadY, 'text-center align-middle')}>
+                  <TableCell className={cn(d.firstPadX, rowPadY, 'text-center align-middle')}>
                     {isTopThree ? (
                       <div
                         className={cn(
@@ -241,19 +239,19 @@ export function DesktopRankingTable({
                     </div>
                   </TableCell>
 
-                  <TableCell className={cn(d.statColW, d.sessionsPadX, rowPadY, 'text-right align-middle')}>
+                  <TableCell className={cn(d.sessionsPadX, rowPadY, 'text-right align-middle')}>
                     <p className={cn('font-display text-foreground tabular-nums', d.statText)}>
                       {ranking.sessions_played}
                     </p>
                   </TableCell>
 
-                  <TableCell className={cn(d.statColW, d.cellPadX, rowPadY, 'text-right align-middle')}>
+                  <TableCell className={cn(d.cellPadX, rowPadY, 'text-right align-middle')}>
                     <p className={cn('font-display text-foreground tabular-nums', d.statText)}>
                       {ranking.championships}
                     </p>
                   </TableCell>
 
-                  <TableCell className={cn(d.pointsColW, d.lastPadX, rowPadY, 'align-middle')}>
+                  <TableCell className={cn(d.lastPadX, rowPadY, 'align-middle')}>
                     <div
                       className={cn(
                         'relative w-full flex items-center justify-end overflow-hidden bg-muted/60 rounded-md',

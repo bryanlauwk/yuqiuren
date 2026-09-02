@@ -19,8 +19,8 @@ export function ArenaHero() {
         <CourtLines />
       </div>
 
-      <div className="relative z-10 container py-10 sm:py-12 lg:py-14">
-        <div className="grid gap-9 lg:grid-cols-12 lg:items-end lg:gap-12">
+      <div className="relative z-10 container py-12 sm:py-16 lg:py-20">
+        <div className="grid gap-10 lg:grid-cols-12 lg:items-end lg:gap-16">
           <div className="lg:col-span-8">
             <div className="mb-4 flex items-center gap-3 font-sans text-[10px] font-extrabold uppercase tracking-[0.28em] text-[hsl(var(--band-foreground))]/75 sm:text-xs">
               <span className="h-2 w-2 bg-accent" />
@@ -47,7 +47,7 @@ export function ArenaHero() {
             </h1>
           </div>
 
-          <div className="border-t-2 border-accent pt-5 lg:col-span-4 lg:border-l-2 lg:border-t-0 lg:pb-1 lg:pl-7 lg:pt-0">
+          <div className="border-t-2 border-accent pt-5 lg:col-span-4 lg:border-l-2 lg:border-t-0 lg:pb-1 lg:pl-10 lg:pt-0">
             <p className="max-w-sm font-sans text-sm font-semibold leading-relaxed text-[hsl(var(--band-foreground))]/80 sm:text-base">
               {t.home.heroSubtitle}
             </p>
