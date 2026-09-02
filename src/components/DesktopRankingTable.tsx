@@ -58,10 +58,10 @@ export function DesktopRankingTable({
       <Table className="table-fixed w-full">
         <colgroup>
           <col className="w-[7%]" />
-          <col className="w-[40%]" />
+          <col className="w-[35%]" />
           <col className="w-[7%]" />
           <col className="w-[7%]" />
-          <col className="w-[39%]" />
+          <col className="w-[44%]" />
         </colgroup>
         <TableHeader>
           <TableRow className="hover:bg-transparent border-b-2 border-foreground bg-foreground">
