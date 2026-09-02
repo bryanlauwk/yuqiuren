@@ -47,7 +47,7 @@ export function ArenaHero() {
             </h1>
           </div>
 
-          <div className="border-t-2 border-accent pt-5 lg:col-span-4 lg:border-l-2 lg:border-t-0 lg:pb-1 lg:pl-7 lg:pt-0">
+          <div className="border-t-2 border-accent pt-5 lg:col-span-4 lg:border-l-2 lg:border-t-0 lg:pb-1 lg:pl-10 lg:pt-0">
             <p className="max-w-sm font-sans text-sm font-semibold leading-relaxed text-[hsl(var(--band-foreground))]/80 sm:text-base">
               {t.home.heroSubtitle}
             </p>
