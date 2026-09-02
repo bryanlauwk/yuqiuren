@@ -36,7 +36,7 @@ export function ArenaHero() {
                       羽球人赛
                     </span>
                   </span>
-                  <span className="block font-sans font-black tracking-[-0.07em] text-accent">积分榜</span>
+            <span className="block mt-2 sm:mt-3 font-sans font-black tracking-[-0.07em] text-accent">积分榜</span>
                 </>
               ) : (
                 <>
