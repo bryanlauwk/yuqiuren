@@ -24,7 +24,7 @@ export function DesktopRankingTable({
     points: 'w-24 shrink-0 text-right',
   };
 
-  const headCls = 'text-[10px] font-black uppercase tracking-[0.18em] text-background/60';
+  const headCls = 'text-[10px] font-black uppercase tracking-[0.18em] text-muted-foreground';
 
   return (
     <div className="w-full">
