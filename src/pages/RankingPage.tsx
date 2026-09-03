@@ -97,7 +97,7 @@ export default function RankingPage() {
             {isMobile ? (
               <div>
                 {/* Sticky column legend — never lose track of what you're reading */}
-                <div className="sticky top-[97px] z-20 -mx-4 px-4 py-2 bg-background/95 backdrop-blur border-b-2 border-foreground flex items-center gap-3">
+                <div className="sticky top-[101px] z-20 -mx-4 px-4 py-2 bg-background/95 backdrop-blur border-b-2 border-foreground flex items-center gap-3">
                   <span className="w-12 text-[10px] font-black uppercase tracking-wider text-foreground/50">
                     #
                   </span>
