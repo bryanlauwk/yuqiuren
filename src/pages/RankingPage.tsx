@@ -39,43 +39,17 @@ export default function RankingPage() {
         <Reveal>
           <div className="mx-auto w-full max-w-5xl">
           <SectionHeading
-            kicker="LEAGUE TABLE · 2026 SEASON"
+            variant="bar"
+            kicker="2026 SEASON · LEAGUE TABLE"
             title={language === 'zh' ? '联赛积分榜' : 'League Standings'}
-            className="mb-5 border-b-2 border-foreground pb-5"
+            className="mb-4"
             action={
-              !isMobile ? (
-                <div className="flex items-center gap-1 border-2 border-foreground bg-card p-1">
-                  {[
-                    { label: language === 'zh' ? '总榜' : 'Overall', active: true },
-                    { label: language === 'zh' ? '胜率' : 'Win %', active: false },
-                    { label: language === 'zh' ? '赛事记录' : 'Matches', active: false, to: '/history' },
-                  ].map((tab) =>
-                    tab.to ? (
-                      <Link
-                        key={tab.label}
-                        to={tab.to}
-                        className="px-3 py-1.5 font-sans text-[10px] font-black uppercase tracking-[0.14em] text-muted-foreground transition-colors hover:text-primary"
-                      >
-                        {tab.label}
-                      </Link>
-                    ) : (
-                      <span
-                        key={tab.label}
-                        aria-current={tab.active ? 'true' : undefined}
-                        className={
-                          tab.active
-                            ? 'bg-foreground px-3 py-1.5 font-sans text-[10px] font-black uppercase tracking-[0.14em] text-background'
-                            : 'px-3 py-1.5 font-sans text-[10px] font-black uppercase tracking-[0.14em] text-muted-foreground'
-                        }
-                      >
-                        {tab.label}
-                      </span>
-                    )
-                  )}
-                </div>
-              ) : undefined
+              <span className="font-sans text-[10px] font-black uppercase tracking-[0.16em] text-background/70">
+                {language === 'zh' ? `共 ${rankings.length} 位球员` : `${rankings.length} PLAYERS`}
+              </span>
             }
           />
+
           {loading ? (
           <div className="space-y-1.5">
             {[...Array(8)].map((_, i) => (
