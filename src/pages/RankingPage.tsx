@@ -30,7 +30,7 @@ export default function RankingPage() {
   };
 
   return (
-    <div className="min-h-screen bg-background flex flex-col relative">
+    <div className="min-h-screen bg-background court-texture flex flex-col relative">
       <Header />
       
       <ArenaHero />

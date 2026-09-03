@@ -226,6 +226,14 @@
     );
   }
 
+  /* Ultra-faint court grid page texture */
+  .court-texture {
+    background-image:
+      linear-gradient(to right, hsl(var(--foreground) / 0.035) 1px, transparent 1px),
+      linear-gradient(to bottom, hsl(var(--foreground) / 0.035) 1px, transparent 1px);
+    background-size: 72px 72px;
+  }
+
   .no-scrollbar {
     scrollbar-width: none;
     -ms-overflow-style: none;
