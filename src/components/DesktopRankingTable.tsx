@@ -75,7 +75,7 @@ export function DesktopRankingTable({
             <div
               key={ranking.player_id}
               className={cn(
-                'group flex items-center gap-5 rounded border-2 border-foreground bg-card px-5 transition-all duration-200',
+                'group flex items-center gap-3 lg:gap-5 rounded border-2 border-foreground bg-card px-3 lg:px-5 transition-all duration-200',
                 'hover:-translate-y-0.5 hover:shadow-[4px_4px_0_0_hsl(var(--foreground))]',
                 isTopThree ? 'py-3' : 'py-2',
                 isFirst && 'bg-accent/[0.04]',
@@ -85,6 +85,7 @@ export function DesktopRankingTable({
                 accentBorder
               )}
             >
+
               {/* Rank */}
               <div className={cn(col.rank, 'flex items-center justify-center gap-1')}>
                 {isTopThree ? (
