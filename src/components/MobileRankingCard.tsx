@@ -11,11 +11,19 @@ interface MobileRankingCardProps {
   ranking: PlayerRanking;
   maxPoints: number;
   onAvatarClick?: (avatarUrl: string, playerName: string) => void;
+  primaryMetric?: 'points' | 'winRate';
+  showRankDelta?: boolean;
 }
 
-export function MobileRankingCard({ ranking, onAvatarClick }: MobileRankingCardProps) {
+export function MobileRankingCard({
+  ranking,
+  onAvatarClick,
+  primaryMetric = 'points',
+  showRankDelta = true,
+}: MobileRankingCardProps) {
   const { t } = useLanguage();
   const [expanded, setExpanded] = useState(false);
+
 
   const isTopThree = ranking.rank <= 3;
   const isFirst = ranking.rank === 1;
