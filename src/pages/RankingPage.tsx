@@ -46,7 +46,7 @@ export default function RankingPage() {
             {[...Array(8)].map((_, i) => (
               <div
                 key={i}
-                className="bg-card/50 animate-pulse-arena rounded h-[52px]"
+                className="bg-card/50 animate-pulse-arena rounded h-[74px] mx-auto w-full max-w-3xl"
                 style={{ animationDelay: `${i * 0.1}s` }}
               />
             ))}

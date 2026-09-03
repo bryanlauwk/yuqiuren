@@ -13,7 +13,7 @@ interface MobileRankingCardProps {
   onAvatarClick?: (avatarUrl: string, playerName: string) => void;
 }
 
-export function MobileRankingCard({ ranking, maxPoints, onAvatarClick }: MobileRankingCardProps) {
+export function MobileRankingCard({ ranking, onAvatarClick }: MobileRankingCardProps) {
   const { t } = useLanguage();
   const [expanded, setExpanded] = useState(false);
 
@@ -22,7 +22,6 @@ export function MobileRankingCard({ ranking, maxPoints, onAvatarClick }: MobileR
   const isSecond = ranking.rank === 2;
   const isThird = ranking.rank === 3;
 
-  const pct = Math.min(100, Math.round((ranking.total_points / Math.max(maxPoints, 1)) * 100));
   const winRate = getWinRate(ranking);
   const avgPoints = getAveragePoints(ranking);
 
@@ -48,15 +47,7 @@ export function MobileRankingCard({ ranking, maxPoints, onAvatarClick }: MobileR
     ? 'bg-primary text-primary-foreground'
     : isThird
     ? 'bg-card text-foreground'
-    : 'bg-muted text-foreground';
-
-  const barFill = isFirst
-    ? 'bg-accent'
-    : isSecond
-    ? 'bg-primary'
-    : isThird
-    ? 'bg-muted-foreground/70'
-    : 'bg-foreground/25';
+    : 'bg-muted text-muted-foreground';
 
   return (
     <div
@@ -67,53 +58,88 @@ export function MobileRankingCard({ ranking, maxPoints, onAvatarClick }: MobileR
         accentBorder
       )}
     >
-      {/* Lean row — tap anywhere to expand */}
       <div className="flex items-stretch">
         <button
           type="button"
           onClick={() => setExpanded(v => !v)}
           aria-expanded={expanded}
           aria-label={expanded ? t.ranking.collapse : t.ranking.expand}
-          className="flex-1 min-w-0 flex items-center gap-3 px-3 py-2.5 min-h-[64px] text-left active:bg-foreground/5 transition-colors"
+          className="flex-1 min-w-0 flex items-center gap-2.5 px-3 py-2.5 min-h-[64px] text-left active:bg-foreground/5 transition-colors"
         >
           {/* Rank */}
           <div
             className={cn(
               'flex-shrink-0 inline-flex items-center justify-center border-2 rounded-lg font-display italic tabular-nums',
               isTopThree
-                ? cn('w-12 h-12 text-xl border-foreground shadow-[2px_2px_0_0_hsl(var(--foreground))]', badgeStyle)
-                : 'w-11 h-11 text-lg border-foreground/50 bg-muted text-muted-foreground'
+                ? cn('w-10 h-10 text-lg border-foreground shadow-[2px_2px_0_0_hsl(var(--foreground))]', badgeStyle)
+                : 'w-10 h-10 text-lg border-foreground/50 bg-muted text-muted-foreground'
             )}
           >
             {ranking.rank}
           </div>
 
-          {/* Name + rank delta */}
+          {/* Avatar */}
+          <span
+            role="button"
+            tabIndex={ranking.full_avatar_url ? 0 : -1}
+            aria-label={ranking.player_name}
+            onClick={(e) => {
+              if (!ranking.full_avatar_url) return;
+              e.stopPropagation();
+              onAvatarClick?.(ranking.full_avatar_url, ranking.player_name);
+            }}
+            className={cn(
+              'flex-shrink-0 w-12 h-12 min-w-[48px] min-h-[48px] overflow-hidden rounded-full bg-muted block',
+              isTopThree ? 'border-2 border-foreground' : 'border-2 border-foreground/50',
+              ranking.full_avatar_url && 'active:scale-95 transition-transform'
+            )}
+          >
+            {ranking.avatar_url ? (
+              <img
+                src={ranking.avatar_url}
+                alt={ranking.player_name}
+                loading="lazy"
+                className="w-full h-full object-cover"
+                style={{
+                  objectPosition:
+                    ranking.avatar_crop_x !== null && ranking.avatar_crop_y !== null
+                      ? `${(ranking.avatar_crop_x ?? 0.5) * 100}% ${(ranking.avatar_crop_y ?? 0.5) * 100}%`
+                      : 'center',
+                }}
+              />
+            ) : (
+              <span className="w-full h-full flex items-center justify-center text-foreground text-xs font-black">
+                {getInitials(ranking.player_name)}
+              </span>
+            )}
+          </span>
+
+          {/* Name + sub info */}
           <div className="flex-1 min-w-0">
             <div className="flex items-center gap-2">
               <p
                 className={cn(
                   'font-display text-foreground tracking-tight truncate',
-                  isTopThree ? 'text-2xl' : 'text-xl'
+                  isTopThree ? 'text-xl' : 'text-lg'
                 )}
               >
                 {ranking.player_name}
               </p>
               <RankDelta ranking={ranking} />
             </div>
-
-            {/* Points bar — the one metric that always shows */}
-            <div className="mt-1.5 relative h-2 rounded-full bg-muted/70 overflow-hidden">
-              <div
-                className={cn('absolute inset-y-0 left-0 origin-left animate-bar-grow', barFill)}
-                style={{ width: `${pct}%` }}
-              />
-            </div>
+            <p className="mt-0.5 truncate text-[10px] font-bold uppercase tracking-wider text-muted-foreground">
+              {ranking.sessions_played} · {ranking.championships} · {winRate}%
+            </p>
           </div>
 
           {/* Points value */}
           <div className="flex-shrink-0 text-right">
-            <p className="font-display text-2xl font-black tabular-nums leading-none text-foreground">
+            <p
+              className={cn(
+                'font-display text-2xl font-black tabular-nums leading-none',
+                isFirst ? 'text-accent' : isSecond ? 'text-primary' : 'text-foreground'
+              )}
+            >
               {ranking.total_points}
             </p>
             <p className="text-[10px] font-bold uppercase tracking-wider text-foreground/50 mt-0.5">
@@ -140,46 +166,11 @@ export function MobileRankingCard({ ranking, maxPoints, onAvatarClick }: MobileR
       >
         <div className="overflow-hidden">
           <div className="px-3 pb-3 pt-3 border-t-2 border-foreground/15">
-            <div className="flex items-center gap-3">
-              <button
-                type="button"
-                onClick={() =>
-                  ranking.full_avatar_url &&
-                  onAvatarClick?.(ranking.full_avatar_url, ranking.player_name)
-                }
-                disabled={!ranking.full_avatar_url}
-                aria-label={ranking.player_name}
-                className={cn(
-                  'flex-shrink-0 w-16 h-16 min-w-[48px] min-h-[48px] overflow-hidden bg-muted rounded-xl border-2 border-foreground shadow-[2px_2px_0_0_hsl(var(--foreground))]',
-                  ranking.full_avatar_url && 'active:scale-95 transition-transform'
-                )}
-              >
-                {ranking.avatar_url ? (
-                  <img
-                    src={ranking.avatar_url}
-                    alt={ranking.player_name}
-                    loading="lazy"
-                    className="w-full h-full object-cover"
-                    style={{
-                      objectPosition:
-                        ranking.avatar_crop_x !== null && ranking.avatar_crop_y !== null
-                          ? `${(ranking.avatar_crop_x ?? 0.5) * 100}% ${(ranking.avatar_crop_y ?? 0.5) * 100}%`
-                          : 'center',
-                    }}
-                  />
-                ) : (
-                  <div className="w-full h-full flex items-center justify-center text-foreground text-base font-black">
-                    {getInitials(ranking.player_name)}
-                  </div>
-                )}
-              </button>
-
-              <div className="flex-1 grid grid-cols-2 gap-2">
-                <Stat label={t.ranking.sessions} value={ranking.sessions_played} />
-                <Stat label={t.ranking.wins} value={ranking.championships} />
-                <Stat label={t.ranking.winRate} value={`${winRate}%`} />
-                <Stat label={t.ranking.avgPoints} value={avgPoints} />
-              </div>
+            <div className="grid grid-cols-2 gap-2">
+              <Stat label={t.ranking.sessions} value={ranking.sessions_played} />
+              <Stat label={t.ranking.wins} value={ranking.championships} />
+              <Stat label={t.ranking.winRate} value={`${winRate}%`} />
+              <Stat label={t.ranking.avgPoints} value={avgPoints} />
             </div>
           </div>
         </div>
@@ -187,6 +178,7 @@ export function MobileRankingCard({ ranking, maxPoints, onAvatarClick }: MobileR
     </div>
   );
 }
+
 
 function Stat({ label, value }: { label: string; value: string | number }) {
   return (
