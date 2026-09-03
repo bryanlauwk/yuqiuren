@@ -146,7 +146,7 @@ export function DesktopRankingTable({
                   <p
                     className={cn(
                       'truncate font-display leading-none tracking-tight text-foreground transition-colors',
-                      isTopThree ? 'text-xl' : 'text-lg',
+                      isTopThree ? 'text-lg lg:text-xl' : 'text-base lg:text-lg',
                       isFirst && 'group-hover:text-accent',
                       isSecond && 'group-hover:text-primary'
                     )}
@@ -159,12 +159,12 @@ export function DesktopRankingTable({
 
 
               {/* Sessions */}
-              <p className={cn(col.stat, 'font-display text-lg font-black leading-none tabular-nums text-foreground')}>
+              <p className={cn(col.stat, 'font-display text-base lg:text-lg font-black leading-none tabular-nums text-foreground')}>
                 {ranking.sessions_played}
               </p>
 
               {/* Wins */}
-              <p className={cn(col.stat, 'font-display text-lg font-black leading-none tabular-nums text-foreground')}>
+              <p className={cn(col.stat, 'font-display text-base lg:text-lg font-black leading-none tabular-nums text-foreground')}>
                 {ranking.championships}
               </p>
 
@@ -174,8 +174,8 @@ export function DesktopRankingTable({
                   col.stat,
                   'tabular-nums',
                   primaryMetric === 'winRate'
-                    ? 'font-display text-2xl font-black leading-none text-primary'
-                    : 'font-sans text-sm font-bold text-muted-foreground',
+                    ? 'font-display text-xl lg:text-2xl font-black leading-none text-primary'
+                    : 'font-sans text-xs lg:text-sm font-bold text-muted-foreground',
                 )}
               >
                 {getWinRate(ranking)}%
@@ -186,7 +186,8 @@ export function DesktopRankingTable({
                 <p
                   className={cn(
                     'font-display font-black leading-none tabular-nums',
-                    isTopThree ? 'text-3xl' : 'text-2xl',
+                    isTopThree ? 'text-2xl lg:text-3xl' : 'text-xl lg:text-2xl',
+
                     primaryMetric === 'points'
                       ? isFirst
                         ? 'text-accent'
