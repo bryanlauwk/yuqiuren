@@ -74,23 +74,17 @@ export function ArenaHero() {
               </div>
             </div>
 
-            <div className="mt-4 flex max-w-sm flex-col gap-2 sm:flex-row lg:flex-col xl:flex-row">
+            <div className="mt-4 max-w-sm">
               <button
                 type="button"
                 onClick={scrollToRankings}
-                className="inline-flex min-h-11 flex-1 items-center justify-between gap-3 border-2 border-[hsl(var(--band-foreground))] bg-accent px-4 py-2.5 font-sans text-[10px] font-black uppercase tracking-[0.14em] text-accent-foreground shadow-[3px_3px_0_0_hsl(var(--band-foreground))] transition-transform hover:-translate-y-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[hsl(var(--band-foreground))] focus-visible:ring-offset-2 focus-visible:ring-offset-[hsl(var(--band-surface))]"
+                className="inline-flex min-h-11 w-full items-center justify-between gap-3 border-2 border-[hsl(var(--band-foreground))] bg-accent px-4 py-2.5 font-sans text-[10px] font-black uppercase tracking-[0.14em] text-accent-foreground shadow-[3px_3px_0_0_hsl(var(--band-foreground))] transition-transform hover:-translate-y-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[hsl(var(--band-foreground))] focus-visible:ring-offset-2 focus-visible:ring-offset-[hsl(var(--band-surface))]"
               >
                 {isZh ? '查看积分榜' : 'VIEW STANDINGS'}
                 <ArrowDown className="h-4 w-4" />
               </button>
-              <Link
-                to="/history"
-                className="inline-flex min-h-11 flex-1 items-center justify-between gap-3 border-2 border-[hsl(var(--band-foreground))]/70 bg-[hsl(var(--band-foreground))]/10 px-4 py-2.5 font-sans text-[10px] font-black uppercase tracking-[0.14em] band-fg transition-all hover:-translate-y-1 hover:bg-[hsl(var(--band-foreground))]/20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[hsl(var(--band-foreground))]"
-              >
-                {isZh ? '赛事纪录' : 'MATCH ARCHIVE'}
-                <ArrowRight className="h-4 w-4" />
-              </Link>
             </div>
+
           </div>
         </div>
       </div>
