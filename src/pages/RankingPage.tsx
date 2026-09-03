@@ -30,12 +30,13 @@ export default function RankingPage() {
     [rankings, results, sessions],
   );
   const winRateRankings = useMemo(() => buildWinRateRankings(rankings), [rankings]);
-  const desktopRankings =
+  const viewRankings =
     rankingView === 'recent5'
       ? recentRankings
       : rankingView === 'winRate'
       ? winRateRankings
       : rankings;
+
 
   const latestSession = sessions[0];
   const latestSessionDate = latestSession
