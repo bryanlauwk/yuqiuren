@@ -9,6 +9,7 @@ import type { SessionResult } from '@/types/ranking';
 import { useState, useMemo } from 'react';
 import { PhotoLightbox } from '@/components/PhotoLightbox';
 import { HighlightsGallery } from '@/components/HighlightsGallery';
+import { SectionHeading } from '@/components/SectionHeading';
 
 export default function SessionHistoryPage() {
   const { t } = useLanguage();
