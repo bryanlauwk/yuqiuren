@@ -48,27 +48,33 @@ export function ArenaHero() {
             </h1>
           </div>
 
-          <div className="border-t-2 border-accent pt-5 lg:col-span-4 lg:border-l-2 lg:border-t-0 lg:pb-1 lg:pl-10 lg:pt-0">
-            <p className="max-w-sm font-sans text-sm font-semibold leading-relaxed text-[hsl(var(--band-foreground))]/80 sm:text-base">
-              {t.home.heroSubtitle}
-            </p>
+          <div className="border-t-2 border-accent pt-4 lg:col-span-4 lg:border-l-2 lg:border-t-0 lg:pb-1 lg:pl-10 lg:pt-0">
+            <div className="mb-3 font-sans text-[9px] font-black uppercase tracking-[0.22em] text-[hsl(var(--band-foreground))]/60">
+              {isZh ? '赛季快报' : 'SEASON SNAPSHOT'}
+            </div>
 
-            <div className="mt-5 grid max-w-sm grid-cols-2 border-l border-t border-[hsl(var(--band-foreground))]/25">
+            <div className="grid max-w-sm grid-cols-3 border-l border-t border-[hsl(var(--band-foreground))]/25">
               <div className="border-b border-r border-[hsl(var(--band-foreground))]/25 p-3">
-                <div className="font-display text-3xl leading-none text-accent">{loading ? '—' : players.length}</div>
+                <div className="font-display text-2xl leading-none text-accent">{loading ? '—' : players.length}</div>
                 <div className="mt-1 font-sans text-[9px] font-black uppercase tracking-[0.16em] text-[hsl(var(--band-foreground))]/65">
                   {isZh ? '球员' : 'Players'}
                 </div>
               </div>
               <div className="border-b border-r border-[hsl(var(--band-foreground))]/25 p-3">
-                <div className="font-display text-3xl leading-none text-accent">{loading ? '—' : sessions.length}</div>
+                <div className="font-display text-2xl leading-none text-accent">{loading ? '—' : sessions.length}</div>
                 <div className="mt-1 font-sans text-[9px] font-black uppercase tracking-[0.16em] text-[hsl(var(--band-foreground))]/65">
-                  {isZh ? '场赛事' : 'Match days'}
+                  {isZh ? '场比赛' : 'Match days'}
+                </div>
+              </div>
+              <div className="border-b border-r border-[hsl(var(--band-foreground))]/25 p-3">
+                <div className="font-display text-2xl leading-none text-accent">{loading ? '—' : topPoints}</div>
+                <div className="mt-1 font-sans text-[9px] font-black uppercase tracking-[0.16em] text-[hsl(var(--band-foreground))]/65">
+                  {isZh ? '最高积分' : 'Top points'}
                 </div>
               </div>
             </div>
 
-            <div className="mt-5 flex max-w-sm flex-col gap-2 sm:flex-row lg:flex-col xl:flex-row">
+            <div className="mt-4 flex max-w-sm flex-col gap-2 sm:flex-row lg:flex-col xl:flex-row">
               <button
                 type="button"
                 onClick={scrollToRankings}
