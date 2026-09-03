@@ -23,9 +23,9 @@ export function DesktopRankingTable({
   const isZh = language === 'zh';
 
   const col = {
-    rank: 'w-16 shrink-0',
-    stat: 'w-20 shrink-0 text-right',
-    points: 'w-24 shrink-0 text-right',
+    rank: 'w-11 lg:w-16 shrink-0',
+    stat: 'w-14 lg:w-20 shrink-0 text-right',
+    points: 'w-16 lg:w-24 shrink-0 text-right',
   };
 
   const headCls = 'text-[10px] font-black uppercase tracking-[0.18em] text-muted-foreground';
@@ -33,9 +33,9 @@ export function DesktopRankingTable({
   return (
     <div className="w-full">
       {/* Header strip */}
-      <div className="flex items-center gap-5 rounded border-2 border-foreground bg-muted/60 px-5 py-2">
+      <div className="sticky top-[89px] z-20 flex items-center gap-3 lg:gap-5 rounded border-2 border-foreground bg-muted/95 px-3 py-2 backdrop-blur lg:px-5">
         <span className={cn(col.rank, headCls, 'text-center')}>#</span>
-        <span className="w-12 shrink-0" />
+        <span className="w-10 shrink-0 lg:w-12" />
         <span className={cn('flex-1', headCls)}>{t.ranking.player}</span>
         <span className={cn(col.stat, headCls)}>{t.ranking.sessions}</span>
         <span className={cn(col.stat, headCls)}>{t.ranking.wins}</span>
@@ -46,6 +46,7 @@ export function DesktopRankingTable({
           {t.ranking.points}
         </span>
       </div>
+
 
 
       {/* Rows */}
