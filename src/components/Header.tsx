@@ -26,16 +26,16 @@ export function Header() {
 
   return (
     <header className="sticky top-0 z-50 border-b-2 border-foreground bg-background/95 backdrop-blur-xl">
-      <div className="container grid min-h-16 grid-cols-[1fr_auto] items-center gap-4 md:min-h-20 md:grid-cols-[1fr_auto_1fr]">
+      <div className="container grid min-h-[68px] grid-cols-[1fr_auto] items-center gap-4 md:min-h-[88px] md:grid-cols-[1fr_auto_1fr]">
         <Link to="/" className="group flex w-fit items-center gap-3" aria-label={isZh ? '羽球人首页' : 'YuQiuRen home'}>
-          <div className="relative grid h-10 w-10 shrink-0 place-items-center overflow-hidden rounded-full border-[3px] border-primary bg-background sm:h-11 sm:w-11">
+          <div className="relative grid h-11 w-11 shrink-0 place-items-center overflow-hidden rounded-full border-[3px] border-primary bg-background sm:h-12 sm:w-12">
             <span className="pr-[2px] pt-1 font-serif text-[22px] font-black italic leading-none text-primary sm:text-2xl" aria-hidden>
               Y
             </span>
             <div className="absolute left-1/2 top-1/2 h-[2.5px] w-[150%] -translate-x-1/2 -translate-y-1/2 -rotate-45 bg-accent" />
           </div>
           <div className="leading-none">
-            <span className="block font-display text-xl tracking-tight text-foreground sm:text-2xl">羽球人</span>
+            <span className="block font-display text-[1.35rem] tracking-tight text-foreground sm:text-[1.6rem]">羽球人</span>
             <span className="hidden font-sans text-[8px] font-black uppercase tracking-[0.26em] text-muted-foreground sm:block">
               Badminton League
             </span>
@@ -48,7 +48,7 @@ export function Header() {
               key={item.to}
               to={item.to}
               className={cn(
-                'relative shrink-0 px-3 py-3 font-sans text-[10px] font-black uppercase tracking-[0.15em] text-foreground transition-colors sm:px-4 md:py-7 md:text-xs',
+                'relative shrink-0 px-3 py-3 font-sans text-[10px] font-black uppercase tracking-[0.15em] text-foreground transition-colors sm:px-4 md:py-8 md:text-[13px]',
                 'after:absolute after:inset-x-3 after:bottom-1 after:h-[3px] after:origin-left after:bg-accent after:transition-transform md:after:bottom-4',
                 item.active ? 'after:scale-x-100' : 'after:scale-x-0 hover:text-primary hover:after:scale-x-100',
               )}
@@ -63,7 +63,7 @@ export function Header() {
             <Link
               to="/admin"
               aria-label={isZh ? '管理后台' : 'Admin'}
-              className="grid h-9 w-9 place-items-center text-foreground transition-colors hover:bg-muted hover:text-primary"
+              className="grid h-10 w-10 place-items-center text-foreground transition-colors hover:bg-muted hover:text-primary"
             >
               <Shield className="h-4 w-4" />
             </Link>
@@ -75,7 +75,7 @@ export function Header() {
               type="button"
               onClick={handleSignOut}
               aria-label={isZh ? '退出登录' : 'Sign out'}
-              className="grid h-9 w-9 place-items-center text-foreground transition-colors hover:bg-muted hover:text-destructive"
+              className="grid h-10 w-10 place-items-center text-foreground transition-colors hover:bg-muted hover:text-destructive"
             >
               <LogOut className="h-4 w-4" />
             </button>

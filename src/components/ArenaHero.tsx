@@ -6,7 +6,8 @@ import { CourtLines } from '@/components/hero/CourtLines';
 
 export function ArenaHero() {
   const { t, language } = useLanguage();
-  const { sessions, players, loading } = useRankings();
+  const { sessions, players, rankings, loading } = useRankings();
+  const topPoints = rankings?.[0]?.total_points ?? 0;
   const isZh = language === 'zh';
 
   const scrollToRankings = () => {
@@ -19,15 +20,15 @@ export function ArenaHero() {
         <CourtLines />
       </div>
 
-      <div className="relative z-10 container py-12 sm:py-16 lg:py-20">
-        <div className="grid gap-10 lg:grid-cols-12 lg:items-end lg:gap-16">
+      <div className="relative z-10 container py-10 sm:py-12 lg:py-14">
+        <div className="grid gap-8 lg:grid-cols-12 lg:items-end lg:gap-14">
           <div className="lg:col-span-8">
             <div className="mb-4 flex items-center gap-3 font-sans text-[10px] font-extrabold uppercase tracking-[0.28em] text-[hsl(var(--band-foreground))]/75 sm:text-xs">
               <span className="h-2 w-2 bg-accent" />
               {isZh ? '羽球人 · 社区联赛' : 'YUQIUREN · COMMUNITY LEAGUE'}
             </div>
 
-            <h1 className="max-w-5xl text-[clamp(3rem,7.5vw,7.5rem)] leading-[0.84] band-fg">
+            <h1 className="max-w-5xl text-[clamp(2.75rem,6.4vw,6.25rem)] leading-[0.86] band-fg">
               {isZh ? (
                 <>
                   <span className="block">
@@ -47,27 +48,33 @@ export function ArenaHero() {
             </h1>
           </div>
 
-          <div className="border-t-2 border-accent pt-5 lg:col-span-4 lg:border-l-2 lg:border-t-0 lg:pb-1 lg:pl-10 lg:pt-0">
-            <p className="max-w-sm font-sans text-sm font-semibold leading-relaxed text-[hsl(var(--band-foreground))]/80 sm:text-base">
-              {t.home.heroSubtitle}
-            </p>
+          <div className="border-t-2 border-accent pt-4 lg:col-span-4 lg:border-l-2 lg:border-t-0 lg:pb-1 lg:pl-10 lg:pt-0">
+            <div className="mb-3 font-sans text-[9px] font-black uppercase tracking-[0.22em] text-[hsl(var(--band-foreground))]/60">
+              {isZh ? '赛季快报' : 'SEASON SNAPSHOT'}
+            </div>
 
-            <div className="mt-5 grid max-w-sm grid-cols-2 border-l border-t border-[hsl(var(--band-foreground))]/25">
+            <div className="grid max-w-sm grid-cols-3 border-l border-t border-[hsl(var(--band-foreground))]/25">
               <div className="border-b border-r border-[hsl(var(--band-foreground))]/25 p-3">
-                <div className="font-display text-3xl leading-none text-accent">{loading ? '—' : players.length}</div>
+                <div className="font-display text-2xl leading-none text-accent">{loading ? '—' : players.length}</div>
                 <div className="mt-1 font-sans text-[9px] font-black uppercase tracking-[0.16em] text-[hsl(var(--band-foreground))]/65">
                   {isZh ? '球员' : 'Players'}
                 </div>
               </div>
               <div className="border-b border-r border-[hsl(var(--band-foreground))]/25 p-3">
-                <div className="font-display text-3xl leading-none text-accent">{loading ? '—' : sessions.length}</div>
+                <div className="font-display text-2xl leading-none text-accent">{loading ? '—' : sessions.length}</div>
                 <div className="mt-1 font-sans text-[9px] font-black uppercase tracking-[0.16em] text-[hsl(var(--band-foreground))]/65">
-                  {isZh ? '场赛事' : 'Match days'}
+                  {isZh ? '场比赛' : 'Match days'}
+                </div>
+              </div>
+              <div className="border-b border-r border-[hsl(var(--band-foreground))]/25 p-3">
+                <div className="font-display text-2xl leading-none text-accent">{loading ? '—' : topPoints}</div>
+                <div className="mt-1 font-sans text-[9px] font-black uppercase tracking-[0.16em] text-[hsl(var(--band-foreground))]/65">
+                  {isZh ? '最高积分' : 'Top points'}
                 </div>
               </div>
             </div>
 
-            <div className="mt-5 flex max-w-sm flex-col gap-2 sm:flex-row lg:flex-col xl:flex-row">
+            <div className="mt-4 flex max-w-sm flex-col gap-2 sm:flex-row lg:flex-col xl:flex-row">
               <button
                 type="button"
                 onClick={scrollToRankings}
