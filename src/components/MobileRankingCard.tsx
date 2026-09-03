@@ -34,11 +34,11 @@ export function MobileRankingCard({ ranking, onAvatarClick }: MobileRankingCardP
     : '';
 
   const accentTint = isFirst
-    ? 'bg-accent/5'
+    ? 'bg-accent/[0.04]'
     : isSecond
-    ? 'bg-primary/5'
+    ? 'bg-primary/[0.035]'
     : isThird
-    ? 'bg-muted/20'
+    ? 'bg-muted/15'
     : 'bg-card';
 
   const badgeStyle = isFirst

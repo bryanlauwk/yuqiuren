@@ -29,7 +29,7 @@ export function DesktopRankingTable({
   return (
     <div className="w-full">
       {/* Header strip */}
-      <div className="flex items-center gap-5 border-x-2 border-b-2 border-foreground bg-muted/60 px-5 py-2">
+      <div className="flex items-center gap-5 rounded border-2 border-foreground bg-muted/60 px-5 py-2">
         <span className={cn(col.rank, headCls, 'text-center')}>#</span>
         <span className="w-12 shrink-0" />
         <span className={cn('flex-1', headCls)}>{t.ranking.player}</span>
