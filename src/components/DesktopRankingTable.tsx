@@ -29,17 +29,18 @@ export function DesktopRankingTable({
   return (
     <div className="w-full">
       {/* Header strip */}
-      <div className="flex items-center gap-5 rounded bg-foreground px-5 py-2.5">
+      <div className="flex items-center gap-5 border-x-2 border-b-2 border-foreground bg-muted/60 px-5 py-2">
         <span className={cn(col.rank, headCls, 'text-center')}>#</span>
         <span className="w-12 shrink-0" />
         <span className={cn('flex-1', headCls)}>{t.ranking.player}</span>
         <span className={cn(col.stat, headCls)}>{t.ranking.sessions}</span>
         <span className={cn(col.stat, headCls)}>{t.ranking.wins}</span>
         <span className={cn(col.stat, headCls)}>{isZh ? '胜率' : 'WIN %'}</span>
-        <span className={cn(col.points, 'text-[10px] font-black uppercase tracking-[0.18em] text-accent')}>
+        <span className={cn(col.points, headCls, 'text-primary')}>
           {t.ranking.points}
         </span>
       </div>
+
 
       {/* Rows */}
       <div className="mt-2 space-y-1.5">
