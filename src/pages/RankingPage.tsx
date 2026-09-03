@@ -34,19 +34,53 @@ export default function RankingPage() {
       
       <ArenaHero />
 
-      <main id="rankings-anchor" className="container relative z-10 flex-1 py-12 scroll-mt-28 sm:py-16">
+      <main id="rankings-anchor" className="container relative z-10 flex-1 py-10 scroll-mt-28 sm:py-14">
         <Reveal>
+          <div className="mx-auto w-full max-w-5xl">
           <SectionHeading
             kicker="LEAGUE TABLE · 2026 SEASON"
             title={language === 'zh' ? '联赛积分榜' : 'League Standings'}
-            className="mb-8 border-b-2 border-foreground pb-5"
+            className="mb-5 border-b-2 border-foreground pb-5"
+            action={
+              !isMobile ? (
+                <div className="flex items-center gap-1 border-2 border-foreground bg-card p-1">
+                  {[
+                    { label: language === 'zh' ? '总榜' : 'Overall', active: true },
+                    { label: language === 'zh' ? '胜率' : 'Win %', active: false },
+                    { label: language === 'zh' ? '赛事记录' : 'Matches', active: false, to: '/history' },
+                  ].map((tab) =>
+                    tab.to ? (
+                      <Link
+                        key={tab.label}
+                        to={tab.to}
+                        className="px-3 py-1.5 font-sans text-[10px] font-black uppercase tracking-[0.14em] text-muted-foreground transition-colors hover:text-primary"
+                      >
+                        {tab.label}
+                      </Link>
+                    ) : (
+                      <span
+                        key={tab.label}
+                        aria-current={tab.active ? 'true' : undefined}
+                        className={
+                          tab.active
+                            ? 'bg-foreground px-3 py-1.5 font-sans text-[10px] font-black uppercase tracking-[0.14em] text-background'
+                            : 'px-3 py-1.5 font-sans text-[10px] font-black uppercase tracking-[0.14em] text-muted-foreground'
+                        }
+                      >
+                        {tab.label}
+                      </span>
+                    )
+                  )}
+                </div>
+              ) : undefined
+            }
           />
           {loading ? (
-          <div className="space-y-2">
+          <div className="space-y-1.5">
             {[...Array(8)].map((_, i) => (
               <div
                 key={i}
-                className="bg-card/50 animate-pulse-arena rounded h-[74px] mx-auto w-full max-w-3xl"
+                className="bg-card/50 animate-pulse-arena rounded h-[68px] w-full"
                 style={{ animationDelay: `${i * 0.1}s` }}
               />
             ))}
