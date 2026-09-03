@@ -7,12 +7,38 @@ interface SectionHeadingProps {
   className?: string;
   /** Render on a dark brand band */
   onBand?: boolean;
+  /** ESPN-style solid header bar */
+  variant?: 'default' | 'bar';
 }
 
 /**
  * Pro-league section header: small uppercase kicker + oversized condensed title.
+ * `variant="bar"` renders a solid broadcast-style header strip.
  */
-export function SectionHeading({ kicker, title, action, className, onBand }: SectionHeadingProps) {
+export function SectionHeading({ kicker, title, action, className, onBand, variant = 'default' }: SectionHeadingProps) {
+  if (variant === 'bar') {
+    return (
+      <div
+        className={cn(
+          'flex items-center justify-between gap-4 border-2 border-foreground bg-foreground px-4 py-3 sm:px-5 sm:py-3.5',
+          className
+        )}
+      >
+        <div className="min-w-0">
+          {kicker && (
+            <div className="mb-1 font-sans text-[9px] font-black uppercase tracking-[0.24em] text-background/60 sm:text-[10px]">
+              {kicker}
+            </div>
+          )}
+          <h2 className="truncate font-condensed text-2xl uppercase leading-none text-background sm:text-3xl md:text-4xl">
+            {title}
+          </h2>
+        </div>
+        {action && <div className="shrink-0">{action}</div>}
+      </div>
+    );
+  }
+
   return (
     <div className={cn('flex items-end justify-between gap-4 mb-5', className)}>
       <div>
