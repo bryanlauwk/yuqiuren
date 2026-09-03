@@ -134,6 +134,7 @@ export function MobileRankingCard({
                 {ranking.player_name}
               </p>
               <RankDelta ranking={ranking} />
+
             </div>
             <p className="mt-0.5 truncate text-[10px] font-bold uppercase tracking-wider text-muted-foreground">
               {ranking.sessions_played} · {ranking.championships} · {winRate}%
