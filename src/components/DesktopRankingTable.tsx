@@ -24,22 +24,23 @@ export function DesktopRankingTable({
     points: 'w-24 shrink-0 text-right',
   };
 
-  const headCls = 'text-[10px] font-black uppercase tracking-[0.18em] text-background/60';
+  const headCls = 'text-[10px] font-black uppercase tracking-[0.18em] text-muted-foreground';
 
   return (
     <div className="w-full">
       {/* Header strip */}
-      <div className="flex items-center gap-5 rounded bg-foreground px-5 py-2.5">
+      <div className="flex items-center gap-5 rounded border-2 border-foreground bg-muted/60 px-5 py-2">
         <span className={cn(col.rank, headCls, 'text-center')}>#</span>
         <span className="w-12 shrink-0" />
         <span className={cn('flex-1', headCls)}>{t.ranking.player}</span>
         <span className={cn(col.stat, headCls)}>{t.ranking.sessions}</span>
         <span className={cn(col.stat, headCls)}>{t.ranking.wins}</span>
         <span className={cn(col.stat, headCls)}>{isZh ? '胜率' : 'WIN %'}</span>
-        <span className={cn(col.points, 'text-[10px] font-black uppercase tracking-[0.18em] text-accent')}>
+        <span className={cn(col.points, headCls, 'text-primary')}>
           {t.ranking.points}
         </span>
       </div>
+
 
       {/* Rows */}
       <div className="mt-2 space-y-1.5">
@@ -70,9 +71,10 @@ export function DesktopRankingTable({
                 'group flex items-center gap-5 rounded border-2 border-foreground bg-card px-5 transition-all duration-200',
                 'hover:-translate-y-0.5 hover:shadow-[4px_4px_0_0_hsl(var(--foreground))]',
                 isTopThree ? 'py-3' : 'py-2',
-                isFirst && 'bg-accent/[0.07] shadow-[0_0_0_1px_hsl(var(--accent)/0.35)]',
-                isSecond && 'bg-primary/[0.06]',
-                isThird && 'bg-muted/30',
+                isFirst && 'bg-accent/[0.04]',
+                isSecond && 'bg-primary/[0.035]',
+                isThird && 'bg-muted/20',
+
                 accentBorder
               )}
             >
@@ -129,7 +131,7 @@ export function DesktopRankingTable({
                 )}
               </button>
 
-              {/* Name + sub info */}
+              {/* Name */}
               <div className="min-w-0 flex-1">
                 <div className="flex min-w-0 items-center gap-2.5">
                   <p
@@ -144,12 +146,8 @@ export function DesktopRankingTable({
                   </p>
                   <RankDelta ranking={ranking} />
                 </div>
-                <p className="mt-1 truncate text-[10px] font-bold uppercase tracking-wider text-muted-foreground">
-                  {isZh
-                    ? `${ranking.sessions_played} 场 · ${ranking.championships} 胜 · ${getWinRate(ranking)}% 胜率`
-                    : `${ranking.sessions_played} PL · ${ranking.championships} W · ${getWinRate(ranking)}% WR`}
-                </p>
               </div>
+
 
               {/* Sessions */}
               <p className={cn(col.stat, 'font-display text-lg font-black leading-none tabular-nums text-foreground')}>
@@ -176,9 +174,6 @@ export function DesktopRankingTable({
                   )}
                 >
                   {ranking.total_points}
-                </p>
-                <p className="mt-1 text-[9px] font-bold uppercase tracking-wider text-muted-foreground">
-                  {t.ranking.points}
                 </p>
               </div>
             </div>

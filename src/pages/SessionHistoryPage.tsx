@@ -9,6 +9,7 @@ import type { SessionResult } from '@/types/ranking';
 import { useState, useMemo } from 'react';
 import { PhotoLightbox } from '@/components/PhotoLightbox';
 import { HighlightsGallery } from '@/components/HighlightsGallery';
+import { SectionHeading } from '@/components/SectionHeading';
 
 export default function SessionHistoryPage() {
   const { t } = useLanguage();
@@ -67,14 +68,19 @@ export default function SessionHistoryPage() {
       
       <main id="highlights" className="flex-1 container py-10 sm:py-12 scroll-mt-28">
         {/* Page Header */}
-        <div className="text-center mb-10">
-          <h1 className="font-display text-4xl sm:text-5xl text-foreground tracking-tight mb-3 break-keep">
-            <span className="red-slab">{t.history.title}</span>
-          </h1>
-          <p className="font-display text-[11px] sm:text-xs tracking-[0.25em] text-muted-foreground">
-            {t.history.subtitle}
-          </p>
-        </div>
+        <SectionHeading
+          variant="bar"
+          as="h1"
+          kicker={t.history.subtitle}
+          title={t.history.title}
+          className="mb-8"
+          action={
+            <span className="font-condensed text-3xl text-background sm:text-4xl">
+              {String(sessions.length).padStart(2, '0')}
+            </span>
+          }
+        />
+
 
         {loading ? (
           <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
