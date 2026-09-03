@@ -165,7 +165,7 @@ export default function RankingPage() {
                 </div>
 
                 <div className="space-y-3 pt-3">
-                  {rankings.map((ranking, index) => (
+                  {viewRankings.map((ranking, index) => (
                     <div
                       key={ranking.player_id}
                       className="animate-fade-in-up"
@@ -173,8 +173,10 @@ export default function RankingPage() {
                     >
                       <MobileRankingCard
                         ranking={ranking}
-                        maxPoints={Math.max(rankings[0]?.total_points ?? 0, 1)}
+                        maxPoints={Math.max(viewRankings[0]?.total_points ?? 0, 1)}
                         onAvatarClick={handleAvatarClick}
+                        primaryMetric={rankingView === 'winRate' ? 'winRate' : 'points'}
+                        showRankDelta={rankingView === 'overall'}
                       />
                     </div>
                   ))}
@@ -184,12 +186,13 @@ export default function RankingPage() {
             ) : (
               <div className="animate-fade-in-up">
                 <DesktopRankingTable
-                  rankings={desktopRankings}
+                  rankings={viewRankings}
                   onAvatarClick={handleAvatarClick}
                   primaryMetric={rankingView === 'winRate' ? 'winRate' : 'points'}
                   showRankDelta={rankingView === 'overall'}
                 />
               </div>
+
             )}
           </>
           )}
