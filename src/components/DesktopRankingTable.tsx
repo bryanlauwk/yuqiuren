@@ -9,11 +9,15 @@ import type { PlayerRanking } from '@/types/ranking';
 interface DesktopRankingTableProps {
   rankings: PlayerRanking[];
   onAvatarClick?: (avatarUrl: string, playerName: string) => void;
+  primaryMetric?: 'points' | 'winRate';
+  showRankDelta?: boolean;
 }
 
 export function DesktopRankingTable({
   rankings,
   onAvatarClick,
+  primaryMetric = 'points',
+  showRankDelta = true,
 }: DesktopRankingTableProps) {
   const { t, language } = useLanguage();
   const isZh = language === 'zh';
@@ -35,8 +39,10 @@ export function DesktopRankingTable({
         <span className={cn('flex-1', headCls)}>{t.ranking.player}</span>
         <span className={cn(col.stat, headCls)}>{t.ranking.sessions}</span>
         <span className={cn(col.stat, headCls)}>{t.ranking.wins}</span>
-        <span className={cn(col.stat, headCls)}>{isZh ? '胜率' : 'WIN %'}</span>
-        <span className={cn(col.points, headCls, 'text-primary')}>
+        <span className={cn(col.stat, headCls, primaryMetric === 'winRate' && 'text-primary')}>
+          {isZh ? '胜率' : 'WIN %'}
+        </span>
+        <span className={cn(col.points, headCls, primaryMetric === 'points' && 'text-primary')}>
           {t.ranking.points}
         </span>
       </div>
@@ -144,7 +150,7 @@ export function DesktopRankingTable({
                   >
                     {ranking.player_name}
                   </p>
-                  <RankDelta ranking={ranking} />
+                  {showRankDelta && <RankDelta ranking={ranking} />}
                 </div>
               </div>
 
@@ -160,7 +166,15 @@ export function DesktopRankingTable({
               </p>
 
               {/* Win rate */}
-              <p className={cn(col.stat, 'font-sans text-sm font-bold tabular-nums text-muted-foreground')}>
+              <p
+                className={cn(
+                  col.stat,
+                  'tabular-nums',
+                  primaryMetric === 'winRate'
+                    ? 'font-display text-2xl font-black leading-none text-primary'
+                    : 'font-sans text-sm font-bold text-muted-foreground',
+                )}
+              >
                 {getWinRate(ranking)}%
               </p>
 
@@ -170,7 +184,13 @@ export function DesktopRankingTable({
                   className={cn(
                     'font-display font-black leading-none tabular-nums',
                     isTopThree ? 'text-3xl' : 'text-2xl',
-                    isFirst ? 'text-accent' : isSecond ? 'text-primary' : 'text-foreground'
+                    primaryMetric === 'points'
+                      ? isFirst
+                        ? 'text-accent'
+                        : isSecond
+                        ? 'text-primary'
+                        : 'text-foreground'
+                      : 'text-foreground'
                   )}
                 >
                   {ranking.total_points}
