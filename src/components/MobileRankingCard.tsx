@@ -11,11 +11,19 @@ interface MobileRankingCardProps {
   ranking: PlayerRanking;
   maxPoints: number;
   onAvatarClick?: (avatarUrl: string, playerName: string) => void;
+  primaryMetric?: 'points' | 'winRate';
+  showRankDelta?: boolean;
 }
 
-export function MobileRankingCard({ ranking, onAvatarClick }: MobileRankingCardProps) {
+export function MobileRankingCard({
+  ranking,
+  onAvatarClick,
+  primaryMetric = 'points',
+  showRankDelta = true,
+}: MobileRankingCardProps) {
   const { t } = useLanguage();
   const [expanded, setExpanded] = useState(false);
+
 
   const isTopThree = ranking.rank <= 3;
   const isFirst = ranking.rank === 1;
@@ -125,27 +133,35 @@ export function MobileRankingCard({ ranking, onAvatarClick }: MobileRankingCardP
               >
                 {ranking.player_name}
               </p>
-              <RankDelta ranking={ranking} />
+              {showRankDelta && <RankDelta ranking={ranking} />}
+
             </div>
             <p className="mt-0.5 truncate text-[10px] font-bold uppercase tracking-wider text-muted-foreground">
               {ranking.sessions_played} · {ranking.championships} · {winRate}%
             </p>
           </div>
 
-          {/* Points value */}
+          {/* Primary metric value */}
           <div className="flex-shrink-0 text-right">
             <p
               className={cn(
                 'font-display text-2xl font-black tabular-nums leading-none',
-                isFirst ? 'text-accent' : isSecond ? 'text-primary' : 'text-foreground'
+                primaryMetric === 'winRate'
+                  ? 'text-primary'
+                  : isFirst
+                  ? 'text-accent'
+                  : isSecond
+                  ? 'text-primary'
+                  : 'text-foreground'
               )}
             >
-              {ranking.total_points}
+              {primaryMetric === 'winRate' ? `${winRate}%` : ranking.total_points}
             </p>
             <p className="text-[10px] font-bold uppercase tracking-wider text-foreground/50 mt-0.5">
-              {t.ranking.points}
+              {primaryMetric === 'winRate' ? t.ranking.winRate : t.ranking.points}
             </p>
           </div>
+
 
           <ChevronDown
             className={cn(

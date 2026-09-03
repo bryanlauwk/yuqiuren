@@ -30,12 +30,13 @@ export default function RankingPage() {
     [rankings, results, sessions],
   );
   const winRateRankings = useMemo(() => buildWinRateRankings(rankings), [rankings]);
-  const desktopRankings =
+  const viewRankings =
     rankingView === 'recent5'
       ? recentRankings
       : rankingView === 'winRate'
       ? winRateRankings
       : rankings;
+
 
   const latestSession = sessions[0];
   const latestSessionDate = latestSession
@@ -67,49 +68,54 @@ export default function RankingPage() {
       <main id="rankings-anchor" className="container relative z-10 flex-1 py-10 scroll-mt-28 sm:py-14">
         <Reveal>
           <div className="mx-auto w-full max-w-5xl">
-          <div className="mb-5 hidden items-end justify-between gap-6 lg:flex">
-            <div className="flex min-w-0 items-end gap-8">
-              <SectionHeading
-                kicker="LEAGUE TABLE · 2026 SEASON"
-                title={language === 'zh' ? '联赛积分榜' : 'League Standings'}
-                className="mb-0 shrink-0"
-              />
+          <SectionHeading
+            variant="bar"
+            kicker="2026 SEASON · LEAGUE TABLE"
+            title={language === 'zh' ? '联赛积分榜' : 'League Standings'}
+            className="mb-3"
+            action={
+              <span className="font-sans text-[10px] font-black uppercase tracking-[0.16em] text-background/70">
+                {language === 'zh' ? `共 ${rankings.length} 位球员` : `${rankings.length} PLAYERS`}
+              </span>
+            }
+          />
 
-              <div className="mb-0.5 flex items-center gap-2">
-                <div
-                  className="inline-flex overflow-hidden rounded border border-border bg-card"
-                  role="group"
-                  aria-label={language === 'zh' ? '排行榜视图' : 'Ranking view'}
-                >
-                  {viewOptions.map((option) => (
-                    <button
-                      key={option.value}
-                      type="button"
-                      aria-pressed={rankingView === option.value}
-                      onClick={() => setRankingView(option.value)}
-                      className={cn(
-                        'min-h-10 border-r border-border px-4 font-sans text-[11px] font-black uppercase tracking-[0.08em] transition-colors last:border-r-0',
-                        rankingView === option.value
-                          ? 'bg-foreground text-background'
-                          : 'bg-card text-foreground hover:bg-muted',
-                      )}
-                    >
-                      {option.label}
-                    </button>
-                  ))}
-                </div>
-
-                <Link
-                  to="/history"
-                  className="inline-flex min-h-10 items-center gap-2 rounded border border-border bg-card px-4 font-sans text-[11px] font-black uppercase tracking-[0.08em] text-foreground transition-colors hover:border-foreground hover:bg-muted"
-                >
-                  {language === 'zh' ? '赛事纪录' : 'Matches'}
-                  <ArrowRight className="h-3.5 w-3.5" aria-hidden />
-                </Link>
+          {/* Unified control row — same on mobile / tablet / desktop */}
+          <div className="mb-4 flex flex-col gap-2 md:flex-row md:flex-wrap md:items-center md:justify-between">
+            <div className="flex items-center gap-2">
+              <div
+                className="inline-flex flex-1 overflow-hidden rounded border border-border bg-card md:flex-none"
+                role="group"
+                aria-label={language === 'zh' ? '排行榜视图' : 'Ranking view'}
+              >
+                {viewOptions.map((option) => (
+                  <button
+                    key={option.value}
+                    type="button"
+                    aria-pressed={rankingView === option.value}
+                    onClick={() => setRankingView(option.value)}
+                    className={cn(
+                      'min-h-11 flex-1 border-r border-border px-3 font-sans text-[11px] font-black uppercase tracking-[0.08em] transition-colors last:border-r-0 md:flex-none md:px-4',
+                      rankingView === option.value
+                        ? 'bg-foreground text-background'
+                        : 'bg-card text-foreground hover:bg-muted',
+                    )}
+                  >
+                    {option.label}
+                  </button>
+                ))}
               </div>
+
+              <Link
+                to="/history"
+                className="inline-flex min-h-11 shrink-0 items-center gap-2 rounded border border-border bg-card px-3 font-sans text-[11px] font-black uppercase tracking-[0.08em] text-foreground transition-colors hover:border-foreground hover:bg-muted md:px-4"
+              >
+                {language === 'zh' ? '赛事纪录' : 'Matches'}
+                <ArrowRight className="h-3.5 w-3.5" aria-hidden />
+              </Link>
             </div>
 
-            <div className="mb-2 flex shrink-0 items-center gap-2 text-muted-foreground">
+            <div className="flex items-center gap-2 text-muted-foreground">
               <CalendarDays className="h-4 w-4" aria-hidden />
               <span className="font-sans text-[11px] font-bold tracking-wide">
                 {latestSessionDate
@@ -123,17 +129,6 @@ export default function RankingPage() {
             </div>
           </div>
 
-          <SectionHeading
-            variant="bar"
-            kicker="2026 SEASON · LEAGUE TABLE"
-            title={language === 'zh' ? '联赛积分榜' : 'League Standings'}
-            className="mb-4 lg:hidden"
-            action={
-              <span className="font-sans text-[10px] font-black uppercase tracking-[0.16em] text-background/70">
-                {language === 'zh' ? `共 ${rankings.length} 位球员` : `${rankings.length} PLAYERS`}
-              </span>
-            }
-          />
 
           {loading ? (
           <div className="space-y-1.5">
@@ -170,7 +165,7 @@ export default function RankingPage() {
                 </div>
 
                 <div className="space-y-3 pt-3">
-                  {rankings.map((ranking, index) => (
+                  {viewRankings.map((ranking, index) => (
                     <div
                       key={ranking.player_id}
                       className="animate-fade-in-up"
@@ -178,8 +173,10 @@ export default function RankingPage() {
                     >
                       <MobileRankingCard
                         ranking={ranking}
-                        maxPoints={Math.max(rankings[0]?.total_points ?? 0, 1)}
+                        maxPoints={Math.max(viewRankings[0]?.total_points ?? 0, 1)}
                         onAvatarClick={handleAvatarClick}
+                        primaryMetric={rankingView === 'winRate' ? 'winRate' : 'points'}
+                        showRankDelta={rankingView === 'overall'}
                       />
                     </div>
                   ))}
@@ -189,12 +186,13 @@ export default function RankingPage() {
             ) : (
               <div className="animate-fade-in-up">
                 <DesktopRankingTable
-                  rankings={desktopRankings}
+                  rankings={viewRankings}
                   onAvatarClick={handleAvatarClick}
                   primaryMetric={rankingView === 'winRate' ? 'winRate' : 'points'}
                   showRankDelta={rankingView === 'overall'}
                 />
               </div>
+
             )}
           </>
           )}

@@ -23,9 +23,9 @@ export function DesktopRankingTable({
   const isZh = language === 'zh';
 
   const col = {
-    rank: 'w-16 shrink-0',
-    stat: 'w-20 shrink-0 text-right',
-    points: 'w-24 shrink-0 text-right',
+    rank: 'w-11 lg:w-16 shrink-0',
+    stat: 'w-14 lg:w-20 shrink-0 text-right',
+    points: 'w-16 lg:w-24 shrink-0 text-right',
   };
 
   const headCls = 'text-[10px] font-black uppercase tracking-[0.18em] text-muted-foreground';
@@ -33,9 +33,9 @@ export function DesktopRankingTable({
   return (
     <div className="w-full">
       {/* Header strip */}
-      <div className="flex items-center gap-5 rounded border-2 border-foreground bg-muted/60 px-5 py-2">
+      <div className="sticky top-[89px] z-20 flex items-center gap-3 lg:gap-5 rounded border-2 border-foreground bg-muted/95 px-3 py-2 backdrop-blur lg:px-5">
         <span className={cn(col.rank, headCls, 'text-center')}>#</span>
-        <span className="w-12 shrink-0" />
+        <span className="w-10 shrink-0 lg:w-12" />
         <span className={cn('flex-1', headCls)}>{t.ranking.player}</span>
         <span className={cn(col.stat, headCls)}>{t.ranking.sessions}</span>
         <span className={cn(col.stat, headCls)}>{t.ranking.wins}</span>
@@ -46,6 +46,7 @@ export function DesktopRankingTable({
           {t.ranking.points}
         </span>
       </div>
+
 
 
       {/* Rows */}
@@ -74,7 +75,7 @@ export function DesktopRankingTable({
             <div
               key={ranking.player_id}
               className={cn(
-                'group flex items-center gap-5 rounded border-2 border-foreground bg-card px-5 transition-all duration-200',
+                'group flex items-center gap-3 lg:gap-5 rounded border-2 border-foreground bg-card px-3 lg:px-5 transition-all duration-200',
                 'hover:-translate-y-0.5 hover:shadow-[4px_4px_0_0_hsl(var(--foreground))]',
                 isTopThree ? 'py-3' : 'py-2',
                 isFirst && 'bg-accent/[0.04]',
@@ -84,23 +85,24 @@ export function DesktopRankingTable({
                 accentBorder
               )}
             >
+
               {/* Rank */}
               <div className={cn(col.rank, 'flex items-center justify-center gap-1')}>
                 {isTopThree ? (
                   <span
                     className={cn(
-                      'inline-flex h-9 w-9 items-center justify-center rounded-lg border-2 border-foreground font-display text-lg italic tabular-nums shadow-[2px_2px_0_0_hsl(var(--foreground))]',
+                      'inline-flex h-8 w-8 lg:h-9 lg:w-9 items-center justify-center rounded-lg border-2 border-foreground font-display text-base lg:text-lg italic tabular-nums shadow-[2px_2px_0_0_hsl(var(--foreground))]',
                       badgeStyle
                     )}
                   >
                     {ranking.rank}
                   </span>
                 ) : (
-                  <span className="font-display text-2xl italic tabular-nums text-muted-foreground">
+                  <span className="font-display text-xl lg:text-2xl italic tabular-nums text-muted-foreground">
                     {ranking.rank}
                   </span>
                 )}
-                {isFirst && <Crown className="h-4 w-4 text-accent" strokeWidth={2.5} aria-hidden />}
+                {isFirst && <Crown className="hidden h-4 w-4 text-accent lg:block" strokeWidth={2.5} aria-hidden />}
               </div>
 
               {/* Avatar */}
@@ -112,11 +114,12 @@ export function DesktopRankingTable({
                 disabled={!ranking.full_avatar_url}
                 aria-label={ranking.player_name}
                 className={cn(
-                  'h-12 w-12 shrink-0 overflow-hidden rounded-full bg-muted transition-transform duration-200 group-hover:scale-105',
+                  'h-10 w-10 lg:h-12 lg:w-12 shrink-0 overflow-hidden rounded-full bg-muted transition-transform duration-200 group-hover:scale-105',
                   isTopThree ? 'border-2 border-foreground' : 'border-2 border-foreground/50',
                   ranking.full_avatar_url && 'cursor-pointer'
                 )}
               >
+
                 {ranking.avatar_url ? (
                   <img
                     src={ranking.avatar_url}
@@ -143,7 +146,7 @@ export function DesktopRankingTable({
                   <p
                     className={cn(
                       'truncate font-display leading-none tracking-tight text-foreground transition-colors',
-                      isTopThree ? 'text-xl' : 'text-lg',
+                      isTopThree ? 'text-lg lg:text-xl' : 'text-base lg:text-lg',
                       isFirst && 'group-hover:text-accent',
                       isSecond && 'group-hover:text-primary'
                     )}
@@ -156,12 +159,12 @@ export function DesktopRankingTable({
 
 
               {/* Sessions */}
-              <p className={cn(col.stat, 'font-display text-lg font-black leading-none tabular-nums text-foreground')}>
+              <p className={cn(col.stat, 'font-display text-base lg:text-lg font-black leading-none tabular-nums text-foreground')}>
                 {ranking.sessions_played}
               </p>
 
               {/* Wins */}
-              <p className={cn(col.stat, 'font-display text-lg font-black leading-none tabular-nums text-foreground')}>
+              <p className={cn(col.stat, 'font-display text-base lg:text-lg font-black leading-none tabular-nums text-foreground')}>
                 {ranking.championships}
               </p>
 
@@ -171,8 +174,8 @@ export function DesktopRankingTable({
                   col.stat,
                   'tabular-nums',
                   primaryMetric === 'winRate'
-                    ? 'font-display text-2xl font-black leading-none text-primary'
-                    : 'font-sans text-sm font-bold text-muted-foreground',
+                    ? 'font-display text-xl lg:text-2xl font-black leading-none text-primary'
+                    : 'font-sans text-xs lg:text-sm font-bold text-muted-foreground',
                 )}
               >
                 {getWinRate(ranking)}%
@@ -183,7 +186,8 @@ export function DesktopRankingTable({
                 <p
                   className={cn(
                     'font-display font-black leading-none tabular-nums',
-                    isTopThree ? 'text-3xl' : 'text-2xl',
+                    isTopThree ? 'text-2xl lg:text-3xl' : 'text-xl lg:text-2xl',
+
                     primaryMetric === 'points'
                       ? isFirst
                         ? 'text-accent'
