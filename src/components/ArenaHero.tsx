@@ -28,7 +28,7 @@ export function ArenaHero() {
               {isZh ? '羽球人 · 社区联赛' : 'YUQIUREN · COMMUNITY LEAGUE'}
             </div>
 
-            <h1 className="max-w-5xl text-[clamp(3rem,7.5vw,7.5rem)] leading-[0.84] band-fg">
+            <h1 className="max-w-5xl text-[clamp(2.75rem,6.4vw,6.25rem)] leading-[0.86] band-fg">
               {isZh ? (
                 <>
                   <span className="block">
