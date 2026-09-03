@@ -6,7 +6,8 @@ import { CourtLines } from '@/components/hero/CourtLines';
 
 export function ArenaHero() {
   const { t, language } = useLanguage();
-  const { sessions, players, loading } = useRankings();
+  const { sessions, players, rankings, loading } = useRankings();
+  const topPoints = rankings?.[0]?.total_points ?? 0;
   const isZh = language === 'zh';
 
   const scrollToRankings = () => {
