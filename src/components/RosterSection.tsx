@@ -35,15 +35,17 @@ export function RosterSection() {
       <div className="container">
         <Reveal>
           <SectionHeading
+            variant="bar"
             kicker={isZh ? '球队阵容 · 2026 赛季' : 'TEAM ROSTER · 2026 SEASON'}
             title={isZh ? '2026 球员名册' : '2026 Player Roster'}
-            className="mb-8 border-b-2 border-foreground pb-5"
+            className="mb-6"
             action={
-              <span className="font-display text-4xl text-primary sm:text-5xl">
+              <span className="font-condensed text-3xl text-background sm:text-4xl">
                 {String(rankings.length).padStart(2, '0')}
               </span>
             }
           />
+
 
           {loading ? (
             <div className="flex gap-4 overflow-hidden md:grid md:grid-cols-3 xl:grid-cols-4">
