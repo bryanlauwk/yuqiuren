@@ -1,5 +1,5 @@
-import { Link } from 'react-router-dom';
-import { ArrowDown, ArrowRight } from 'lucide-react';
+
+import { ArrowDown } from 'lucide-react';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { useRankings } from '@/hooks/useRankings';
 import { CourtLines } from '@/components/hero/CourtLines';
