@@ -9,13 +9,16 @@ interface SectionHeadingProps {
   onBand?: boolean;
   /** ESPN-style solid header bar */
   variant?: 'default' | 'bar';
+  /** Heading element to render */
+  as?: 'h1' | 'h2';
 }
 
 /**
  * Pro-league section header: small uppercase kicker + oversized condensed title.
  * `variant="bar"` renders a solid broadcast-style header strip.
  */
-export function SectionHeading({ kicker, title, action, className, onBand, variant = 'default' }: SectionHeadingProps) {
+export function SectionHeading({ kicker, title, action, className, onBand, variant = 'default', as = 'h2' }: SectionHeadingProps) {
+  const Heading = as;
   if (variant === 'bar') {
     return (
       <div
@@ -30,9 +33,9 @@ export function SectionHeading({ kicker, title, action, className, onBand, varia
               {kicker}
             </div>
           )}
-          <h2 className="truncate font-condensed text-2xl uppercase leading-none text-background sm:text-3xl md:text-4xl">
+          <Heading className="truncate font-condensed text-2xl uppercase leading-none text-background sm:text-3xl md:text-4xl">
             {title}
-          </h2>
+          </Heading>
         </div>
         {action && <div className="shrink-0">{action}</div>}
       </div>

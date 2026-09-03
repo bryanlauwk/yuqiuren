@@ -70,6 +70,7 @@ export default function SessionHistoryPage() {
         {/* Page Header */}
         <SectionHeading
           variant="bar"
+          as="h1"
           kicker={t.history.subtitle}
           title={t.history.title}
           className="mb-8"
