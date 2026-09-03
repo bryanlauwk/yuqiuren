@@ -20,8 +20,8 @@ export function ArenaHero() {
         <CourtLines />
       </div>
 
-      <div className="relative z-10 container py-12 sm:py-16 lg:py-20">
-        <div className="grid gap-10 lg:grid-cols-12 lg:items-end lg:gap-16">
+      <div className="relative z-10 container py-10 sm:py-12 lg:py-14">
+        <div className="grid gap-8 lg:grid-cols-12 lg:items-end lg:gap-14">
           <div className="lg:col-span-8">
             <div className="mb-4 flex items-center gap-3 font-sans text-[10px] font-extrabold uppercase tracking-[0.28em] text-[hsl(var(--band-foreground))]/75 sm:text-xs">
               <span className="h-2 w-2 bg-accent" />
