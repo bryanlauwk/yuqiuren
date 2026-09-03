@@ -131,7 +131,7 @@ export function DesktopRankingTable({
                 )}
               </button>
 
-              {/* Name + sub info */}
+              {/* Name */}
               <div className="min-w-0 flex-1">
                 <div className="flex min-w-0 items-center gap-2.5">
                   <p
@@ -146,12 +146,8 @@ export function DesktopRankingTable({
                   </p>
                   <RankDelta ranking={ranking} />
                 </div>
-                <p className="mt-1 truncate text-[10px] font-bold uppercase tracking-wider text-muted-foreground">
-                  {isZh
-                    ? `${ranking.sessions_played} 场 · ${ranking.championships} 胜 · ${getWinRate(ranking)}% 胜率`
-                    : `${ranking.sessions_played} PL · ${ranking.championships} W · ${getWinRate(ranking)}% WR`}
-                </p>
               </div>
+
 
               {/* Sessions */}
               <p className={cn(col.stat, 'font-display text-lg font-black leading-none tabular-nums text-foreground')}>
