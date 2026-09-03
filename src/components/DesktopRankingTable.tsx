@@ -91,18 +91,18 @@ export function DesktopRankingTable({
                 {isTopThree ? (
                   <span
                     className={cn(
-                      'inline-flex h-9 w-9 items-center justify-center rounded-lg border-2 border-foreground font-display text-lg italic tabular-nums shadow-[2px_2px_0_0_hsl(var(--foreground))]',
+                      'inline-flex h-8 w-8 lg:h-9 lg:w-9 items-center justify-center rounded-lg border-2 border-foreground font-display text-base lg:text-lg italic tabular-nums shadow-[2px_2px_0_0_hsl(var(--foreground))]',
                       badgeStyle
                     )}
                   >
                     {ranking.rank}
                   </span>
                 ) : (
-                  <span className="font-display text-2xl italic tabular-nums text-muted-foreground">
+                  <span className="font-display text-xl lg:text-2xl italic tabular-nums text-muted-foreground">
                     {ranking.rank}
                   </span>
                 )}
-                {isFirst && <Crown className="h-4 w-4 text-accent" strokeWidth={2.5} aria-hidden />}
+                {isFirst && <Crown className="hidden h-4 w-4 text-accent lg:block" strokeWidth={2.5} aria-hidden />}
               </div>
 
               {/* Avatar */}
@@ -114,11 +114,12 @@ export function DesktopRankingTable({
                 disabled={!ranking.full_avatar_url}
                 aria-label={ranking.player_name}
                 className={cn(
-                  'h-12 w-12 shrink-0 overflow-hidden rounded-full bg-muted transition-transform duration-200 group-hover:scale-105',
+                  'h-10 w-10 lg:h-12 lg:w-12 shrink-0 overflow-hidden rounded-full bg-muted transition-transform duration-200 group-hover:scale-105',
                   isTopThree ? 'border-2 border-foreground' : 'border-2 border-foreground/50',
                   ranking.full_avatar_url && 'cursor-pointer'
                 )}
               >
+
                 {ranking.avatar_url ? (
                   <img
                     src={ranking.avatar_url}
