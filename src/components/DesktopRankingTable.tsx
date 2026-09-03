@@ -175,9 +175,6 @@ export function DesktopRankingTable({
                 >
                   {ranking.total_points}
                 </p>
-                <p className="mt-1 text-[9px] font-bold uppercase tracking-wider text-muted-foreground">
-                  {t.ranking.points}
-                </p>
               </div>
             </div>
           );
