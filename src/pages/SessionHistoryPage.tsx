@@ -33,13 +33,13 @@ export default function SessionHistoryPage() {
       <Header />
       <main id="main-content" className="cs-shell flex-1 py-8 sm:py-12">
         <div id="highlights" className="mb-8 flex scroll-mt-24 items-end justify-between gap-4">
-          <div><p className="cs-eyebrow mb-3">{isZh ? '场上的成绩 · 场下的回忆' : 'RESULTS & MEMORIES'}</p><h1 className="cs-title">{isZh ? '赛事回顾' : 'Match days'}</h1></div>
-          <span className="shrink-0 rounded-full border border-border px-3 py-2 text-sm text-muted-foreground">{loading ? '—' : sessions.length} {isZh ? '次活动' : 'sessions'}</span>
+          <div><p className="cs-eyebrow mb-3">{isZh ? '场上成绩 · 赛后回忆' : 'RESULTS & MEMORIES'}</p><h1 className="cs-title">{isZh ? '比赛记录' : 'Match history'}</h1></div>
+          <span className="shrink-0 rounded-full border border-border px-3 py-2 text-sm text-muted-foreground">{loading ? '—' : sessions.length} {isZh ? '场比赛' : 'matches'}</span>
         </div>
         {loading ? (
-          <div role="status" className="grid gap-5 md:grid-cols-2 xl:grid-cols-3"><span className="sr-only">{isZh ? '正在加载赛事回顾' : 'Loading match days'}</span>{Array.from({ length: 6 }, (_, i) => <div key={i} className="cs-panel h-96 animate-pulse bg-muted/50" />)}</div>
+          <div role="status" className="grid gap-5 md:grid-cols-2 xl:grid-cols-3"><span className="sr-only">{isZh ? '正在加载比赛记录' : 'Loading match history'}</span>{Array.from({ length: 6 }, (_, i) => <div key={i} className="cs-panel h-96 animate-pulse bg-muted/50" />)}</div>
         ) : sessions.length === 0 ? (
-          <div className="cs-panel py-16 text-center"><CalendarDays className="mx-auto mb-4 h-8 w-8 text-muted-foreground" aria-hidden /><p>{isZh ? '暂无活动记录' : 'No match days yet'}</p></div>
+          <div className="cs-panel py-16 text-center"><CalendarDays className="mx-auto mb-4 h-8 w-8 text-muted-foreground" aria-hidden /><p>{isZh ? '暂无比赛记录' : 'No matches yet'}</p></div>
         ) : (
           <div className="grid items-start gap-5 md:grid-cols-2 xl:grid-cols-3">
             {sessions.map((session) => {
@@ -49,7 +49,7 @@ export default function SessionHistoryPage() {
               const groups = [
                 { type: 'champion', label: isZh ? '冠军' : 'Champions', icon: Trophy, color: 'bg-accent text-accent-foreground' },
                 { type: 'runner_up', label: isZh ? '亚军' : 'Runners-up', icon: Medal, color: 'bg-primary/10 text-primary' },
-                { type: 'attendance', label: isZh ? '参赛球友' : 'Also played', icon: Users, color: 'bg-secondary text-muted-foreground' },
+                 { type: 'attendance', label: isZh ? '出赛球员' : 'Also played', icon: Users, color: 'bg-secondary text-muted-foreground' },
               ];
               return (
                 <article key={session.id} className="cs-panel overflow-hidden" aria-label={dateLabel}>
@@ -66,7 +66,7 @@ export default function SessionHistoryPage() {
                       {!sessionResults.length && <p className="text-sm text-muted-foreground">{isZh ? '成绩尚未记录' : 'Results not recorded yet'}</p>}
                     </div>
                     {(sessionResults.length > 0 || sessionHighlights.length > 0) && <div className="mt-5 border-t border-border/70 pt-4">
-                      {sessionResults.length > 0 && <p className="mb-3 text-xs text-muted-foreground">{isZh ? '本场总积分' : 'Session points'} <span className="ml-1 font-semibold tabular-nums text-foreground">{sessionResults.reduce((sum, result) => sum + result.total_points, 0)}</span></p>}
+                       {sessionResults.length > 0 && <p className="mb-3 text-xs text-muted-foreground">{isZh ? '本场积分' : 'Match points'} <span className="ml-1 font-semibold tabular-nums text-foreground">{sessionResults.reduce((sum, result) => sum + result.total_points, 0)}</span></p>}
                       {sessionHighlights.length > 0 && <button type="button" onClick={() => setGalleryFor(session.id)} className="cs-action w-full"><Play className="h-4 w-4 fill-current" aria-hidden /><span>{sessionHighlights.length} {isZh ? '段精彩片段' : 'highlights'}</span><ArrowRight className="ml-auto h-4 w-4" aria-hidden /></button>}
                     </div>}
                   </div>

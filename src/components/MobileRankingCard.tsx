@@ -24,7 +24,7 @@ export function MobileRankingCard({ ranking, onAvatarClick, primaryMetric = 'poi
       <div className="cs-mobile-row">
         <RankingBadge rank={ranking.rank} />
         <RankingAvatar ranking={ranking} onAvatarClick={onAvatarClick} className="h-9 w-9" />
-        <button type="button" className="col-span-3 grid min-h-11 min-w-0 grid-cols-[minmax(0,1fr)_auto_1.25rem] items-center gap-2 text-left" onClick={() => setExpanded(!expanded)} aria-expanded={expanded} aria-controls={detailsId} aria-label={`${ranking.player_name} — ${isZh ? '详细数据' : 'player stats'}`}>
+        <button type="button" className="col-span-3 grid min-h-11 min-w-0 grid-cols-[minmax(0,1fr)_auto_1.25rem] items-center gap-2 text-left" onClick={() => setExpanded(!expanded)} aria-expanded={expanded} aria-controls={detailsId} aria-label={`${ranking.player_name} — ${isZh ? '球员数据' : 'player stats'}`}>
           <span className="min-w-0">
             <span className={cn('block break-words text-sm font-semibold', ranking.rank === 2 && 'text-primary')}>{ranking.player_name}</span>
             <span className="mt-1 flex flex-wrap items-center gap-1.5 text-xs text-muted-foreground">
@@ -42,10 +42,10 @@ export function MobileRankingCard({ ranking, onAvatarClick, primaryMetric = 'poi
       <div id={detailsId} hidden={!expanded} className="pb-4 pl-1">
         <dl className="grid grid-cols-2 gap-3 rounded-lg bg-muted/40 p-3">
           {[
-            [isZh ? '参与场次' : 'Sessions played', ranking.sessions_played],
-            [isZh ? '夺冠次数' : 'Session titles', ranking.championships],
+            [isZh ? '出赛场数' : 'Matches played', ranking.sessions_played],
+            [isZh ? '冠军次数' : 'Titles won', ranking.championships],
             [isZh ? '夺冠率' : 'Title rate', `${getWinRate(ranking)}%`],
-            [isZh ? '场均积分' : 'Points per session', getAveragePoints(ranking)],
+            [isZh ? '场均积分' : 'Points per match', getAveragePoints(ranking)],
           ].map(([label, value]) => <div key={label}><dt className="text-xs text-muted-foreground">{label}</dt><dd className="mt-1 text-base font-semibold tabular-nums">{value}</dd></div>)}
         </dl>
       </div>

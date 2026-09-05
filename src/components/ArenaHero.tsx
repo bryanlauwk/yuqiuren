@@ -16,7 +16,7 @@ export function ArenaHero() {
           <h1 id="standings-title" className="cs-title">{isZh ? '2026 联赛积分榜' : '2026 League Standings'}</h1>
           <div className="mt-3 flex flex-wrap items-center gap-x-6 gap-y-2 text-sm text-muted-foreground sm:mt-5">
             <span className="inline-flex items-center gap-2"><Users className="h-4 w-4" aria-hidden /><strong className="font-semibold text-foreground">{loading ? '—' : players.length}</strong>{isZh ? '位球员' : 'players'}</span>
-            <span className="inline-flex items-center gap-2"><CalendarDays className="h-4 w-4" aria-hidden /><strong className="font-semibold text-foreground">{loading ? '—' : sessions.length}</strong>{isZh ? '次活动' : 'match days'}</span>
+            <span className="inline-flex items-center gap-2"><CalendarDays className="h-4 w-4" aria-hidden /><strong className="font-semibold text-foreground">{loading ? '—' : sessions.length}</strong>{isZh ? '场比赛' : 'matches'}</span>
           </div>
         </div>
         <p className="hidden shrink-0 border-l border-border pl-6 text-right text-sm leading-7 text-muted-foreground lg:block">
