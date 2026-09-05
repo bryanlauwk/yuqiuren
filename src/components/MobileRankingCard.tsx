@@ -24,7 +24,7 @@ export function MobileRankingCard({ ranking, onAvatarClick, primaryMetric = 'poi
       <div className="cs-mobile-row">
         <RankingBadge rank={ranking.rank} />
         <RankingAvatar ranking={ranking} onAvatarClick={onAvatarClick} className="h-9 w-9" />
-        <button type="button" className="col-span-3 grid min-h-11 min-w-0 grid-cols-[minmax(0,1fr)_auto_1.25rem] items-center gap-2 text-left" onClick={() => setExpanded(!expanded)} aria-expanded={expanded} aria-controls={detailsId} aria-label={`${ranking.player_name} — ${isZh ? '详细数据' : 'player stats'}`}>
+        <button type="button" className="col-span-3 grid min-h-11 min-w-0 grid-cols-[minmax(0,1fr)_auto_1.25rem] items-center gap-2 text-left" onClick={() => setExpanded(!expanded)} aria-expanded={expanded} aria-controls={detailsId} aria-label={`${ranking.player_name} — ${isZh ? '球员数据' : 'player stats'}`}>
           <span className="min-w-0">
             <span className={cn('block break-words text-sm font-semibold', ranking.rank === 2 && 'text-primary')}>{ranking.player_name}</span>
             <span className="mt-1 flex flex-wrap items-center gap-1.5 text-xs text-muted-foreground">
