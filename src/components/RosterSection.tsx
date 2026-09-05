@@ -1,128 +1,61 @@
 import { useMemo, useState } from 'react';
-import { Dialog, DialogContent, DialogTitle } from '@/components/ui/dialog';
+import { Users } from 'lucide-react';
+import { Dialog, DialogContent, DialogDescription, DialogTitle } from '@/components/ui/dialog';
 import { PlayerCard } from '@/components/PlayerCard';
-import { SectionHeading } from '@/components/SectionHeading';
-import { Reveal } from '@/components/Reveal';
-import { useIsMobile } from '@/hooks/use-mobile';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { useRankings } from '@/hooks/useRankings';
 import { getAveragePoints, getBestChampionshipStreak, getInitials, getWinRate } from '@/lib/ranking-display';
 import type { PlayerRanking } from '@/types/ranking';
 
-interface RosterPlayer {
-  ranking: PlayerRanking;
-  bestStreak: number;
-}
+interface RosterPlayer { ranking: PlayerRanking; bestStreak: number; }
 
 export function RosterSection() {
   const { rankings, sessions, results, loading } = useRankings();
   const { language } = useLanguage();
-  const isMobile = useIsMobile();
   const isZh = language === 'zh';
   const [selected, setSelected] = useState<RosterPlayer | null>(null);
-
-  const roster = useMemo(
-    () => rankings.map((ranking) => ({
-      ranking,
-      bestStreak: getBestChampionshipStreak(ranking.player_id, sessions, results),
-    })),
-    [rankings, results, sessions],
-  );
-
+  const roster = useMemo(() => rankings.map((ranking) => ({ ranking, bestStreak: getBestChampionshipStreak(ranking.player_id, sessions, results) })), [rankings, results, sessions]);
   return (
-    <section id="roster" className="relative overflow-hidden border-b-2 border-foreground bg-secondary py-14 scroll-mt-28 sm:py-20">
-      <div className="brand-band absolute inset-x-0 top-0 h-2" />
-      <div className="container">
-        <Reveal>
-          <SectionHeading
-            variant="bar"
-            kicker={isZh ? '球队阵容 · 2026 赛季' : 'TEAM ROSTER · 2026 SEASON'}
-            title={isZh ? '2026 球员名册' : '2026 Player Roster'}
-            className="mb-6"
-            action={
-              <span className="font-condensed text-3xl text-background sm:text-4xl">
-                {String(rankings.length).padStart(2, '0')}
-              </span>
-            }
-          />
-
-
-          {loading ? (
-            <div className="flex gap-4 overflow-hidden md:grid md:grid-cols-3 xl:grid-cols-4">
-              {[...Array(4)].map((_, index) => (
-                <div key={index} className="h-[24rem] w-[78vw] max-w-[19rem] shrink-0 animate-pulse-arena bg-muted md:w-full md:max-w-none" />
-              ))}
-            </div>
-          ) : (
-            <div className="-mx-4 flex snap-x snap-mandatory gap-4 overflow-x-auto px-4 pb-3 no-scrollbar md:mx-0 md:grid md:grid-cols-3 md:overflow-visible md:px-0 xl:grid-cols-4">
-              {roster.map((player) => (
-                <PlayerCard
-                  key={player.ranking.player_id}
-                  ranking={player.ranking}
-                  bestStreak={player.bestStreak}
-                  mobile={isMobile}
-                  onSelect={() => setSelected(player)}
-                />
-              ))}
-            </div>
-          )}
-        </Reveal>
+    <section id="roster" className="cs-shell py-8 sm:py-12" aria-labelledby="roster-title">
+      <div className="mb-8 flex items-end justify-between gap-4">
+        <div><p className="cs-eyebrow mb-3">2026 · {isZh ? '球队阵容' : 'THE PLAYERS'}</p><h1 id="roster-title" className="cs-title">{isZh ? '我们的球友' : 'Meet the players'}</h1></div>
+        <span className="shrink-0 rounded-full border border-border px-3 py-2 text-sm text-muted-foreground">{loading ? '—' : rankings.length} {isZh ? '位球员' : 'players'}</span>
       </div>
-
-      <MobilePlayerDialog player={selected} open={!!selected} onClose={() => setSelected(null)} />
+      {loading ? <div role="status" className="grid grid-cols-2 gap-4 md:grid-cols-3 xl:grid-cols-4"><span className="sr-only">{isZh ? '加载球员中' : 'Loading players'}</span>{Array.from({ length: 8 }, (_, index) => <div key={index} className="cs-panel h-72 animate-pulse bg-muted" />)}</div>
+        : roster.length === 0 ? <div className="cs-panel py-16 text-center"><Users className="mx-auto mb-3 h-8 w-8 text-muted-foreground" aria-hidden /><p>{isZh ? '暂无球员数据' : 'No player data yet'}</p></div>
+        : <div className="grid grid-cols-2 gap-3 sm:gap-5 md:grid-cols-3 xl:grid-cols-4">{roster.map((player) => <PlayerCard key={player.ranking.player_id} ranking={player.ranking} onSelect={() => setSelected(player)} />)}</div>}
+      <PlayerDialog player={selected} onClose={() => setSelected(null)} />
     </section>
   );
 }
 
-function MobilePlayerDialog({ player, open, onClose }: { player: RosterPlayer | null; open: boolean; onClose: () => void }) {
+function PlayerDialog({ player, onClose }: { player: RosterPlayer | null; onClose: () => void }) {
+  const { language } = useLanguage();
+  const isZh = language === 'zh';
   if (!player) return null;
-
   const { ranking, bestStreak } = player;
-  const imageUrl = ranking.full_avatar_url || ranking.avatar_url;
-
+  const image = ranking.full_avatar_url || ranking.avatar_url;
+  const stats = [
+    [isZh ? '参与场次' : 'Sessions played', ranking.sessions_played],
+    [isZh ? '夺冠率' : 'Title rate', `${getWinRate(ranking)}%`],
+    [isZh ? '总积分' : 'Total points', ranking.total_points],
+    [isZh ? '联赛排名' : 'League rank', `#${ranking.rank}`],
+    [isZh ? '场均积分' : 'Points per session', getAveragePoints(ranking)],
+    [isZh ? '最佳连冠' : 'Best title streak', bestStreak],
+  ];
   return (
-    <Dialog open={open} onOpenChange={(nextOpen) => !nextOpen && onClose()}>
-      <DialogContent className="brand-surface h-[100dvh] w-screen max-w-none gap-0 overflow-y-auto rounded-none border-0 p-0 [&>button]:right-4 [&>button]:top-4 [&>button]:z-20 [&>button]:grid [&>button]:h-11 [&>button]:w-11 [&>button]:place-items-center [&>button]:border [&>button]:border-[hsl(var(--band-foreground))]/50 [&>button]:bg-[hsl(var(--band-surface))]/75 [&>button]:text-[hsl(var(--band-foreground))] [&>button]:opacity-100">
-        <DialogTitle className="sr-only">{ranking.player_name}</DialogTitle>
-
-        <div className="relative h-[54dvh] min-h-80 overflow-hidden bg-primary">
-          {imageUrl ? (
-            <img
-              src={imageUrl}
-              alt={ranking.player_name}
-              className="h-full w-full object-cover"
-              style={{ objectPosition: `${(ranking.avatar_crop_x ?? 0.5) * 100}% ${(ranking.avatar_crop_y ?? 0.5) * 100}%` }}
-            />
-          ) : (
-            <div className="flex h-full items-center justify-center font-display text-9xl text-primary-foreground/70">
-              {getInitials(ranking.player_name)}
-            </div>
-          )}
-          <div className="brand-photo-overlay absolute inset-0" />
-          <div className="absolute inset-x-0 bottom-0 p-5">
-            <div className="font-sans text-[9px] font-black uppercase tracking-[0.2em] text-[hsl(var(--band-foreground))]/60">YQR League · 2026</div>
-            <div className="mt-1 font-display text-5xl leading-[0.88] band-fg">{ranking.player_name}</div>
-          </div>
+    <Dialog open={!!player} onOpenChange={(open) => !open && onClose()}>
+      <DialogContent className="courtside max-h-[90dvh] w-[calc(100%-2rem)] max-w-3xl overflow-y-auto rounded-xl border-border bg-card p-0 sm:grid-cols-2 sm:gap-0 [&>button]:right-3 [&>button]:top-3 [&>button]:z-10 [&>button]:flex [&>button]:h-11 [&>button]:w-11 [&>button]:items-center [&>button]:justify-center [&>button]:rounded-full [&>button]:border [&>button]:border-border [&>button]:bg-background [&>button]:opacity-100">
+        <div className="flex min-h-48 items-center justify-center overflow-hidden bg-secondary sm:min-h-full">
+          {image ? <img src={image} alt={ranking.player_name} className="max-h-[42dvh] w-full object-contain sm:max-h-[75dvh]" /> : <span className="p-16 text-7xl font-bold text-primary">{getInitials(ranking.player_name)}</span>}
         </div>
-
-        <div className="grid grid-cols-2 border-l border-t border-[hsl(var(--band-foreground))]/20 m-5">
-          <DialogStat label="场次 / GP" value={ranking.sessions_played} />
-          <DialogStat label="胜率 / WIN%" value={`${getWinRate(ranking)}%`} />
-          <DialogStat label="积分 / PTS" value={ranking.total_points} />
-          <DialogStat label="排名 / RANK" value={`#${ranking.rank}`} />
-          <DialogStat label="场均 / AVG" value={getAveragePoints(ranking)} />
-          <DialogStat label="最佳连胜 / STREAK" value={bestStreak} />
+        <div className="p-5 sm:pb-8 sm:pt-16">
+          <p className="cs-eyebrow mb-3">2026 · YUQIUREN</p>
+          <DialogTitle className="break-words text-2xl font-bold leading-tight">{ranking.player_name}</DialogTitle>
+          <DialogDescription className="mt-3 text-sm">{isZh ? '本赛季的出场与成绩' : 'Appearances and results this season'}</DialogDescription>
+          <dl className="mt-6 grid grid-cols-2 gap-x-4 gap-y-5">{stats.map(([label, value]) => <div key={label}><dt className="text-xs text-muted-foreground">{label}</dt><dd className="mt-1 text-2xl font-bold tabular-nums text-primary">{value}</dd></div>)}</dl>
         </div>
       </DialogContent>
     </Dialog>
-  );
-}
-
-function DialogStat({ label, value }: { label: string; value: string | number }) {
-  return (
-    <div className="border-b border-r border-[hsl(var(--band-foreground))]/20 p-4">
-      <div className="font-display text-4xl leading-none text-accent">{value}</div>
-      <div className="mt-1 font-sans text-[8px] font-black uppercase tracking-[0.14em] text-[hsl(var(--band-foreground))]/55">{label}</div>
-    </div>
   );
 }

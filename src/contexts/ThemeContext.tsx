@@ -13,9 +13,9 @@ const ThemeContext = createContext<ThemeContextValue | undefined>(undefined);
 const STORAGE_KEY = 'yqr-theme';
 
 function getInitialTheme(): Theme {
-  if (typeof window === 'undefined') return 'light';
+  if (typeof window === 'undefined') return 'dark';
   const stored = window.localStorage.getItem(STORAGE_KEY);
-  return stored === 'light' || stored === 'dark' ? stored : 'light';
+  return stored === 'light' || stored === 'dark' ? stored : 'dark';
 }
 
 export function ThemeProvider({ children }: { children: React.ReactNode }) {

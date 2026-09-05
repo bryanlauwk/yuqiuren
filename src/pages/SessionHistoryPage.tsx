@@ -1,281 +1,83 @@
+import { useMemo, useState } from 'react';
+import { ArrowRight, CalendarDays, Medal, Play, Trophy, Users } from 'lucide-react';
 import { Header } from '@/components/Header';
 import { Footer } from '@/components/Footer';
-import { Calendar, Trophy, Medal, Users, Image as ImageIcon, Play } from 'lucide-react';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { useRankings } from '@/hooks/useRankings';
 import { useAllHighlights } from '@/hooks/useHighlights';
-import { format } from 'date-fns';
-import type { SessionResult } from '@/types/ranking';
-import { useState, useMemo } from 'react';
 import { PhotoLightbox } from '@/components/PhotoLightbox';
 import { HighlightsGallery } from '@/components/HighlightsGallery';
-import { SectionHeading } from '@/components/SectionHeading';
+import { formatSessionDate } from '@/lib/session-date';
+import { parseYouTubeId } from '@/lib/youtube';
 
 export default function SessionHistoryPage() {
-  const { t } = useLanguage();
+  const { language } = useLanguage();
+  const isZh = language === 'zh';
   const { sessions, results, players, loading } = useRankings();
   const { highlights } = useAllHighlights();
   const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
   const [galleryFor, setGalleryFor] = useState<string | null>(null);
-
-  // Group highlights by session_id
+  const playerNames = useMemo(() => new Map(players.map((player) => [player.id, player.name])), [players]);
   const highlightsBySession = useMemo(() => {
     const map = new Map<string, typeof highlights>();
-    highlights.forEach((h) => {
-      const arr = map.get(h.session_id) ?? [];
-      arr.push(h);
-      map.set(h.session_id, arr);
-    });
+    for (const highlight of highlights) {
+      if (parseYouTubeId(highlight.youtube_url)) map.set(highlight.session_id, [...(map.get(highlight.session_id) ?? []), highlight]);
+    }
     return map;
   }, [highlights]);
-
-  // Collect all session photos for gallery navigation
-  const allPhotos = useMemo(() => {
-    return sessions
-      .filter(s => s.group_photo_url)
-      .map(s => ({
-        src: s.group_photo_url!,
-        alt: `${t.history.groupPhoto} - ${s.session_date}`,
-        sessionId: s.id,
-      }));
-  }, [sessions, t.history.groupPhoto]);
-
-  const openLightbox = (photoUrl: string) => {
-    const index = allPhotos.findIndex(p => p.src === photoUrl);
-    if (index !== -1) {
-      setLightboxIndex(index);
-    }
-  };
-
-  const getPlayerName = (playerId: string) => {
-    return players.find(p => p.id === playerId)?.name || 'Unknown';
-  };
-
-  const getSessionResults = (sessionId: string) => {
-    return results.filter(r => r.session_id === sessionId);
-  };
-
-  const groupResultsByType = (sessionResults: SessionResult[]) => {
-    const champions = sessionResults.filter(r => r.result_type === 'champion');
-    const runnerUps = sessionResults.filter(r => r.result_type === 'runner_up');
-    const attendance = sessionResults.filter(r => r.result_type === 'attendance');
-    return { champions, runnerUps, attendance };
-  };
+  const allPhotos = useMemo(() => sessions.filter((session) => session.group_photo_url).map((session) => ({ src: session.group_photo_url!, alt: `${isZh ? '球友合影' : 'Group photo'} · ${formatSessionDate(session.session_date, language)}`, sessionId: session.id })), [sessions, isZh, language]);
+  const gallerySession = sessions.find((session) => session.id === galleryFor);
 
   return (
-    <div className="min-h-screen bg-background flex flex-col">
+    <div className="courtside cs-page">
       <Header />
-      
-      <main id="highlights" className="flex-1 container py-10 sm:py-12 scroll-mt-28">
-        {/* Page Header */}
-        <SectionHeading
-          variant="bar"
-          as="h1"
-          kicker={t.history.subtitle}
-          title={t.history.title}
-          className="mb-8"
-          action={
-            <span className="font-condensed text-3xl text-background sm:text-4xl">
-              {String(sessions.length).padStart(2, '0')}
-            </span>
-          }
-        />
-
-
+      <main id="main-content" className="cs-shell flex-1 py-8 sm:py-12">
+        <div id="highlights" className="mb-8 flex scroll-mt-24 items-end justify-between gap-4">
+          <div><p className="cs-eyebrow mb-3">{isZh ? '场上的成绩 · 场下的回忆' : 'RESULTS & MEMORIES'}</p><h1 className="cs-title">{isZh ? '赛事回顾' : 'Match days'}</h1></div>
+          <span className="shrink-0 rounded-full border border-border px-3 py-2 text-sm text-muted-foreground">{loading ? '—' : sessions.length} {isZh ? '次活动' : 'sessions'}</span>
+        </div>
         {loading ? (
-          <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-            {[...Array(6)].map((_, i) => (
-              <div
-                key={i}
-                className="bg-card/50 animate-pulse-arena rounded h-48 border-2 border-foreground/10"
-                style={{ animationDelay: `${i * 0.1}s` }}
-              />
-            ))}
-          </div>
+          <div role="status" className="grid gap-5 md:grid-cols-2 xl:grid-cols-3"><span className="sr-only">{isZh ? '正在加载赛事回顾' : 'Loading match days'}</span>{Array.from({ length: 6 }, (_, i) => <div key={i} className="cs-panel h-96 animate-pulse bg-muted/50" />)}</div>
         ) : sessions.length === 0 ? (
-          <div className="text-center py-12">
-            <Calendar className="w-16 h-16 text-muted-foreground/30 mx-auto mb-4" />
-            <p className="text-muted-foreground text-lg">
-              {t.history.noSessions}
-            </p>
-          </div>
+          <div className="cs-panel py-16 text-center"><CalendarDays className="mx-auto mb-4 h-8 w-8 text-muted-foreground" aria-hidden /><p>{isZh ? '暂无活动记录' : 'No match days yet'}</p></div>
         ) : (
-          <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-            {sessions.map((session, index) => {
-              const sessionResults = getSessionResults(session.id);
-              const { champions, runnerUps, attendance } = groupResultsByType(sessionResults);
-
+          <div className="grid items-start gap-5 md:grid-cols-2 xl:grid-cols-3">
+            {sessions.map((session) => {
+              const sessionResults = results.filter((result) => result.session_id === session.id);
+              const sessionHighlights = highlightsBySession.get(session.id) ?? [];
+              const dateLabel = formatSessionDate(session.session_date, language);
+              const groups = [
+                { type: 'champion', label: isZh ? '冠军' : 'Champions', icon: Trophy, color: 'bg-accent text-accent-foreground' },
+                { type: 'runner_up', label: isZh ? '亚军' : 'Runners-up', icon: Medal, color: 'bg-primary/10 text-primary' },
+                { type: 'attendance', label: isZh ? '参赛球友' : 'Also played', icon: Users, color: 'bg-secondary text-muted-foreground' },
+              ];
               return (
-                <div
-                  key={session.id}
-                  className="bg-card rounded border-2 border-foreground p-5 shadow-[4px_4px_0_0_hsl(var(--foreground))] transition-all duration-200 hover:-translate-y-0.5 hover:-translate-x-0.5 hover:shadow-[6px_6px_0_0_hsl(var(--foreground))] animate-fade-in-up"
-                  style={{ animationDelay: `${index * 0.05}s` }}
-                >
-                  {/* Session Header */}
-                  <div className="flex items-center justify-between mb-4">
-                    <div className="flex items-center gap-2">
-                      <Calendar className="w-4 h-4 text-muted-foreground" />
-                      <span className="font-display text-base text-foreground">
-                        {format(new Date(session.session_date), 'MMM d, yyyy')}
-                      </span>
+                <article key={session.id} className="cs-panel overflow-hidden" aria-label={dateLabel}>
+                  {session.group_photo_url && <button type="button" className="block w-full overflow-hidden bg-secondary" onClick={() => setLightboxIndex(allPhotos.findIndex((photo) => photo.sessionId === session.id))} aria-label={isZh ? `查看 ${dateLabel} 合影` : `View group photo from ${dateLabel}`}><img src={session.group_photo_url} alt={isZh ? `${dateLabel} 球友合影` : `Badminton friends on ${dateLabel}`} loading="lazy" className="cs-photo aspect-[4/3] transition-opacity hover:opacity-90" /></button>}
+                  <div className="p-5">
+                    <div className="flex flex-wrap items-center justify-between gap-2"><h2 className="text-lg font-bold"><time dateTime={session.session_date}>{dateLabel}</time></h2><span className="rounded-md bg-secondary px-2 py-1 text-xs text-muted-foreground">{session.session_type === '3_teams' ? (isZh ? '3 队模式' : '3 teams') : (isZh ? '2 队模式' : '2 teams')}</span></div>
+                    {session.name && <p className="mt-2 text-sm text-muted-foreground">{session.name}</p>}
+                    <div className="mt-5 space-y-4">
+                      {groups.map(({ type, label, icon: Icon, color }) => {
+                        const groupResults = sessionResults.filter((result) => result.result_type === type);
+                        if (!groupResults.length) return null;
+                        return <div key={type}><h3 className="mb-2 flex items-center gap-2 text-xs font-medium text-muted-foreground"><Icon className="h-3.5 w-3.5" aria-hidden />{label}</h3><div className="flex flex-wrap gap-1.5">{groupResults.map((result) => <span key={result.id} className={`rounded-md px-2.5 py-1.5 text-sm font-medium ${color}`}>{playerNames.get(result.player_id) ?? (isZh ? '未知球员' : 'Unknown player')}{result.streak_bonus > 0 && <span className="ml-1.5 text-xs" title={isZh ? '连冠奖励积分' : 'Consecutive title bonus'}>+{result.streak_bonus}</span>}</span>)}</div></div>;
+                      })}
+                      {!sessionResults.length && <p className="text-sm text-muted-foreground">{isZh ? '成绩尚未记录' : 'Results not recorded yet'}</p>}
                     </div>
-                    <span
-                      className={`font-display text-[10px] tracking-wider px-2 py-1 border-2 border-foreground rounded ${
-                        session.session_type === '3_teams'
-                          ? 'bg-primary text-primary-foreground'
-                          : 'bg-background text-foreground'
-                      }`}
-                    >
-                      {session.session_type === '3_teams' ? t.admin.threeTeams : t.admin.twoTeams}
-                    </span>
+                    {(sessionResults.length > 0 || sessionHighlights.length > 0) && <div className="mt-5 border-t border-border/70 pt-4">
+                      {sessionResults.length > 0 && <p className="mb-3 text-xs text-muted-foreground">{isZh ? '本场总积分' : 'Session points'} <span className="ml-1 font-semibold tabular-nums text-foreground">{sessionResults.reduce((sum, result) => sum + result.total_points, 0)}</span></p>}
+                      {sessionHighlights.length > 0 && <button type="button" onClick={() => setGalleryFor(session.id)} className="cs-action w-full"><Play className="h-4 w-4 fill-current" aria-hidden /><span>{sessionHighlights.length} {isZh ? '段精彩片段' : 'highlights'}</span><ArrowRight className="ml-auto h-4 w-4" aria-hidden /></button>}
+                    </div>}
                   </div>
-
-                  {session.name && (
-                    <p className="text-sm text-muted-foreground mb-4">
-                      {session.name}
-                    </p>
-                  )}
-
-                  {/* Group Photo */}
-                  {session.group_photo_url && (
-                    <div className="mb-4">
-                      <div className="flex items-center gap-2 mb-2">
-                        <ImageIcon className="w-4 h-4 text-muted-foreground" />
-                        <span className="text-xs text-muted-foreground">{t.history.groupPhoto}</span>
-                      </div>
-                      <img
-                        src={session.group_photo_url}
-                        alt={t.history.groupPhoto}
-                        className="w-full h-40 object-cover rounded border-2 border-foreground cursor-pointer hover:opacity-90 transition-opacity"
-                        onClick={() => openLightbox(session.group_photo_url!)}
-                      />
-                    </div>
-                  )}
-
-                  {/* Results */}
-                  {sessionResults.length > 0 ? (
-                    <div className="space-y-3">
-                      {/* Champions */}
-                      {champions.length > 0 && (
-                        <div className="flex items-start gap-2">
-                          <Trophy className="w-4 h-4 text-accent mt-1 shrink-0" />
-                          <div className="flex flex-wrap gap-1.5">
-                            {champions.map((r) => (
-                              <span
-                                key={r.id}
-                                className="font-display text-[10px] tracking-wide px-2 py-1 border-2 border-foreground rounded bg-accent text-accent-foreground"
-                              >
-                                {getPlayerName(r.player_id)}
-                                {r.streak_bonus > 0 && (
-                                  <span className="ml-1 opacity-85">+{r.streak_bonus}</span>
-                                )}
-                              </span>
-                            ))}
-                          </div>
-                        </div>
-                      )}
-
-                      {/* Runner-ups */}
-                      {runnerUps.length > 0 && (
-                        <div className="flex items-start gap-2">
-                          <Medal className="w-4 h-4 text-primary mt-1 shrink-0" />
-                          <div className="flex flex-wrap gap-1.5">
-                            {runnerUps.map((r) => (
-                              <span
-                                key={r.id}
-                                className="font-display text-[10px] tracking-wide px-2 py-1 border-2 border-foreground rounded bg-primary text-primary-foreground"
-                              >
-                                {getPlayerName(r.player_id)}
-                              </span>
-                            ))}
-                          </div>
-                        </div>
-                      )}
-
-                      {/* Attendance */}
-                      {attendance.length > 0 && (
-                        <div className="flex items-start gap-2">
-                          <Users className="w-4 h-4 text-muted-foreground mt-1 shrink-0" />
-                          <div className="flex flex-wrap gap-1.5">
-                            {attendance.map((r) => (
-                              <span
-                                key={r.id}
-                                className="font-display text-[10px] tracking-wide px-2 py-1 border-2 border-foreground/40 rounded bg-muted text-foreground"
-                              >
-                                {getPlayerName(r.player_id)}
-                              </span>
-                            ))}
-                          </div>
-                        </div>
-                      )}
-                    </div>
-                  ) : (
-                    <p className="text-sm text-muted-foreground">{t.admin.noResults}</p>
-                  )}
-
-                  {/* Footer row: points + highlights chip */}
-                  {(() => {
-                    const sessionHighlights = highlightsBySession.get(session.id) ?? [];
-                    const hasPoints = sessionResults.length > 0;
-                    const hasHighlights = sessionHighlights.length > 0;
-                    if (!hasPoints && !hasHighlights) return null;
-                    return (
-                      <div className="flex flex-wrap items-center justify-between gap-x-3 gap-y-2 pt-3 mt-3 border-t-2 border-foreground/10">
-                        {hasPoints ? (
-                          <span className="text-xs text-muted-foreground">
-                            {t.admin.totalPoints}:{' '}
-                            <span className="font-display text-sm text-foreground">
-                              {sessionResults.reduce((sum, r) => sum + r.total_points, 0)}
-                            </span>
-                          </span>
-                        ) : (
-                          <span />
-                        )}
-                        {hasHighlights && (
-                          <button
-                            type="button"
-                            onClick={() => setGalleryFor(session.id)}
-                            aria-label={`${t.highlights.title} (${sessionHighlights.length})`}
-                            className="group inline-flex min-h-9 shrink-0 items-center gap-1.5 rounded border-2 border-foreground bg-background px-3 py-1.5 text-xs font-bold text-foreground shadow-[2px_2px_0_0_hsl(var(--foreground))] transition-all hover:-translate-y-0.5 hover:-translate-x-0.5 hover:shadow-[3px_3px_0_0_hsl(var(--foreground))] active:translate-x-0.5 active:translate-y-0.5 active:shadow-[1px_1px_0_0_hsl(var(--foreground))]"
-                          >
-                            <Play className="h-3.5 w-3.5 fill-accent text-accent transition-transform group-hover:scale-110" />
-                            <span className="tabular-nums font-display">{sessionHighlights.length}</span>
-                            <span>{t.highlights.chip}</span>
-                          </button>
-                        )}
-                      </div>
-                    );
-                  })()}
-                </div>
+                </article>
               );
             })}
           </div>
         )}
       </main>
-
-      {/* Photo Lightbox */}
-      <PhotoLightbox
-        images={allPhotos}
-        currentIndex={lightboxIndex ?? 0}
-        open={lightboxIndex !== null}
-        onClose={() => setLightboxIndex(null)}
-        onIndexChange={setLightboxIndex}
-      />
-      {/* Highlights Gallery */}
-      {galleryFor && (() => {
-        const s = sessions.find((x) => x.id === galleryFor);
-        if (!s) return null;
-        const label = `${format(new Date(s.session_date), 'MMM d, yyyy')}${s.name ? ` · ${s.name}` : ''}`;
-        return (
-          <HighlightsGallery
-            open={!!galleryFor}
-            onClose={() => setGalleryFor(null)}
-            highlights={highlightsBySession.get(galleryFor) ?? []}
-            sessionLabel={label}
-          />
-        );
-      })()}
-
+      <PhotoLightbox images={allPhotos} currentIndex={lightboxIndex ?? 0} open={lightboxIndex !== null} onClose={() => setLightboxIndex(null)} onIndexChange={setLightboxIndex} />
+      {gallerySession && <HighlightsGallery open={!!galleryFor} onClose={() => setGalleryFor(null)} highlights={highlightsBySession.get(gallerySession.id) ?? []} sessionLabel={formatSessionDate(gallerySession.session_date, language)} />}
       <Footer />
     </div>
   );

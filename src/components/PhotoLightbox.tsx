@@ -1,5 +1,5 @@
 import { useState, useRef, useCallback, useEffect } from 'react';
-import { Dialog, DialogContent } from '@/components/ui/dialog';
+import { Dialog, DialogContent, DialogTitle } from '@/components/ui/dialog';
 import { X, ZoomIn, ZoomOut, ChevronLeft, ChevronRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
@@ -210,8 +210,10 @@ export function PhotoLightbox({
     <Dialog open={open} onOpenChange={() => onClose()}>
       <DialogContent 
         className="max-w-[100vw] max-h-[100vh] w-screen h-screen p-0 border-none bg-black/95 overflow-hidden"
+        aria-describedby={undefined}
         onInteractOutside={(e) => e.preventDefault()}
       >
+        <DialogTitle className="sr-only">{currentImage.alt || 'Photo viewer'}</DialogTitle>
         {/* Controls */}
         <div className="absolute top-4 right-4 z-50 flex gap-2">
           <Button
@@ -219,6 +221,7 @@ export function PhotoLightbox({
             size="icon"
             className="h-10 w-10 rounded-full bg-white/10 hover:bg-white/20 text-white backdrop-blur-sm"
             onClick={handleZoomOut}
+            aria-label="Zoom out"
             disabled={scale <= 1}
           >
             <ZoomOut className="w-5 h-5" />
@@ -228,6 +231,7 @@ export function PhotoLightbox({
             size="icon"
             className="h-10 w-10 rounded-full bg-white/10 hover:bg-white/20 text-white backdrop-blur-sm"
             onClick={handleZoomIn}
+            aria-label="Zoom in"
             disabled={scale >= 4}
           >
             <ZoomIn className="w-5 h-5" />
@@ -237,6 +241,7 @@ export function PhotoLightbox({
             size="icon"
             className="h-10 w-10 rounded-full bg-white/10 hover:bg-white/20 text-white backdrop-blur-sm"
             onClick={onClose}
+            aria-label="Close photo"
           >
             <X className="w-5 h-5" />
           </Button>
@@ -253,6 +258,7 @@ export function PhotoLightbox({
                 !canGoPrev && "opacity-30 cursor-not-allowed"
               )}
               onClick={goToPrev}
+              aria-label="Previous photo"
               disabled={!canGoPrev}
             >
               <ChevronLeft className="w-6 h-6" />
@@ -265,6 +271,7 @@ export function PhotoLightbox({
                 !canGoNext && "opacity-30 cursor-not-allowed"
               )}
               onClick={goToNext}
+              aria-label="Next photo"
               disabled={!canGoNext}
             >
               <ChevronRight className="w-6 h-6" />
