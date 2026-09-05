@@ -4,9 +4,9 @@ import { RosterSection } from '@/components/RosterSection';
 
 export default function RosterPage() {
   return (
-    <div className="flex min-h-screen flex-col bg-background">
+    <div className="courtside cs-page">
       <Header />
-      <main className="flex-1">
+      <main id="main-content" className="flex-1">
         <RosterSection />
       </main>
       <Footer />

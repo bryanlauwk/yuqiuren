@@ -1,5 +1,5 @@
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { LogOut, Shield } from 'lucide-react';
+import { LogOut, Shield, Trophy, Users, PlaySquare } from 'lucide-react';
 import { useAuth } from '@/hooks/useAuth';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { LanguageSwitcher } from '@/components/LanguageSwitcher';
@@ -7,17 +7,17 @@ import { ThemeToggle } from '@/components/ThemeToggle';
 import { cn } from '@/lib/utils';
 
 export function Header() {
-  const { pathname, hash } = useLocation();
+  const { pathname } = useLocation();
   const navigate = useNavigate();
   const { user, isAdmin, signOut } = useAuth();
   const { language } = useLanguage();
   const isZh = language === 'zh';
-
   const navItems = [
-    { to: '/#rankings-anchor', label: isZh ? '排行榜' : 'Rankings', active: pathname === '/' && hash !== '#about' },
-    { to: '/roster', label: isZh ? '球员名册' : 'Roster', active: pathname === '/roster' },
-    { to: '/history', label: isZh ? '赛事纪录' : 'Matches', active: pathname === '/history' && hash !== '#highlights' },
+    { to: '/', label: isZh ? '积分榜' : 'Rankings', icon: Trophy },
+    { to: '/roster', label: isZh ? '球员' : 'Players', icon: Users },
+    { to: '/history', label: isZh ? '赛事回顾' : 'Match days', icon: PlaySquare },
   ];
+  const isPublicPage = navItems.some((item) => pathname === item.to);
 
   const handleSignOut = async () => {
     await signOut();
@@ -25,63 +25,41 @@ export function Header() {
   };
 
   return (
-    <header className="sticky top-0 z-50 border-b-2 border-foreground bg-background/95 backdrop-blur-xl">
-      <div className="container grid min-h-[68px] grid-cols-[1fr_auto] items-center gap-4 md:min-h-[88px] md:grid-cols-[1fr_auto_1fr]">
-        <Link to="/" className="group flex w-fit items-center gap-3" aria-label={isZh ? '羽球人首页' : 'YuQiuRen home'}>
-          <div className="relative grid h-11 w-11 shrink-0 place-items-center overflow-hidden rounded-full border-[3px] border-primary bg-background sm:h-12 sm:w-12">
-            <span className="pr-[2px] pt-1 font-serif text-[22px] font-black italic leading-none text-primary sm:text-2xl" aria-hidden>
-              Y
-            </span>
-            <div className="absolute left-1/2 top-1/2 h-[2.5px] w-[150%] -translate-x-1/2 -translate-y-1/2 -rotate-45 bg-accent" />
+    <>
+      {isPublicPage && <a href="#main-content" className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[100] focus:rounded-lg focus:bg-accent focus:p-3 focus:text-accent-foreground">
+        {isZh ? '跳至主要内容' : 'Skip to content'}
+      </a>}
+      <header className="sticky top-0 z-40 border-b border-border/70 bg-background/95 backdrop-blur-xl">
+        <div className="cs-shell flex min-h-[72px] flex-wrap items-center justify-between gap-2 py-3 md:min-h-[84px] md:flex-nowrap md:gap-4 md:py-0">
+          <Link to="/" className="shrink-0 leading-none" aria-label={isZh ? '羽球人首页' : 'Yuqiuren home'}>
+            <span className="block text-2xl font-extrabold tracking-tight">羽球人</span>
+            <span className="mt-1.5 block text-xs font-semibold tracking-[0.22em] text-muted-foreground">YUQIUREN</span>
+          </Link>
+          <nav className="hidden items-center gap-2 md:flex" aria-label={isZh ? '主导航' : 'Main navigation'}>
+            {navItems.map((item) => (
+              <Link key={item.to} to={item.to} aria-current={pathname === item.to ? 'page' : undefined}
+                className={cn('relative px-5 py-7 text-sm font-semibold transition-colors after:absolute after:inset-x-5 after:bottom-3 after:h-0.5 after:rounded-full',
+                  pathname === item.to ? 'text-foreground after:bg-accent dark:text-accent' : 'text-muted-foreground hover:text-foreground')}>
+                {item.label}
+              </Link>
+            ))}
+          </nav>
+          <div className="flex items-center gap-1 sm:gap-2">
+            {isAdmin && <Link to="/admin" className="cs-icon-button" aria-label={isZh ? '管理后台' : 'Admin'}><Shield className="h-4 w-4" /></Link>}
+            <LanguageSwitcher />
+            <ThemeToggle />
+            {user && isAdmin && <button type="button" className="cs-icon-button" onClick={handleSignOut} aria-label={isZh ? '退出登录' : 'Sign out'}><LogOut className="h-4 w-4" /></button>}
           </div>
-          <div className="leading-none">
-            <span className="block font-display text-[1.35rem] tracking-tight text-foreground sm:text-[1.6rem]">羽球人</span>
-            <span className="hidden font-sans text-[8px] font-black uppercase tracking-[0.26em] text-muted-foreground sm:block">
-              Badminton League
-            </span>
-          </div>
-        </Link>
-
-        <nav className="order-3 col-span-2 flex items-center overflow-x-auto border-t border-border md:order-none md:col-span-1 md:border-0" aria-label={isZh ? '主导航' : 'Main navigation'}>
-          {navItems.map((item) => (
-            <Link
-              key={item.to}
-              to={item.to}
-              className={cn(
-                'relative shrink-0 px-3 py-3 font-sans text-[10px] font-black uppercase tracking-[0.15em] text-foreground transition-colors sm:px-4 md:py-8 md:text-[13px]',
-                'after:absolute after:inset-x-3 after:bottom-1 after:h-[3px] after:origin-left after:bg-accent after:transition-transform md:after:bottom-4',
-                item.active ? 'after:scale-x-100' : 'after:scale-x-0 hover:text-primary hover:after:scale-x-100',
-              )}
-            >
-              {item.label}
-            </Link>
-          ))}
-        </nav>
-
-        <div className="flex items-center justify-end gap-1">
-          {isAdmin && (
-            <Link
-              to="/admin"
-              aria-label={isZh ? '管理后台' : 'Admin'}
-              className="grid h-10 w-10 place-items-center text-foreground transition-colors hover:bg-muted hover:text-primary"
-            >
-              <Shield className="h-4 w-4" />
-            </Link>
-          )}
-          <LanguageSwitcher />
-          <ThemeToggle />
-          {user && isAdmin && (
-            <button
-              type="button"
-              onClick={handleSignOut}
-              aria-label={isZh ? '退出登录' : 'Sign out'}
-              className="grid h-10 w-10 place-items-center text-foreground transition-colors hover:bg-muted hover:text-destructive"
-            >
-              <LogOut className="h-4 w-4" />
-            </button>
-          )}
         </div>
-      </div>
-    </header>
+      </header>
+      {isPublicPage && <nav className="cs-mobile-nav fixed inset-x-0 bottom-0 z-40 grid grid-cols-3 border-t border-border bg-background/95 px-3 pt-2 backdrop-blur-xl md:hidden" aria-label={isZh ? '移动导航' : 'Mobile navigation'}>
+        {navItems.map(({ to, label, icon: Icon }) => (
+          <Link key={to} to={to} aria-current={pathname === to ? 'page' : undefined}
+            className={cn('flex min-h-14 flex-col items-center justify-center gap-1.5 rounded-xl px-1 text-xs font-semibold', pathname === to ? 'bg-accent/10 text-foreground dark:text-accent' : 'text-muted-foreground')}>
+            <Icon className="h-5 w-5" strokeWidth={pathname === to ? 2.3 : 1.7} aria-hidden />{label}
+          </Link>
+        ))}
+      </nav>}
+    </>
   );
 }

@@ -11,11 +11,13 @@ export function LanguageSwitcher() {
   return (
     <button
       onClick={toggleLanguage}
-      className="inline-flex items-center gap-1.5 px-2.5 sm:px-3 py-2 rounded border-2 border-foreground text-xs font-bold uppercase tracking-wide text-foreground bg-background hover:bg-muted transition-colors"
+      type="button"
+      aria-label={language === 'zh' ? 'Switch to English' : '切换到中文'}
+      className="inline-flex min-h-11 items-center gap-1.5 rounded-xl border border-border px-3 text-sm font-semibold transition-colors hover:bg-muted"
       title={language === 'zh' ? 'Switch to English' : '切换到中文'}
     >
-      <Globe className="w-4 h-4" />
-      <span className="hidden sm:inline">{language === 'zh' ? 'EN' : '中文'}</span>
+      <Globe className="hidden h-4 w-4 sm:block" aria-hidden />
+      <span>{language === 'zh' ? 'EN' : '中文'}</span>
     </button>
   );
 }

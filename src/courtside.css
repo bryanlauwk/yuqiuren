@@ -1,0 +1,90 @@
+/* Courtside: midnight navy, lime, and quiet scoreboard surfaces. */
+:root {
+  color-scheme: light;
+  --background: 215 32% 97%;
+  --foreground: 215 43% 14%;
+  --card: 0 0% 100%;
+  --card-foreground: 215 43% 14%;
+  --popover: 0 0% 100%;
+  --popover-foreground: 215 43% 14%;
+  --primary: 214 78% 39%;
+  --primary-foreground: 0 0% 100%;
+  --secondary: 215 28% 93%;
+  --secondary-foreground: 215 43% 14%;
+  --muted: 215 25% 92%;
+  --muted-foreground: 215 18% 41%;
+  --accent: 74 81% 65%;
+  --accent-foreground: 215 55% 10%;
+  --border: 215 23% 84%;
+  --input: 215 23% 80%;
+  --ring: 214 78% 39%;
+  --finished: 139 57% 30%;
+  --radius: 0.75rem;
+  --band-surface: 215 50% 11%;
+  --band-foreground: 210 40% 98%;
+  --shadow-card: 0 4px 20px hsl(215 40% 15% / 0.04);
+  --shadow-elevated: 0 12px 32px hsl(215 40% 15% / 0.08);
+}
+
+.dark {
+  color-scheme: dark;
+  --background: 214 49% 10%;
+  --foreground: 210 36% 96%;
+  --card: 214 43% 14%;
+  --card-foreground: 210 36% 96%;
+  --popover: 214 43% 14%;
+  --popover-foreground: 210 36% 96%;
+  --primary: 209 96% 75%;
+  --primary-foreground: 215 55% 10%;
+  --secondary: 215 39% 17%;
+  --secondary-foreground: 210 36% 96%;
+  --muted: 215 32% 20%;
+  --muted-foreground: 213 24% 71%;
+  --accent: 74 85% 68%;
+  --accent-foreground: 215 55% 10%;
+  --border: 213 29% 27%;
+  --input: 213 29% 32%;
+  --ring: 74 85% 68%;
+  --finished: 74 85% 68%;
+  --band-surface: 214 49% 10%;
+  --shadow-card: 0 4px 24px hsl(215 65% 3% / 0.12);
+  --shadow-elevated: 0 16px 40px hsl(215 65% 3% / 0.22);
+}
+
+.cs-shell { width: min(calc(100% - 2rem), 75rem); margin-inline: auto; }
+.cs-page { min-height: 100dvh; display: flex; flex-direction: column; background: hsl(var(--background)); }
+.cs-panel { border: 1px solid hsl(var(--border)); border-radius: 0.875rem; background: hsl(var(--card)); box-shadow: var(--shadow-card); }
+.cs-eyebrow { font-size: 0.75rem; font-weight: 600; letter-spacing: 0.17em; text-transform: uppercase; color: hsl(var(--muted-foreground)); }
+.cs-title { font-size: clamp(1.65rem, 4vw, 3rem); line-height: 1.25; font-weight: 800; letter-spacing: -0.035em; overflow-wrap: anywhere; }
+.cs-icon-button { display: inline-flex; align-items: center; justify-content: center; width: 2.75rem; height: 2.75rem; flex-shrink: 0; border: 1px solid hsl(var(--border)); border-radius: 0.75rem; color: hsl(var(--foreground)); background: transparent; transition: background 160ms ease; }
+.cs-icon-button:hover { background: hsl(var(--muted)); }
+.cs-action { display: inline-flex; align-items: center; justify-content: center; gap: 0.65rem; min-height: 2.75rem; padding: 0.65rem 1rem; border-radius: 0.625rem; background: hsl(var(--accent)); color: hsl(var(--accent-foreground)); font-size: 0.875rem; font-weight: 700; transition: filter 160ms ease; }
+.cs-action:hover { filter: brightness(0.95); }
+.courtside :is(a, button, input):focus-visible { outline: 2px solid hsl(var(--ring)); outline-offset: 4px; }
+.cs-hero { position: relative; overflow: hidden; isolation: isolate; }
+.cs-hero-court { position: absolute; width: 37rem; height: 24rem; right: -5rem; top: -10rem; transform: perspective(600px) rotateX(50deg) rotateZ(-22deg); opacity: 0.1; border: 2px solid hsl(var(--primary)); pointer-events: none; z-index: -1; }
+.cs-hero-court::before { content: ''; position: absolute; inset: 12% 7%; border: 1px solid hsl(var(--primary)); background: linear-gradient(to right, transparent calc(50% - 1px), hsl(var(--primary)) 50%, transparent calc(50% + 1px)), linear-gradient(to bottom, transparent calc(50% - 1px), hsl(var(--primary)) 50%, transparent calc(50% + 1px)); }
+.cs-standings { width: 100%; border-collapse: separate; border-spacing: 0; table-layout: fixed; }
+.cs-standings th { height: 2.75rem; font-size: 0.75rem; font-weight: 500; color: hsl(var(--muted-foreground)); text-align: right; padding: 0.6rem 0.5rem; border-bottom: 1px solid hsl(var(--border)); }
+.cs-standings td { height: 4.25rem; padding: 0.7rem 0.5rem; border-bottom: 1px solid hsl(var(--border) / 0.6); text-align: right; font-size: 0.875rem; font-variant-numeric: tabular-nums; }
+.cs-standings tr:last-child td { border-bottom: 0; }
+.cs-standings th:first-child, .cs-standings td:first-child { text-align: center; width: 3rem; }
+.cs-standings th:nth-child(2), .cs-standings td:nth-child(2) { text-align: left; }
+.cs-standings th:nth-child(n+3) { width: 3.8rem; }
+.cs-standings th:last-child { width: 4.5rem; }
+.cs-standings tbody tr { transition: background 160ms ease; }
+.cs-standings tbody tr:hover { background: hsl(var(--muted) / 0.5); }
+.cs-rank { display: inline-flex; align-items: center; justify-content: center; width: 1.75rem; height: 1.75rem; border-radius: 50%; color: hsl(var(--muted-foreground)); font-size: 1rem; font-weight: 700; font-variant-numeric: tabular-nums; }
+.cs-rank-1 { color: hsl(var(--accent-foreground)); background: hsl(var(--accent)); box-shadow: 0 0 14px hsl(var(--accent) / 0.16); }
+.cs-rank-2 { color: #16283d; background: #abc9e9; }
+.cs-rank-3 { color: #352318; background: #d9b694; }
+.cs-mobile-row { display: grid; grid-template-columns: 1.75rem 2.25rem minmax(0, 1fr) auto 1.25rem; align-items: center; gap: 0.55rem; padding: 0.8rem 0; }
+.cs-mobile-nav { padding-bottom: max(0.5rem, env(safe-area-inset-bottom)); }
+.cs-photo { width: 100%; display: block; object-fit: cover; object-position: center; }
+.cs-player-card:hover .cs-player-image { transform: scale(1.025); }
+.cs-player-image { transition: transform 220ms ease; }
+
+@media (min-width: 640px) { .cs-shell { width: min(calc(100% - 3rem), 75rem); } }
+@media (min-width: 1024px) { .cs-home-grid { display: grid; grid-template-columns: minmax(0, 1fr) 19rem; align-items: start; gap: 1.5rem; } }
+@media (max-width: 767px) { .cs-page { padding-bottom: calc(5rem + env(safe-area-inset-bottom)); } }
+@media (prefers-reduced-motion: reduce) { .cs-player-card:hover .cs-player-image { transform: none; } }

@@ -8,7 +8,8 @@ export function ThemeToggle() {
   return (
     <button
       onClick={toggleTheme}
-      className="inline-flex items-center justify-center h-9 w-9 sm:h-10 sm:w-10 rounded border-2 border-foreground text-foreground bg-background hover:bg-muted transition-colors"
+      type="button"
+      className="cs-icon-button"
       title={isDark ? 'Light mode' : 'Dark mode'}
       aria-label={isDark ? 'Switch to light mode' : 'Switch to dark mode'}
     >

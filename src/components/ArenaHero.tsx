@@ -1,96 +1,27 @@
-
-import { ArrowDown } from 'lucide-react';
+import { CalendarDays, Users } from 'lucide-react';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { useRankings } from '@/hooks/useRankings';
-import { CourtLines } from '@/components/hero/CourtLines';
 
 export function ArenaHero() {
-  const { t, language } = useLanguage();
-  const { sessions, players, rankings, loading } = useRankings();
-  const topPoints = rankings?.[0]?.total_points ?? 0;
+  const { language } = useLanguage();
+  const { sessions, players, loading } = useRankings();
   const isZh = language === 'zh';
 
-  const scrollToRankings = () => {
-    document.getElementById('rankings-anchor')?.scrollIntoView({ behavior: 'smooth' });
-  };
-
   return (
-    <section className="brand-band relative w-full overflow-hidden border-b-2 border-foreground">
-      <div className="absolute inset-0 pointer-events-none opacity-15 band-fg" aria-hidden>
-        <CourtLines />
-      </div>
-
-      <div className="relative z-10 container py-10 sm:py-12 lg:py-14">
-        <div className="mx-auto w-full max-w-5xl">
-          <div className="grid gap-8 lg:grid-cols-12 lg:items-end lg:gap-12">
-            <div className="lg:col-span-8">
-              <div className="mb-4 flex items-center gap-3 font-sans text-[10px] font-extrabold uppercase tracking-[0.28em] text-[hsl(var(--band-foreground))]/75 sm:text-xs">
-                <span className="h-2 w-2 bg-accent" />
-                {isZh ? '羽球人 · 社区联赛' : 'YUQIUREN · COMMUNITY LEAGUE'}
-              </div>
-
-              <h1 className="max-w-5xl text-[clamp(2.75rem,6.4vw,6.25rem)] leading-[0.86] band-fg">
-                {isZh ? (
-                  <>
-                    <span className="block">
-                      <span className="font-display">2026</span>
-                      <span className="block font-sans font-black tracking-[-0.07em] sm:ml-[0.18em] sm:inline">
-                        羽球人赛
-                      </span>
-                    </span>
-                    <span className="mt-2 block font-sans font-black tracking-[-0.07em] text-accent sm:mt-3">
-                      积分榜
-                    </span>
-                  </>
-                ) : (
-                  <>
-                    <span className="block font-display">2026 YUQIUREN</span>
-                    <span className="block font-display text-accent">LEAGUE TABLE</span>
-                  </>
-                )}
-              </h1>
-            </div>
-
-            <div className="border-t-2 border-accent pt-4 lg:col-span-4 lg:border-l-2 lg:border-t-0 lg:pb-1 lg:pl-10 lg:pt-0">
-              <div className="mb-3 font-sans text-[9px] font-black uppercase tracking-[0.22em] text-[hsl(var(--band-foreground))]/60">
-                {isZh ? '赛季快报' : 'SEASON SNAPSHOT'}
-              </div>
-
-              <div className="grid max-w-sm grid-cols-3 border-l border-t border-[hsl(var(--band-foreground))]/25">
-                <div className="border-b border-r border-[hsl(var(--band-foreground))]/25 p-3">
-                  <div className="font-display text-2xl leading-none text-accent">{loading ? '—' : players.length}</div>
-                  <div className="mt-1 font-sans text-[9px] font-black uppercase tracking-[0.16em] text-[hsl(var(--band-foreground))]/65">
-                    {isZh ? '球员' : 'Players'}
-                  </div>
-                </div>
-                <div className="border-b border-r border-[hsl(var(--band-foreground))]/25 p-3">
-                  <div className="font-display text-2xl leading-none text-accent">{loading ? '—' : sessions.length}</div>
-                  <div className="mt-1 font-sans text-[9px] font-black uppercase tracking-[0.16em] text-[hsl(var(--band-foreground))]/65">
-                    {isZh ? '场比赛' : 'Match days'}
-                  </div>
-                </div>
-                <div className="border-b border-r border-[hsl(var(--band-foreground))]/25 p-3">
-                  <div className="font-display text-2xl leading-none text-accent">{loading ? '—' : topPoints}</div>
-                  <div className="mt-1 font-sans text-[9px] font-black uppercase tracking-[0.16em] text-[hsl(var(--band-foreground))]/65">
-                    {isZh ? '最高积分' : 'Top points'}
-                  </div>
-                </div>
-              </div>
-
-              <div className="mt-4 max-w-sm">
-                <button
-                  type="button"
-                  onClick={scrollToRankings}
-                  className="inline-flex min-h-11 w-full items-center justify-between gap-3 border-2 border-[hsl(var(--band-foreground))] bg-accent px-4 py-2.5 font-sans text-[10px] font-black uppercase tracking-[0.14em] text-accent-foreground shadow-[3px_3px_0_0_hsl(var(--band-foreground))] transition-transform hover:-translate-y-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[hsl(var(--band-foreground))] focus-visible:ring-offset-2 focus-visible:ring-offset-[hsl(var(--band-surface))]"
-                >
-                  {isZh ? '查看积分榜' : 'VIEW STANDINGS'}
-                  <ArrowDown className="h-4 w-4" />
-                </button>
-              </div>
-
-            </div>
+    <section className="cs-hero cs-shell py-6 sm:pb-9 sm:pt-12" aria-labelledby="standings-title">
+      <div className="cs-hero-court" aria-hidden />
+      <div className="flex items-end justify-between gap-6">
+        <div>
+          <p className="cs-eyebrow mb-3 hidden sm:block">{isZh ? '羽球人 · 社区联赛' : 'YUQIUREN · COMMUNITY LEAGUE'}</p>
+          <h1 id="standings-title" className="cs-title">{isZh ? '2026 联赛积分榜' : '2026 League Standings'}</h1>
+          <div className="mt-3 flex flex-wrap items-center gap-x-6 gap-y-2 text-sm text-muted-foreground sm:mt-5">
+            <span className="inline-flex items-center gap-2"><Users className="h-4 w-4" aria-hidden /><strong className="font-semibold text-foreground">{loading ? '—' : players.length}</strong>{isZh ? '位球员' : 'players'}</span>
+            <span className="inline-flex items-center gap-2"><CalendarDays className="h-4 w-4" aria-hidden /><strong className="font-semibold text-foreground">{loading ? '—' : sessions.length}</strong>{isZh ? '次活动' : 'match days'}</span>
           </div>
         </div>
+        <p className="hidden shrink-0 border-l border-border pl-6 text-right text-sm leading-7 text-muted-foreground lg:block">
+          {isZh ? '同一片球场' : 'Same court.'}<br /><span className="text-foreground">{isZh ? '更好的我们' : 'Better together.'}</span>
+        </p>
       </div>
     </section>
   );
