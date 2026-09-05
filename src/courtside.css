@@ -61,9 +61,48 @@
 .cs-action { display: inline-flex; align-items: center; justify-content: center; gap: 0.65rem; min-height: 2.75rem; padding: 0.65rem 1rem; border-radius: 0.625rem; background: hsl(var(--accent)); color: hsl(var(--accent-foreground)); font-size: 0.875rem; font-weight: 700; transition: filter 160ms ease; }
 .cs-action:hover { filter: brightness(0.95); }
 .courtside :is(a, button, input):focus-visible { outline: 2px solid hsl(var(--ring)); outline-offset: 4px; }
-.cs-hero { position: relative; overflow: hidden; isolation: isolate; }
-.cs-hero-court { position: absolute; width: 37rem; height: 24rem; right: -5rem; top: -10rem; transform: perspective(600px) rotateX(50deg) rotateZ(-22deg); opacity: 0.1; border: 2px solid hsl(var(--primary)); pointer-events: none; z-index: -1; }
-.cs-hero-court::before { content: ''; position: absolute; inset: 12% 7%; border: 1px solid hsl(var(--primary)); background: linear-gradient(to right, transparent calc(50% - 1px), hsl(var(--primary)) 50%, transparent calc(50% + 1px)), linear-gradient(to bottom, transparent calc(50% - 1px), hsl(var(--primary)) 50%, transparent calc(50% + 1px)); }
+.cs-hero {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+  /* Keep the photographic band dark, including when light mode is chosen. */
+  --foreground: 210 36% 96%;
+  --muted-foreground: 213 24% 78%;
+  color: hsl(var(--foreground));
+  background: #0d1b2a;
+  border-radius: 0.875rem;
+  margin-block: 1rem 1.5rem;
+}
+.cs-hero-art { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: 65% 52%; z-index: -2; pointer-events: none; }
+.cs-hero::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background: linear-gradient(90deg, #0d1b2aed 0%, #0d1b2abb 36%, #0d1b2a0d 62%, #0d1b2a22 100%), linear-gradient(0deg, #0d1b2a99, transparent 40%);
+}
+.cs-hero-content { position: relative; display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: center; gap: 2rem; min-height: 15rem; padding: 2rem; }
+.cs-hero-heading { min-width: 0; max-width: 35rem; text-shadow: 0 2px 18px #07111ccc; }
+.cs-hero-note { align-self: end; padding-bottom: 0.5rem; text-align: right; }
+.cs-hero-quote { font-family: 'Caveat', cursive; font-size: 2rem; font-weight: 600; line-height: 1.15; color: #edf3fa; transform: rotate(-7deg); text-shadow: 0 2px 12px #07111c; }
+.cs-hero-quote:lang(zh) { font-family: 'Zhi Mang Xing', 'KaiTi', cursive; font-weight: 400; }
+.cs-hero-quote span { display: block; }
+.cs-hero-quote span:last-child { margin-top: 0.2rem; margin-left: 1.5rem; }
+.cs-hero-signature { margin-top: 1.25rem; font-size: 0.75rem; line-height: 1.5; letter-spacing: 0.12em; color: #b8c9dc; }
+@media (min-width: 768px) and (max-width: 1023px) {
+  .cs-hero-heading { max-width: 29rem; }
+  .cs-hero-content { padding: 1.5rem; gap: 1rem; }
+  .cs-hero-quote { font-size: 1.6rem; }
+}
+@media (max-width: 767px) {
+  .cs-hero-content { grid-template-columns: minmax(0, 1fr); gap: 1.35rem; min-height: 14rem; padding: 1.25rem; }
+  .cs-hero-heading .cs-title { font-size: clamp(1.5rem, 5.3vw, 2rem); }
+  .cs-hero-note { justify-self: start; text-align: left; padding: 0 0 0.25rem; }
+  .cs-hero-quote { font-size: 1.5rem; }
+  .cs-hero-signature { display: none; }
+  .cs-hero::before { background: linear-gradient(90deg, #0d1b2aed, #0d1b2ab3 38%, #0d1b2a1a 75%), linear-gradient(0deg, #0d1b2a80, transparent 45%); }
+}
 .cs-standings { width: 100%; border-collapse: separate; border-spacing: 0; table-layout: fixed; }
 .cs-standings th { height: 2.75rem; font-size: 0.75rem; font-weight: 500; color: hsl(var(--muted-foreground)); text-align: right; padding: 0.6rem 0.5rem; border-bottom: 1px solid hsl(var(--border)); }
 .cs-standings td { height: 4.25rem; padding: 0.7rem 0.5rem; border-bottom: 1px solid hsl(var(--border) / 0.6); text-align: right; font-size: 0.875rem; font-variant-numeric: tabular-nums; }
