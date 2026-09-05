@@ -15,7 +15,7 @@ export function Header() {
   const navItems = [
     { to: '/', label: isZh ? '积分榜' : 'Rankings', icon: Trophy },
     { to: '/roster', label: isZh ? '球员' : 'Players', icon: Users },
-    { to: '/history', label: isZh ? '赛事回顾' : 'Match days', icon: PlaySquare },
+    { to: '/history', label: isZh ? '比赛记录' : 'Matches', icon: PlaySquare },
   ];
   const isPublicPage = navItems.some((item) => pathname === item.to);
 

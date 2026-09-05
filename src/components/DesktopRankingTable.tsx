@@ -23,8 +23,8 @@ export function DesktopRankingTable({ rankings, onAvatarClick, primaryMetric = '
         <TableRow>
           <TableHead scope="col">{isZh ? '排名' : 'Rank'}</TableHead>
           <TableHead scope="col">{isZh ? '球员' : 'Player'}</TableHead>
-          <TableHead scope="col">{isZh ? '场次' : 'Played'}</TableHead>
-          <TableHead scope="col">{isZh ? '夺冠' : 'Titles'}</TableHead>
+          <TableHead scope="col">{isZh ? '出赛' : 'Played'}</TableHead>
+          <TableHead scope="col">{isZh ? '冠军' : 'Titles'}</TableHead>
           <TableHead scope="col" aria-sort={primaryMetric === 'winRate' ? 'descending' : undefined}>{isZh ? '夺冠率' : 'Title %'}</TableHead>
           <TableHead scope="col" aria-sort={primaryMetric === 'points' ? 'descending' : undefined}>{isZh ? '积分' : 'Points'}</TableHead>
         </TableRow>

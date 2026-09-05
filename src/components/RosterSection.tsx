@@ -36,11 +36,11 @@ function PlayerDialog({ player, onClose }: { player: RosterPlayer | null; onClos
   const { ranking, bestStreak } = player;
   const image = ranking.full_avatar_url || ranking.avatar_url;
   const stats = [
-    [isZh ? '参与场次' : 'Sessions played', ranking.sessions_played],
+    [isZh ? '出赛场数' : 'Matches played', ranking.sessions_played],
     [isZh ? '夺冠率' : 'Title rate', `${getWinRate(ranking)}%`],
     [isZh ? '总积分' : 'Total points', ranking.total_points],
     [isZh ? '联赛排名' : 'League rank', `#${ranking.rank}`],
-    [isZh ? '场均积分' : 'Points per session', getAveragePoints(ranking)],
+    [isZh ? '场均积分' : 'Points per match', getAveragePoints(ranking)],
     [isZh ? '最佳连冠' : 'Best title streak', bestStreak],
   ];
   return (

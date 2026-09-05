@@ -17,7 +17,7 @@ export function PlayerCard({ ranking, onSelect }: { ranking: PlayerRanking; onSe
       <div className="p-3 sm:p-5">
         <h2 className="break-words text-base font-bold leading-snug sm:text-lg">{ranking.player_name}</h2>
         <div className="mt-4 flex flex-wrap items-end justify-between gap-3">
-          <span><span className="block text-xs text-muted-foreground">{isZh ? '场次' : 'Played'}</span><span className="mt-1 block text-base font-semibold tabular-nums">{ranking.sessions_played}</span></span>
+          <span><span className="block text-xs text-muted-foreground">{isZh ? '出赛' : 'Played'}</span><span className="mt-1 block text-base font-semibold tabular-nums">{ranking.sessions_played}</span></span>
           <span className="text-right"><span className="block text-xs text-muted-foreground">{isZh ? '积分' : 'Points'}</span><span className="mt-1 block text-xl font-bold tabular-nums text-primary">{ranking.total_points}</span></span>
         </div>
         <span className="mt-4 flex min-h-8 items-center justify-between gap-2 border-t border-border/70 pt-3 text-xs font-medium text-muted-foreground group-hover:text-primary">{isZh ? '球员数据' : 'Player stats'}<ArrowUpRight className="h-4 w-4 shrink-0" aria-hidden /></span>

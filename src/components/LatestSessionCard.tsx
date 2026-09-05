@@ -19,7 +19,7 @@ export function LatestSessionCard() {
   const latest = sessions[0];
   const sessionHighlights = highlights.filter((h) => h.session_id === latest?.id && parseYouTubeId(h.youtube_url));
 
-  if (loading) return <div className="cs-panel h-80 animate-pulse" aria-label={isZh ? '正在加载最近活动' : 'Loading latest session'} />;
+  if (loading) return <div className="cs-panel h-80 animate-pulse" aria-label={isZh ? '正在加载上期比赛' : 'Loading last match'} />;
   if (!latest) return null;
   const dateLabel = formatSessionDate(latest.session_date, language);
 
@@ -27,7 +27,7 @@ export function LatestSessionCard() {
     <aside className="min-w-0 lg:sticky lg:top-[108px]" aria-labelledby="latest-session-title">
       <div className="cs-panel overflow-hidden p-4 sm:p-5">
         <div className="flex items-center justify-between gap-3">
-          <h2 id="latest-session-title" className="text-base font-semibold">{isZh ? '最近相聚' : 'Latest match day'}</h2>
+          <h2 id="latest-session-title" className="text-base font-semibold">{isZh ? '上期比赛' : 'Last match'}</h2>
           <CalendarDays className="h-4 w-4 text-muted-foreground" aria-hidden />
         </div>
         <p className="mt-3 text-3xl font-bold tracking-tight"><time dateTime={latest.session_date}>{formatSessionDate(latest.session_date, language, true)}</time></p>
@@ -41,10 +41,10 @@ export function LatestSessionCard() {
         {sessionHighlights.length > 0 ? (
           <button type="button" className="cs-action mt-4 w-full" onClick={() => setGalleryOpen(true)}><Play className="h-4 w-4 fill-current" aria-hidden />{isZh ? '查看精彩片段' : 'Watch highlights'}<ArrowRight className="h-4 w-4" aria-hidden /></button>
         ) : (
-          <Link className="cs-action mt-4 w-full" to="/history">{isZh ? '查看赛事回顾' : 'View match days'}<ArrowRight className="h-4 w-4" aria-hidden /></Link>
+          <Link className="cs-action mt-4 w-full" to="/history">{isZh ? '查看比赛记录' : 'View match history'}<ArrowRight className="h-4 w-4" aria-hidden /></Link>
         )}
       </div>
-      <Link to="/history" className="mt-4 flex min-h-11 items-center justify-between px-1 text-sm text-muted-foreground transition-colors hover:text-foreground">{isZh ? '所有赛事回顾' : 'All match days'}<ArrowRight className="h-4 w-4" aria-hidden /></Link>
+      <Link to="/history" className="mt-4 flex min-h-11 items-center justify-between px-1 text-sm text-muted-foreground transition-colors hover:text-foreground">{isZh ? '查看所有比赛' : 'View all matches'}<ArrowRight className="h-4 w-4" aria-hidden /></Link>
       <HighlightsGallery open={galleryOpen} onClose={() => setGalleryOpen(false)} highlights={sessionHighlights} sessionLabel={dateLabel} />
       <PhotoLightbox open={photoOpen} onClose={() => setPhotoOpen(false)} images={latest.group_photo_url ? [{ src: latest.group_photo_url, alt: dateLabel }] : []} currentIndex={0} />
     </aside>

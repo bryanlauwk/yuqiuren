@@ -42,10 +42,10 @@ export function MobileRankingCard({ ranking, onAvatarClick, primaryMetric = 'poi
       <div id={detailsId} hidden={!expanded} className="pb-4 pl-1">
         <dl className="grid grid-cols-2 gap-3 rounded-lg bg-muted/40 p-3">
           {[
-            [isZh ? '参与场次' : 'Sessions played', ranking.sessions_played],
-            [isZh ? '夺冠次数' : 'Session titles', ranking.championships],
+            [isZh ? '出赛场数' : 'Matches played', ranking.sessions_played],
+            [isZh ? '冠军次数' : 'Titles won', ranking.championships],
             [isZh ? '夺冠率' : 'Title rate', `${getWinRate(ranking)}%`],
-            [isZh ? '场均积分' : 'Points per session', getAveragePoints(ranking)],
+            [isZh ? '场均积分' : 'Points per match', getAveragePoints(ranking)],
           ].map(([label, value]) => <div key={label}><dt className="text-xs text-muted-foreground">{label}</dt><dd className="mt-1 text-base font-semibold tabular-nums">{value}</dd></div>)}
         </dl>
       </div>
