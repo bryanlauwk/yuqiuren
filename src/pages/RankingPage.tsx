@@ -30,7 +30,7 @@ export default function RankingPage() {
   const views: { value: RankingView; label: string }[] = [
     { value: 'overall', label: isZh ? '总榜' : 'Overall' },
     { value: 'recent5', label: isZh ? '最近5场' : 'Last 5' },
-    { value: 'winRate', label: isZh ? '夺冠率' : 'Title rate' },
+    { value: 'winRate', label: isZh ? '夺冠率' : 'Title %' },
   ];
 
   return (
@@ -53,23 +53,23 @@ export default function RankingPage() {
               </div>
               <p className="mb-1 mt-4 min-h-5 text-xs leading-relaxed text-muted-foreground">
                 {rankingView === 'recent5'
-                  ? (isZh ? '统计联赛最近 5 次活动的成绩。' : 'Results from the league’s latest 5 sessions.')
+                  ? (isZh ? '统计最近 5 场比赛的成绩。' : 'Results from the latest 5 matches.')
                   : rankingView === 'winRate'
-                    ? (isZh ? '夺冠次数 ÷ 参与场次；请同时参考出场次数。' : 'Session titles ÷ sessions played. Consider the number played, too.')
+                    ? (isZh ? '冠军次数 ÷ 出赛场数；出赛越多越具参考价值。' : 'Titles won ÷ matches played. More matches provide a stronger sample.')
                     : sessions[0] ? `${isZh ? '最近更新至' : 'Results through'} ${formatSessionDate(sessions[0].session_date, language)}` : (isZh ? '2026 赛季' : '2026 season')}
               </p>
               <TabsContent value={rankingView} className="mt-2">
                 {loading ? (
                   <div role="status" className="space-y-3 py-3"><span className="sr-only">{isZh ? '正在加载积分榜' : 'Loading standings'}</span>{Array.from({ length: 6 }, (_, i) => <div key={i} className="h-16 animate-pulse rounded-lg bg-muted/60" />)}</div>
                 ) : rankings.length === 0 ? (
-                  <div className="py-16 text-center"><Trophy className="mx-auto mb-4 h-9 w-9 text-muted-foreground" aria-hidden /><p className="font-semibold">{isZh ? '暂无比赛数据' : 'No results yet'}</p><p className="mt-2 text-sm text-muted-foreground">{isZh ? '记录第一场活动后，积分榜会显示在这里。' : 'Standings will appear after the first session is recorded.'}</p></div>
+                   <div className="py-16 text-center"><Trophy className="mx-auto mb-4 h-9 w-9 text-muted-foreground" aria-hidden /><p className="font-semibold">{isZh ? '暂无比赛数据' : 'No results yet'}</p><p className="mt-2 text-sm text-muted-foreground">{isZh ? '录入第一场比赛后，积分榜会显示在这里。' : 'Standings will appear after the first match is recorded.'}</p></div>
                 ) : filteredRankings.length === 0 ? (
                   <div role="status" className="py-14 text-center"><p className="font-semibold">{isZh ? '找不到这位球员' : 'No player found'}</p><button type="button" className="mt-3 min-h-11 text-sm text-primary underline underline-offset-4" onClick={() => setSearch('')}>{isZh ? '查看所有球员' : 'Show all players'}</button></div>
                 ) : (
                   <>
                     <div className="hidden md:block"><DesktopRankingTable rankings={filteredRankings} onAvatarClick={handleAvatarClick} primaryMetric={primaryMetric} showRankDelta={rankingView === 'overall'} /></div>
                     <div className="md:hidden">
-                      <div className="flex justify-between border-b border-border pb-2 pt-1 text-xs text-muted-foreground"><span>{isZh ? '排名 / 球员' : 'Rank / Player'}</span><span className="pr-7">{primaryMetric === 'winRate' ? (isZh ? '夺冠率' : 'Title rate') : (isZh ? '积分' : 'Points')}</span></div>
+                      <div className="flex justify-between border-b border-border pb-2 pt-1 text-xs text-muted-foreground"><span>{isZh ? '排名 / 球员' : 'Rank / Player'}</span><span className="pr-7">{primaryMetric === 'winRate' ? (isZh ? '夺冠率' : 'Title %') : (isZh ? '积分' : 'Points')}</span></div>
                       {filteredRankings.map((ranking) => <MobileRankingCard key={ranking.player_id} ranking={ranking} onAvatarClick={handleAvatarClick} primaryMetric={primaryMetric} showRankDelta={rankingView === 'overall'} />)}
                     </div>
                   </>

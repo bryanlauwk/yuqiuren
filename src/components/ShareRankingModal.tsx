@@ -65,12 +65,12 @@ export function ShareRankingModal({ open, onClose, rankings }: ShareRankingModal
 
       setProgress(100);
       setImageUrl(data.imageUrl);
-      toast.success(language === 'zh' ? 'AI图片生成成功！' : 'AI image generated!');
+      toast.success(language === 'zh' ? '积分榜海报已生成' : 'Standings poster generated');
     } catch (err) {
       console.error('Failed to generate image:', err);
       const errorMessage = err instanceof Error ? err.message : 'Unknown error';
       setError(errorMessage);
-      toast.error(language === 'zh' ? `生成失败: ${errorMessage}` : `Generation failed: ${errorMessage}`);
+      toast.error(language === 'zh' ? `生成失败：${errorMessage}` : `Generation failed: ${errorMessage}`);
     } finally {
       clearInterval(progressInterval);
       setIsGenerating(false);
@@ -97,8 +97,8 @@ export function ShareRankingModal({ open, onClose, rankings }: ShareRankingModal
 
   const handleWhatsAppShare = async () => {
     const shareText = language === 'zh' 
-      ? `🏸 羽球人联赛最新积分榜！\n\n查看完整排名: https://yuqiuren.lovable.app`
-      : `🏸 Check out the latest Badminton League rankings!\n\nView full rankings: https://yuqiuren.lovable.app`;
+      ? `🏸 羽球人联赛最新积分榜\n\n查看完整排名：https://yuqiuren.lovable.app`
+      : `🏸 Latest Badminton League standings\n\nView the full table: https://yuqiuren.lovable.app`;
 
     // Try Web Share API first (works on mobile)
     if (navigator.share && imageUrl) {
@@ -137,8 +137,8 @@ export function ShareRankingModal({ open, onClose, rankings }: ShareRankingModal
     
     toast.success(
       language === 'zh' 
-        ? '图片已下载，分享文字已复制。请在WhatsApp中粘贴并附加图片。' 
-        : 'Image downloaded, share text copied. Paste and attach image in WhatsApp.'
+        ? '海报已下载，分享文字已复制。请在 WhatsApp 贴上文字并附加海报。' 
+        : 'Poster downloaded and share text copied. Paste the text and attach the poster in WhatsApp.'
     );
   };
 
@@ -155,15 +155,15 @@ export function ShareRankingModal({ open, onClose, rankings }: ShareRankingModal
         <DialogHeader className="px-6 pt-6 pb-2">
           <DialogTitle className="flex items-center gap-2">
             <Sparkles className="w-5 h-5 text-primary" />
-            {language === 'zh' ? 'AI 生成排行榜图片' : 'AI-Generated Rankings'}
+            {language === 'zh' ? '生成积分榜海报' : 'Generate standings poster'}
           </DialogTitle>
         </DialogHeader>
 
         <div className="px-6 pb-2">
           <p className="text-sm text-muted-foreground">
             {language === 'zh' 
-              ? '使用AI生成专业的体育风格排名海报' 
-              : 'Generate a professional sports-style ranking poster with AI'}
+              ? '生成一张专业体育风格的分享海报' 
+              : 'Create a professional sports-style poster to share'}
           </p>
         </div>
 
@@ -178,10 +178,10 @@ export function ShareRankingModal({ open, onClose, rankings }: ShareRankingModal
                 </div>
                 <div className="text-center">
                   <p className="text-white font-medium">
-                    {language === 'zh' ? 'AI 正在创作中...' : 'AI is creating your image...'}
+                    {language === 'zh' ? '正在生成海报…' : 'Creating your poster…'}
                   </p>
                   <p className="text-white/60 text-sm mt-1">
-                    {language === 'zh' ? '这可能需要 10-20 秒' : 'This may take 10-20 seconds'}
+                    {language === 'zh' ? '预计需要 10–20 秒' : 'This may take 10–20 seconds'}
                   </p>
                 </div>
                 <div className="w-full max-w-48">
@@ -210,12 +210,12 @@ export function ShareRankingModal({ open, onClose, rankings }: ShareRankingModal
             ) : imageUrl ? (
               <img 
                 src={imageUrl} 
-                alt="Rankings preview" 
+                alt={language === 'zh' ? '积分榜海报预览' : 'Standings poster preview'}
                 className="w-full"
               />
             ) : (
               <div className="w-full aspect-[3/4] flex items-center justify-center">
-                <p className="text-white/60">{language === 'zh' ? '准备生成...' : 'Preparing...'}</p>
+                <p className="text-white/60">{language === 'zh' ? '准备生成…' : 'Preparing…'}</p>
               </div>
             )}
           </div>
