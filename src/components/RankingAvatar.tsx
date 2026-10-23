@@ -16,7 +16,7 @@ export function RankingAvatar({ ranking, onAvatarClick, className }: {
   ) : <span className="text-xs font-bold">{getInitials(ranking.player_name)}</span>;
   const classes = cn('inline-flex h-10 w-10 shrink-0 items-center justify-center overflow-hidden rounded-full border border-border bg-muted text-foreground', className);
   return fullImage && onAvatarClick ? (
-    <button type="button" className={cn(classes, 'transition-opacity hover:opacity-80')} aria-label={language === 'zh' ? `查看 ${ranking.player_name} 的照片` : `View ${ranking.player_name}'s photo`} onClick={() => onAvatarClick(fullImage, ranking.player_name)}>{content}</button>
+    <button type="button" className={cn(classes, 'transition-opacity hover:opacity-80')} aria-label={language === 'zh' ? `查看 ${ranking.player_name} 的照片` : `View ${ranking.player_name}'s photo`} onClick={(e) => { e.stopPropagation(); onAvatarClick(fullImage, ranking.player_name); }}>{content}</button>
   ) : <span className={classes} aria-hidden>{content}</span>;
 }
 
