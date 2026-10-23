@@ -1,6 +1,7 @@
 import { useState, useEffect, useMemo } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import type { Player, TournamentSession, SessionResult, PlayerRanking, SessionType, ResultType } from '@/types/ranking';
+import { getStreakBonus } from '@/lib/streak';
 
 export function useRankingsStore() {
   const [players, setPlayers] = useState<Player[]>([]);
@@ -248,10 +249,7 @@ export function useRankingsStore() {
     // Total streak = previous consecutive wins + 1 (current win being recorded)
     const totalStreak = previousStreak + 1;
 
-    // Bonus formula: streak - 1 (0 for 1st win, +1 for 2nd, +2 for 3rd, etc.)
-    // Cap at +4 for 5+ consecutive wins
-    if (totalStreak <= 1) return 0;
-    return Math.min(totalStreak - 1, 4);
+    return getStreakBonus(totalStreak);
   };
 
   // Add a new player

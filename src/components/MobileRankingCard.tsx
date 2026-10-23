@@ -1,3 +1,4 @@
+import { PlayerPointsBreakdown } from '@/components/PlayerPointsBreakdown';
 import { useId, useState } from 'react';
 import { ChevronDown } from 'lucide-react';
 import { cn } from '@/lib/utils';
@@ -48,6 +49,7 @@ export function MobileRankingCard({ ranking, onAvatarClick, primaryMetric = 'poi
             [isZh ? '场均积分' : 'Points per match', getAveragePoints(ranking)],
           ].map(([label, value]) => <div key={label}><dt className="text-xs text-muted-foreground">{label}</dt><dd className="mt-1 text-base font-semibold tabular-nums">{value}</dd></div>)}
         </dl>
+        {expanded && <div className="mt-3"><PlayerPointsBreakdown playerId={ranking.player_id} /></div>}
       </div>
     </div>
   );
