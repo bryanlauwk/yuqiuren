@@ -208,24 +208,26 @@ export function useRankingsStore() {
   // currentSessionId: the session being recorded (exclude from query since results don't exist yet)
   const calculateStreakBonus = async (playerId: string, currentSessionId: string): Promise<number> => {
     // Get all sessions EXCEPT the current one, ordered by date (most recent first)
-    const { data: orderedSessions } = await supabase
+    const { data: orderedSessions, error: sessionsError } = await supabase
       .from('tournament_sessions')
       .select('id')
       .neq('id', currentSessionId)
       .order('session_date', { ascending: false });
 
+    if (sessionsError) throw sessionsError;
     if (!orderedSessions || orderedSessions.length === 0) {
       // This is the first session, no previous streak possible
       return 0;
     }
 
     // Get player's existing results (won't include current session yet)
-    const { data: playerResults } = await supabase
+    const { data: playerResults, error: resultsError } = await supabase
       .from('session_results')
       .select('session_id, result_type')
       .eq('player_id', playerId);
 
-    if (!playerResults) return 0;
+    if (resultsError) throw resultsError;
+    if (!playerResults) throw new Error('Could not load player history for streak bonus');
 
     const championSessions = new Set(
       playerResults
