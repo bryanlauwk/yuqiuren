@@ -1,3 +1,6 @@
+import { Fragment, useState } from 'react';
+import { ChevronDown } from 'lucide-react';
+import { PlayerPointsBreakdown } from '@/components/PlayerPointsBreakdown';
 import { cn } from '@/lib/utils';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { getWinRate } from '@/lib/ranking-display';
@@ -16,6 +19,7 @@ interface DesktopRankingTableProps {
 export function DesktopRankingTable({ rankings, onAvatarClick, primaryMetric = 'points', showRankDelta = true }: DesktopRankingTableProps) {
   const { language } = useLanguage();
   const isZh = language === 'zh';
+  const [openId, setOpenId] = useState<string | null>(null);
   return (
     <Table className="cs-standings">
       <TableCaption className="sr-only">{isZh ? '联赛积分榜' : 'League standings'}</TableCaption>
@@ -31,7 +35,8 @@ export function DesktopRankingTable({ rankings, onAvatarClick, primaryMetric = '
       </TableHeader>
       <TableBody>
         {rankings.map((ranking) => (
-          <TableRow key={ranking.player_id} className={cn(ranking.rank === 2 && 'bg-primary/[0.07]')}>
+          <Fragment key={ranking.player_id}>
+          <TableRow className={cn('cursor-pointer', ranking.rank === 2 && 'bg-primary/[0.07]')} onClick={() => setOpenId(openId === ranking.player_id ? null : ranking.player_id)} aria-expanded={openId === ranking.player_id}>
             <TableCell><RankingBadge rank={ranking.rank} /></TableCell>
             <TableCell>
               <div className="flex min-w-0 items-center gap-3">
@@ -45,8 +50,14 @@ export function DesktopRankingTable({ rankings, onAvatarClick, primaryMetric = '
             <TableCell className="text-muted-foreground">{ranking.sessions_played}</TableCell>
             <TableCell className="text-muted-foreground">{ranking.championships}</TableCell>
             <TableCell><span className={cn(primaryMetric === 'winRate' ? 'text-xl font-bold text-primary' : 'text-muted-foreground')}>{getWinRate(ranking)}%</span></TableCell>
-            <TableCell><span className={cn('text-xl font-bold', primaryMetric === 'points' && ranking.rank === 1 && 'dark:text-accent', ranking.rank === 2 && 'text-primary')}>{ranking.total_points}</span></TableCell>
+            <TableCell><span className={cn('text-xl font-bold', primaryMetric === 'points' && ranking.rank === 1 && 'dark:text-accent', ranking.rank === 2 && 'text-primary')}>{ranking.total_points}</span><ChevronDown className={cn('ml-2 inline h-4 w-4 text-muted-foreground transition-transform', openId === ranking.player_id && 'rotate-180')} aria-hidden /></TableCell>
           </TableRow>
+          {openId === ranking.player_id && (
+            <TableRow className="hover:bg-transparent">
+              <TableCell colSpan={6} className="bg-muted/30"><PlayerPointsBreakdown playerId={ranking.player_id} /></TableCell>
+            </TableRow>
+          )}
+          </Fragment>
         ))}
       </TableBody>
     </Table>

@@ -41,7 +41,7 @@ export function PlayerPointsBreakdown({ playerId }: { playerId: string }) {
               <td className="px-3 py-2 text-muted-foreground">{r.date.slice(5)}</td>
               <td className={cn('px-2 py-2', r.result_type === 'champion' && 'font-semibold text-primary')}>{l[r.result_type]}</td>
               <td className="px-2 py-2 text-right">{r.base_points}</td>
-              <td className={cn('px-2 py-2 text-right', r.streak_bonus > 0 ? 'font-semibold text-accent-foreground' : 'text-muted-foreground')}>
+              <td className={cn('px-2 py-2 text-right', r.streak_bonus > 0 ? 'font-semibold text-primary' : 'text-muted-foreground')}>
                 {r.streak_bonus > 0 ? `+${r.streak_bonus}` : '—'}
               </td>
               <td className="px-3 py-2 text-right font-bold">{r.total_points}</td>
