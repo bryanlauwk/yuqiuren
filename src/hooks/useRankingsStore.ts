@@ -206,8 +206,8 @@ export function useRankingsStore() {
   }, [rankings]);
 
   // Calculate consecutive championship streak for a player
-  // Streak is counted over the player's OWN attended sessions only —
-  // sitting out a session does NOT reset the streak.
+  // Streak is counted over the CLUB's full session calendar —
+  // sitting out a session DOES reset the streak (must defend every week).
   // currentSessionId: the session being recorded (exclude from query since results don't exist yet)
   const calculateStreakBonus = async (playerId: string, currentSessionId: string): Promise<number> => {
     // Get player's existing results (won't include current session yet)
@@ -223,23 +223,22 @@ export function useRankingsStore() {
       return 0;
     }
 
-    // Get dates of the sessions this player attended, most recent first
-    const attendedIds = playerResults.map(r => r.session_id);
-    const { data: attendedSessions, error: sessionsError } = await supabase
+    const resultBySession = new Map(playerResults.map(r => [r.session_id, r.result_type]));
+
+    // Walk the club's full session calendar, most recent first
+    const { data: allSessions, error: sessionsError } = await supabase
       .from('tournament_sessions')
       .select('id, session_date')
-      .in('id', attendedIds)
       .neq('id', currentSessionId)
       .order('session_date', { ascending: false });
 
     if (sessionsError) throw sessionsError;
-    if (!attendedSessions) throw new Error('Could not load session dates for streak bonus');
+    if (!allSessions) throw new Error('Could not load session dates for streak bonus');
 
-    const resultBySession = new Map(playerResults.map(r => [r.session_id, r.result_type]));
-
-    // Count consecutive championships over the player's own attended sessions
+    // Count consecutive championships; any session without a champion result
+    // (absent OR attended but didn't win) breaks the streak
     let previousStreak = 0;
-    for (const session of attendedSessions) {
+    for (const session of allSessions) {
       if (resultBySession.get(session.id) === 'champion') {
         previousStreak++;
       } else {
