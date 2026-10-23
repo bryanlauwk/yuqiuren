@@ -206,21 +206,10 @@ export function useRankingsStore() {
   }, [rankings]);
 
   // Calculate consecutive championship streak for a player
+  // Streak is counted over the player's OWN attended sessions only —
+  // sitting out a session does NOT reset the streak.
   // currentSessionId: the session being recorded (exclude from query since results don't exist yet)
   const calculateStreakBonus = async (playerId: string, currentSessionId: string): Promise<number> => {
-    // Get all sessions EXCEPT the current one, ordered by date (most recent first)
-    const { data: orderedSessions, error: sessionsError } = await supabase
-      .from('tournament_sessions')
-      .select('id')
-      .neq('id', currentSessionId)
-      .order('session_date', { ascending: false });
-
-    if (sessionsError) throw sessionsError;
-    if (!orderedSessions || orderedSessions.length === 0) {
-      // This is the first session, no previous streak possible
-      return 0;
-    }
-
     // Get player's existing results (won't include current session yet)
     const { data: playerResults, error: resultsError } = await supabase
       .from('session_results')
@@ -229,17 +218,29 @@ export function useRankingsStore() {
 
     if (resultsError) throw resultsError;
     if (!playerResults) throw new Error('Could not load player history for streak bonus');
+    if (playerResults.length === 0) {
+      // First ever session for this player, no previous streak possible
+      return 0;
+    }
 
-    const championSessions = new Set(
-      playerResults
-        .filter(r => r.result_type === 'champion')
-        .map(r => r.session_id)
-    );
+    // Get dates of the sessions this player attended, most recent first
+    const attendedIds = playerResults.map(r => r.session_id);
+    const { data: attendedSessions, error: sessionsError } = await supabase
+      .from('tournament_sessions')
+      .select('id, session_date')
+      .in('id', attendedIds)
+      .neq('id', currentSessionId)
+      .order('session_date', { ascending: false });
 
-    // Count consecutive championships from most recent (excluding current session)
+    if (sessionsError) throw sessionsError;
+    if (!attendedSessions) throw new Error('Could not load session dates for streak bonus');
+
+    const resultBySession = new Map(playerResults.map(r => [r.session_id, r.result_type]));
+
+    // Count consecutive championships over the player's own attended sessions
     let previousStreak = 0;
-    for (const session of orderedSessions) {
-      if (championSessions.has(session.id)) {
+    for (const session of attendedSessions) {
+      if (resultBySession.get(session.id) === 'champion') {
         previousStreak++;
       } else {
         break;
