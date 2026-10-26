@@ -225,12 +225,21 @@ export function useRankingsStore() {
 
     const resultBySession = new Map(playerResults.map(r => [r.session_id, r.result_type]));
 
-    // Walk the club's full session calendar, most recent first
+    const { data: current, error: currentError } = await supabase
+      .from('tournament_sessions')
+      .select('session_date')
+      .eq('id', currentSessionId)
+      .single();
+    if (currentError || !current) throw currentError ?? new Error('Could not load current session');
+
+    // Walk the club's earlier sessions only, most recent first
     const { data: allSessions, error: sessionsError } = await supabase
       .from('tournament_sessions')
       .select('id, session_date')
       .neq('id', currentSessionId)
-      .order('session_date', { ascending: false });
+      .lt('session_date', current.session_date)
+      .order('session_date', { ascending: false })
+      .order('created_at', { ascending: false });
 
     if (sessionsError) throw sessionsError;
     if (!allSessions) throw new Error('Could not load session dates for streak bonus');
