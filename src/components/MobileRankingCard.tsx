@@ -33,10 +33,10 @@ export function MobileRankingCard({ ranking, onAvatarClick, primaryMetric = 'poi
               {showRankDelta && <RankDelta ranking={ranking} />}
             </span>
           </span>
-          <span className="text-right tabular-nums">
-            <span className={cn('block text-xl font-bold', ranking.rank === 2 && 'text-primary')}>{primaryMetric === 'winRate' ? `${getWinRate(ranking)}%` : ranking.total_points}</span>
-            <span className="block text-xs text-muted-foreground">{primaryMetric === 'winRate' ? (isZh ? '夺冠率' : 'Title %') : (isZh ? '积分' : 'Points')}</span>
+          <span className={cn('text-right text-xl font-bold tabular-nums', ranking.rank === 2 && 'text-primary')}>
+            {primaryMetric === 'winRate' ? `${getWinRate(ranking)}%` : ranking.total_points}
           </span>
+
           <ChevronDown className={cn('h-4 w-4 text-muted-foreground transition-transform', expanded && 'rotate-180')} aria-hidden />
         </button>
       </div>
