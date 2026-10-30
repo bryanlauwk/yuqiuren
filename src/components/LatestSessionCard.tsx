@@ -32,7 +32,7 @@ export function LatestSessionCard() {
         </div>
         <p className="mt-3 text-3xl font-bold tracking-tight"><time dateTime={latest.session_date}>{formatSessionDate(latest.session_date, language, true)}</time></p>
         {latest.name && <p className="mt-2 break-words text-sm text-muted-foreground">{latest.name}</p>}
-        {sessionHighlights.length > 0 && <p className="mt-3 flex items-center gap-2 text-sm text-muted-foreground"><Play className="h-3.5 w-3.5 text-primary" aria-hidden />{sessionHighlights.length} {isZh ? '段精彩片段' : 'highlights'}</p>}
+
         {latest.group_photo_url && (
           <button type="button" className="mt-5 block w-full overflow-hidden rounded-lg bg-muted" onClick={() => setPhotoOpen(true)} aria-label={isZh ? `查看 ${dateLabel} 合影` : `View group photo from ${dateLabel}`}>
             <img src={latest.group_photo_url} alt={isZh ? `${dateLabel} 球友合影` : `Badminton friends on ${dateLabel}`} className="cs-photo aspect-[4/3] transition-opacity hover:opacity-90" />
@@ -44,7 +44,6 @@ export function LatestSessionCard() {
           <Link className="cs-action mt-4 w-full" to="/history">{isZh ? '查看比赛记录' : 'View match history'}<ArrowRight className="h-4 w-4" aria-hidden /></Link>
         )}
       </div>
-      <Link to="/history" className="mt-4 flex min-h-11 items-center justify-between px-1 text-sm text-muted-foreground transition-colors hover:text-foreground">{isZh ? '查看所有比赛' : 'View all matches'}<ArrowRight className="h-4 w-4" aria-hidden /></Link>
       <HighlightsGallery open={galleryOpen} onClose={() => setGalleryOpen(false)} highlights={sessionHighlights} sessionLabel={dateLabel} />
       <PhotoLightbox open={photoOpen} onClose={() => setPhotoOpen(false)} images={latest.group_photo_url ? [{ src: latest.group_photo_url, alt: dateLabel }] : []} currentIndex={0} />
     </aside>

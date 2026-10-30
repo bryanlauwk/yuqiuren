@@ -51,13 +51,6 @@ export default function RankingPage() {
                   {search && <button type="button" onClick={() => setSearch('')} className="absolute right-0 top-0 flex h-11 w-9 items-center justify-center text-muted-foreground" aria-label={isZh ? '清除搜索' : 'Clear search'}><X className="h-4 w-4" /></button>}
                 </div>
               </div>
-              <p className="mb-1 mt-4 min-h-5 text-xs leading-relaxed text-muted-foreground">
-                {rankingView === 'recent5'
-                  ? (isZh ? '统计最近 5 场比赛的成绩。' : 'Results from the latest 5 matches.')
-                  : rankingView === 'winRate'
-                    ? (isZh ? '冠军次数 ÷ 出赛场数；出赛越多越具参考价值。' : 'Titles won ÷ matches played. More matches provide a stronger sample.')
-                    : sessions[0] ? `${isZh ? '最近更新至' : 'Results through'} ${formatSessionDate(sessions[0].session_date, language)}` : (isZh ? '2026 赛季' : '2026 season')}
-              </p>
               <TabsContent value={rankingView} className="mt-2">
                 {loading ? (
                   <div role="status" className="space-y-3 py-3"><span className="sr-only">{isZh ? '正在加载积分榜' : 'Loading standings'}</span>{Array.from({ length: 6 }, (_, i) => <div key={i} className="h-16 animate-pulse rounded-lg bg-muted/60" />)}</div>
@@ -69,14 +62,14 @@ export default function RankingPage() {
                   <>
                     <div className="hidden md:block"><DesktopRankingTable rankings={filteredRankings} onAvatarClick={handleAvatarClick} primaryMetric={primaryMetric} showRankDelta={rankingView === 'overall'} /></div>
                     <div className="md:hidden">
-                      <div className="flex justify-between border-b border-border pb-2 pt-1 text-xs text-muted-foreground"><span>{isZh ? '排名 / 球员' : 'Rank / Player'}</span><span className="pr-7">{primaryMetric === 'winRate' ? (isZh ? '夺冠率' : 'Title %') : (isZh ? '积分' : 'Points')}</span></div>
+
                       {filteredRankings.map((ranking) => <MobileRankingCard key={ranking.player_id} ranking={ranking} onAvatarClick={handleAvatarClick} primaryMetric={primaryMetric} showRankDelta={rankingView === 'overall'} />)}
                     </div>
                   </>
                 )}
               </TabsContent>
             </Tabs>
-            {search && filteredRankings.length > 0 && <p role="status" className="mt-3 text-xs text-muted-foreground">{filteredRankings.length} {isZh ? '位球员 · 保留榜单原排名' : 'players · original ranks retained'}</p>}
+
           </section>
           <LatestSessionCard />
         </div>
