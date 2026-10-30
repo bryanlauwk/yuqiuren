@@ -12,7 +12,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useRankings } from '@/hooks/useRankings';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { buildRecentRankings, buildWinRateRankings, type RankingView } from '@/lib/ranking-views';
-import { formatSessionDate } from '@/lib/session-date';
+
 
 export default function RankingPage() {
   const { rankings, loading, sessions, results } = useRankings();
